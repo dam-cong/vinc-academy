@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vinc Academy — Đào tạo lập trình thực chiến</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="#about">Giới thiệu</a>
+            <a href="#courses">Khóa học</a>
+            <a href="#roadmap">Lộ trình</a>
+            <a href="#why">Tại sao chúng tôi</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <button class="btn-nav" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Đăng
+            ký ngay</button>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối"
+            aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-badge">Live Training · Thực chiến 100%</div>
+            <h1>Đào tạo lập trình<br><span class="accent">thực chiến</span><br>cho developer</h1>
+            <p class="hero-desc">Từ Python cơ bản đến DevOps, Odoo — học theo lộ trình rõ ràng, bài tập thực tế, giảng
+                viên kinh nghiệm doanh nghiệp.</p>
+            <div class="hero-actions">
+                <button class="btn-primary"
+                    onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Xem khóa
+                    học</button>
+                <button class="btn-secondary"
+                    onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})">Xem lộ
+                    trình</button>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot blue">📦</div>
+                </div>
+                <div class="stat-num">6</div>
+                <div class="stat-label">Khóa học chuyên sâu</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot teal">💻</div>
+                </div>
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Thực hành dự án thật</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot amber">🎯</div>
+                </div>
+                <div class="stat-num">Job-ready</div>
+                <div class="stat-label">Sẵn sàng đi làm ngay</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+        <div class="about-grid">
+            <div class="about-visual">
+                <div class="about-logo-block">
+                    <img src="image/vinc-academy.png" alt="Vinc Academy"
+                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;" />
+                </div>
+                <div class="about-float-badge">
+                    <div class="dot"></div>
+                    <span>Đang tuyển sinh 2026</span>
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-tag">Giới thiệu</span>
+                <h2 style="margin-bottom:0;">Chúng tôi là<br>Vinc Academy</h2>
+                <p>Vinc Academy được thành lập với sứ mệnh đào tạo lập trình <strong>thực chiến</strong> — nơi học viên
+                    không chỉ học lý thuyết mà còn tự tay xây dựng sản phẩm thật từ ngày đầu tiên.</p>
+                <p>Chúng tôi tập trung vào hệ sinh thái <strong>Python · Odoo · DevOps</strong> — bộ kỹ năng được các
+                    doanh nghiệp Việt Nam và quốc tế săn đón nhất hiện nay, đặc biệt trong lĩnh vực ERP và tự động hóa
+                    quy trình.</p>
+                <div class="about-highlight">
+                    "Học đúng thứ doanh nghiệp cần — không phải học để biết"
+                </div>
+                <div class="about-stats-row">
+                    <div class="about-stat">
+                        <div class="about-stat-num">6</div>
+                        <div class="about-stat-label">Khóa chuyên sâu</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num">100%</div>
+                        <div class="about-stat-label">Thực hành</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num">24h</div>
+                        <div class="about-stat-label">Hỗ trợ phản hồi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="courses">
+        <span class="section-tag">Chương trình đào tạo</span>
+        <h2>6 khóa học thực chiến</h2>
+        <p class="section-sub">Từ nền tảng lập trình đến vận hành hệ thống doanh nghiệp</p>
+        <div class="courses-grid">
+            <div class="course-card featured">
+                <div class="course-icon ci-blue">
+                    <img src="image/python.png" alt="Python">
+                </div>
+                <div class="course-num">Khóa 01</div>
+                <div class="course-title">Python</div>
+                <div class="course-desc">Nắm vững Python từ cú pháp cơ bản đến OOP, xử lý file, thư viện phổ biến — nền
+                    tảng cho mọi ngành lập trình.</div>
+                <div class="course-tags">
+                    <span class="tag">Variables & Types</span>
+                    <span class="tag">OOP</span>
+                    <span class="tag">File I/O</span>
+                    <span class="tag">Libraries</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Cơ bản → Nâng cao</span>
+                    <span class="badge badge-hot">Phổ biến nhất</span>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-icon ci-blue">
+                    <img src="image/postgresql.jpg" alt="PostgreSQL">
+                </div>
+                <div class="course-num">Khóa 02</div>
+                <div class="course-title">PostgreSQL</div>
+                <div class="course-desc">Thiết kế database, truy vấn SQL nâng cao, tối ưu hiệu suất và quản lý dữ liệu
+                    doanh nghiệp với PostgreSQL.</div>
+                <div class="course-tags">
+                    <span class="tag">SQL Query</span>
+                    <span class="tag">Indexing</span>
+                    <span class="tag">Transactions</span>
+                    <span class="tag">Performance</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Trung cấp</span>
+                    <span class="badge badge-new">Mới cập nhật</span>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-icon ci-blue">
+                    <img src="image/git.png" alt="Git">
+                </div>
+                <div class="course-num">Khóa 03</div>
+                <div class="course-title">Git + GitLab</div>
+                <div class="course-desc">Kiểm soát phiên bản với Git, quản lý dự án nhóm qua GitLab CI/CD — kỹ năng
+                    thiết yếu của mọi developer.</div>
+                <div class="course-tags">
+                    <span class="tag">Branching</span>
+                    <span class="tag">Merge Request</span>
+                    <span class="tag">CI/CD Pipeline</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Cơ bản</span>
+                    <span class="badge badge-pop">Thiết yếu</span>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-icon ci-blue">
+                    <img src="image/odoo.png" alt="Odoo">
+                </div>
+                <div class="course-num">Khóa 04</div>
+                <div class="course-title">Odoo Cơ Bản</div>
+                <div class="course-desc">Làm quen với hệ thống ERP Odoo — cấu hình module, quản lý quy trình kinh doanh,
+                    CRM và kế toán cơ bản.</div>
+                <div class="course-tags">
+                    <span class="tag">ERP Setup</span>
+                    <span class="tag">CRM</span>
+                    <span class="tag">Accounting</span>
+                    <span class="tag">Modules</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Cơ bản</span>
+                    <span class="badge badge-new">Có chứng chỉ</span>
+                </div>
+            </div>
+            <div class="course-card featured">
+                <div class="course-icon ci-blue">
+                    <img src="image/odoo.png" alt="Odoo">
+                </div>
+                <div class="course-num">Khóa 05</div>
+                <div class="course-title">Odoo Nâng Cao</div>
+                <div class="course-desc">Phát triển module tùy chỉnh bằng Python, tích hợp API, kỹ thuật customization
+                    chuyên sâu cho doanh nghiệp.</div>
+                <div class="course-tags">
+                    <span class="tag">Custom Module</span>
+                    <span class="tag">ORM</span>
+                    <span class="tag">API Integration</span>
+                    <span class="tag">Reports</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Nâng cao</span>
+                    <span class="badge badge-hot">Đặc sắc</span>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="course-icon ci-blue">
+                    <img src="image/devops.jpg" alt="DevOps">
+                </div>
+                <div class="course-num">Khóa 06</div>
+                <div class="course-title">DevOps Cơ Bản</div>
+                <div class="course-desc">Docker, Linux server, deploy ứng dụng thực tế, monitoring cơ bản — bước đầu vào
+                    thế giới DevOps.</div>
+                <div class="course-tags">
+                    <span class="tag">Docker</span>
+                    <span class="tag">Linux</span>
+                    <span class="tag">Deploy</span>
+                    <span class="tag">Nginx</span>
+                </div>
+                <div class="course-footer">
+                    <span class="course-level">Cơ bản</span>
+                    <span class="badge badge-new">Mới ra mắt</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ROADMAP -->
+    <section class="section" id="roadmap">
+        <span class="section-tag">Lộ trình học tập</span>
+        <h2>Học theo thứ tự tối ưu</h2>
+        <p class="section-sub">Từng bước xây dựng kỹ năng vững chắc cho sự nghiệp developer</p>
+        <div class="roadmap">
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot active">1</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">Python — Nền tảng lập trình</div>
+                    <div class="road-detail">Ngôn ngữ bắt buộc trước khi học Odoo hoặc bất kỳ khóa nào khác</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot active">2</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">PostgreSQL — Cơ sở dữ liệu</div>
+                    <div class="road-detail">Hiểu database để làm việc hiệu quả với Odoo và các hệ thống thực tế</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot active">3</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">Git + GitLab — Quản lý code</div>
+                    <div class="road-detail">Kỹ năng làm việc nhóm và triển khai dự án trong môi trường doanh nghiệp
+                    </div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot">4</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">Odoo Cơ Bản — ERP doanh nghiệp</div>
+                    <div class="road-detail">Vận hành và cấu hình hệ thống ERP phổ biến nhất thế giới</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot">5</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">Odoo Nâng Cao — Phát triển module</div>
+                    <div class="road-detail">Customization và phát triển tính năng doanh nghiệp, tích hợp hệ thống</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot">6</div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name">DevOps Cơ Bản — Deploy & vận hành</div>
+                    <div class="road-detail">Triển khai và duy trì hệ thống trên server thực tế</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- WHY -->
+    <section class="section" id="why">
+        <span class="section-tag">Tại sao chọn Vinc Academy</span>
+        <h2>Học thực chiến, ra làm được ngay</h2>
+        <p class="section-sub">Không lý thuyết suông — mỗi bài học gắn với bài tập và dự án thực tế</p>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon-wrap">🎯</div>
+                <div class="why-title">Thực hành là chính</div>
+                <div class="why-desc">Mỗi module đều có bài tập code thực tế, project cuối khóa để xây portfolio.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-icon-wrap">👨‍🏫</div>
+                <div class="why-title">Giảng viên kinh nghiệm</div>
+                <div class="why-desc">Đội ngũ developer và Odoo consultant có nhiều năm kinh nghiệm thực chiến doanh
+                    nghiệp.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-icon-wrap">💬</div>
+                <div class="why-title">Hỗ trợ liên tục</div>
+                <div class="why-desc">Nhóm học viên riêng, giảng viên hỗ trợ câu hỏi trong ngày, không bỏ sót ai.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-icon-wrap">📋</div>
+                <div class="why-title">Lộ trình rõ ràng</div>
+                <div class="why-desc">Biết chính xác học gì tiếp theo, không bị lạc trong biển kiến thức.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-icon-wrap">🏆</div>
+                <div class="why-title">Chứng chỉ hoàn thành</div>
+                <div class="why-desc">Nhận chứng chỉ sau khi hoàn thành khóa học, tăng điểm cộng trong CV.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-icon-wrap">🔄</div>
+                <div class="why-title">Cập nhật nội dung</div>
+                <div class="why-desc">Nội dung được cập nhật theo phiên bản mới nhất của công nghệ.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+        <span class="section-tag">FAQ</span>
+        <h2>Câu hỏi thường gặp</h2>
+        <p class="section-sub">Những thắc mắc phổ biến từ học viên</p>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Chưa biết gì về lập trình, học được không? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Hoàn toàn được. Khóa Python được thiết kế từ con số 0, không yêu cầu kinh nghiệm
+                    trước. Chỉ cần máy tính và kết nối internet là đủ để bắt đầu.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Học online hay offline? <span class="faq-arrow">▾</span>
+                </div>
+                <div class="faq-a">Vinc Academy đào tạo online qua video bài giảng và buổi live có tương tác. Học viên
+                    có thể xem lại bất cứ lúc nào, không bị ràng buộc lịch cố định.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Sau khi học Odoo Cơ Bản có thể đi làm được không? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Có. Khóa Odoo Cơ Bản giúp bạn cấu hình và vận hành hệ thống, phù hợp với vị trí Odoo
+                    Functional Consultant. Khóa Nâng Cao dành cho developer muốn code module tùy chỉnh.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Có cần học Python trước khi học Odoo không? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Với Odoo Cơ Bản thì không bắt buộc. Nhưng để học Odoo Nâng Cao, Python là yêu cầu
+                    tiên quyết vì bạn sẽ viết code Python để tùy chỉnh hệ thống.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Thời gian hoàn thành mỗi khóa là bao lâu? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Trung bình 4–8 tuần nếu học đều đặn 1–2 giờ mỗi ngày. Không có deadline, học viên
+                    hoàn toàn chủ động thời gian học tập.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- REGISTER -->
+    <section class="section" id="register">
+        <span class="section-tag">Đăng ký học</span>
+        <h2>3 bước bắt đầu đơn giản</h2>
+        <p class="section-sub">Toàn bộ quá trình chỉ mất 5 phút — bắt đầu học ngay trong hôm nay</p>
+        <div class="steps-wrapper">
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">1</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title">Chọn khóa học phù hợp</div>
+                        <div class="step-desc">Xem lại danh sách 6 khóa học phía trên, tham khảo lộ trình đề xuất để
+                            chọn đúng khóa theo trình độ và mục tiêu của bạn.</div>
+                        <span class="step-tag">Tư vấn miễn phí nếu chưa chắc</span>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">2</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title">Chuyển khoản học phí</div>
+                        <div class="step-desc">Chuyển khoản đúng số tiền theo khóa đã chọn. Nội dung chuyển khoản ghi
+                            rõ: <strong>Họ tên + SĐT + Tên khóa học</strong>.</div>
+                        <span class="step-tag teal">Xác nhận trong 24h làm việc</span>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">3</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title">Nhận link & bắt đầu học</div>
+                        <div class="step-desc">Sau khi xác nhận thanh toán, bạn sẽ nhận link truy cập khóa học qua Zalo
+                            hoặc Email. Học ngay, không giới hạn thời gian.</div>
+                        <span class="step-tag amber">Truy cập mãi mãi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="register-card">
+                <h3>Thanh toán học phí</h3>
+                <p class="sub">Chuyển khoản để kích hoạt tài khoản</p>
+                <div class="payment-info">
+                    <h4>Thông tin tài khoản</h4>
+                    <div class="payment-row">
+                        <span class="pk">Ngân hàng</span>
+                        <span class="pv">TECHCOMBANK</span>
+                    </div>
+                    <div class="payment-row">
+                        <span class="pk">Số tài khoản</span>
+                        <span class="pv bank">0987654321</span>
+                    </div>
+                    <div class="payment-row">
+                        <span class="pk">Chủ tài khoản</span>
+                        <span class="pv">DAM CONG HIEN</span>
+                    </div>
+                    <div class="payment-row">
+                        <span class="pk">Liên hệ Zalo</span>
+                        <span class="pv bank">036 3729 276</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <h4>Đăng ký toàn bộ khóa học</h4>
+                        <span style="background: var(--blue-50); color: var(--blue-500); border: 1px solid var(--blue-100);
+                                font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">Tiết kiệm nhất</span>
+                    </div>
+                    <div style="font-size: 24px; font-weight: 700; color: var(--blue-500); letter-spacing: -0.6px; margin-bottom: 4px;">
+                        5.000.000 <span style="font-size: 13px; font-weight: 500; color: var(--text-muted);">VND</span>
+                    </div>
+                    <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">
+                        Trọn bộ 6 khóa · Tiết kiệm hơn đăng ký từng khóa
+                    </p>
+                    <a href="https://zalo.me/0363729276" target="_blank" style="display: block; text-align: center; background: var(--blue-500); color: #fff;
+                            padding: 11px; border-radius: 9px; font-size: 13.5px; font-weight: 700;
+                            text-decoration: none; transition: background 0.15s;">
+                        Đăng ký qua Zalo · 036 3729 276
+                    </a>
+                    <p style="font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 8px;">
+                        Chuyển khoản xong nhắn số Zalo để được kích hoạt
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">Vinc <span>Academy</span></div>
+        <div class="footer-right">© 2025 Vinc Academy</div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">Đăng ký thành công! Chúng tôi sẽ liên hệ bạn sớm nhất.</div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
