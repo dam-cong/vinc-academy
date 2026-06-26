@@ -7,7 +7,14 @@ function toggleTheme() {
 
 (function () {
     const saved = localStorage.getItem('va-theme');
-    if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    if (saved) {
+        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        const hour = new Date().getHours();
+        if (hour >= 18 || hour < 6) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    }
 })();
 
 function toggleFaq(el) {
@@ -15,21 +22,6 @@ function toggleFaq(el) {
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
-}
-
-function handleRegister() {
-    const name = document.getElementById('reg-name').value.trim();
-    const contact = document.getElementById('reg-contact').value.trim();
-    if (!name || !contact) {
-        alert('Vui lòng điền đầy đủ họ tên và thông tin liên hệ.');
-        return;
-    }
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
-    document.getElementById('reg-name').value = '';
-    document.getElementById('reg-contact').value = '';
-    document.getElementById('reg-course').value = '';
 }
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
