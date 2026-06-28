@@ -38,25 +38,26 @@ vinc-academy/
 
 | Section | ID | Mô tả |
 |---|---|---|
-| Hero | — | Headline, CTA buttons, 3 stat cards (6 khóa, 100% thực hành, Job-ready) |
-| Giới thiệu | `#about` | Sứ mệnh, quote, thống kê (6 khóa, 100% thực hành, 24h hỗ trợ) |
-| Khóa học | `#courses` | 6 course cards với tags, badges, featured highlight |
-| Lộ trình | `#roadmap` | Timeline 6 bước học theo thứ tự tối ưu (timeline dọc) |
+| Hero | — | Headline, CTA buttons, 3 stat cards (6 chương trình, 100% thực hành, Job-ready) |
+| Giới thiệu | `#about` | Sứ mệnh, quote, thống kê (6 chương trình, 100% thực hành, 4 cấp độ) |
+| Chương trình | `#programs` | 6 product cards (3 featured, 3 collapsible) |
+| Bảng giá | `#pricing` | Bảng so sánh 5 combo |
+| Lộ trình | `#roadmap` | 4 cấp độ học (Nền tảng → Phát triển → Vận hành → AI Developer) |
 | Tại sao chọn | `#why` | 6 điểm mạnh (grid 3 cột) |
 | FAQ | `#faq` | 5 câu hỏi thường gặp (accordion) |
 | Đăng ký | `#register` | 3 bước đăng ký + payment info + combo |
 | Footer | — | Logo + © 2025 |
 
-## Danh sách khóa học
+## Danh sách chương trình đào tạo
 
-| # | Tên | Cấp độ | Badge |
-|---|---|---|---|
-| 01 | Python | Cơ bản → Nâng cao | Phổ biến nhất (featured) |
-| 02 | PostgreSQL | Trung cấp | Mới cập nhật |
-| 03 | Git + GitLab | Cơ bản | Thiết yếu |
-| 04 | Odoo Cơ Bản | Cơ bản | Có chứng chỉ |
-| 05 | Odoo Nâng Cao | Nâng cao | Đặc sắc (featured) |
-| 06 | DevOps Cơ Bản | Cơ bản | Mới ra mắt |
+| # | Tên | Đối tượng | Thời lượng | Dự án |
+|---|---|---|---|---|
+| 01 | Developer Foundation (nền tảng) | Người mới, trái ngành | 8–10 buổi | Customer Management |
+| 02 | Odoo Developer Foundation (cốt lõi) | Đã có nền tảng lập trình | 5–6 buổi | Student Management |
+| 03 | Odoo Business & Functional | Developer, BA, Consultant | 3–4 buổi | Phân tích nghiệp vụ |
+| 04 | Odoo Advanced Developer | Đã biết Odoo | 6–8 buổi | HR / CRM |
+| 05 | DevOps for Odoo | Odoo Developer | 4–5 buổi | Deploy Production |
+| 06 | AI & Vibe Coding Odoo | Đã biết Odoo | 4–5 buổi | Module với AI |
 
 ## Theme System
 
@@ -95,11 +96,12 @@ Chỉ 41 dòng, 4 chức năng:
 --blue-900: #042C53;   /* Darkest */
 ```
 
-### Thêm khóa học mới
+### Thêm chương trình đào tạo mới
 
 1. Thêm icon vào thư mục `image/`
-2. Copy một `.course-card` block trong `index.html`
-3. Cập nhật số thứ tự, title, desc, tags, level, badge
+2. Copy một `.course-card` block trong `index.html` (section `#programs`)
+3. Cập nhật title, target, duration, curriculum, price, badge
+4. Nếu muốn ẩn mặc định, thêm vào nhóm `program-hidden`
 
 ## Cách chạy
 
@@ -119,4 +121,8 @@ Hoặc dùng Live Server nếu muốn hot-reload.
 - Số tài khoản: **0987654321**
 - Chủ tài khoản: **DAM CONG HIEN**
 - Zalo: **036 3729 276**
-- Combo toàn bộ 6 khóa: **6.000.000 VND**
+- Combo Bắt đầu (Developer Foundation + Odoo Developer Foundation): **6.000.000 VND**
+- Combo Chuyên nghiệp (Bắt đầu + Odoo Advanced Developer): **10.000.000 VND**
+- Combo Chuyên gia (Chuyên nghiệp + DevOps for Odoo): **14.000.000 VND**
+- Combo AI Developer (Odoo Advanced Developer + AI & Vibe Coding): **8.000.000 VND**
+- Combo Full Stack Odoo (Toàn bộ 6 chương trình): **16.000.000–18.000.000 VND**

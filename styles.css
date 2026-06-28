@@ -1156,8 +1156,476 @@
      opacity: 1;
  }
 
- .course-card:hover .course-icon {
-     transform: scale(1.1);
-     transition: 0.3s;
- }
+.course-card:hover .course-icon {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+/* ── PROGRAM CARDS ── */
+.program-curriculum {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px;
+}
+
+.program-curriculum li {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.program-curriculum li::before {
+    content: '›';
+    position: absolute;
+    left: 2px;
+    color: var(--blue-500);
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.program-target {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.program-duration {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue-500);
+    margin-bottom: 10px;
+}
+
+.program-outcome {
+    font-size: 12px;
+    color: var(--green-600);
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    background: var(--green-50);
+    border-radius: 6px;
+    line-height: 1.5;
+}
+
+.program-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+}
+
+.program-price small {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.program-hidden {
+    display: none;
+}
+
+.program-hidden.show {
+    display: block;
+}
+
+@keyframes fadeSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.program-hidden.show .course-card {
+    animation: fadeSlideDown 0.3s ease forwards;
+}
+
+.expand-btn-wrap {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-top: 6px;
+}
+
+.expand-btn {
+    background: transparent;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    padding: 11px 28px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    letter-spacing: -0.1px;
+}
+
+.expand-btn:hover {
+    border-color: var(--blue-500);
+    color: var(--blue-500);
+    background: var(--blue-50);
+}
+
+/* ── COMBO CARDS ── */
+.combo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.combo-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 1.3rem;
+    position: relative;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.combo-card:hover {
+    border-color: var(--blue-100);
+    transform: translateY(-3px);
+}
+
+.combo-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+}
+
+.combo-badge.best {
+    background: var(--blue-50);
+    color: var(--blue-500);
+}
+
+.combo-badge.popular {
+    background: var(--coral-50);
+    color: var(--coral-600);
+}
+
+.combo-badge.value {
+    background: var(--teal-50);
+    color: var(--teal-600);
+}
+
+.combo-badge.ai {
+    background: var(--purple-50);
+    color: var(--purple-600);
+}
+
+.combo-badge.full {
+    background: var(--amber-50);
+    color: var(--amber-600);
+}
+
+.combo-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.combo-card .combo-includes {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.combo-card .combo-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-500);
+    letter-spacing: -0.5px;
+}
+
+.combo-card .combo-price small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+/* ── LEVEL BADGE (Roadmap) ── */
+.level-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.level-badge.l1 {
+    background: var(--green-50);
+    color: var(--green-600);
+}
+
+.level-badge.l2 {
+    background: var(--blue-50);
+    color: var(--blue-500);
+}
+
+.level-badge.l3 {
+    background: var(--amber-50);
+    color: var(--amber-600);
+}
+
+.level-badge.l4 {
+    background: var(--purple-50);
+    color: var(--purple-600);
+}
+
+/* ── BRAND LEVELS ── */
+.levels-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.level-card {
+    background: var(--gray-50);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.level-card .level-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue-500);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: -1px;
+}
+
+.level-card .level-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 4px 0 2px;
+}
+
+.level-card .level-desc {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .combo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .levels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .combo-grid {
+        grid-template-columns: 1fr;
+    }
+    .levels-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── PRICING TABLE ── */
+.pricing-wrap {
+    overflow-x: auto;
+}
+
+.pricing-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+}
+
+.pricing-table th {
+    background: var(--gray-50);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.pricing-table td {
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+}
+
+.pricing-table tr:last-child td {
+    border-bottom: none;
+}
+
+.pricing-table tr:hover td {
+    background: var(--gray-50);
+}
+
+.pricing-table .pricing-name {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.pricing-table .pricing-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.pricing-table .pricing-badge.hot {
+    background: var(--coral-50);
+    color: var(--coral-600);
+}
+
+.pricing-table .pricing-badge.best {
+    background: var(--blue-50);
+    color: var(--blue-500);
+}
+
+.pricing-table .pricing-badge.value {
+    background: var(--teal-50);
+    color: var(--teal-600);
+}
+
+.pricing-table .pricing-badge.ai {
+    background: var(--purple-50);
+    color: var(--purple-600);
+}
+
+.pricing-table .pricing-badge.full {
+    background: var(--amber-50);
+    color: var(--amber-600);
+}
+
+.pricing-table .pricing-price {
+    font-weight: 700;
+    color: var(--blue-500);
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.pricing-table .pricing-price small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.pricing-table .pricing-action {
+    text-align: right;
+}
+
+.pricing-btn {
+    display: inline-block;
+    background: var(--blue-500);
+    color: #fff;
+    border: none;
+    padding: 7px 18px;
+    border-radius: 7px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.pricing-btn:hover {
+    background: var(--blue-700);
+}
+
+.pricing-btn.outline {
+    background: transparent;
+    color: var(--blue-500);
+    border: 1.5px solid var(--blue-100);
+}
+
+.pricing-btn.outline:hover {
+    background: var(--blue-50);
+}
+
+@media (max-width: 700px) {
+    .pricing-table,
+    .pricing-table thead,
+    .pricing-table tbody,
+    .pricing-table tr,
+    .pricing-table th,
+    .pricing-table td {
+        display: block;
+    }
+
+    .pricing-table thead {
+        display: none;
+    }
+
+    .pricing-table tr {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .pricing-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .pricing-table td {
+        padding: 4px 0;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pricing-table td::before {
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .pricing-table .pricing-action {
+        padding-top: 10px;
+    }
+
+    .pricing-table .pricing-action .pricing-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
  

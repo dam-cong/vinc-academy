@@ -59,16 +59,24 @@ xdg-open index.html  # Linux
 | FAQ | 5 câu hỏi thường gặp (accordion) |
 | Đăng ký | 3 bước đăng ký + payment info + combo 5.000.000 VND |
 
-## Danh sách khóa học
+## Danh sách chương trình đào tạo
 
-1. **Python** — Cơ bản → Nâng cao (badge: Phổ biến nhất)
-2. **PostgreSQL** — Thiết kế DB, SQL nâng cao (badge: Mới cập nhật)
-3. **Git + GitLab** — Version control, CI/CD (badge: Thiết yếu)
-4. **Odoo Cơ Bản** — ERP, CRM, kế toán (badge: Có chứng chỉ)
-5. **Odoo Nâng Cao** — Custom module, ORM, API (badge: Đặc sắc)
-6. **DevOps Cơ Bản** — Docker, Linux, Nginx, Deploy (badge: Mới ra mắt)
+1. **Developer Foundation** (nền tảng) — 8–10 buổi · Python + SQL + Git
+2. **Odoo Developer Foundation** (cốt lõi) — 5–6 buổi · Module, ORM, View, Security
+3. **Odoo Business & Functional** — 3–4 buổi · CRM, Sales, Inventory, Accounting
+4. **Odoo Advanced Developer** — 6–8 buổi · ORM nâng cao, OWL, API, Performance
+5. **DevOps for Odoo** — 4–5 buổi · Linux, Docker, CI/CD, Deployment
+6. **AI & Vibe Coding Odoo** — 4–5 buổi · Prompt Engineering, AI Code Gen
 
-**Combo toàn bộ:** 5.000.000 VND
+## Combo
+
+| Combo | Nội dung | Giá |
+|---|---|---|
+| Bắt đầu | Developer Foundation + Odoo Developer Foundation | 6 triệu |
+| Chuyên nghiệp | Bắt đầu + Odoo Advanced Developer | 10 triệu |
+| Chuyên gia | Chuyên nghiệp + DevOps for Odoo | 14 triệu |
+| AI Developer | Odoo Advanced Developer + AI & Vibe Coding | 8 triệu |
+| Full Stack Odoo | Toàn bộ 6 chương trình | 16–18 triệu |
 
 ## Thông tin thanh toán
 

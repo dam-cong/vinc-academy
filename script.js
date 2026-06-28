@@ -31,3 +31,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
 });
+
+function togglePrograms(btn) {
+    const hidden = document.querySelectorAll('.program-hidden');
+    const isExpanded = btn.textContent.includes('Thu gọn');
+    hidden.forEach(el => {
+        if (isExpanded) el.classList.remove('show');
+        else el.classList.add('show');
+    });
+    btn.textContent = isExpanded ? '+ Xem thêm 3 chương trình' : '− Thu gọn';
+}
