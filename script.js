@@ -170,8 +170,8 @@ const i18n = {
 
         'r.4.name': 'AI Developer',
         'r.4.badge': 'AI',
-        'r.4.content': 'Odoo Advanced Developer + AI & Vibe Coding',
-        'r.4.price': '8 triệu',
+        'r.4.content': 'AI & Vibe Coding',
+        'r.4.price': '6 triệu',
 
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'Trọn gói',
@@ -394,8 +394,8 @@ const i18n = {
 
         'r.4.name': 'AI Developer',
         'r.4.badge': 'AI',
-        'r.4.content': 'Odoo Advanced Developer + AI & Vibe Coding',
-        'r.4.price': '8M VND',
+        'r.4.content': 'AI & Vibe Coding',
+        'r.4.price': '6M VND',
 
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'All-in',
