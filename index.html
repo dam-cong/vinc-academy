@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vinc Academy — Đào tạo lập trình thực chiến</title>
+    <title data-i18n="page.title">Vinc Academy — Đào tạo lập trình thực chiến</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet" />
@@ -23,16 +23,15 @@
             <span class="nav-logo-text">Vinc <span>Academy</span></span>
         </a>
         <div class="nav-links">
-            <a href="#about">Giới thiệu</a>
-            <a href="#programs">Chương trình</a>
-            <a href="#pricing">Bảng giá</a>
-            <a href="#roadmap">Lộ trình</a>
-            <a href="#why">Tại sao chúng tôi</a>
-            <a href="#faq">FAQ</a>
+            <a href="#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="#pricing" data-i18n="nav.pricing">Bảng giá</a>
+            <a href="#roadmap" data-i18n="nav.roadmap">Lộ trình</a>
+            <a href="#why" data-i18n="nav.why">Tại sao chúng tôi</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
         </div>
-        <button class="btn-nav" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">Đăng
-            ký ngay</button>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối"
+        <button class="btn-nav" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})" data-i18n="nav.register">Đăng ký ngay</button>
+        <button class="lang-toggle" onclick="toggleLang()" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối"
             aria-label="Toggle dark mode">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
@@ -56,17 +55,17 @@
     <!-- HERO -->
     <section class="hero">
         <div class="hero-left">
-            <div class="hero-badge">Đào tạo thực chiến · 100% dự án thật</div>
-            <h1>Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer</h1>
-            <p class="hero-desc">Từ Developer Foundation đến AI & Vibe Coding — 6 chương trình Odoo thực chiến, lộ trình rõ ràng, bài tập thực tế,
+            <div class="hero-badge" data-i18n="hero.badge">Đào tạo thực chiến · 100% dự án thật</div>
+            <h1 data-i18n-html="hero.title">Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer</h1>
+            <p class="hero-desc" data-i18n="hero.desc">Từ Developer Foundation đến AI & Vibe Coding — 6 chương trình Odoo thực chiến, lộ trình rõ ràng, bài tập thực tế,
                 giảng viên kinh nghiệm doanh nghiệp.</p>
             <div class="hero-actions">
                 <button class="btn-primary"
-                    onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">Xem chương
-                    trình</button>
+                    onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})"
+                    data-i18n="hero.btn1">Xem chương trình</button>
                 <button class="btn-secondary"
-                    onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})">Xem lộ
-                    trình</button>
+                    onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})"
+                    data-i18n="hero.btn2">Xem lộ trình</button>
             </div>
         </div>
         <div class="hero-stats">
@@ -75,21 +74,21 @@
                     <div class="stat-dot blue">📦</div>
                 </div>
                 <div class="stat-num">6</div>
-                <div class="stat-label">Chương trình đào tạo</div>
+                <div class="stat-label" data-i18n="hero.stat1">Chương trình đào tạo</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon-row">
                     <div class="stat-dot teal">💻</div>
                 </div>
                 <div class="stat-num">100%</div>
-                <div class="stat-label">Thực hành dự án thật</div>
+                <div class="stat-label" data-i18n="hero.stat2">Thực hành dự án thật</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon-row">
                     <div class="stat-dot amber">🎯</div>
                 </div>
                 <div class="stat-num">Job-ready</div>
-                <div class="stat-label">Sẵn sàng đi làm ngay</div>
+                <div class="stat-label" data-i18n="hero.stat3">Sẵn sàng đi làm ngay</div>
             </div>
         </div>
     </section>
@@ -110,57 +109,59 @@
                 </div>
             </div>
             <div class="about-content">
-                <span class="section-tag">Giới thiệu</span>
-                <h2 style="margin-bottom:0;">Chúng tôi là<br>Vinc Academy</h2>
-                <p>Vinc Academy được thành lập với sứ mệnh đào tạo Odoo <strong>thực chiến</strong> — nơi học viên
+                <span class="section-tag" data-i18n="about.tag">Giới thiệu</span>
+                <h2 style="margin-bottom:0;" data-i18n-html="about.title">Chúng tôi là<br>Vinc Academy</h2>
+                <p data-i18n="about.desc1">Vinc Academy được thành lập với sứ mệnh đào tạo Odoo <strong>thực chiến</strong> — nơi học viên
                     không chỉ học lý thuyết mà còn tự tay xây dựng sản phẩm thật từ ngày đầu tiên.</p>
-                <p>Chúng tôi tập trung vào hệ sinh thái <strong>Python · Odoo · DevOps · AI</strong> — bộ kỹ năng được các
+                <p data-i18n="about.desc2">Chúng tôi tập trung vào hệ sinh thái <strong>Python · Odoo · DevOps · AI</strong> — bộ kỹ năng được các
                     doanh nghiệp Việt Nam và quốc tế săn đón nhất hiện nay, đặc biệt trong lĩnh vực ERP và tự động hóa
                     quy trình.</p>
-                <div class="about-highlight">
+                <div class="about-highlight" data-i18n="about.quote">
                     "Học đúng thứ doanh nghiệp cần — không phải học để biết"
                 </div>
                 <div class="about-stats-row">
                     <div class="about-stat">
                         <div class="about-stat-num">6</div>
-                        <div class="about-stat-label">Chương trình</div>
+                        <div class="about-stat-label" data-i18n="about.stat1">Chương trình</div>
                     </div>
                     <div class="about-stat">
                         <div class="about-stat-num">100%</div>
-                        <div class="about-stat-label">Thực hành</div>
+                        <div class="about-stat-label" data-i18n="about.stat2">Thực hành</div>
                     </div>
                     <div class="about-stat">
                         <div class="about-stat-num">4</div>
-                        <div class="about-stat-label">Cấp độ lộ trình</div>
+                        <div class="about-stat-label" data-i18n="about.stat3">Cấp độ lộ trình</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- PROGRAMS -->
     <section class="section" id="programs">
-        <span class="section-tag">Chương trình đào tạo</span>
-        <h2>6 chương trình Odoo thực chiến</h2>
-        <p class="section-sub">Từ nền tảng lập trình đến AI — lộ trình bài bản cho mọi cấp độ</p>
+        <span class="section-tag" data-i18n="programs.tag">Chương trình đào tạo</span>
+        <h2 data-i18n="programs.title">6 chương trình Odoo thực chiến</h2>
+        <p class="section-sub" data-i18n="programs.sub">Từ nền tảng lập trình đến AI — lộ trình bài bản cho mọi cấp độ</p>
         <div class="courses-grid">
             <!-- 1. Developer Foundation (featured) -->
             <div class="course-card featured">
                 <div class="course-icon ci-blue">
                     <img src="image/python.png" alt="Developer Foundation">
                 </div>
-                <div class="course-num">Nền tảng lập trình</div>
-                <div class="course-title">Developer Foundation</div>
-                <div class="program-target">Người mới · Sinh viên CNTT · Chuyển ngành</div>
-                <div class="program-duration">⏱ 8–10 buổi</div>
+                <div class="course-num" data-i18n="p.1.num">Nền tảng lập trình</div>
+                <div class="course-title" data-i18n="p.1.title">Developer Foundation</div>
+                <div class="program-target" data-i18n="p.1.target">Người mới · Sinh viên CNTT · Chuyển ngành</div>
+                <div class="program-duration" data-i18n="p.1.duration">⏱ 8–10 buổi</div>
                 <ul class="program-curriculum">
-                    <li><strong>Python</strong> — Cơ bản, OOP, Exception</li>
-                    <li><strong>PostgreSQL</strong> — Database Design, SQL</li>
-                    <li><strong>Git & GitLab</strong> — Workflow, Branch</li>
-                    <li><strong>Dự án:</strong> Customer Management</li>
+                    <li data-i18n-html="p.1.c.1"><strong>Python</strong> — Cơ bản, OOP, Exception</li>
+                    <li data-i18n-html="p.1.c.2"><strong>PostgreSQL</strong> — Database Design, SQL</li>
+                    <li data-i18n-html="p.1.c.3"><strong>Git & GitLab</strong> — Workflow, Branch</li>
+                    <li data-i18n-html="p.1.c.4"><strong>Dự án:</strong> Customer Management</li>
                 </ul>
-                <div class="program-outcome">✅ Biết lập trình · Hiểu dữ liệu · Biết làm việc với Git</div>
+                <div class="program-outcome" data-i18n="p.1.outcome">✅ Biết lập trình · Hiểu dữ liệu · Biết làm việc với Git</div>
                 <div class="course-footer">
-                    <span class="program-price">— <small>trong combo</small></span>
-                    <span class="badge badge-hot">🔥 Nền tảng</span>
+                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                    <span class="badge badge-hot" data-i18n="p.1.badge">🔥 Nền tảng</span>
                 </div>
             </div>
 
@@ -169,20 +170,20 @@
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="Odoo Developer Foundation">
                 </div>
-                <div class="course-num">Junior Odoo Developer</div>
-                <div class="course-title">Odoo Developer Foundation</div>
-                <div class="program-target">Đã có nền tảng lập trình</div>
-                <div class="program-duration">⏱ 5–6 buổi</div>
+                <div class="course-num" data-i18n="p.2.num">Junior Odoo Developer</div>
+                <div class="course-title" data-i18n="p.2.title">Odoo Developer Foundation</div>
+                <div class="program-target" data-i18n="p.2.target">Đã có nền tảng lập trình</div>
+                <div class="program-duration" data-i18n="p.2.duration">⏱ 5–6 buổi</div>
                 <ul class="program-curriculum">
-                    <li>ERP & Odoo Architecture · MVC · Module</li>
-                    <li>Models · ORM · Decorator · Inheritance</li>
-                    <li>View · Security · Controller · QWeb</li>
-                    <li><strong>Dự án:</strong> Student Management System</li>
+                    <li data-i18n="p.2.c.1">ERP & Odoo Architecture · MVC · Module</li>
+                    <li data-i18n="p.2.c.2">Models · ORM · Decorator · Inheritance</li>
+                    <li data-i18n="p.2.c.3">View · Security · Controller · QWeb</li>
+                    <li data-i18n-html="p.2.c.4"><strong>Dự án:</strong> Student Management System</li>
                 </ul>
-                <div class="program-outcome">✅ Viết module Odoo · Customize hệ thống · Hiểu kiến trúc Odoo</div>
+                <div class="program-outcome" data-i18n="p.2.outcome">✅ Viết module Odoo · Customize hệ thống · Hiểu kiến trúc Odoo</div>
                 <div class="course-footer">
-                    <span class="program-price">— <small>trong combo</small></span>
-                    <span class="badge badge-hot">🔥 Cốt lõi</span>
+                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                    <span class="badge badge-hot" data-i18n="p.2.badge">🔥 Cốt lõi</span>
                 </div>
             </div>
 
@@ -191,21 +192,21 @@
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="AI & Vibe Coding Odoo">
                 </div>
-                <div class="course-num">Làm việc cùng AI</div>
-                <div class="course-title">AI & Vibe Coding Odoo</div>
-                <div class="program-target">Đã biết Odoo · Muốn tăng năng suất</div>
-                <div class="program-duration">⏱ 4–5 buổi</div>
+                <div class="course-num" data-i18n="p.3.num">Làm việc cùng AI</div>
+                <div class="course-title" data-i18n="p.3.title">AI & Vibe Coding Odoo</div>
+                <div class="program-target" data-i18n="p.3.target">Đã biết Odoo · Muốn tăng năng suất</div>
+                <div class="program-duration" data-i18n="p.3.duration">⏱ 4–5 buổi</div>
                 <ul class="program-curriculum">
-                    <li>Prompt Engineering · AI Pair Programming</li>
-                    <li>AI Code Generation · Review · Refactor · Debug</li>
-                    <li>Technical Design · Documentation</li>
-                    <li>Tool: ChatGPT · Claude · Cursor · OpenCode</li>
-                    <li><strong>Dự án:</strong> Phát triển module bằng AI</li>
+                    <li data-i18n="p.3.c.1">Prompt Engineering · AI Pair Programming</li>
+                    <li data-i18n="p.3.c.2">AI Code Generation · Review · Refactor · Debug</li>
+                    <li data-i18n="p.3.c.3">Technical Design · Documentation</li>
+                    <li data-i18n="p.3.c.4">Tool: ChatGPT · Claude · Cursor · OpenCode</li>
+                    <li data-i18n-html="p.3.c.5"><strong>Dự án:</strong> Phát triển module bằng AI</li>
                 </ul>
-                <div class="program-outcome">✅ Tăng tốc phát triển · Nâng cao năng suất</div>
+                <div class="program-outcome" data-i18n="p.3.outcome">✅ Tăng tốc phát triển · Nâng cao năng suất</div>
                 <div class="course-footer">
-                    <span class="program-price">— <small>trong combo</small></span>
-                    <span class="badge badge-new">✨ AI</span>
+                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                    <span class="badge badge-new" data-i18n="p.3.badge">✨ AI</span>
                 </div>
             </div>
 
@@ -215,19 +216,19 @@
                     <div class="course-icon ci-blue">
                         <img src="image/postgresql.jpg" alt="Odoo Business & Functional">
                     </div>
-                    <div class="course-num">Nghiệp vụ</div>
-                    <div class="course-title">Odoo Business & Functional</div>
-                    <div class="program-target">Developer · BA · Consultant</div>
-                    <div class="program-duration">⏱ 3–4 buổi</div>
+                    <div class="course-num" data-i18n="p.4.num">Nghiệp vụ</div>
+                    <div class="course-title" data-i18n="p.4.title">Odoo Business & Functional</div>
+                    <div class="program-target" data-i18n="p.4.target">Developer · BA · Consultant</div>
+                    <div class="program-duration" data-i18n="p.4.duration">⏱ 3–4 buổi</div>
                     <ul class="program-curriculum">
-                        <li>CRM · Sales · Purchase · Inventory</li>
-                        <li>Accounting · HR · MRP</li>
-                        <li><strong>Dự án:</strong> Phân tích nghiệp vụ doanh nghiệp</li>
+                        <li data-i18n="p.4.c.1">CRM · Sales · Purchase · Inventory</li>
+                        <li data-i18n="p.4.c.2">Accounting · HR · MRP</li>
+                        <li data-i18n-html="p.4.c.3"><strong>Dự án:</strong> Phân tích nghiệp vụ doanh nghiệp</li>
                     </ul>
-                    <div class="program-outcome">✅ Hiểu khách hàng · Phân tích yêu cầu</div>
+                    <div class="program-outcome" data-i18n="p.4.outcome">✅ Hiểu khách hàng · Phân tích yêu cầu</div>
                     <div class="course-footer">
-                        <span class="program-price">— <small>trong combo</small></span>
-                        <span class="badge badge-pop">Nghiệp vụ</span>
+                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                        <span class="badge badge-pop" data-i18n="p.4.badge">Nghiệp vụ</span>
                     </div>
                 </div>
             </div>
@@ -238,20 +239,20 @@
                     <div class="course-icon ci-blue">
                         <img src="image/odoo.png" alt="Odoo Advanced Developer">
                     </div>
-                    <div class="course-num">Nâng cao</div>
-                    <div class="course-title">Odoo Advanced Developer</div>
-                    <div class="program-target">Đã biết Odoo CB · Odoo Dev 6 tháng–2 năm</div>
-                    <div class="program-duration">⏱ 6–8 buổi</div>
+                    <div class="course-num" data-i18n="p.5.num">Nâng cao</div>
+                    <div class="course-title" data-i18n="p.5.title">Odoo Advanced Developer</div>
+                    <div class="program-target" data-i18n="p.5.target">Đã biết Odoo CB · Odoo Dev 6 tháng–2 năm</div>
+                    <div class="program-duration" data-i18n="p.5.duration">⏱ 6–8 buổi</div>
                     <ul class="program-curriculum">
-                        <li>Advanced ORM · SQL Optimization · Multi Company</li>
-                        <li>API Integration · Cron Job · Queue Job · Testing</li>
-                        <li>OWL · POS · Performance</li>
-                        <li><strong>Dự án:</strong> HR Management hoặc CRM</li>
+                        <li data-i18n="p.5.c.1">Advanced ORM · SQL Optimization · Multi Company</li>
+                        <li data-i18n="p.5.c.2">API Integration · Cron Job · Queue Job · Testing</li>
+                        <li data-i18n="p.5.c.3">OWL · POS · Performance</li>
+                        <li data-i18n-html="p.5.c.4"><strong>Dự án:</strong> HR Management hoặc CRM</li>
                     </ul>
-                    <div class="program-outcome">✅ Tham gia dự án thực tế · Xử lý bài toán khó</div>
+                    <div class="program-outcome" data-i18n="p.5.outcome">✅ Tham gia dự án thực tế · Xử lý bài toán khó</div>
                     <div class="course-footer">
-                        <span class="program-price">— <small>trong combo</small></span>
-                        <span class="badge badge-pop">Chuyên sâu</span>
+                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                        <span class="badge badge-pop" data-i18n="p.5.badge">Chuyên sâu</span>
                     </div>
                 </div>
             </div>
@@ -262,27 +263,27 @@
                     <div class="course-icon ci-blue">
                         <img src="image/devops.jpg" alt="DevOps for Odoo">
                     </div>
-                    <div class="course-num">Vận hành</div>
-                    <div class="course-title">DevOps for Odoo</div>
-                    <div class="program-target">Odoo Developer · Technical Consultant</div>
-                    <div class="program-duration">⏱ 4–5 buổi</div>
+                    <div class="course-num" data-i18n="p.6.num">Vận hành</div>
+                    <div class="course-title" data-i18n="p.6.title">DevOps for Odoo</div>
+                    <div class="program-target" data-i18n="p.6.target">Odoo Developer · Technical Consultant</div>
+                    <div class="program-duration" data-i18n="p.6.duration">⏱ 4–5 buổi</div>
                     <ul class="program-curriculum">
-                        <li>Linux · Docker · PostgreSQL</li>
-                        <li>Nginx · SSL · Odoo Deployment</li>
-                        <li>Backup · Monitoring · CI/CD</li>
-                        <li><strong>Dự án:</strong> Deploy Production Server</li>
+                        <li data-i18n="p.6.c.1">Linux · Docker · PostgreSQL</li>
+                        <li data-i18n="p.6.c.2">Nginx · SSL · Odoo Deployment</li>
+                        <li data-i18n="p.6.c.3">Backup · Monitoring · CI/CD</li>
+                        <li data-i18n-html="p.6.c.4"><strong>Dự án:</strong> Deploy Production Server</li>
                     </ul>
-                    <div class="program-outcome">✅ Cài đặt Odoo · Triển khai hệ thống</div>
+                    <div class="program-outcome" data-i18n="p.6.outcome">✅ Cài đặt Odoo · Triển khai hệ thống</div>
                     <div class="course-footer">
-                        <span class="program-price">— <small>trong combo</small></span>
-                        <span class="badge badge-new">Triển khai</span>
+                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
+                        <span class="badge badge-new" data-i18n="p.6.badge">Triển khai</span>
                     </div>
                 </div>
             </div>
 
             <!-- Expand button -->
             <div class="expand-btn-wrap">
-                <button class="expand-btn" onclick="togglePrograms(this)">+ Xem thêm 3 chương trình</button>
+                <button class="expand-btn" onclick="togglePrograms(this)" data-expanded="false">+ Xem thêm 3 chương trình</button>
             </div>
         </div>
     </section>
@@ -291,73 +292,73 @@
 
     <!-- PRICING -->
     <section class="section" id="pricing">
-        <span class="section-tag">Bảng giá</span>
-        <h2>Combo tiết kiệm — chọn gói phù hợp</h2>
-        <p class="section-sub">Tiết kiệm đến 30% so với đăng ký từng chương trình riêng lẻ</p>
+        <span class="section-tag" data-i18n="pricing.tag">Bảng giá</span>
+        <h2 data-i18n="pricing.title">Combo tiết kiệm — chọn gói phù hợp</h2>
+        <p class="section-sub" data-i18n="pricing.sub">Tiết kiệm đến 30% so với đăng ký từng chương trình riêng lẻ</p>
         <div class="pricing-wrap">
             <table class="pricing-table">
                 <thead>
                     <tr>
-                        <th>Combo</th>
-                        <th>Nội dung</th>
-                        <th>Giá</th>
+                        <th data-i18n="pricing.th1">Combo</th>
+                        <th data-i18n="pricing.th2">Nội dung</th>
+                        <th data-i18n="pricing.th3">Giá</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td data-label="Combo">
-                            <span class="pricing-name">Bắt đầu</span>
-                            <span class="pricing-badge hot">🔥 Phổ biến</span>
+                            <span class="pricing-name" data-i18n="r.1.name">Bắt đầu</span>
+                            <span class="pricing-badge hot" data-i18n="r.1.badge">🔥 Phổ biến</span>
                         </td>
-                        <td data-label="Nội dung">Developer Foundation + Odoo Developer Foundation</td>
-                        <td data-label="Giá"><span class="pricing-price">6 <small>triệu</small></span></td>
+                        <td data-label="Nội dung"><span data-i18n="r.1.content">Developer Foundation + Odoo Developer Foundation</span></td>
+                        <td data-label="Giá"><span class="pricing-price" data-i18n-html="r.1.price">6 <small>triệu</small></span></td>
                         <td data-label="" class="pricing-action">
-                            <a class="pricing-btn" href="#register">Đăng ký</a>
+                            <a class="pricing-btn" href="#register" data-i18n="pricing.btn">Đăng ký</a>
                         </td>
                     </tr>
                     <tr>
                         <td data-label="Combo">
-                            <span class="pricing-name">Chuyên nghiệp</span>
-                            <span class="pricing-badge best">Tiết kiệm nhất</span>
+                            <span class="pricing-name" data-i18n="r.2.name">Chuyên nghiệp</span>
+                            <span class="pricing-badge best" data-i18n="r.2.badge">Tiết kiệm nhất</span>
                         </td>
-                        <td data-label="Nội dung">Bắt đầu + Odoo Advanced Developer</td>
-                        <td data-label="Giá"><span class="pricing-price">10 <small>triệu</small></span></td>
+                        <td data-label="Nội dung"><span data-i18n="r.2.content">Bắt đầu + Odoo Advanced Developer</span></td>
+                        <td data-label="Giá"><span class="pricing-price" data-i18n-html="r.2.price">10 <small>triệu</small></span></td>
                         <td data-label="" class="pricing-action">
-                            <a class="pricing-btn" href="#register">Đăng ký</a>
+                            <a class="pricing-btn" href="#register" data-i18n="pricing.btn">Đăng ký</a>
                         </td>
                     </tr>
                     <tr>
                         <td data-label="Combo">
-                            <span class="pricing-name">Chuyên gia</span>
-                            <span class="pricing-badge value">Toàn diện</span>
+                            <span class="pricing-name" data-i18n="r.3.name">Chuyên gia</span>
+                            <span class="pricing-badge value" data-i18n="r.3.badge">Toàn diện</span>
                         </td>
-                        <td data-label="Nội dung">Bắt đầu + Advanced + DevOps for Odoo</td>
-                        <td data-label="Giá"><span class="pricing-price">14 <small>triệu</small></span></td>
+                        <td data-label="Nội dung"><span data-i18n="r.3.content">Bắt đầu + Advanced + DevOps for Odoo</span></td>
+                        <td data-label="Giá"><span class="pricing-price" data-i18n-html="r.3.price">14 <small>triệu</small></span></td>
                         <td data-label="" class="pricing-action">
-                            <a class="pricing-btn" href="#register">Đăng ký</a>
+                            <a class="pricing-btn" href="#register" data-i18n="pricing.btn">Đăng ký</a>
                         </td>
                     </tr>
                     <tr>
                         <td data-label="Combo">
-                            <span class="pricing-name">AI Developer</span>
-                            <span class="pricing-badge ai">AI</span>
+                            <span class="pricing-name" data-i18n="r.4.name">AI Developer</span>
+                            <span class="pricing-badge ai" data-i18n="r.4.badge">AI</span>
                         </td>
-                        <td data-label="Nội dung">Odoo Advanced Developer + AI & Vibe Coding</td>
-                        <td data-label="Giá"><span class="pricing-price">8 <small>triệu</small></span></td>
+                        <td data-label="Nội dung"><span data-i18n="r.4.content">Odoo Advanced Developer + AI & Vibe Coding</span></td>
+                        <td data-label="Giá"><span class="pricing-price" data-i18n-html="r.4.price">8 <small>triệu</small></span></td>
                         <td data-label="" class="pricing-action">
-                            <a class="pricing-btn" href="#register">Đăng ký</a>
+                            <a class="pricing-btn" href="#register" data-i18n="pricing.btn">Đăng ký</a>
                         </td>
                     </tr>
                     <tr>
                         <td data-label="Combo">
-                            <span class="pricing-name">Full Stack Odoo</span>
-                            <span class="pricing-badge full">Trọn gói</span>
+                            <span class="pricing-name" data-i18n="r.5.name">Full Stack Odoo</span>
+                            <span class="pricing-badge full" data-i18n="r.5.badge">Trọn gói</span>
                         </td>
-                        <td data-label="Nội dung">Toàn bộ 6 chương trình</td>
-                        <td data-label="Giá"><span class="pricing-price">16–18 <small>triệu</small></span></td>
+                        <td data-label="Nội dung"><span data-i18n="r.5.content">Toàn bộ 6 chương trình</span></td>
+                        <td data-label="Giá"><span class="pricing-price" data-i18n-html="r.5.price">16–18 <small>triệu</small></span></td>
                         <td data-label="" class="pricing-action">
-                            <a class="pricing-btn outline" href="#register">Liên hệ</a>
+                            <a class="pricing-btn outline" href="#register" data-i18n="pricing.btn2">Liên hệ</a>
                         </td>
                     </tr>
                 </tbody>
@@ -369,9 +370,9 @@
 
     <!-- ROADMAP -->
     <section class="section" id="roadmap">
-        <span class="section-tag">Lộ trình học tập</span>
-        <h2>4 cấp độ — từ Nền tảng đến Senior</h2>
-        <p class="section-sub">Xây dựng kỹ năng vững chắc qua từng cấp độ, sẵn sàng cho sự nghiệp Odoo</p>
+        <span class="section-tag" data-i18n="roadmap.tag">Lộ trình học tập</span>
+        <h2 data-i18n="roadmap.title">4 cấp độ — từ Nền tảng đến Senior</h2>
+        <p class="section-sub" data-i18n="roadmap.sub">Xây dựng kỹ năng vững chắc qua từng cấp độ, sẵn sàng cho sự nghiệp Odoo</p>
         <div class="roadmap">
             <div class="road-item">
                 <div class="road-line">
@@ -379,8 +380,8 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name">Cấp độ 1 — Nền tảng <span class="level-badge l1">Biết lập trình & Odoo</span></div>
-                    <div class="road-detail">Developer Foundation + Odoo Developer Foundation — Từ con số 0 đến Junior Odoo Developer. Project: Customer Management, Student Management.</div>
+                    <div class="road-name"><span data-i18n="road.l1.name">Cấp độ 1 — Nền tảng</span> <span class="level-badge l1" data-i18n="road.l1.badge">Biết lập trình & Odoo</span></div>
+                    <div class="road-detail" data-i18n="road.l1.detail">Developer Foundation + Odoo Developer Foundation — Từ con số 0 đến Junior Odoo Developer. Project: Customer Management, Student Management.</div>
                 </div>
             </div>
             <div class="road-item">
@@ -389,8 +390,8 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name">Cấp độ 2 — Phát triển <span class="level-badge l2">Làm được dự án</span></div>
-                    <div class="road-detail">Odoo Advanced Developer + Business & Functional — ORM nâng cao, OWL, Integration, Performance, nghiệp vụ doanh nghiệp.</div>
+                    <div class="road-name"><span data-i18n="road.l2.name">Cấp độ 2 — Phát triển</span> <span class="level-badge l2" data-i18n="road.l2.badge">Làm được dự án</span></div>
+                    <div class="road-detail" data-i18n="road.l2.detail">Odoo Advanced Developer + Business & Functional — ORM nâng cao, OWL, Integration, Performance, nghiệp vụ doanh nghiệp.</div>
                 </div>
             </div>
             <div class="road-item">
@@ -399,8 +400,8 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name">Cấp độ 3 — Vận hành <span class="level-badge l3">Triển khai hệ thống</span></div>
-                    <div class="road-detail">DevOps for Odoo — Linux, Docker, Nginx, CI/CD, Backup. Deploy production server thực tế.</div>
+                    <div class="road-name"><span data-i18n="road.l3.name">Cấp độ 3 — Vận hành</span> <span class="level-badge l3" data-i18n="road.l3.badge">Triển khai hệ thống</span></div>
+                    <div class="road-detail" data-i18n="road.l3.detail">DevOps for Odoo — Linux, Docker, Nginx, CI/CD, Backup. Deploy production server thực tế.</div>
                 </div>
             </div>
             <div class="road-item">
@@ -408,31 +409,31 @@
                     <div class="road-dot">4</div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name">Cấp độ 4 — AI Developer <span class="level-badge l4">Tăng năng suất với AI</span></div>
-                    <div class="road-detail">AI & Vibe Coding Odoo — Prompt Engineering, AI Code Generation, AI Review & Debug, Technical Design. Làm việc hiệu quả gấp 2-3 lần.</div>
+                    <div class="road-name"><span data-i18n="road.l4.name">Cấp độ 4 — AI Developer</span> <span class="level-badge l4" data-i18n="road.l4.badge">Tăng năng suất với AI</span></div>
+                    <div class="road-detail" data-i18n="road.l4.detail">AI & Vibe Coding Odoo — Prompt Engineering, AI Code Generation, AI Review & Debug, Technical Design. Làm việc hiệu quả gấp 2-3 lần.</div>
                 </div>
             </div>
         </div>
         <div class="levels-grid">
             <div class="level-card">
                 <div class="level-num">L1</div>
-                <div class="level-name">Nền tảng</div>
-                <div class="level-desc">Biết lập trình và Odoo</div>
+                <div class="level-name" data-i18n="road.card1">Nền tảng</div>
+                <div class="level-desc" data-i18n="road.card1d">Biết lập trình và Odoo</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L2</div>
-                <div class="level-name">Phát triển</div>
-                <div class="level-desc">Làm được dự án</div>
+                <div class="level-name" data-i18n="road.card2">Phát triển</div>
+                <div class="level-desc" data-i18n="road.card2d">Làm được dự án</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L3</div>
-                <div class="level-name">Vận hành</div>
-                <div class="level-desc">Triển khai hệ thống</div>
+                <div class="level-name" data-i18n="road.card3">Vận hành</div>
+                <div class="level-desc" data-i18n="road.card3d">Triển khai hệ thống</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L4</div>
-                <div class="level-name">AI Developer</div>
-                <div class="level-desc">Tăng năng suất với AI</div>
+                <div class="level-name" data-i18n="road.card4">AI Developer</div>
+                <div class="level-desc" data-i18n="road.card4d">Tăng năng suất với AI</div>
             </div>
         </div>
     </section>
@@ -441,40 +442,40 @@
 
     <!-- WHY -->
     <section class="section" id="why">
-        <span class="section-tag">Tại sao chọn Vinc Academy</span>
-        <h2>Học thực chiến, ra làm được ngay</h2>
-        <p class="section-sub">Không lý thuyết suông — mỗi bài học gắn với bài tập và dự án thực tế</p>
+        <span class="section-tag" data-i18n="why.tag">Tại sao chọn Vinc Academy</span>
+        <h2 data-i18n="why.title">Học thực chiến, ra làm được ngay</h2>
+        <p class="section-sub" data-i18n="why.sub">Không lý thuyết suông — mỗi bài học gắn với bài tập và dự án thực tế</p>
         <div class="why-grid">
             <div class="why-card">
                 <div class="why-icon-wrap">🎯</div>
-                <div class="why-title">Thực hành là chính</div>
-                <div class="why-desc">Mỗi module đều có bài tập code thực tế, project cuối khóa để xây portfolio.</div>
+                <div class="why-title" data-i18n="w.1.title">Thực hành là chính</div>
+                <div class="why-desc" data-i18n="w.1.desc">Mỗi module đều có bài tập code thực tế, project cuối khóa để xây portfolio.</div>
             </div>
             <div class="why-card">
                 <div class="why-icon-wrap">👨‍🏫</div>
-                <div class="why-title">Giảng viên kinh nghiệm</div>
-                <div class="why-desc">Đội ngũ developer và Odoo consultant có nhiều năm kinh nghiệm thực chiến doanh
+                <div class="why-title" data-i18n="w.2.title">Giảng viên kinh nghiệm</div>
+                <div class="why-desc" data-i18n="w.2.desc">Đội ngũ developer và Odoo consultant có nhiều năm kinh nghiệm thực chiến doanh
                     nghiệp.</div>
             </div>
             <div class="why-card">
                 <div class="why-icon-wrap">💬</div>
-                <div class="why-title">Hỗ trợ liên tục</div>
-                <div class="why-desc">Nhóm học viên riêng, giảng viên hỗ trợ câu hỏi trong ngày, không bỏ sót ai.</div>
+                <div class="why-title" data-i18n="w.3.title">Hỗ trợ liên tục</div>
+                <div class="why-desc" data-i18n="w.3.desc">Nhóm học viên riêng, giảng viên hỗ trợ câu hỏi trong ngày, không bỏ sót ai.</div>
             </div>
             <div class="why-card">
                 <div class="why-icon-wrap">📋</div>
-                <div class="why-title">Lộ trình rõ ràng</div>
-                <div class="why-desc">Biết chính xác học gì tiếp theo, không bị lạc trong biển kiến thức.</div>
+                <div class="why-title" data-i18n="w.4.title">Lộ trình rõ ràng</div>
+                <div class="why-desc" data-i18n="w.4.desc">Biết chính xác học gì tiếp theo, không bị lạc trong biển kiến thức.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">🏆</div>
-                <div class="why-title">Chứng chỉ hoàn thành</div>
-                <div class="why-desc">Nhận chứng chỉ sau khi hoàn thành khóa học, tăng điểm cộng trong CV.</div>
+                <div class="why-icon-wrap">👨‍🏫</div>
+                <div class="why-title" data-i18n="w.5.title">Mentor 1-1</div>
+                <div class="why-desc" data-i18n="w.5.desc">Hỗ trợ trực tiếp từ giảng viên, giải đáp thắc mắc trong ngày, định hướng lộ trình cá nhân.</div>
             </div>
             <div class="why-card">
                 <div class="why-icon-wrap">🔄</div>
-                <div class="why-title">Cập nhật nội dung</div>
-                <div class="why-desc">Nội dung được cập nhật theo phiên bản mới nhất của công nghệ.</div>
+                <div class="why-title" data-i18n="w.6.title">Cập nhật nội dung</div>
+                <div class="why-desc" data-i18n="w.6.desc">Nội dung được cập nhật theo phiên bản mới nhất của công nghệ.</div>
             </div>
         </div>
     </section>
@@ -483,30 +484,30 @@
 
     <!-- FAQ -->
     <section class="section" id="faq">
-        <span class="section-tag">FAQ</span>
-        <h2>Câu hỏi thường gặp</h2>
-        <p class="section-sub">Những thắc mắc phổ biến từ học viên</p>
+        <span class="section-tag" data-i18n="faq.tag">FAQ</span>
+        <h2 data-i18n="faq.title">Câu hỏi thường gặp</h2>
+        <p class="section-sub" data-i18n="faq.sub">Những thắc mắc phổ biến từ học viên</p>
         <div class="faq-list">
             <div class="faq-item">
-                <div class="faq-q" onclick="toggleFaq(this)">Chưa biết gì về lập trình, học Developer Foundation được không? <span
+                <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q1">Chưa biết gì về lập trình, học Developer Foundation được không?</span> <span
                         class="faq-arrow">▾</span></div>
-                <div class="faq-a">Hoàn toàn được. Chương trình Developer Foundation được thiết kế từ con số 0 — bắt đầu với Python cơ bản, không yêu cầu kinh nghiệm trước. Chỉ cần máy tính và kết nối internet là đủ.</div>
+                <div class="faq-a" data-i18n="faq.a1">Hoàn toàn được. Chương trình Developer Foundation được thiết kế từ con số 0 — bắt đầu với Python cơ bản, không yêu cầu kinh nghiệm trước. Chỉ cần máy tính và kết nối internet là đủ.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q" onclick="toggleFaq(this)">Học online hay offline? <span class="faq-arrow">▾</span>
+                <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q2">Học online hay offline?</span> <span class="faq-arrow">▾</span>
                 </div>
-                <div class="faq-a">Vinc Academy đào tạo online qua video bài giảng và buổi live có tương tác. Học viên
+                <div class="faq-a" data-i18n="faq.a2">Vinc Academy đào tạo online qua video bài giảng và buổi live có tương tác. Học viên
                     có thể xem lại bất cứ lúc nào, không bị ràng buộc lịch cố định. Có nhóm riêng để hỗ trợ xuyên suốt.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q" onclick="toggleFaq(this)">Sau Odoo Developer Foundation có thể đi làm được không? <span
+                <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q3">Sau Odoo Developer Foundation có thể đi làm được không?</span> <span
                         class="faq-arrow">▾</span></div>
-                <div class="faq-a">Có. Odoo Developer Foundation giúp bạn viết module, customize hệ thống và hiểu kiến trúc Odoo — đủ để ứng tuyển Junior Odoo Developer. Nếu muốn nâng cao, bạn có thể học tiếp Advanced hoặc DevOps.</div>
+                <div class="faq-a" data-i18n="faq.a3">Có. Odoo Developer Foundation giúp bạn viết module, customize hệ thống và hiểu kiến trúc Odoo — đủ để ứng tuyển Junior Odoo Developer. Nếu muốn nâng cao, bạn có thể học tiếp Advanced hoặc DevOps.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q" onclick="toggleFaq(this)">Thời gian hoàn thành mỗi chương trình là bao lâu? <span
+                <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q4">Thời gian hoàn thành mỗi chương trình là bao lâu?</span> <span
                         class="faq-arrow">▾</span></div>
-                <div class="faq-a">Developer Foundation: 8–10 buổi, Odoo Foundation: 5–6 buổi, Advanced: 6–8 buổi, DevOps: 4–5 buổi, AI & Vibe Coding: 4–5 buổi. Trung bình 4–8 tuần nếu học đều đặn 1–2 giờ mỗi ngày. Không có deadline, học viên hoàn toàn chủ động thời gian.</div>
+                <div class="faq-a" data-i18n="faq.a4">Developer Foundation: 8–10 buổi, Odoo Foundation: 5–6 buổi, Advanced: 6–8 buổi, DevOps: 4–5 buổi, AI & Vibe Coding: 4–5 buổi. Trung bình 4–8 tuần nếu học đều đặn 1–2 giờ mỗi ngày. Không có deadline, học viên hoàn toàn chủ động thời gian.</div>
             </div>
         </div>
     </section>
@@ -515,9 +516,9 @@
 
     <!-- REGISTER -->
     <section class="section" id="register">
-        <span class="section-tag">Đăng ký học</span>
-        <h2>3 bước bắt đầu đơn giản</h2>
-        <p class="section-sub">Chọn combo phù hợp — chuyển khoản — bắt đầu học ngay</p>
+        <span class="section-tag" data-i18n="register.tag">Đăng ký học</span>
+        <h2 data-i18n="register.title">3 bước bắt đầu đơn giản</h2>
+        <p class="section-sub" data-i18n="register.sub">Chọn combo phù hợp — chuyển khoản — bắt đầu học ngay</p>
         <div class="steps-wrapper">
             <div class="steps-list">
                 <div class="step-item">
@@ -525,9 +526,9 @@
                         <div class="step-num">1</div>
                     </div>
                     <div class="step-body">
-                        <div class="step-title">Chọn combo phù hợp</div>
-                        <div class="step-desc">Xem bảng combo bên cạnh hoặc chọn chương trình riêng lẻ phía trên. Nếu chưa chắc, nhắn Zalo để được tư vấn miễn phí.</div>
-                        <span class="step-tag">Tư vấn miễn phí</span>
+                        <div class="step-title" data-i18n="reg.step1">Chọn combo phù hợp</div>
+                        <div class="step-desc" data-i18n="reg.desc1">Xem bảng combo bên cạnh hoặc chọn chương trình riêng lẻ phía trên. Nếu chưa chắc, nhắn Zalo để được tư vấn miễn phí.</div>
+                        <span class="step-tag" data-i18n="reg.tag1">Tư vấn miễn phí</span>
                     </div>
                 </div>
                 <div class="step-item">
@@ -535,9 +536,9 @@
                         <div class="step-num">2</div>
                     </div>
                     <div class="step-body">
-                        <div class="step-title">Chuyển khoản học phí</div>
-                        <div class="step-desc">Chuyển khoản đúng số tiền theo combo đã chọn. Nội dung ghi rõ: <strong>Họ tên + SĐT + Tên combo</strong>.</div>
-                        <span class="step-tag teal">Xác nhận trong 24h</span>
+                        <div class="step-title" data-i18n="reg.step2">Chuyển khoản học phí</div>
+                        <div class="step-desc" data-i18n-html="reg.desc2">Chuyển khoản đúng số tiền theo combo đã chọn. Nội dung ghi rõ: <strong>Họ tên + SĐT + Tên combo</strong>.</div>
+                        <span class="step-tag teal" data-i18n="reg.tag2">Xác nhận trong 24h</span>
                     </div>
                 </div>
                 <div class="step-item">
@@ -545,57 +546,59 @@
                         <div class="step-num">3</div>
                     </div>
                     <div class="step-body">
-                        <div class="step-title">Nhận link & bắt đầu học</div>
-                        <div class="step-desc">Sau khi xác nhận thanh toán, bạn sẽ nhận link truy cập khóa học qua Zalo hoặc Email. Học ngay, không giới hạn thời gian.</div>
-                        <span class="step-tag amber">Truy cập mãi mãi</span>
+                        <div class="step-title" data-i18n="reg.step3">Nhận link & bắt đầu học</div>
+                        <div class="step-desc" data-i18n="reg.desc3">Sau khi xác nhận thanh toán, bạn sẽ nhận link truy cập khóa học qua Zalo hoặc Email. Học ngay, không giới hạn thời gian.</div>
+                        <span class="step-tag amber" data-i18n="reg.tag3">Truy cập mãi mãi</span>
                     </div>
                 </div>
             </div>
 
             <div class="register-card">
-                <h3>Đăng ký học</h3>
-                <p class="sub">Chuyển khoản để kích hoạt tài khoản</p>
+                <h3 data-i18n="reg.card.title">Đăng ký học</h3>
+                <p class="sub" data-i18n="reg.card.sub">Chuyển khoản để kích hoạt tài khoản</p>
 
                 <div style="background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: 10px; padding: 14px 16px; margin-bottom: 1.25rem;">
-                    <div style="font-size: 13px; font-weight: 600; color: var(--blue-700); margin-bottom: 4px;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--blue-700); margin-bottom: 4px;" data-i18n="reg.suggest.title">
                         💡 Gợi ý cho người mới
                     </div>
-                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;" data-i18n-html="reg.suggest.desc">
                         Combo <strong>Bắt đầu</strong> (6 triệu) — đã bao gồm Developer Foundation + Odoo Developer Foundation.
                         Phù hợp nhất để bắt đầu từ con số 0.
                     </div>
                 </div>
 
                 <div class="payment-info">
-                    <h4>Thông tin tài khoản</h4>
+                    <h4 data-i18n="reg.pay.title">Thông tin tài khoản</h4>
                     <div class="payment-row">
-                        <span class="pk">Ngân hàng</span>
-                        <span class="pv">TECHCOMBANK</span>
+                        <span class="pk" data-i18n="reg.pay.bank">Ngân hàng</span>
+                        <span class="pv" data-i18n="reg.pay.bankV">TECHCOMBANK</span>
                     </div>
                     <div class="payment-row">
-                        <span class="pk">Số tài khoản</span>
-                        <span class="pv bank">0987654321</span>
+                        <span class="pk" data-i18n="reg.pay.acc">Số tài khoản</span>
+                        <span class="pv bank" data-i18n="reg.pay.accV">0987654321</span>
                     </div>
                     <div class="payment-row">
-                        <span class="pk">Chủ tài khoản</span>
-                        <span class="pv">DAM CONG HIEN</span>
+                        <span class="pk" data-i18n="reg.pay.name">Chủ tài khoản</span>
+                        <span class="pv" data-i18n="reg.pay.nameV">DAM CONG HIEN</span>
                     </div>
                     <div class="payment-row">
-                        <span class="pk">Liên hệ Zalo</span>
-                        <span class="pv bank">036 3729 276</span>
+                        <span class="pk" data-i18n="reg.pay.zalo">Liên hệ Zalo</span>
+                        <span class="pv bank" data-i18n="reg.pay.zaloV">036 3729 276</span>
                     </div>
                 </div>
 
-                <div style="margin-top: 1rem; font-size: 12.5px; color: var(--text-muted); text-align: center; line-height: 1.6;">
+                <div style="margin-top: 1rem; font-size: 12.5px; color: var(--text-muted); text-align: center; line-height: 1.6;" data-i18n-html="reg.transfer">
                     Nội dung chuyển khoản: <strong>Họ tên + SĐT + Tên combo</strong>
                 </div>
 
                 <a href="https://zalo.me/0363729276" target="_blank" style="display: block; text-align: center; background: var(--blue-500); color: #fff;
                         padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700;
-                        text-decoration: none; transition: background 0.15s; margin-top: 10px;">
+                        text-decoration: none; transition: background 0.15s; margin-top: 10px;"
+                    data-i18n="reg.btn">
                     Đăng ký qua Zalo · 036 3729 276
                 </a>
-                <p style="font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 8px;">
+                <p style="font-size: 11.5px; color: var(--text-muted); text-align: center; margin-top: 8px;"
+                    data-i18n="reg.note">
                     Chuyển khoản xong nhắn số Zalo để được kích hoạt
                 </p>
             </div>
@@ -604,8 +607,8 @@
 
     <!-- FOOTER -->
     <footer>
-        <div class="footer-logo">Vinc <span>Academy</span></div>
-        <div class="footer-right">© 2025 Vinc Academy</div>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-right" data-i18n="footer.right">© 2025 Vinc Academy</div>
     </footer>
 
     <!-- TOAST -->
