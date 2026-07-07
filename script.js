@@ -168,40 +168,33 @@ const i18n = {
         'programs.collapse': '− Thu gọn',
         'p.free': 'trong combo',
 
-        'pricing.tag': 'Bảng giá',
-        'pricing.title': 'Combo tiết kiệm — chọn gói phù hợp',
-        'pricing.sub': 'Tiết kiệm đến 30% so với đăng ký từng chương trình riêng lẻ',
-        'pricing.th1': 'Combo',
-        'pricing.th2': 'Nội dung',
-        'pricing.th3': 'Giá',
+        'pricing.tag': 'Học phí',
+        'pricing.title': 'Nhận thông tin học phí từ Vinc Academy',
+        'pricing.sub': 'Giảm 10% khi đăng ký hôm nay — nhắn Zalo để nhận báo giá chi tiết',
+        'pricing.promo': '🎉 Giảm 10% học phí khi đăng ký ngay hôm nay',
+        'pricing.listTitle': '5 combo đào tạo Odoo thực chiến',
 
         'r.1.name': 'Bắt đầu',
         'r.1.badge': '🔥 Phổ biến',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
-        'r.1.price': '6 triệu',
-
         'r.2.name': 'Chuyên nghiệp',
         'r.2.badge': 'Tiết kiệm nhất',
         'r.2.content': 'Bắt đầu + Odoo Advanced Developer',
-        'r.2.price': '10 triệu',
 
         'r.3.name': 'Chuyên gia',
         'r.3.badge': 'Toàn diện',
         'r.3.content': 'Bắt đầu + Advanced + DevOps for Odoo',
-        'r.3.price': '14 triệu',
 
         'r.4.name': 'AI Developer',
         'r.4.badge': 'AI',
         'r.4.content': 'AI & Vibe Coding',
-        'r.4.price': '6 triệu',
 
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'Trọn gói',
         'r.5.content': 'Toàn bộ 6 chương trình',
-        'r.5.price': '16–18 triệu',
 
-        'pricing.btn': 'Đăng ký',
-        'pricing.btn2': 'Liên hệ',
+        'pricing.btn': '📱 Nhận báo giá qua Zalo',
+        'pricing.formBtn': '📝 Đăng ký qua Google Form',
 
         'roadmap.tag': 'Lộ trình học tập',
         'roadmap.title': '4 cấp độ — từ Foundation đến Senior',
@@ -271,33 +264,24 @@ const i18n = {
 
         'register.tag': 'Đăng ký học',
         'register.title': '3 bước bắt đầu đơn giản',
-        'register.sub': 'Chọn combo phù hợp — chuyển khoản — bắt đầu học ngay',
+        'register.sub': 'Chọn combo — nhận tư vấn — bắt đầu học ngay',
         'reg.step1': 'Chọn combo phù hợp',
-        'reg.desc1': 'Xem bảng combo hoặc chọn chương trình riêng lẻ. Nếu chưa chắc, nhắn Zalo để được tư vấn miễn phí.',
+        'reg.desc1': 'Xem danh sách combo phía trên hoặc chọn chương trình riêng lẻ. Nếu chưa chắc, nhắn Zalo để được tư vấn miễn phí.',
         'reg.tag1': 'Tư vấn miễn phí',
-        'reg.step2': 'Chuyển khoản học phí',
-        'reg.desc2': 'Chuyển khoản đúng số tiền theo combo đã chọn. Nội dung ghi rõ: <strong>Họ tên + SĐT + Tên combo</strong>.',
-        'reg.tag2': 'Xác nhận trong 24h',
-        'reg.step3': 'Nhận link & bắt đầu học',
-        'reg.desc3': 'Sau khi xác nhận thanh toán, bạn sẽ nhận link truy cập khóa học qua Zalo hoặc Email. Học ngay, không giới hạn thời gian.',
+        'reg.step2': 'Nhận tư vấn và báo giá',
+        'reg.desc2': 'Nhắn tin qua Zalo, đội ngũ Vinc Academy sẽ tư vấn lộ trình phù hợp và gửi báo giá chi tiết trong vòng 24h.',
+        'reg.tag2': 'Tư vấn miễn phí',
+        'reg.step3': 'Nhận thông tin & bắt đầu học',
+        'reg.desc3': 'Sau khi nhận báo giá và xác nhận, bạn sẽ được hướng dẫn chi tiết và bắt đầu học ngay. Không giới hạn thời gian.',
         'reg.tag3': 'Truy cập mãi mãi',
-
-        'reg.suggest.title': '💡 Gợi ý cho người mới',
-        'reg.suggest.desc': 'Combo <strong>Bắt đầu</strong> (6 triệu) — đã bao gồm Developer Foundation + Odoo Developer Foundation. Phù hợp nhất để bắt đầu từ con số 0.',
-        'reg.pay.title': 'Thông tin tài khoản',
-        'reg.pay.bank': 'Ngân hàng',
-        'reg.pay.bankV': 'TECHCOMBANK',
-        'reg.pay.acc': 'Số tài khoản',
-        'reg.pay.accV': '0987654321',
-        'reg.pay.name': 'Chủ tài khoản',
-        'reg.pay.nameV': 'DAM CONG HIEN',
-        'reg.pay.zalo': 'Liên hệ Zalo',
-        'reg.pay.zaloV': '036 3729 276',
-        'reg.transfer': 'Nội dung chuyển khoản: <strong>Họ tên + SĐT + Tên combo</strong>',
-        'reg.btn': 'Đăng ký qua Zalo · 036 3729 276',
-        'reg.note': 'Chuyển khoản xong nhắn số Zalo để được kích hoạt',
         'reg.card.title': 'Đăng ký học',
-        'reg.card.sub': 'Chuyển khoản để kích hoạt tài khoản',
+        'reg.card.sub': 'Liên hệ ngay để nhận ưu đãi',
+        'reg.suggest.desc': '💡 Combo <strong>Bắt đầu</strong> — dành cho người mới, đã bao gồm Developer Foundation + Odoo Developer Foundation. Phù hợp nhất để bắt đầu từ con số 0.',
+        'reg.card.text': 'Nhắn tin qua Zalo, đội ngũ Vinc Academy sẽ <strong>tư vấn miễn phí</strong> và gửi <strong>báo giá chi tiết</strong> trong vòng 24h.',
+        'reg.card.benefits': '✅ Tư vấn lộ trình phù hợp<br>✅ Báo giá chi tiết theo combo<br>✅ Giảm 10% khi đăng ký hôm nay',
+        'reg.btn': 'Nhắn tin Zalo ngay · 036 3729 276',
+        'reg.formBtn': '📝 Đăng ký qua Google Form',
+        'reg.note': 'Phản hồi trong vòng 24h — Cam kết không spam',
         'page.title': 'Vinc Academy — Đào tạo lập trình thực chiến',
 
         'footer': 'Vinc Academy',
@@ -426,40 +410,33 @@ const i18n = {
         'programs.collapse': '− Collapse',
         'p.free': 'in combo',
 
-        'pricing.tag': 'Pricing',
-        'pricing.title': 'Combo Deals — pick your plan',
-        'pricing.sub': 'Save up to 30% compared to individual program registration',
-        'pricing.th1': 'Combo',
-        'pricing.th2': 'Content',
-        'pricing.th3': 'Price',
+        'pricing.tag': 'Tuition',
+        'pricing.title': 'Get tuition info from Vinc Academy',
+        'pricing.sub': 'Get 10% off when you register today — message Zalo for a detailed quote',
+        'pricing.promo': '🎉 10% off tuition when you register today',
+        'pricing.listTitle': '5 hands-on Odoo training combos',
 
         'r.1.name': 'Starter',
         'r.1.badge': '🔥 Popular',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
-        'r.1.price': '6M VND',
-
         'r.2.name': 'Professional',
         'r.2.badge': 'Best Value',
         'r.2.content': 'Starter + Odoo Advanced Developer',
-        'r.2.price': '10M VND',
 
         'r.3.name': 'Expert',
         'r.3.badge': 'Comprehensive',
         'r.3.content': 'Starter + Advanced + DevOps for Odoo',
-        'r.3.price': '14M VND',
 
         'r.4.name': 'AI Developer',
         'r.4.badge': 'AI',
         'r.4.content': 'AI & Vibe Coding',
-        'r.4.price': '6M VND',
 
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'All-in',
         'r.5.content': 'All 6 programs',
-        'r.5.price': '16–18M VND',
 
-        'pricing.btn': 'Register',
-        'pricing.btn2': 'Contact',
+        'pricing.btn': '📱 Get a quote via Zalo',
+        'pricing.formBtn': '📝 Register via Google Form',
 
         'roadmap.tag': 'Learning Path',
         'roadmap.title': '4 Levels — from Foundation to Senior',
@@ -527,33 +504,24 @@ const i18n = {
 
         'register.tag': 'Registration',
         'register.title': '3 Simple Steps to Start',
-        'register.sub': 'Pick a combo — transfer — start learning today',
+        'register.sub': 'Pick a combo — get advice — start learning today',
         'reg.step1': 'Choose your combo',
-        'reg.desc1': 'Check the pricing table or pick individual programs. Not sure? Message us on Zalo for free consultation.',
+        'reg.desc1': 'Check the combo list above or pick individual programs. Not sure? Message us on Zalo for free consultation.',
         'reg.tag1': 'Free consultation',
-        'reg.step2': 'Transfer tuition',
-        'reg.desc2': 'Transfer the exact amount for your chosen combo. Include: <strong>Full name + Phone + Combo name</strong>.',
-        'reg.tag2': 'Confirm within 24h',
-        'reg.step3': 'Get access & start',
-        'reg.desc3': 'After payment confirmation, you will receive course access via Zalo or Email. Learn immediately, no time limit.',
+        'reg.step2': 'Get advice & quote',
+        'reg.desc2': 'Message us on Zalo, the Vinc Academy team will advise on the right path and send a detailed quote within 24h.',
+        'reg.tag2': 'Free consultation',
+        'reg.step3': 'Get info & start learning',
+        'reg.desc3': 'After receiving the quote and confirming, you will get detailed guidance and start learning right away. No time limit.',
         'reg.tag3': 'Lifetime access',
-
-        'reg.suggest.title': '💡 Recommended for beginners',
-        'reg.suggest.desc': '<strong>Starter</strong> combo (6M VND) — includes Developer Foundation + Odoo Developer Foundation. Best for starting from zero.',
-        'reg.pay.title': 'Account Info',
-        'reg.pay.bank': 'Bank',
-        'reg.pay.bankV': 'TECHCOMBANK',
-        'reg.pay.acc': 'Account No.',
-        'reg.pay.accV': '0987654321',
-        'reg.pay.name': 'Account Holder',
-        'reg.pay.nameV': 'DAM CONG HIEN',
-        'reg.pay.zalo': 'Zalo Contact',
-        'reg.pay.zaloV': '036 3729 276',
-        'reg.transfer': 'Transfer content: <strong>Full name + Phone + Combo name</strong>',
-        'reg.btn': 'Register via Zalo · 036 3729 276',
-        'reg.note': 'After transfer, message via Zalo to activate',
         'reg.card.title': 'Register',
-        'reg.card.sub': 'Transfer to activate your account',
+        'reg.card.sub': 'Contact us now for special offers',
+        'reg.suggest.desc': '💡 <strong>Starter</strong> combo — for beginners, includes Developer Foundation + Odoo Developer Foundation. Best for starting from zero.',
+        'reg.card.text': 'Message us on Zalo, the Vinc Academy team will provide <strong>free consultation</strong> and send a <strong>detailed quote</strong> within 24h.',
+        'reg.card.benefits': '✅ Find the right learning path<br>✅ Detailed quote per combo<br>✅ 10% off when you register today',
+        'reg.btn': 'Message us on Zalo · 036 3729 276',
+        'reg.formBtn': '📝 Register via Google Form',
+        'reg.note': 'Response within 24h — No spam guarantee',
         'page.title': 'Vinc Academy — Hands-on Programming Training',
 
         'footer': 'Vinc Academy',
@@ -605,7 +573,17 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLang();
     initCertificateSearch();
     initMobileNav();
+    initAboutBadge();
 });
+
+// ── ABOUT BADGE (mobile tap to show text) ──
+function initAboutBadge() {
+    const badge = document.querySelector('.about-float-badge');
+    if (!badge) return;
+    badge.addEventListener('click', () => {
+        badge.classList.toggle('show');
+    });
+}
 
 // ── MOBILE NAV (Hamburger) ──
 function initMobileNav() {
@@ -636,6 +614,21 @@ function initMobileNav() {
         }
     });
 }
+
+// ── FORM MODAL ──
+function openFormModal() {
+    document.getElementById('formModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFormModal() {
+    document.getElementById('formModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeFormModal();
+});
 
 // ── CERTIFICATE VERIFY SEARCH ──
 function initCertificateSearch() {

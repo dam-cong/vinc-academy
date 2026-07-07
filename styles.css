@@ -115,6 +115,7 @@
      font-size: 16px;
      font-weight: 700;
      letter-spacing: -0.3px;
+     white-space: nowrap;
  }
 
  .nav-logo-text span {
@@ -155,6 +156,17 @@
      cursor: pointer;
      transition: background 0.15s, transform 0.1s;
      letter-spacing: -0.1px;
+     white-space: nowrap;
+ }
+
+ @media (max-width: 520px) {
+     .btn-nav {
+         padding: 7px 10px;
+         font-size: 11.5px;
+     }
+     .nav-logo-text {
+         display: none;
+     }
  }
 
  .btn-nav:hover {
@@ -346,11 +358,15 @@
      gap: 12px;
      flex-wrap: wrap;
  }
+ .hero-actions .btn-primary,
+ .hero-actions .btn-secondary {
+     flex: 1;
+ }
 
  .btn-primary {
      background: var(--blue-500);
      color: #fff;
-     border: none;
+     border: 1.5px solid transparent;
      padding: 13px 26px;
      border-radius: 9px;
      font-family: 'Be Vietnam Pro', sans-serif;
@@ -385,9 +401,12 @@
  }
 
  .hero-stats {
-     display: flex;
-     flex-direction: column;
+     display: grid;
+     grid-template-columns: repeat(2, 1fr);
      gap: 12px;
+ }
+ .hero-stats .stat-card:nth-child(3) {
+     grid-column: 1 / -1;
  }
 
  .stat-card {
@@ -501,8 +520,7 @@
      }
 
      .hero-stats {
-         flex-direction: row;
-         flex-wrap: wrap;
+         gap: 10px;
      }
 
      .nav-toggle {
@@ -798,11 +816,17 @@
      gap: 12px;
  }
 
- @media (max-width: 700px) {
-     .why-grid {
-         grid-template-columns: repeat(2, 1fr);
-     }
- }
+@media (max-width: 700px) {
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
  .why-card {
      background: var(--gray-50);
@@ -921,12 +945,33 @@
      align-items: center;
  }
 
- @media (max-width: 700px) {
-     .about-grid {
-         grid-template-columns: 1fr;
-         gap: 2rem;
-     }
- }
+@media (max-width: 700px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .about-float-badge {
+        bottom: -8px;
+        right: 50%;
+        transform: translateX(50%);
+        padding: 8px 14px;
+    }
+    .about-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .about-stats-row {
+        grid-template-columns: 1fr;
+    }
+    .about-float-badge span {
+        display: none;
+    }
+    .about-float-badge.show span {
+        display: inline;
+    }
+}
 
  .about-visual {
      position: relative;
@@ -1188,34 +1233,154 @@
      border-color: var(--blue-500);
  }
 
- .btn-register {
-     background: var(--blue-500);
-     color: #fff;
-     border: none;
-     padding: 13px;
-     border-radius: 9px;
-     font-family: 'Be Vietnam Pro', sans-serif;
-     font-size: 15px;
-     font-weight: 700;
-     cursor: pointer;
-     transition: background 0.15s, transform 0.1s;
-     letter-spacing: -0.2px;
-     width: 100%;
- }
+.btn-register {
+    display: block;
+    text-align: center;
+    background: var(--blue-500);
+    color: #fff;
+    border: none;
+    padding: 13px 16px;
+    border-radius: 9px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: -0.2px;
+    width: 100%;
+}
 
- .btn-register:hover {
-     background: var(--blue-700);
-     transform: translateY(-1px);
- }
+.btn-register:hover {
+    background: var(--blue-700);
+    transform: translateY(-1px);
+}
 
- .reg-note {
+.btn-register.outline {
+    margin-top: 10px;
+    background: #34A853;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(52, 168, 83, 0.3);
+    font-weight: 700;
+}
+
+.btn-register.outline:hover {
+    background: #2D9249;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4);
+}
+
+.reg-note {
      font-size: 11.5px;
      color: var(--text-muted);
      margin-top: 10px;
      text-align: center;
  }
 
- .payment-info {
+ .reg-card-simple {
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.reg-card-icon {
+    font-size: 36px;
+    margin-bottom: 0.75rem;
+}
+
+.reg-card-text {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+}
+
+.reg-suggest {
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 1.25rem;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.reg-card-benefits {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+/* ── FORM MODAL ── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gray-100);
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.modal-close:hover {
+    background: var(--gray-200);
+}
+
+.modal-iframe {
+    width: 100%;
+    height: 800px;
+    border: none;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 12px;
+    }
+    .modal-iframe {
+        height: 650px;
+    }
+}
+
+.payment-info {
      margin-top: 1.25rem;
      padding-top: 1.25rem;
      border-top: 1px solid var(--border-light);
@@ -1774,6 +1939,137 @@
     .pricing-table .pricing-action .pricing-btn {
         width: 100%;
         text-align: center;
+    }
+}
+
+/* ── PRICING SECTION (new) ── */
+.pricing-promo {
+    background: linear-gradient(135deg, var(--coral-50), var(--amber-50));
+    border: 1px solid var(--amber-600);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 1.5rem;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--amber-600);
+    letter-spacing: 0.3px;
+}
+
+.pricing-list-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.3px;
+}
+
+.pricing-combos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.pricing-combos .combo-card {
+    margin: 0;
+}
+
+.pricing-combos .combo-card h4 {
+    font-size: 14px;
+}
+
+.pricing-combos .combo-card .combo-includes {
+    font-size: 12px;
+    min-height: auto;
+}
+
+.pricing-cta-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.btn-row .btn-register {
+    flex: 1;
+    width: auto;
+    margin-top: 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pricing-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-500);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.pricing-cta:hover {
+    background: var(--blue-700);
+    transform: translateY(-2px);
+}
+
+.pricing-cta.gform {
+    background: #34A853;
+    box-shadow: 0 4px 12px rgba(52, 168, 83, 0.3);
+}
+
+.pricing-cta.gform:hover {
+    background: #2D9249;
+    box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4);
+}
+
+@media (max-width: 800px) {
+    .pricing-combos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .pricing-cta-wrap {
+        flex-direction: column;
+    }
+
+    .pricing-cta {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-row {
+        flex-direction: column;
+    }
+
+    .btn-row .btn-register {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .pricing-combos {
+        grid-template-columns: 1fr;
     }
 }
 
