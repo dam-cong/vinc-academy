@@ -51,8 +51,20 @@ const i18n = {
         'nav.programs': 'Chương trình',
         'nav.pricing': 'Bảng giá',
         'nav.roadmap': 'Lộ trình',
-        'nav.why': 'Tại sao chúng tôi',
+        'nav.why': 'Quyền lợi',
         'nav.faq': 'FAQ',
+        'nav.certificate': 'Chứng chỉ',
+
+        'verify.subtitle': 'Vinc Academy Verification System',
+        'verify.title': 'XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC',
+        'verify.desc': 'Tra cứu nhanh và chính xác văn bằng, chứng chỉ được cấp bởi Vinc Academy. Nhập mã số chứng chỉ ở khung bên dưới để xác thực trực tuyến.',
+        'verify.placeholder': 'Nhập mã chứng chỉ (Ví dụ: VINC-2026-PY01)...',
+        'verify.btn': 'Tra cứu',
+        'verify.sampleLabel': 'Mã thử nghiệm nhanh: ',
+        'verify.found': 'Tìm thấy chứng nhận! Đang chuyển hướng...',
+        'verify.invalid': 'Mã chứng nhận không hợp lệ. Vui lòng kiểm tra lại!',
+        'verify.empty': 'Vui lòng nhập mã chứng nhận.',
+        'verify.sampleSelected': 'Đã chọn mã mẫu: {code}. Bấm nút "Tra cứu" để xác minh.',
 
         'hero.badge': 'Đào tạo thực chiến · 100% dự án thật',
         'hero.title': 'Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer',
@@ -71,6 +83,16 @@ const i18n = {
         'about.stat1': 'Chương trình',
         'about.stat2': 'Thực hành',
         'about.stat3': 'Cấp độ lộ trình',
+
+        'instructor.tag': 'Giảng viên',
+        'instructor.name': 'Đàm Công Hiến',
+        'instructor.badge': 'Giảng viên tại Vinc Academy',
+        'instructor.desc1': '<strong>Đàm Công Hiến</strong> là <strong>Senior Odoo Developer</strong> và giảng viên tại Vinc Academy với <strong>hơn 5 năm kinh nghiệm</strong> phát triển và triển khai các giải pháp ERP trên nền tảng Odoo. Anh có chuyên môn về <strong>Python, PostgreSQL, DevOps</strong>, phát triển module Odoo, tích hợp hệ thống, tối ưu hiệu năng, triển khai Docker, xây dựng CI/CD và tư vấn chuyển đổi số cho doanh nghiệp.',
+        'instructor.desc2': 'Anh đã trực tiếp <strong>đào tạo hơn 100 thực tập sinh và lập trình viên Python Odoo</strong>, áp dụng phương pháp <strong>Learning by Doing</strong> với các dự án thực tế, giúp học viên nhanh chóng làm chủ Odoo và sẵn sàng tham gia các dự án triển khai ngay sau khóa học.',
+        'instructor.quote': '"Biết làm mới là biết thật — và Odoo là cách nhanh nhất để chạm vào doanh nghiệp."',
+        'instructor.stat1num': '5+', 'instructor.stat1': 'Năm kinh nghiệm',
+        'instructor.stat2num': '100+', 'instructor.stat2': 'Học viên',
+        'instructor.stat3num': '6', 'instructor.stat3': 'Chương trình',
 
         'programs.tag': 'Chương trình đào tạo',
         'programs.title': '6 chương trình Odoo thực chiến',
@@ -206,20 +228,32 @@ const i18n = {
         'road.card4d': 'Tăng năng suất với AI',
 
         'why.tag': 'Tại sao chọn Vinc Academy',
-        'why.title': 'Học thực chiến, ra làm được ngay',
-        'why.sub': 'Không lý thuyết suông — mỗi bài học gắn với bài tập và dự án thực tế',
-        'w.1.title': 'Thực hành là chính',
-        'w.1.desc': 'Mỗi module đều có bài tập code thực tế, project cuối khóa để xây portfolio.',
-        'w.2.title': 'Giảng viên kinh nghiệm',
-        'w.2.desc': 'Đội ngũ developer và Odoo consultant có nhiều năm kinh nghiệm thực chiến doanh nghiệp.',
-        'w.3.title': 'Hỗ trợ liên tục',
-        'w.3.desc': 'Nhóm học viên riêng, giảng viên hỗ trợ câu hỏi trong ngày, không bỏ sót ai.',
-        'w.4.title': 'Lộ trình rõ ràng',
-        'w.4.desc': 'Biết chính xác học gì tiếp theo, không bị lạc trong biển kiến thức.',
-        'w.5.title': 'Mentor 1-1',
-        'w.5.desc': 'Hỗ trợ trực tiếp từ giảng viên, giải đáp thắc mắc trong ngày, định hướng lộ trình cá nhân.',
-        'w.6.title': 'Cập nhật nội dung',
-        'w.6.desc': 'Nội dung được cập nhật theo phiên bản mới nhất của công nghệ.',
+        'why.title': 'Đào tạo như doanh nghiệp phần mềm',
+        'why.sub': 'Không chỉ học code — học quy trình phát triển sản phẩm thực tế',
+        'why.brandPromise': 'Không chỉ dạy bạn viết code — Vinc Academy đào tạo bạn trở thành Developer có thể tham gia dự án thực tế ngay sau khi hoàn thành khóa học.',
+        'w.1.title': 'Học như đi làm tại doanh nghiệp',
+        'w.1.desc': 'Làm việc theo đúng quy trình phát triển phần mềm: từ phân tích yêu cầu, lập kế hoạch, viết code, review code đến triển khai và vận hành hệ thống.',
+        'w.2.title': 'Tích lũy kinh nghiệm thực chiến',
+        'w.2.desc': 'Thay vì mất nhiều tháng đi thực tập, bạn được thực hành trên dự án mô phỏng sát môi trường doanh nghiệp, xây dựng kinh nghiệm ngay từ ngày đầu.',
+        'w.3.title': 'Giảng viên là Developer thực tế',
+        'w.3.desc': 'Senior Odoo Developer và Technical Consultant đang trực tiếp triển khai dự án cho doanh nghiệp — kiến thức cập nhật, kinh nghiệm thực tế.',
+        'w.4.title': 'Học quy trình phát triển hiện đại',
+        'w.4.desc': 'Git, Agile/Scrum, Code Review, Docker, CI/CD, Linux, PostgreSQL — những kỹ năng doanh nghiệp yêu cầu nhưng ít trung tâm đào tạo bài bản.',
+        'w.5.title': 'Xây dựng Portfolio chuyên nghiệp',
+        'w.5.desc': 'Mỗi khóa học có mini project và dự án cuối khóa. Sau khi hoàn thành, bạn sở hữu portfolio và source code để ứng tuyển.',
+        'w.6.title': 'Lộ trình rõ ràng đến Developer',
+        'w.6.desc': 'Chương trình thiết kế theo từng giai đoạn với mục tiêu cụ thể, giúp bạn biết chính xác học gì, làm gì và đạt được kỹ năng nào.',
+        'w.7.title': 'Mentor đồng hành xuyên suốt',
+        'w.7.desc': 'Giảng viên và mentor theo sát quá trình học, hỗ trợ giải đáp, review code và định hướng phát triển cá nhân.',
+        'w.8.title': 'Nội dung cập nhật theo doanh nghiệp',
+        'w.8.desc': 'Giáo trình được cập nhật liên tục theo phiên bản mới của Python, Odoo, PostgreSQL, Docker, DevOps — bám sát nhu cầu tuyển dụng.',
+        'w.9.title': 'Cộng đồng học viên',
+        'w.9.desc': 'Tham gia cộng đồng học viên Vinc Academy, trao đổi kiến thức, chia sẻ kinh nghiệm và hỗ trợ lẫn nhau trong suốt quá trình học.',
+        'cv.1': 'Learn by Building — Học qua xây dựng sản phẩm thực tế',
+        'cv.2': 'Learn by Doing — Thực hành là trọng tâm',
+        'cv.3': 'Learn with Mentors — Đồng hành cùng chuyên gia',
+        'cv.4': 'Learn like a Software Company — Quy trình chuyên nghiệp',
+        'cv.5': 'Learn for Your Career — Phát triển sự nghiệp bền vững',
 
         'faq.tag': 'FAQ',
         'faq.title': 'Câu hỏi thường gặp',
@@ -274,9 +308,21 @@ const i18n = {
         'nav.programs': 'Programs',
         'nav.pricing': 'Pricing',
         'nav.roadmap': 'Roadmap',
-        'nav.why': 'Why Us',
+        'nav.why': 'Benefits',
         'nav.faq': 'FAQ',
+        'nav.certificate': 'Certificate',
         'nav.register': 'Register Now',
+
+        'verify.subtitle': 'Vinc Academy Verification System',
+        'verify.title': 'VERIFY COURSE COMPLETION CERTIFICATE',
+        'verify.desc': 'Quickly and accurately look up diplomas and certificates issued by Vinc Academy. Enter the certificate code in the box below to verify online.',
+        'verify.placeholder': 'Enter certificate code (e.g. VINC-2026-PY01)...',
+        'verify.btn': 'Verify',
+        'verify.sampleLabel': 'Quick sample codes: ',
+        'verify.found': 'Certificate found! Redirecting...',
+        'verify.invalid': 'Invalid certificate code. Please check again!',
+        'verify.empty': 'Please enter a certificate code.',
+        'verify.sampleSelected': 'Selected sample code: {code}. Click "Verify" to authenticate.',
 
         'hero.badge': 'Hands-on Training · 100% Real Projects',
         'hero.title': 'Odoo<br><span class="accent">Hands-on</span><br>Training for Developers',
@@ -295,6 +341,16 @@ const i18n = {
         'about.stat1': 'Programs',
         'about.stat2': 'Practice',
         'about.stat3': 'Path Levels',
+
+        'instructor.tag': 'Instructor',
+        'instructor.name': 'Đàm Công Hiến',
+        'instructor.badge': 'Instructor at Vinc Academy',
+        'instructor.desc1': '<strong>Đàm Công Hiến</strong> is a <strong>Senior Odoo Developer</strong> and instructor at Vinc Academy with <strong>over 5 years of experience</strong> developing and deploying ERP solutions on the Odoo platform. His expertise includes <strong>Python, PostgreSQL, DevOps</strong>, Odoo module development, system integration, performance optimization, Docker deployment, CI/CD setup, and digital transformation consulting for businesses.',
+        'instructor.desc2': 'He has personally <strong>trained over 100 interns and Python Odoo developers</strong>, applying the <strong>Learning by Doing</strong> approach with real projects, helping students quickly master Odoo and be ready to join deployment projects right after the course.',
+        'instructor.quote': '"You only truly know it when you can build it — and Odoo is the fastest way to touch business."',
+        'instructor.stat1num': '5+', 'instructor.stat1': 'Years Experience',
+        'instructor.stat2num': '100+', 'instructor.stat2': 'Students Trained',
+        'instructor.stat3num': '6', 'instructor.stat3': 'Programs',
 
         'programs.tag': 'Training Programs',
         'programs.title': '6 Hands-on Odoo Programs',
@@ -430,20 +486,32 @@ const i18n = {
         'road.card4d': 'Boost with AI',
 
         'why.tag': 'Why Vinc Academy',
-        'why.title': 'Learn by doing, ready to work',
-        'why.sub': 'No boring theory — every lesson includes exercises and real projects',
-        'w.1.title': 'Practice First',
-        'w.1.desc': 'Every module has real coding exercises and a final project to build your portfolio.',
-        'w.2.title': 'Experienced Mentors',
-        'w.2.desc': 'Our team of developers and Odoo consultants have years of real-world business experience.',
-        'w.3.title': 'Always Supported',
-        'w.3.desc': 'Dedicated student group, instructors answer questions within the day.',
-        'w.4.title': 'Clear Roadmap',
-        'w.4.desc': 'Know exactly what to learn next, never get lost in the sea of knowledge.',
-        'w.5.title': 'Mentor 1-1',
-        'w.5.desc': 'Direct support from instructors, daily Q&A, personalized learning path.',
-        'w.6.title': 'Updated Content',
-        'w.6.desc': 'Content is updated with the latest technology versions.',
+        'why.title': 'Training like a Software Company',
+        'why.sub': 'Not just coding — learn real product development workflows',
+        'why.brandPromise': 'We don\'t just teach you to code — Vinc Academy trains you to become a Developer ready for real projects right after the course.',
+        'w.1.title': 'Work like in a software company',
+        'w.1.desc': 'Follow real development workflows: requirements analysis, planning, coding, code review, deployment, and operations.',
+        'w.2.title': 'Real experience from day one',
+        'w.2.desc': 'Instead of spending months as an intern, you practice on business-simulated projects and build experience from day one.',
+        'w.3.title': 'Instructors are active Developers',
+        'w.3.desc': 'Senior Odoo Developers and Technical Consultants currently deploying real business projects — up-to-date knowledge, real experience.',
+        'w.4.title': 'Learn modern development workflows',
+        'w.4.desc': 'Git, Agile/Scrum, Code Review, Docker, CI/CD, Linux, PostgreSQL — enterprise skills rarely taught in traditional training centers.',
+        'w.5.title': 'Build a professional Portfolio',
+        'w.5.desc': 'Every course includes mini projects and a final project. Graduate with a portfolio and source code ready for job applications.',
+        'w.6.title': 'Clear path to Developer career',
+        'w.6.desc': 'Program designed in stages with specific goals — you always know what to learn, what to build, and what skills you\'ll gain.',
+        'w.7.title': 'Mentors guide you all the way',
+        'w.7.desc': 'Instructors and mentors track your progress, answer questions, review code, and guide your personal development.',
+        'w.8.title': 'Content updated for the industry',
+        'w.8.desc': 'Curriculum continuously updated with the latest Python, Odoo, PostgreSQL, Docker, DevOps — aligned with hiring needs.',
+        'w.9.title': 'Student Community',
+        'w.9.desc': 'Join the Vinc Academy student community to exchange knowledge, share experience, and support each other throughout your learning journey.',
+        'cv.1': 'Learn by Building — Learn through building real products',
+        'cv.2': 'Learn by Doing — Practice is the core',
+        'cv.3': 'Learn with Mentors — Alongside industry experts',
+        'cv.4': 'Learn like a Software Company — Professional workflow',
+        'cv.5': 'Learn for Your Career — Sustainable career growth',
 
         'faq.tag': 'FAQ',
         'faq.title': 'Frequently Asked Questions',
@@ -509,6 +577,12 @@ function applyLang() {
             el.innerHTML = i18n[currentLang][key];
         }
     });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+            el.setAttribute('placeholder', i18n[currentLang][key]);
+        }
+    });
     const btn = document.querySelector('.lang-toggle');
     if (btn) btn.textContent = currentLang === 'vi' ? 'EN' : 'VI';
 
@@ -527,7 +601,93 @@ function toggleLang() {
     applyLang();
 }
 
-document.addEventListener('DOMContentLoaded', applyLang);
+document.addEventListener('DOMContentLoaded', () => {
+    applyLang();
+    initCertificateSearch();
+    initMobileNav();
+});
+
+// ── MOBILE NAV (Hamburger) ──
+function initMobileNav() {
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (!navToggle || !navLinks) return;
+
+    navToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        navToggle.setAttribute('aria-label', isOpen ? 'Đóng menu' : 'Mở menu');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+            navToggle.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 800) {
+            navLinks.classList.remove('open');
+            navToggle.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+// ── CERTIFICATE VERIFY SEARCH ──
+function initCertificateSearch() {
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const feedbackMsg = document.getElementById('feedback-msg');
+    const sampleBadges = document.querySelectorAll('.sample-code-badge');
+
+    if (!searchForm || !searchInput) return;
+
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const certId = searchInput.value.trim().toUpperCase();
+
+        if (!certId) {
+            showVerifyFeedback(i18n[currentLang]['verify.empty'], 'error');
+            return;
+        }
+
+        if (window.certificatesDatabase && window.certificatesDatabase[certId]) {
+            showVerifyFeedback(i18n[currentLang]['verify.found'], 'success');
+            setTimeout(() => {
+                window.location.href = `certificate/certificate.html?id=${certId}`;
+            }, 800);
+        } else {
+            showVerifyFeedback(i18n[currentLang]['verify.invalid'], 'error');
+        }
+    });
+
+    if (sampleBadges && searchInput) {
+        sampleBadges.forEach(badge => {
+            badge.addEventListener('click', () => {
+                const code = badge.getAttribute('data-code');
+                searchInput.value = code;
+                searchInput.focus();
+                showVerifyFeedback(
+                    i18n[currentLang]['verify.sampleSelected'].replace('{code}', code),
+                    'success'
+                );
+            });
+        });
+    }
+
+    function showVerifyFeedback(text, type) {
+        if (!feedbackMsg) return;
+        feedbackMsg.innerText = text;
+        feedbackMsg.className = `feedback-msg ${type}`;
+        feedbackMsg.style.animation = 'none';
+        feedbackMsg.offsetHeight; /* trigger reflow */
+        feedbackMsg.style.animation = 'fadeInUp 0.3s ease';
+    }
+}
 
 // Scroll spy
 const spySections = document.querySelectorAll('section[id]');

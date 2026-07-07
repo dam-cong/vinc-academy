@@ -224,11 +224,54 @@
      display: none;
  }
 
- html[data-theme="dark"] .icon-moon {
-     display: block;
- }
+  html[data-theme="dark"] .icon-moon {
+      display: block;
+  }
 
- /* ── HERO ── */
+  /* Icon sáng hơn trên nền tối để dễ nhìn */
+  html[data-theme="dark"] .theme-toggle {
+      color: #53B0F5;
+  }
+
+  /* ── NAV TOGGLE (Hamburger) ── */
+  .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-card);
+      border-radius: 9px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+  }
+
+  .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--blue-500);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+
+  .nav-toggle.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+  }
+
+  .nav-toggle.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ── HERO ── */
  .hero {
      max-width: 1000px;
      margin: 0 auto;
@@ -416,15 +459,16 @@
      padding: 4rem 2.5rem;
  }
 
- .section-tag {
-     font-size: 11.5px;
-     font-weight: 700;
-     letter-spacing: 1.2px;
-     text-transform: uppercase;
-     color: var(--blue-500);
-     margin-bottom: 10px;
-     display: block;
- }
+.section-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--blue-500);
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+}
 
  .section h2 {
      font-size: 30px;
@@ -461,12 +505,73 @@
          flex-wrap: wrap;
      }
 
-     nav .nav-links {
+     .nav-toggle {
+         display: flex;
+     }
+
+     .nav-links {
+         position: absolute;
+         top: 64px;
+         left: 0;
+         right: 0;
+         flex-direction: column;
+         gap: 0;
+         background: var(--nav-bg);
+         backdrop-filter: blur(12px);
+         -webkit-backdrop-filter: blur(12px);
+         border-bottom: 1px solid var(--border-light);
+         padding: 0.5rem 1.5rem 1rem;
+         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
          display: none;
+         z-index: 99;
+     }
+
+     .nav-links.open {
+         display: flex;
+     }
+
+     .nav-links a {
+         padding: 0.8rem 0;
+         font-size: 14px;
+         border-bottom: 1px solid var(--border-light);
+     }
+
+     .nav-links a:last-child {
+         border-bottom: none;
      }
  }
 
- @media (max-width: 520px) {
+  /* Tablet / laptop nhỏ: thu nhỏ nav để link nằm 1 dòng */
+  @media (max-width: 1100px) {
+      nav {
+          padding: 0 1.5rem;
+      }
+      .nav-links {
+          gap: 18px;
+      }
+      .nav-links a {
+          font-size: 12.5px;
+          letter-spacing: 0;
+      }
+      .btn-nav {
+          padding: 8px 16px;
+          font-size: 12.5px;
+      }
+  }
+
+  @media (max-width: 900px) {
+      .nav-links {
+          gap: 12px;
+      }
+      .nav-links a {
+          font-size: 11.5px;
+      }
+      .btn-nav {
+          padding: 7px 12px;
+      }
+  }
+
+  @media (max-width: 520px) {
      .courses-grid {
          grid-template-columns: 1fr;
      }
@@ -719,13 +824,29 @@
      border: 1px solid var(--border-light);
  }
 
- .why-title {
-     font-size: 14px;
-     font-weight: 700;
-     color: var(--text-primary);
-     margin-bottom: 5px;
-     letter-spacing: -0.2px;
- }
+.why-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+    letter-spacing: -0.2px;
+}
+
+.why-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.why-header .why-icon-wrap {
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.why-header .why-title {
+    margin-bottom: 0;
+}
 
  .why-desc {
      font-size: 13px;
@@ -1653,6 +1774,158 @@
     .pricing-table .pricing-action .pricing-btn {
         width: 100%;
         text-align: center;
+    }
+}
+
+/* ── USP COMPARISON TABLE ── */
+.usp-table-wrap {
+    overflow-x: auto;
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+.usp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+}
+
+.usp-table th {
+    background: var(--blue-500);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+.usp-table th:first-child {
+    background: var(--gray-50);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 11.5px;
+}
+
+.usp-table th {
+    text-align: center;
+}
+
+.usp-table td {
+    padding: 13px 18px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.usp-table td strong {
+    color: var(--blue-500);
+}
+
+.usp-table tr:last-child td {
+    border-bottom: none;
+}
+
+.usp-table tr:hover td {
+    background: var(--gray-50);
+}
+
+@media (max-width: 700px) {
+    .usp-table,
+    .usp-table thead,
+    .usp-table tbody,
+    .usp-table tr,
+    .usp-table th,
+    .usp-table td {
+        display: block;
+    }
+    .usp-table thead {
+        display: none;
+    }
+    .usp-table tr {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-light);
+    }
+    .usp-table tr:last-child {
+        border-bottom: none;
+    }
+    .usp-table td {
+        padding: 4px 0;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+    .usp-table td::before {
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        flex-shrink: 0;
+    }
+    .usp-table td strong {
+        text-align: right;
+    }
+}
+
+/* ── CORE VALUES (tái sử dụng .levels-grid / .level-card) ── */
+.core-values {
+    margin-top: 2.5rem;
+    text-align: center;
+}
+
+.core-value-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.core-rows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.core-row {
+    display: grid;
+    gap: 10px;
+    max-width: 750px;
+    width: 100%;
+}
+
+.core-row:first-child {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.core-row:last-child {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 500px;
+}
+
+@media (max-width: 700px) {
+    .core-row:first-child,
+    .core-row:last-child {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .core-row:first-child,
+    .core-row:last-child {
+        grid-template-columns: 1fr;
+        max-width: 100%;
     }
 }
  

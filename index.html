@@ -9,6 +9,8 @@
         href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="cert-verify.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -29,6 +31,7 @@
             <a href="#roadmap" data-i18n="nav.roadmap">Lộ trình</a>
             <a href="#why" data-i18n="nav.why">Tại sao chúng tôi</a>
             <a href="#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="#verify" data-i18n="nav.certificate">Tra Cứu Chứng Chỉ</a>
         </div>
         <button class="btn-nav" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})" data-i18n="nav.register">Đăng ký ngay</button>
         <button class="lang-toggle" onclick="toggleLang()" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối"
@@ -49,6 +52,9 @@
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
         </button>
     </nav>
 
@@ -111,9 +117,9 @@
             <div class="about-content">
                 <span class="section-tag" data-i18n="about.tag">Giới thiệu</span>
                 <h2 style="margin-bottom:0;" data-i18n-html="about.title">Chúng tôi là<br>Vinc Academy</h2>
-                <p data-i18n="about.desc1">Vinc Academy được thành lập với sứ mệnh đào tạo Odoo <strong>thực chiến</strong> — nơi học viên
+                <p data-i18n-html="about.desc1">Vinc Academy được thành lập với sứ mệnh đào tạo Odoo <strong>thực chiến</strong> — nơi học viên
                     không chỉ học lý thuyết mà còn tự tay xây dựng sản phẩm thật từ ngày đầu tiên.</p>
-                <p data-i18n="about.desc2">Chúng tôi tập trung vào hệ sinh thái <strong>Python · Odoo · DevOps · AI</strong> — bộ kỹ năng được các
+                <p data-i18n-html="about.desc2">Chúng tôi tập trung vào hệ sinh thái <strong>Python · Odoo · DevOps · AI</strong> — bộ kỹ năng được các
                     doanh nghiệp Việt Nam và quốc tế săn đón nhất hiện nay, đặc biệt trong lĩnh vực ERP và tự động hóa
                     quy trình.</p>
                 <div class="about-highlight" data-i18n="about.quote">
@@ -443,42 +449,189 @@
     <!-- WHY -->
     <section class="section" id="why">
         <span class="section-tag" data-i18n="why.tag">Tại sao chọn Vinc Academy</span>
-        <h2 data-i18n="why.title">Học thực chiến, ra làm được ngay</h2>
-        <p class="section-sub" data-i18n="why.sub">Không lý thuyết suông — mỗi bài học gắn với bài tập và dự án thực tế</p>
+        <h2 data-i18n="why.title">Đào tạo như doanh nghiệp phần mềm</h2>
+        <p class="section-sub" data-i18n="why.sub">Không chỉ học code — học quy trình phát triển sản phẩm thực tế</p>
+
+        <!-- Brand Promise -->
+        <div class="about-highlight" data-i18n="why.brandPromise">
+            Không chỉ dạy bạn viết code — Vinc Academy đào tạo bạn trở thành Developer
+            có thể tham gia dự án thực tế ngay sau khi hoàn thành khóa học.
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="usp-table-wrap">
+            <table class="usp-table">
+                <thead>
+                    <tr>
+                        <th>Trung tâm đào tạo thông thường</th>
+                        <th>Vinc Academy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Thông thường">Học để biết</td>
+                        <td data-label="Vinc Academy"><strong>Học để làm</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Thông thường">Học theo giáo trình</td>
+                        <td data-label="Vinc Academy"><strong>Học theo dự án thực tế</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Thông thường">Chủ yếu học code</td>
+                        <td data-label="Vinc Academy"><strong>Học quy trình phát triển sản phẩm</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Thông thường">Thực hành ít</td>
+                        <td data-label="Vinc Academy"><strong>Thực hành xuyên suốt khóa học</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Thông thường">Kết thúc nhận chứng chỉ</td>
+                        <td data-label="Vinc Academy"><strong>Có Portfolio + kinh nghiệm thực chiến</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Thông thường">Học riêng từng công nghệ</td>
+                        <td data-label="Vinc Academy"><strong>Học từ Development → Deployment</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9 USP Cards -->
         <div class="why-grid">
             <div class="why-card">
-                <div class="why-icon-wrap">🎯</div>
-                <div class="why-title" data-i18n="w.1.title">Thực hành là chính</div>
-                <div class="why-desc" data-i18n="w.1.desc">Mỗi module đều có bài tập code thực tế, project cuối khóa để xây portfolio.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">🚀</div>
+                    <div class="why-title" data-i18n="w.1.title">Học như đi làm tại doanh nghiệp</div>
+                </div>
+                <div class="why-desc" data-i18n="w.1.desc">Làm việc theo đúng quy trình phát triển phần mềm: từ phân tích yêu cầu, lập kế hoạch, viết code, review code đến triển khai và vận hành hệ thống.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">👨‍🏫</div>
-                <div class="why-title" data-i18n="w.2.title">Giảng viên kinh nghiệm</div>
-                <div class="why-desc" data-i18n="w.2.desc">Đội ngũ developer và Odoo consultant có nhiều năm kinh nghiệm thực chiến doanh
-                    nghiệp.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">💼</div>
+                    <div class="why-title" data-i18n="w.2.title">Tích lũy kinh nghiệm thực chiến</div>
+                </div>
+                <div class="why-desc" data-i18n="w.2.desc">Thay vì mất nhiều tháng đi thực tập, bạn được thực hành trên dự án mô phỏng sát môi trường doanh nghiệp, xây dựng kinh nghiệm ngay từ ngày đầu.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">💬</div>
-                <div class="why-title" data-i18n="w.3.title">Hỗ trợ liên tục</div>
-                <div class="why-desc" data-i18n="w.3.desc">Nhóm học viên riêng, giảng viên hỗ trợ câu hỏi trong ngày, không bỏ sót ai.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">👨‍💻</div>
+                    <div class="why-title" data-i18n="w.3.title">Giảng viên là Developer thực tế</div>
+                </div>
+                <div class="why-desc" data-i18n="w.3.desc">Senior Odoo Developer và Technical Consultant đang trực tiếp triển khai dự án cho doanh nghiệp — kiến thức cập nhật, kinh nghiệm thực tế.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">📋</div>
-                <div class="why-title" data-i18n="w.4.title">Lộ trình rõ ràng</div>
-                <div class="why-desc" data-i18n="w.4.desc">Biết chính xác học gì tiếp theo, không bị lạc trong biển kiến thức.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">🏗️</div>
+                    <div class="why-title" data-i18n="w.4.title">Học quy trình phát triển hiện đại</div>
+                </div>
+                <div class="why-desc" data-i18n="w.4.desc">Git, Agile/Scrum, Code Review, Docker, CI/CD, Linux, PostgreSQL — những kỹ năng doanh nghiệp yêu cầu nhưng ít trung tâm đào tạo bài bản.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">👨‍🏫</div>
-                <div class="why-title" data-i18n="w.5.title">Mentor 1-1</div>
-                <div class="why-desc" data-i18n="w.5.desc">Hỗ trợ trực tiếp từ giảng viên, giải đáp thắc mắc trong ngày, định hướng lộ trình cá nhân.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">📂</div>
+                    <div class="why-title" data-i18n="w.5.title">Xây dựng Portfolio chuyên nghiệp</div>
+                </div>
+                <div class="why-desc" data-i18n="w.5.desc">Mỗi khóa học có mini project và dự án cuối khóa. Sau khi hoàn thành, bạn sở hữu portfolio và source code để ứng tuyển.</div>
             </div>
             <div class="why-card">
-                <div class="why-icon-wrap">🔄</div>
-                <div class="why-title" data-i18n="w.6.title">Cập nhật nội dung</div>
-                <div class="why-desc" data-i18n="w.6.desc">Nội dung được cập nhật theo phiên bản mới nhất của công nghệ.</div>
+                <div class="why-header">
+                    <div class="why-icon-wrap">🎯</div>
+                    <div class="why-title" data-i18n="w.6.title">Lộ trình rõ ràng đến Developer</div>
+                </div>
+                <div class="why-desc" data-i18n="w.6.desc">Chương trình thiết kế theo từng giai đoạn với mục tiêu cụ thể, giúp bạn biết chính xác học gì, làm gì và đạt được kỹ năng nào.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap">🤝</div>
+                    <div class="why-title" data-i18n="w.7.title">Mentor đồng hành xuyên suốt</div>
+                </div>
+                <div class="why-desc" data-i18n="w.7.desc">Giảng viên và mentor theo sát quá trình học, hỗ trợ giải đáp, review code và định hướng phát triển cá nhân.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap">🔄</div>
+                    <div class="why-title" data-i18n="w.8.title">Nội dung cập nhật theo doanh nghiệp</div>
+                </div>
+                <div class="why-desc" data-i18n="w.8.desc">Giáo trình được cập nhật liên tục theo phiên bản mới của Python, Odoo, PostgreSQL, Docker, DevOps — bám sát nhu cầu tuyển dụng.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap">👥</div>
+                    <div class="why-title" data-i18n="w.9.title">Cộng đồng học viên</div>
+                </div>
+                <div class="why-desc" data-i18n="w.9.desc">Tham gia cộng đồng học viên Vinc Academy, trao đổi kiến thức, chia sẻ kinh nghiệm và hỗ trợ lẫn nhau trong suốt quá trình học.</div>
+            </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="core-values">
+            <h3 style="font-size: 22px; font-weight: 700; margin-bottom: 1.25rem; text-align: center;">Giá trị cốt lõi</h3>
+            <div class="core-rows">
+                <div class="core-row">
+                    <div class="level-card">
+                        <div class="core-value-icon">💡</div>
+                        <div class="level-name" data-i18n="cv.1">Learn by Building — Học qua xây dựng sản phẩm thực tế</div>
+                    </div>
+                    <div class="level-card">
+                        <div class="core-value-icon">🚀</div>
+                        <div class="level-name" data-i18n="cv.2">Learn by Doing — Thực hành là trọng tâm</div>
+                    </div>
+                    <div class="level-card">
+                        <div class="core-value-icon">🤝</div>
+                        <div class="level-name" data-i18n="cv.3">Learn with Mentors — Đồng hành cùng chuyên gia</div>
+                    </div>
+                </div>
+                <div class="core-row">
+                    <div class="level-card">
+                        <div class="core-value-icon">🏢</div>
+                        <div class="level-name" data-i18n="cv.4">Learn like a Software Company — Quy trình chuyên nghiệp</div>
+                    </div>
+                    <div class="level-card">
+                        <div class="core-value-icon">📈</div>
+                        <div class="level-name" data-i18n="cv.5">Learn for Your Career — Phát triển sự nghiệp bền vững</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- INSTRUCTOR -->
+    <!-- <section class="section" id="instructor">
+        <div class="about-grid">
+            <div class="about-visual">
+                <div class="about-logo-block"
+                    style="background: var(--bg-card); border: 1px solid var(--border-light); max-width: 300px; aspect-ratio: 3 / 4;">
+                    <img src="image/hiendc.jpg" alt="Đàm Công Hiến"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" />
+                </div>
+                <div class="about-float-badge">
+                    <div class="dot"></div>
+                    <span data-i18n="instructor.badge">Giảng viên tại Vinc Academy</span>
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-tag" data-i18n="instructor.tag">Giảng viên</span>
+                <h2 style="margin-bottom:0;" data-i18n-html="instructor.name">Đàm Công Hiến</h2>
+                <p data-i18n-html="instructor.desc1"><strong>Đàm Công Hiến</strong> là <strong>Senior Odoo Developer</strong> và giảng viên tại Vinc Academy với <strong>hơn 5 năm kinh nghiệm</strong> phát triển và triển khai các giải pháp ERP trên nền tảng Odoo. Anh có chuyên môn về <strong>Python, PostgreSQL, DevOps</strong>, phát triển module Odoo, tích hợp hệ thống, tối ưu hiệu năng, triển khai Docker, xây dựng CI/CD và tư vấn chuyển đổi số cho doanh nghiệp.</p>
+                <p data-i18n-html="instructor.desc2">Anh đã trực tiếp <strong>đào tạo hơn 100 thực tập sinh và lập trình viên Python Odoo</strong>, áp dụng phương pháp <strong>Learning by Doing</strong> với các dự án thực tế, giúp học viên nhanh chóng làm chủ Odoo và sẵn sàng tham gia các dự án triển khai ngay sau khóa học.</p>
+                <div class="about-highlight" data-i18n="instructor.quote">"Biết làm mới là biết thật — và Odoo là cách nhanh nhất để chạm vào doanh nghiệp."</div>
+                <div class="about-stats-row">
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat1num">5+</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat1">Năm kinh nghiệm</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat2num">100+</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat2">Học viên</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat3num">6</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat3">Chương trình</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
 
     <div class="divider"></div>
 
@@ -508,6 +661,38 @@
                 <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q4">Thời gian hoàn thành mỗi chương trình là bao lâu?</span> <span
                         class="faq-arrow">▾</span></div>
                 <div class="faq-a" data-i18n="faq.a4">Developer Foundation: 8–10 buổi, Odoo Foundation: 5–6 buổi, Advanced: 6–8 buổi, DevOps: 4–5 buổi, AI & Vibe Coding: 4–5 buổi. Trung bình 4–8 tuần nếu học đều đặn 1–2 giờ mỗi ngày. Không có deadline, học viên hoàn toàn chủ động thời gian.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CERTIFICATE VERIFY -->
+    <section class="cert-verify" id="verify">
+        <div class="hero-section">
+            <div class="hero-content">
+                <p class="hero-subtitle" data-i18n="verify.subtitle">Vinc Academy Verification System</p>
+                <h1 class="hero-title" data-i18n="verify.title">XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC</h1>
+                <p class="hero-desc" data-i18n="verify.desc">Tra cứu nhanh và chính xác văn bằng, chứng chỉ được cấp bởi Vinc Academy. Nhập mã số chứng chỉ ở khung bên dưới để xác thực trực tuyến.</p>
+
+                <!-- Search Form -->
+                <form id="search-form" class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="search-input" class="search-input" data-i18n-placeholder="verify.placeholder" autocomplete="off">
+                    </div>
+                    <button type="submit" id="search-btn" class="search-btn" data-i18n="verify.btn">Tra cứu</button>
+                </form>
+
+                <!-- Feedback Message -->
+                <div id="feedback-msg" class="feedback-msg"></div>
+
+                <!-- Quick Sample Codes for Testing -->
+                <div class="verify-samples" style="margin-top: 2rem; font-size: 0.9rem; color: var(--gray-400);">
+                    <span data-i18n="verify.sampleLabel">Mã thử nghiệm nhanh: </span>
+                    <span class="sample-code-badge" data-code="VINC-2026-PY01" style="background: rgba(212,175,55,0.15); border: 1px solid var(--gold); padding: 4px 10px; border-radius: 15px; color: var(--gold-light); cursor: pointer; margin: 0 5px; display: inline-block; transition: all 0.2s;">VINC-2026-PY01</span>
+                    <span class="sample-code-badge" data-code="VINC-2026-OD02" style="background: rgba(212,175,55,0.15); border: 1px solid var(--gold); padding: 4px 10px; border-radius: 15px; color: var(--gold-light); cursor: pointer; margin: 0 5px; display: inline-block; transition: all 0.2s;">VINC-2026-OD02</span>
+                </div>
             </div>
         </div>
     </section>
@@ -614,6 +799,7 @@
     <!-- TOAST -->
     <div class="toast" id="toast">Đăng ký thành công! Chúng tôi sẽ liên hệ bạn sớm nhất.</div>
 
+    <script src="certificate/js/data.js"></script>
     <script src="script.js"></script>
 
 </body>

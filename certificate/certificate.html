@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chứng Nhận Hoàn Thành Khóa Học - Vinc Academy</title>
+    
+    <!-- Tab Icon -->
+    <link rel="icon" type="image/png" href="../image/vinc-academy.png">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/certificate.css">
+    
+    <!-- FontAwesome Icons (loaded via CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="cert-page-body">
+
+    <!-- Top Action Control Panel (Hidden when printing) -->
+    <div class="control-panel">
+        <div class="panel-left">
+            <a href="../index.html" class="back-btn" id="btn-back-home">
+                <i class="fa-solid fa-arrow-left"></i>
+                Quay lại Trang Chủ
+            </a>
+            <span class="cert-id-badge" id="cert-id-panel">Mã chứng nhận: <span id="cert-id">VINC-2026-PY01</span></span>
+        </div>
+        
+        <div class="panel-right">
+            <button id="print-btn" class="btn btn-primary" title="In hoặc Tải file PDF">
+                <i class="fa-solid fa-print"></i>
+                In / Tải PDF
+            </button>
+            <button id="share-btn" class="btn btn-secondary" title="Chia sẻ liên kết chứng chỉ">
+                <i class="fa-solid fa-share-nodes"></i>
+                Chia sẻ liên kết
+            </button>
+        </div>
+    </div>
+
+    <!-- Certificate Frame -->
+    <div class="cert-outer-container">
+        <div class="certificate-container" id="certificate-print-area">
+            
+            <!-- Security watermark & wavy graphics -->
+            <div class="cert-bg-patterns">
+                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Subtle diagonal grid pattern -->
+                        <pattern id="cert-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <rect width="40" height="40" fill="none"/>
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D4AF37" stroke-width="0.3" opacity="0.08"/>
+                            <circle cx="0" cy="0" r="1" fill="#D4AF37" opacity="0.15"/>
+                        </pattern>
+                        <!-- Microtext pattern - VINC ACADEMY repeated -->
+                        <pattern id="cert-microtext" width="120" height="30" patternUnits="userSpaceOnUse">
+                            <rect width="120" height="30" fill="none"/>
+                             <text x="2" y="18" font-family="'Outfit', sans-serif" font-size="8" font-weight="600" fill="#D4AF37" opacity="0.05" transform="rotate(-15, 60, 15)">VINC ACADEMY ★ VINC ACADEMY ★</text>
+                        </pattern>
+                        <!-- Complex hypocycloid guilloche pattern -->
+                        <pattern id="cert-guilloche" width="200" height="200" patternUnits="userSpaceOnUse">
+                            <rect width="200" height="200" fill="none"/>
+                            <path d="M 100 10 C 150 30, 190 80, 190 100 C 190 120, 150 170, 100 190 C 50 170, 10 120, 10 100 C 10 80, 50 30, 100 10 Z" fill="none" stroke="#0E2247" stroke-width="0.4" opacity="0.06"/>
+                            <path d="M 100 30 C 135 45, 165 80, 165 100 C 165 120, 135 155, 100 170 C 65 155, 35 120, 35 100 C 35 80, 65 45, 100 30 Z" fill="none" stroke="#D4AF37" stroke-width="0.4" opacity="0.06"/>
+                            <path d="M 100 50 C 120 60, 140 80, 140 100 C 140 120, 120 140, 100 150 C 80 140, 60 120, 60 100 C 60 80, 80 60, 100 50 Z" fill="none" stroke="#0E2247" stroke-width="0.3" opacity="0.05"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#cert-grid)"/>
+                    <rect width="100%" height="100%" fill="url(#cert-microtext)"/>
+                    <rect width="100%" height="100%" fill="url(#cert-guilloche)"/>
+                    
+                    <!-- Decorative guilloche waves top-left -->
+                    <path d="M -50 150 Q 200 -50 450 150 T 950 -20" fill="none" stroke="#D4AF37" stroke-width="0.8" opacity="0.08"/>
+                    <path d="M -50 170 Q 200 -30 450 170 T 950 0" fill="none" stroke="#D4AF37" stroke-width="0.8" opacity="0.08"/>
+                    <path d="M -50 190 Q 200 -10 450 190 T 950 20" fill="none" stroke="#0E2247" stroke-width="0.4" opacity="0.06"/>
+                    <path d="M -50 210 Q 200 10 450 210 T 950 40" fill="none" stroke="#0E2247" stroke-width="0.4" opacity="0.06"/>
+                    
+                    <!-- Decorative guilloche waves bottom-right -->
+                    <path d="M 150 820 Q 650 620 1150 780 T 1650 630" fill="none" stroke="#0E2247" stroke-width="1" opacity="0.08"/>
+                    <path d="M 150 800 Q 650 600 1150 760 T 1650 610" fill="none" stroke="#0E2247" stroke-width="1" opacity="0.08"/>
+                    <path d="M 150 780 Q 650 580 1150 740 T 1650 590" fill="none" stroke="#D4AF37" stroke-width="0.4" opacity="0.06"/>
+                    <path d="M 150 760 Q 650 560 1150 720 T 1650 570" fill="none" stroke="#D4AF37" stroke-width="0.4" opacity="0.06"/>
+                </svg>
+            </div>
+            
+            <!-- Large transparent watermark in center -->
+            <div class="cert-watermark"></div>
+
+            <!-- Borders -->
+            <div class="cert-border-outer"></div>
+            <div class="cert-border-security"></div>
+            <div class="cert-border-inner"></div>
+
+            <!-- Gold corners -->
+            <div class="cert-corner corner-tl"></div>
+            <div class="cert-corner corner-tr"></div>
+            <div class="cert-corner corner-bl"></div>
+            <div class="cert-corner corner-br"></div>
+
+            <!-- Top Right Ribbon containing Logo -->
+            <div class="cert-ribbon">
+                <img src="../image/vinc-academy.png" alt="Vinc Academy Star Logo" class="cert-ribbon-logo">
+                <div class="cert-ribbon-stars">★★★★★</div>
+            </div>
+
+            <!-- Header Section -->
+            <div class="cert-header">
+                <div class="cert-logo-section">
+                    <img src="../image/vinc-academy.png" alt="Vinc Academy Official Logo" class="cert-logo">
+                    <div class="cert-institution">
+                        <span class="cert-institution-name">VINC ACADEMY</span>
+                        <span class="cert-institution-motto">INSPIRE, LEARN, LEAD</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Certificate Body -->
+            <div class="cert-body">
+                <h2 class="cert-title-vi">GIẤY CHỨNG NHẬN</h2>
+                <h3 class="cert-title-en">CERTIFICATE OF COMPLETION</h3>
+                
+                <p class="cert-award-text">Chứng nhận học viên / This is to certify that</p>
+                
+                <h1 class="cert-recipient-name" id="cert-recipient">ĐÀM CÔNG HIẾN</h1>
+                <div class="cert-recipient-line"></div>
+                
+                <div class="cert-course-detail">
+                    <p class="cert-course-vi" id="cert-course-vi">
+                        Đã hoàn thành khoá học <strong class="cert-course-name">“Python Cơ Bản”</strong>
+                    </p>
+                    <p class="cert-course-en" id="cert-course-en">
+                        Has successfully completed the course <strong class="cert-course-name">“Python Fundamentals”</strong>
+                    </p>
+                    
+                    <p style="margin-top: 15px; font-size: 0.95rem; color: var(--gray-800);">
+                        Với thời lượng <strong id="cert-hours-vi">40</strong> giờ học. Xếp loại: <strong id="cert-grade-vi">Xuất Sắc</strong>
+                        <span style="color: var(--gray-700); font-style: italic; display: block; margin-top: 2px; font-size: 0.85rem;">
+                            With a duration of <span id="cert-hours-en">40</span> study hours. Grade: <span id="cert-grade-en">Excellent</span>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Details, QR, Stamp & Signature -->
+            <div class="cert-footer">
+                
+                <!-- Left footer column: Location, date & Verify link -->
+                <div class="cert-footer-left">
+                    <div class="cert-date-loc">
+                        <div class="cert-date-vi" id="cert-date-vi">Hà Nội, ngày 17 tháng 07 năm 2026</div>
+                        <div class="cert-date-en" id="cert-date-en">Ha Noi, July 17, 2026</div>
+                    </div>
+                    
+                    <!-- Dynamic verification reference -->
+                    <div class="cert-verification-ref" id="cert-verification-ref">
+                        Xác nhận tại: certificate.vincacademy.edu.vn/?id=VINC-2026-PY01
+                    </div>
+                    
+                </div>
+
+                <!-- Center footer column: Red Wax Stamp Seal -->
+                <div class="cert-footer-center">
+                    <div id="cert-stamp-container">
+                        <!-- SVG Stamp rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Right footer column: Signatures and Names -->
+                <div class="cert-footer-right">
+                    <div class="cert-sign-title">GIÁM ĐỐC ĐÀO TẠO</div>
+                    <div class="cert-sign-title-en">Director of Education</div>
+                    
+                    <!-- Signature Image Box -->
+                    <div class="cert-signature-container" id="cert-signature-container">
+                        <!-- SVG Hand-written Signature rendered by JS -->
+                    </div>
+                    
+                    <!-- Printed Name -->
+                    <div class="cert-sign-name" id="cert-instructor-name">ĐÀM CÔNG HIẾN</div>
+                    <div style="font-size: 0.75rem; color: var(--gray-700); margin-top: 2px;" id="cert-instructor-title-vi">Giám đốc Đào tạo</div>
+                    <div style="font-size: 0.7rem; color: var(--gray-700); font-style: italic;" id="cert-instructor-title-en">Director of Education</div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Toast Notification (Hidden by default) -->
+    <div id="toast-message" class="toast-msg">Đã sao chép liên kết vào bộ nhớ tạm!</div>
+
+    <!-- JS Files -->
+    <script src="js/data.js"></script>
+    <script src="js/cert-renderer.js"></script>
+</body>
+</html>
