@@ -1513,6 +1513,36 @@
     margin-bottom: 10px;
 }
 
+.program-detail-link-wrap {
+  padding: 4px 0 12px;
+}
+.program-detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: var(--blue-500);
+  letter-spacing: -0.1px;
+  transition: background 0.15s, transform 0.1s;
+}
+.program-detail-link::after {
+  content: '→';
+  font-size: 14px;
+  transition: transform 0.15s;
+}
+.program-detail-link:hover {
+  background: var(--blue-700);
+  transform: translateY(-1px);
+}
+.program-detail-link:hover::after {
+  transform: translateX(3px);
+}
+
 .program-outcome {
     font-size: 12px;
     color: var(--green-600);
@@ -1705,10 +1735,20 @@
     color: var(--purple-600);
 }
 
+.level-badge.l5 {
+    background: var(--coral-50);
+    color: var(--coral-600);
+}
+
+.level-badge.l6 {
+    background: var(--teal-50);
+    color: var(--teal-600);
+}
+
 /* ── BRAND LEVELS ── */
 .levels-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 10px;
     margin-top: 2rem;
 }
@@ -1742,21 +1782,24 @@
     line-height: 1.5;
 }
 
+@media (max-width: 900px) {
+    .levels-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 @media (max-width: 800px) {
     .combo-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+@media (max-width: 600px) {
     .levels-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
 @media (max-width: 520px) {
     .combo-grid {
         grid-template-columns: 1fr;
-    }
-    .levels-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
 

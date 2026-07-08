@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Vinc Academy — Chương trình đào tạo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .pd-hero {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 2rem;
+    }
+    .pd-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      transition: color 0.15s;
+    }
+    .pd-back:hover { color: var(--blue-500); }
+    .pd-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .pd-icon {
+      width: 80px; height: 80px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue-50);
+      flex-shrink: 0;
+    }
+    .pd-icon img { width: 48px; height: 48px; object-fit: contain; }
+    .pd-info { flex: 1; min-width: 200px; }
+    .pd-info .pd-level {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text-muted);
+      font-family: 'Space Mono', monospace; margin-bottom: 4px;
+    }
+    .pd-info .pd-title {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.8px;
+      color: var(--text-primary); margin-bottom: 6px;
+    }
+    .pd-meta {
+      display: flex; flex-wrap: wrap; gap: 10px 20px;
+      margin-bottom: 12px;
+    }
+    .pd-meta-item {
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .pd-meta-item strong { color: var(--text-primary); }
+    .pd-badge {
+      display: inline-block;
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 5px; margin-top: 4px;
+    }
+    .pd-desc {
+      font-size: 15px; color: var(--text-secondary);
+      line-height: 1.7; margin-bottom: 1rem;
+      max-width: 600px;
+    }
+    .pd-outcomes {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 2.5rem;
+    }
+    .pd-outcome-tag {
+      font-size: 12px; font-weight: 600;
+      padding: 5px 12px; border-radius: 20px;
+      background: var(--green-50); color: var(--green-600);
+      border: 1px solid #c3e6b2;
+    }
+    .pd-cta {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2.5rem;
+    }
+    .pd-cta a { text-decoration: none; flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .pd-cta .btn-google {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--blue-500); color: #fff;
+      border: 1.5px solid transparent; padding: 13px 22px;
+      border-radius: 9px; font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      text-decoration: none; letter-spacing: -0.2px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .pd-cta .btn-google:hover {
+      background: var(--blue-700); transform: translateY(-1px);
+    }
+    .pd-promo {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--amber-50); color: var(--amber-600);
+      border: 1px solid #ecd9b5; border-left: 3px solid var(--amber-600);
+      border-radius: 9px; padding: 12px 16px;
+      font-size: 14px; font-weight: 600; line-height: 1.5;
+      margin-bottom: 2.5rem;
+    }
+    .pd-promo .pd-promo-ico { font-size: 18px; flex-shrink: 0; }
+    @media (max-width: 520px) {
+      .pd-cta a { flex: 1; white-space: nowrap; }
+      .pd-cta .btn-ico { display: none; }
+      .pd-promo { font-size: 13px; }
+    }
+    .pd-section-title {
+      font-size: 20px; font-weight: 700;
+      letter-spacing: -0.5px; color: var(--text-primary);
+      margin-bottom: 1.25rem; padding-top: 0.5rem;
+    }
+    .pd-sessions {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-bottom: 3rem;
+    }
+    .pd-session {
+      border: 1px solid var(--border-light);
+      border-radius: 12px; background: var(--bg-card);
+      overflow: hidden; transition: border-color 0.2s;
+    }
+    .pd-session:hover { border-color: var(--blue-100); }
+    .pd-session-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; cursor: pointer;
+      user-select: none; transition: background 0.15s;
+    }
+    .pd-session-header:hover { background: var(--gray-50); }
+    .pd-session-num {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--blue-500); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      font-family: 'Space Mono', monospace; flex-shrink: 0;
+    }
+    .pd-session-title {
+      flex: 1; font-size: 14px; font-weight: 600;
+      color: var(--text-primary);
+    }
+    .pd-session-arrow {
+      font-size: 11px; color: var(--text-muted);
+      transition: transform 0.25s; flex-shrink: 0;
+    }
+    .pd-session.open .pd-session-arrow { transform: rotate(180deg); }
+    .pd-session-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.25s ease;
+    }
+    .pd-session.open .pd-session-body {
+      max-height: 2000px; padding: 0 18px 16px;
+    }
+    .pd-topic-list {
+      list-style: none; padding: 0; margin: 0 0 10px;
+    }
+    .pd-topic-list li {
+      font-size: 13.5px; color: var(--text-secondary);
+      padding: 3px 0 3px 18px; position: relative; line-height: 1.5;
+    }
+    .pd-topic-list li::before {
+      content: '›'; position: absolute; left: 2px;
+      color: var(--blue-500); font-weight: 700; font-size: 15px;
+    }
+    .pd-project {
+      font-size: 13px; font-weight: 600; color: var(--blue-500);
+      padding: 6px 12px; background: var(--blue-50);
+      border-radius: 6px; display: inline-block;
+    }
+    .pd-loading {
+      text-align: center; padding: 6rem 2rem;
+      color: var(--text-muted); font-size: 15px;
+    }
+    .pd-error {
+      text-align: center; padding: 6rem 2rem;
+    }
+    .pd-error h2 { font-size: 24px; margin-bottom: 1rem; }
+    .pd-error p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+    .pd-footer {
+      border-top: 1px solid var(--border-light);
+      padding: 1.75rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      max-width: 1000px; margin: 0 auto;
+    }
+
+    @media (max-width: 700px) {
+      .pd-header { flex-direction: column; }
+    }
+    @media (max-width: 520px) {
+      .pd-hero { padding: 2rem 1.25rem 1rem; }
+      .pd-info .pd-title { font-size: 22px; }
+      .pd-meta { flex-direction: column; gap: 4px; }
+      .pd-session-title { font-size: 13px; }
+      .pd-outcome-tag { font-size: 11px; }
+      .pd-footer { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">
+        <img src="image/vinc-academy.png" alt="Vinc Academy" width="34" height="34" style="border-radius:8px;object-fit:cover;" />
+      </div>
+      <span class="nav-logo-text">Vinc <span>Academy</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">← Quay lại trang chủ</a>
+    </div>
+    <button class="btn-nav" onclick="window.location.href='index.html#register'" data-i18n="nav.register">Đăng ký ngay</button>
+    <button class="lang-toggle" onclick="toggleLang()" title="Switch language" aria-label="Toggle language">VI</button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+    </button>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="pd-hero" id="app">
+    <!-- Nội dung render động -->
+  </div>
+
+  <div class="pd-footer">
+    <div class="footer-logo">Vinc <span>Academy</span></div>
+    <div class="footer-right">© 2025 Vinc Academy</div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="program-data.js"></script>
+  <script>
+    // Apply saved theme
+    (function () {
+      const saved = localStorage.getItem('va-theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else if (!saved) {
+        const hour = new Date().getHours();
+        if (hour >= 18 || hour < 6) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      }
+    })();
+
+    function render() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      const app = document.getElementById('app');
+
+      if (!code || !programs[code]) {
+        app.innerHTML = `
+          <div class="pd-error">
+            <h2>Không tìm thấy chương trình</h2>
+            <p>Mã chương trình không hợp lệ: "${code || ''}"</p>
+            <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block;">
+              ← Quay lại trang chủ
+            </a>
+          </div>
+        `;
+        document.title = 'Không tìm thấy — Vinc Academy';
+        return;
+      }
+
+      const p = programs[code];
+      document.title = p.title + ' — Vinc Academy';
+
+      // Badge color mapping
+      const badgeColors = {
+        '🔥 Nền tảng': { bg: 'var(--coral-50)', color: 'var(--coral-600)' },
+        '🔥 Cốt lõi': { bg: 'var(--coral-50)', color: 'var(--coral-600)' },
+        '✨ AI': { bg: 'var(--teal-50)', color: 'var(--teal-600)' },
+        'Nghiệp vụ': { bg: 'var(--blue-50)', color: 'var(--blue-500)' },
+        'Chuyên sâu': { bg: 'var(--purple-50)', color: 'var(--purple-600)' },
+        'Triển khai': { bg: 'var(--amber-50)', color: 'var(--amber-600)' },
+      };
+      const bc = badgeColors[p.badge] || { bg: 'var(--blue-50)', color: 'var(--blue-500)' };
+
+      // Build sessions HTML
+      let sessionsHtml = '';
+      p.sessions.forEach(s => {
+        let topicsHtml = '';
+        s.topics.forEach(t => {
+          topicsHtml += `<li>${t}</li>`;
+        });
+        let projectHtml = '';
+        if (s.project) {
+          projectHtml = `<div class="pd-project">🎯 Bài thực hành: ${s.project}</div>`;
+        }
+        sessionsHtml += `
+          <div class="pd-session open">
+            <div class="pd-session-header" onclick="toggleSession(this)">
+              <div class="pd-session-num">${s.num}</div>
+              <div class="pd-session-title">${s.title}</div>
+              <span class="pd-session-arrow">▾</span>
+            </div>
+            <div class="pd-session-body">
+              <ul class="pd-topic-list">${topicsHtml}</ul>
+              ${projectHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      // Outcome tags
+      let outcomeHtml = '';
+      p.outcome.forEach(o => {
+        outcomeHtml += `<span class="pd-outcome-tag">✅ ${o}</span>`;
+      });
+
+      app.innerHTML = `
+        <a href="index.html#programs" class="pd-back">← Quay lại chương trình đào tạo</a>
+
+        <div class="pd-header">
+          <div class="pd-icon">
+            <img src="${p.icon}" alt="${p.title}" />
+          </div>
+          <div class="pd-info">
+            <div class="pd-level">${p.level} · ${p.role}</div>
+            <h1 class="pd-title">${p.title}</h1>
+            <div class="pd-meta">
+              <span class="pd-meta-item">⏱ <strong>${p.duration}</strong></span>
+              <span class="pd-meta-item">👤 <strong>${p.target}</strong></span>
+            </div>
+            <span class="pd-badge" style="background:${bc.bg};color:${bc.color};">${p.badge}</span>
+          </div>
+        </div>
+
+        <p class="pd-desc">${p.description}</p>
+
+        <div class="pd-outcomes">${outcomeHtml}</div>
+
+        <div class="pd-cta">
+          <a href="https://zalo.me/0363729276" target="_blank" class="btn-secondary">
+            <span class="btn-ico">📱</span> Tư vấn qua Zalo
+          </a>
+          <a href="https://forms.gle/YOUR_GOOGLE_FORM_ID" target="_blank" class="btn-google">
+            <svg class="btn-ico" width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+            Đăng ký qua Google Form
+          </a>
+        </div>
+
+        <div class="pd-promo">
+          <span class="pd-promo-ico">🎁</span>
+          <span>Đăng ký ngay hôm nay để nhận ưu đãi học phí</span>
+        </div>
+
+        <h2 class="pd-section-title">📖 Nội dung chi tiết (${p.sessions.length} buổi)</h2>
+        <div class="pd-sessions">${sessionsHtml}</div>
+      `;
+    }
+
+    function toggleSession(header) {
+      const session = header.closest('.pd-session');
+      const isOpen = session.classList.contains('open');
+      session.classList.toggle('open', !isOpen);
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>

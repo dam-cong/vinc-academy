@@ -150,21 +150,24 @@
         <p class="section-sub" data-i18n="programs.sub">Từ nền tảng lập trình đến AI — lộ trình bài bản cho mọi cấp độ</p>
         <div class="courses-grid">
             <!-- 1. Developer Foundation (featured) -->
-            <div class="course-card featured">
+            <div class="course-card featured" onclick="window.location='program-detail.html?code=DEV-F'">
                 <div class="course-icon ci-blue">
                     <img src="image/python.png" alt="Developer Foundation">
                 </div>
                 <div class="course-num" data-i18n="p.1.num">Nền tảng lập trình</div>
                 <div class="course-title" data-i18n="p.1.title">Developer Foundation</div>
                 <div class="program-target" data-i18n="p.1.target">Người mới · Sinh viên CNTT · Chuyển ngành</div>
-                <div class="program-duration" data-i18n="p.1.duration">⏱ 8–10 buổi</div>
+                <div class="program-duration" data-i18n="p.1.duration">⏱ 5 buổi</div>
                 <ul class="program-curriculum">
-                    <li data-i18n-html="p.1.c.1"><strong>Python</strong> — Cơ bản, OOP, Exception</li>
-                    <li data-i18n-html="p.1.c.2"><strong>PostgreSQL</strong> — Database Design, SQL</li>
-                    <li data-i18n-html="p.1.c.3"><strong>Git & GitLab</strong> — Workflow, Branch</li>
+                    <li data-i18n-html="p.1.c.1"><strong>Python</strong> — Fundamentals, Function, OOP</li>
+                    <li data-i18n-html="p.1.c.2"><strong>PostgreSQL</strong> — Database, SQL, JOIN</li>
+                    <li data-i18n-html="p.1.c.3"><strong>Git & GitHub</strong> — Workflow, Branch, Merge</li>
                     <li data-i18n-html="p.1.c.4"><strong>Dự án:</strong> Customer Management</li>
                 </ul>
-                <div class="program-outcome" data-i18n="p.1.outcome">✅ Biết lập trình · Hiểu dữ liệu · Biết làm việc với Git</div>
+                <div class="program-outcome" data-i18n="p.1.outcome">✅ Python · SQL · Git · Mini Project</div>
+                <div class="program-detail-link-wrap">
+                    <a href="program-detail.html?code=DEV-F" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
+                </div>
                 <div class="course-footer">
                     <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-hot" data-i18n="p.1.badge">🔥 Nền tảng</span>
@@ -172,21 +175,24 @@
             </div>
 
             <!-- 2. Odoo Developer Foundation -->
-            <div class="course-card">
+            <div class="course-card" onclick="window.location='program-detail.html?code=ODO-F'">
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="Odoo Developer Foundation">
                 </div>
                 <div class="course-num" data-i18n="p.2.num">Junior Odoo Developer</div>
                 <div class="course-title" data-i18n="p.2.title">Odoo Developer Foundation</div>
                 <div class="program-target" data-i18n="p.2.target">Đã có nền tảng lập trình</div>
-                <div class="program-duration" data-i18n="p.2.duration">⏱ 5–6 buổi</div>
+                <div class="program-duration" data-i18n="p.2.duration">⏱ 8 buổi</div>
                 <ul class="program-curriculum">
-                    <li data-i18n="p.2.c.1">ERP & Odoo Architecture · MVC · Module</li>
-                    <li data-i18n="p.2.c.2">Models · ORM · Decorator · Inheritance</li>
-                    <li data-i18n="p.2.c.3">View · Security · Controller · QWeb</li>
-                    <li data-i18n-html="p.2.c.4"><strong>Dự án:</strong> Student Management System</li>
+                    <li data-i18n="p.2.c.1">Odoo Architecture · MVC · Module · Manifest</li>
+                    <li data-i18n="p.2.c.2">ORM · Models · Fields · Relations</li>
+                    <li data-i18n="p.2.c.3">Views · Business Logic · Security · Report</li>
+                    <li data-i18n-html="p.2.c.4"><strong>Dự án:</strong> Training Management System (TMS)</li>
                 </ul>
-                <div class="program-outcome" data-i18n="p.2.outcome">✅ Viết module Odoo · Customize hệ thống · Hiểu kiến trúc Odoo</div>
+                <div class="program-outcome" data-i18n="p.2.outcome">✅ Module Odoo · Security · PDF Report · Website · Portfolio TMS</div>
+                <div class="program-detail-link-wrap">
+                    <a href="program-detail.html?code=ODO-F" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
+                </div>
                 <div class="course-footer">
                     <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-hot" data-i18n="p.2.badge">🔥 Cốt lõi</span>
@@ -194,14 +200,14 @@
             </div>
 
             <!-- 3. AI & Vibe Coding Odoo -->
-            <div class="course-card">
+            <div class="course-card" onclick="window.location='program-detail.html?code=AI-O'">
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="AI & Vibe Coding Odoo">
                 </div>
                 <div class="course-num" data-i18n="p.3.num">Làm việc cùng AI</div>
                 <div class="course-title" data-i18n="p.3.title">AI & Vibe Coding Odoo</div>
                 <div class="program-target" data-i18n="p.3.target">Đã biết Odoo · Muốn tăng năng suất</div>
-                <div class="program-duration" data-i18n="p.3.duration">⏱ 4–5 buổi</div>
+                <div class="program-duration" data-i18n="p.3.duration">⏱ 5 buổi</div>
                 <ul class="program-curriculum">
                     <li data-i18n="p.3.c.1">Prompt Engineering · AI Pair Programming</li>
                     <li data-i18n="p.3.c.2">AI Code Generation · Review · Refactor · Debug</li>
@@ -209,7 +215,10 @@
                     <li data-i18n="p.3.c.4">Tool: ChatGPT · Claude · Cursor · OpenCode</li>
                     <li data-i18n-html="p.3.c.5"><strong>Dự án:</strong> Phát triển module bằng AI</li>
                 </ul>
-                <div class="program-outcome" data-i18n="p.3.outcome">✅ Tăng tốc phát triển · Nâng cao năng suất</div>
+                <div class="program-outcome" data-i18n="p.3.outcome">✅ Tăng tốc 2-5 lần · AI Code · Review · Project</div>
+                <div class="program-detail-link-wrap">
+                    <a href="program-detail.html?code=AI-O" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
+                </div>
                 <div class="course-footer">
                     <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-new" data-i18n="p.3.badge">✨ AI</span>
@@ -218,20 +227,23 @@
 
             <!-- 4. Odoo Business & Functional (hidden) -->
             <div class="program-hidden">
-                <div class="course-card">
+                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-B'">
                     <div class="course-icon ci-blue">
                         <img src="image/postgresql.jpg" alt="Odoo Business & Functional">
                     </div>
                     <div class="course-num" data-i18n="p.4.num">Nghiệp vụ</div>
                     <div class="course-title" data-i18n="p.4.title">Odoo Business & Functional</div>
-                    <div class="program-target" data-i18n="p.4.target">Developer · BA · Consultant</div>
-                    <div class="program-duration" data-i18n="p.4.duration">⏱ 3–4 buổi</div>
+                    <div class="program-target" data-i18n="p.4.target">Developer · BA · Functional Consultant · PM</div>
+                    <div class="program-duration" data-i18n="p.4.duration">⏱ 8 buổi</div>
                     <ul class="program-curriculum">
-                        <li data-i18n="p.4.c.1">CRM · Sales · Purchase · Inventory</li>
-                        <li data-i18n="p.4.c.2">Accounting · HR · MRP</li>
-                        <li data-i18n-html="p.4.c.3"><strong>Dự án:</strong> Phân tích nghiệp vụ doanh nghiệp</li>
+                        <li data-i18n="p.4.c.1">CRM · Sales · Purchase · Inventory · Accounting</li>
+                        <li data-i18n="p.4.c.2">HR · Project · Business Analysis · Documentation</li>
+                        <li data-i18n-html="p.4.c.3"><strong>Dự án:</strong> Phân tích & thiết kế giải pháp doanh nghiệp</li>
                     </ul>
-                    <div class="program-outcome" data-i18n="p.4.outcome">✅ Hiểu khách hàng · Phân tích yêu cầu</div>
+                    <div class="program-outcome" data-i18n="p.4.outcome">✅ ERP Process · BA · BRD · Solution Design · Gap Analysis</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="program-detail.html?code=ODO-B" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
+                    </div>
                     <div class="course-footer">
                         <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-pop" data-i18n="p.4.badge">Nghiệp vụ</span>
@@ -241,21 +253,24 @@
 
             <!-- 5. Odoo Advanced Developer (hidden) -->
             <div class="program-hidden">
-                <div class="course-card">
+                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-A'">
                     <div class="course-icon ci-blue">
                         <img src="image/odoo.png" alt="Odoo Advanced Developer">
                     </div>
                     <div class="course-num" data-i18n="p.5.num">Nâng cao</div>
                     <div class="course-title" data-i18n="p.5.title">Odoo Advanced Developer</div>
-                    <div class="program-target" data-i18n="p.5.target">Đã biết Odoo CB · Odoo Dev 6 tháng–2 năm</div>
-                    <div class="program-duration" data-i18n="p.5.duration">⏱ 6–8 buổi</div>
+                    <div class="program-target" data-i18n="p.5.target">Odoo Developer 6 tháng+ kinh nghiệm</div>
+                    <div class="program-duration" data-i18n="p.5.duration">⏱ 8 buổi</div>
                     <ul class="program-curriculum">
                         <li data-i18n="p.5.c.1">Advanced ORM · SQL Optimization · Multi Company</li>
                         <li data-i18n="p.5.c.2">API Integration · Cron Job · Queue Job · Testing</li>
                         <li data-i18n="p.5.c.3">OWL · POS · Performance</li>
                         <li data-i18n-html="p.5.c.4"><strong>Dự án:</strong> HR Management hoặc CRM</li>
                     </ul>
-                    <div class="program-outcome" data-i18n="p.5.outcome">✅ Tham gia dự án thực tế · Xử lý bài toán khó</div>
+                    <div class="program-outcome" data-i18n="p.5.outcome">✅ Advanced ORM · API · OWL · Performance · Testing</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="program-detail.html?code=ODO-A" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
+                    </div>
                     <div class="course-footer">
                         <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-pop" data-i18n="p.5.badge">Chuyên sâu</span>
@@ -265,21 +280,24 @@
 
             <!-- 6. DevOps for Odoo (hidden) -->
             <div class="program-hidden">
-                <div class="course-card">
+                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-D'">
                     <div class="course-icon ci-blue">
                         <img src="image/devops.jpg" alt="DevOps for Odoo">
                     </div>
                     <div class="course-num" data-i18n="p.6.num">Vận hành</div>
                     <div class="course-title" data-i18n="p.6.title">DevOps for Odoo</div>
-                    <div class="program-target" data-i18n="p.6.target">Odoo Developer · Technical Consultant</div>
-                    <div class="program-duration" data-i18n="p.6.duration">⏱ 4–5 buổi</div>
+                    <div class="program-target" data-i18n="p.6.target">Odoo Developer · Technical Consultant · System Admin</div>
+                    <div class="program-duration" data-i18n="p.6.duration">⏱ 5 buổi</div>
                     <ul class="program-curriculum">
                         <li data-i18n="p.6.c.1">Linux · Docker · PostgreSQL</li>
                         <li data-i18n="p.6.c.2">Nginx · SSL · Odoo Deployment</li>
                         <li data-i18n="p.6.c.3">Backup · Monitoring · CI/CD</li>
                         <li data-i18n-html="p.6.c.4"><strong>Dự án:</strong> Deploy Production Server</li>
                     </ul>
-                    <div class="program-outcome" data-i18n="p.6.outcome">✅ Cài đặt Odoo · Triển khai hệ thống</div>
+                    <div class="program-outcome" data-i18n="p.6.outcome">✅ Production Server · Docker · Nginx · Backup · CI/CD</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="program-detail.html?code=ODO-D" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
+                    </div>
                     <div class="course-footer">
                         <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-new" data-i18n="p.6.badge">Triển khai</span>
@@ -346,7 +364,7 @@
     <!-- ROADMAP -->
     <section class="section" id="roadmap">
         <span class="section-tag" data-i18n="roadmap.tag">Lộ trình học tập</span>
-        <h2 data-i18n="roadmap.title">4 cấp độ — từ Nền tảng đến Senior</h2>
+        <h2 data-i18n="roadmap.title">6 cấp độ — từ Foundation đến Senior</h2>
         <p class="section-sub" data-i18n="roadmap.sub">Xây dựng kỹ năng vững chắc qua từng cấp độ, sẵn sàng cho sự nghiệp Odoo</p>
         <div class="roadmap">
             <div class="road-item">
@@ -355,8 +373,8 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name"><span data-i18n="road.l1.name">Cấp độ 1 — Nền tảng</span> <span class="level-badge l1" data-i18n="road.l1.badge">Biết lập trình & Odoo</span></div>
-                    <div class="road-detail" data-i18n="road.l1.detail">Developer Foundation + Odoo Developer Foundation — Từ con số 0 đến Junior Odoo Developer. Project: Customer Management, Student Management.</div>
+                    <div class="road-name"><span data-i18n="road.l1.name">L1 — Nền tảng</span> <span class="level-badge l1" data-i18n="road.l1.badge">Developer Foundation</span></div>
+                    <div class="road-detail" data-i18n="road.l1.detail">Python, PostgreSQL, Git — Mini Project: Customer Management. Sẵn sàng học Odoo.</div>
                 </div>
             </div>
             <div class="road-item">
@@ -365,8 +383,8 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name"><span data-i18n="road.l2.name">Cấp độ 2 — Phát triển</span> <span class="level-badge l2" data-i18n="road.l2.badge">Làm được dự án</span></div>
-                    <div class="road-detail" data-i18n="road.l2.detail">Odoo Advanced Developer + Business & Functional — ORM nâng cao, OWL, Integration, Performance, nghiệp vụ doanh nghiệp.</div>
+                    <div class="road-name"><span data-i18n="road.l2.name">L2 — Odoo Developer</span> <span class="level-badge l2" data-i18n="road.l2.badge">Junior Odoo Developer</span></div>
+                    <div class="road-detail" data-i18n="road.l2.detail">Odoo Architecture, ORM, Views, Security, Report, Website. Dự án: Training Management System.</div>
                 </div>
             </div>
             <div class="road-item">
@@ -375,17 +393,37 @@
                     <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name"><span data-i18n="road.l3.name">Cấp độ 3 — Vận hành</span> <span class="level-badge l3" data-i18n="road.l3.badge">Triển khai hệ thống</span></div>
-                    <div class="road-detail" data-i18n="road.l3.detail">DevOps for Odoo — Linux, Docker, Nginx, CI/CD, Backup. Deploy production server thực tế.</div>
+                    <div class="road-name"><span data-i18n="road.l3.name">L3 — AI Developer</span> <span class="level-badge l3" data-i18n="road.l3.badge">AI-Enhanced Developer</span></div>
+                    <div class="road-detail" data-i18n="road.l3.detail">Prompt Engineering, AI Pair Programming, AI Review & Debug. Tăng tốc phát triển 2-5 lần.</div>
                 </div>
             </div>
             <div class="road-item">
                 <div class="road-line">
                     <div class="road-dot">4</div>
+                    <div class="road-connector"></div>
                 </div>
                 <div class="road-content">
-                    <div class="road-name"><span data-i18n="road.l4.name">Cấp độ 4 — AI Developer</span> <span class="level-badge l4" data-i18n="road.l4.badge">Tăng năng suất với AI</span></div>
-                    <div class="road-detail" data-i18n="road.l4.detail">AI & Vibe Coding Odoo — Prompt Engineering, AI Code Generation, AI Review & Debug, Technical Design. Làm việc hiệu quả gấp 2-3 lần.</div>
+                    <div class="road-name"><span data-i18n="road.l4.name">L4 — BA / Functional</span> <span class="level-badge l4" data-i18n="road.l4.badge">Functional Consultant</span></div>
+                    <div class="road-detail" data-i18n="road.l4.detail">ERP Process, CRM, Sales, Inventory, Accounting, BA, BRD, Solution Design. Tham gia triển khai dự án.</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot">5</div>
+                    <div class="road-connector"></div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name"><span data-i18n="road.l5.name">L5 — Advanced Dev</span> <span class="level-badge l5" data-i18n="road.l5.badge">Senior Developer</span></div>
+                    <div class="road-detail" data-i18n="road.l5.detail">Advanced ORM, API Integration, OWL, Performance, Testing. Phát triển dự án Enterprise.</div>
+                </div>
+            </div>
+            <div class="road-item">
+                <div class="road-line">
+                    <div class="road-dot">6</div>
+                </div>
+                <div class="road-content">
+                    <div class="road-name"><span data-i18n="road.l6.name">L6 — DevOps</span> <span class="level-badge l6" data-i18n="road.l6.badge">DevOps Engineer</span></div>
+                    <div class="road-detail" data-i18n="road.l6.detail">Linux, Docker, Nginx, SSL, Backup, Monitoring, CI/CD. Triển khai Production Server.</div>
                 </div>
             </div>
         </div>
@@ -393,22 +431,32 @@
             <div class="level-card">
                 <div class="level-num">L1</div>
                 <div class="level-name" data-i18n="road.card1">Nền tảng</div>
-                <div class="level-desc" data-i18n="road.card1d">Biết lập trình và Odoo</div>
+                <div class="level-desc" data-i18n="road.card1d">Python · SQL · Git</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L2</div>
-                <div class="level-name" data-i18n="road.card2">Phát triển</div>
-                <div class="level-desc" data-i18n="road.card2d">Làm được dự án</div>
+                <div class="level-name" data-i18n="road.card2">Odoo Core</div>
+                <div class="level-desc" data-i18n="road.card2d">Junior Odoo Developer</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L3</div>
-                <div class="level-name" data-i18n="road.card3">Vận hành</div>
-                <div class="level-desc" data-i18n="road.card3d">Triển khai hệ thống</div>
+                <div class="level-name" data-i18n="road.card3">AI</div>
+                <div class="level-desc" data-i18n="road.card3d">AI-Enhanced Developer</div>
             </div>
             <div class="level-card">
                 <div class="level-num">L4</div>
-                <div class="level-name" data-i18n="road.card4">AI Developer</div>
-                <div class="level-desc" data-i18n="road.card4d">Tăng năng suất với AI</div>
+                <div class="level-name" data-i18n="road.card4">BA / Functional</div>
+                <div class="level-desc" data-i18n="road.card4d">Functional Consultant</div>
+            </div>
+            <div class="level-card">
+                <div class="level-num">L5</div>
+                <div class="level-name" data-i18n="road.card5">Advanced</div>
+                <div class="level-desc" data-i18n="road.card5d">Senior Developer</div>
+            </div>
+            <div class="level-card">
+                <div class="level-num">L6</div>
+                <div class="level-name" data-i18n="road.card6">DevOps</div>
+                <div class="level-desc" data-i18n="road.card6d">Production Deployment</div>
             </div>
         </div>
     </section>

@@ -1,8 +1,10 @@
 # Vinc Academy — Kế hoạch chi tiết 6 chương trình đào tạo
 
-> **Phiên bản:** 1.0 — Thống nhất ngày 08/07/2026
+> **Phiên bản:** 1.1 — Cập nhật ngày 08/07/2026
 >
 > **Mục đích:** Tài liệu spec cho dev cập nhật nội dung landing page và documentation.
+>
+> **Thay đổi 1.1:** Bổ sung kiến trúc trang chi tiết (`program-detail.html` + `program-data.js`), nâng cấp nút "Xem chi tiết", CTA Zalo/Google Form, banner ưu đãi, sessions mở sẵn.
 
 ---
 
@@ -570,6 +572,43 @@ Ví dụ: Trung tâm đào tạo, CRM, Bán hàng, Kho, Gara ô tô, Bất độ
 
 ---
 
+## Kiến trúc trang chi tiết (program-detail.html)
+
+Mỗi chương trình có trang chi tiết riêng, mở bằng cách click vào card hoặc link "Xem chi tiết" trên `index.html`:
+
+```text
+index.html (card / link "Xem chi tiết")
+   └─> program-detail.html?code=DEV-F   (hoặc ODO-F / AI-O / ODO-B / ODO-A / ODO-D)
+          └─> render nội dung từ program-data.js theo ?code=
+```
+
+### Source of truth
+
+- **`program-data.js`** — chứa dữ liệu 6 chương trình (title, level, role, duration, target, description, badge, outcome[], sessions[]). Mọi thay đổi nội dung buổi học chỉnh sửa ở đây.
+- `program-detail.html` — template, render động theo `?code=`, không hardcode nội dung từng chương trình.
+
+### Cấu trúc trang chi tiết
+
+| Thành phần | Mô tả |
+|-----------|-------|
+| Header (`<nav>`) | Dùng header gốc của `index.html`; `.nav-links` thay bằng 1 link **"← Quay lại trang chủ"** (trỏ về `index.html`). Giữ logo, nút Đăng ký, lang/theme toggle, hamburger. |
+| Back link | **"← Quay lại chương trình đào tạo"** (trỏ `index.html#programs`) |
+| Header chương trình | icon + level · role + title + meta (⏱ duration, 👤 target) + badge |
+| Mô tả & outcomes | `description` + danh sách tag `outcome` |
+| CTA | 2 nút rộng đều: **Tư vấn qua Zalo** (`btn-secondary`, link Zalo `0363729276`) và **Đăng ký qua Google Form** (`btn-google` xanh, link form). **Đã bỏ nút "Đăng ký ngay" btn-primary** trên trang này. |
+| Banner ưu đãi | `🎁 Đăng ký ngay hôm nay để nhận ưu đãi học phí` (class `.pd-promo`, accent vàng) |
+| Nội dung chi tiết | Danh sách session dạng accordion, **mở sẵn** (class `open` mặc định), click header để đóng/mở |
+
+### Ghi chú kỹ thuật
+
+- **Nút "Xem chi tiết"** trên card `index.html` đã nâng cấp: từ text link thành button xanh đặc (`program-detail-link`), có icon `→`, hover dịch lên + arrow chạy sang phải.
+- **Google Form:** link hiện là placeholder `https://forms.gle/YOUR_GOOGLE_FORM_ID` — cần thay bằng link thật.
+- **i18n:** nội dung trang chi tiết (session, topic, description, outcome, CTA, banner) hiện là **Tiếng Việt cố định**, chưa có chuyển ngôn ngữ như `index.html`. Chỉ nav (qua `script.js`) hỗ trợ VI/EN.
+- **Dark mode:** trang chi tiết kế thừa `data-theme` từ `localStorage` (`va-theme`), tự động áp dụng như `index.html`.
+- **Mobile (≤520px):** icon trên 2 CTA bị ẩn, label nằm 1 dòng (`white-space: nowrap`); banner thu nhỏ font.
+
+---
+
 ## Hướng dẫn cập nhật website
 
 ### index.html — Section `#programs`
@@ -585,9 +624,19 @@ Mỗi `.course-card` cần cập nhật:
 | Odoo Advanced Developer | duration: `⏱ 8 buổi`; curriculum: cập nhật |
 | DevOps for Odoo | duration: `⏱ 5 buổi`; curriculum: cập nhật |
 
+Nút **"Xem chi tiết"** (`.program-detail-link`) trỏ đến `program-detail.html?code=<MÃ>` tương ứng; đã là button xanh đặc, không cần sửa style thường xuyên.
+
+### program-data.js — Nội dung chi tiết
+
+Khi sửa nội dung buổi học, chỉnh trực tiếp object chương trình tương ứng (`code: 'DEV-F'` ...). Mỗi `session` có: `num`, `title`, `topics[]`, `project` (tùy chọn). Số buổi = độ dài `sessions`.
+
+### program-detail.html — Template
+
+Chỉ sửa khi thay đổi cấu trúc giao diện (thêm/sửa thành phần CTA, banner, style). Nội dung buổi học KHÔNG sửa ở đây.
+
 ### i18n keys (`script.js`)
 
-Cập nhật các key `p.1.*` đến `p.6.*` tương ứng với nội dung mới.
+Cập nhật các key `p.1.*` đến `p.6.*` tương ứng với nội dung mới (dùng cho card trên `index.html`).
 
 ### Roadmap
 
