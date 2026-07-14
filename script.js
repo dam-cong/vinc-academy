@@ -58,13 +58,20 @@ const i18n = {
         'verify.subtitle': 'Vinc Academy Verification System',
         'verify.title': 'XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC',
         'verify.desc': 'Tra cứu nhanh và chính xác văn bằng, chứng chỉ được cấp bởi Vinc Academy. Nhập mã số chứng chỉ ở khung bên dưới để xác thực trực tuyến.',
-        'verify.placeholder': 'Nhập mã chứng chỉ (Ví dụ: VINC-2026-PY01)...',
+        'verify.placeholder': 'Nhập mã chứng chỉ (VD: HV20260004-C0002)...',
         'verify.btn': 'Tra cứu',
         'verify.sampleLabel': 'Mã thử nghiệm nhanh: ',
         'verify.found': 'Tìm thấy chứng nhận! Đang chuyển hướng...',
         'verify.invalid': 'Mã chứng nhận không hợp lệ. Vui lòng kiểm tra lại!',
         'verify.empty': 'Vui lòng nhập mã chứng nhận.',
         'verify.sampleSelected': 'Đã chọn mã mẫu: {code}. Bấm nút "Tra cứu" để xác minh.',
+        'verify.invalidFormat': 'Mã chứng chỉ không đúng định dạng. Định dạng đúng: HVxxxxxxxx-Cxxxx',
+        'verify.domainError': 'Không thể xác minh chứng chỉ. Vui lòng thử lại sau.',
+        'verify.openCert': 'Xem chứng chỉ',
+        'verify.copyLink': 'Sao chép liên kết',
+        'verify.copied': 'Đã sao chép!',
+        'verify.validCert': 'Chứng chỉ hợp lệ',
+        'verify.certLink': 'Liên kết chứng chỉ:',
 
         'hero.badge': 'Đào tạo thực chiến · 100% dự án thật',
         'hero.title': 'Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer',
@@ -311,13 +318,20 @@ const i18n = {
         'verify.subtitle': 'Vinc Academy Verification System',
         'verify.title': 'VERIFY COURSE COMPLETION CERTIFICATE',
         'verify.desc': 'Quickly and accurately look up diplomas and certificates issued by Vinc Academy. Enter the certificate code in the box below to verify online.',
-        'verify.placeholder': 'Enter certificate code (e.g. VINC-2026-PY01)...',
+        'verify.placeholder': 'Enter certificate code (e.g. HV20260004-C0002)...',
         'verify.btn': 'Verify',
         'verify.sampleLabel': 'Quick sample codes: ',
         'verify.found': 'Certificate found! Redirecting...',
         'verify.invalid': 'Invalid certificate code. Please check again!',
         'verify.empty': 'Please enter a certificate code.',
         'verify.sampleSelected': 'Selected sample code: {code}. Click "Verify" to authenticate.',
+        'verify.invalidFormat': 'Invalid certificate format. Correct format: HVxxxxxxxx-Cxxxx',
+        'verify.domainError': 'Unable to verify certificate. Please try again later.',
+        'verify.openCert': 'View Certificate',
+        'verify.copyLink': 'Copy Link',
+        'verify.copied': 'Copied!',
+        'verify.validCert': 'Valid Certificate',
+        'verify.certLink': 'Certificate link:',
 
         'hero.badge': 'Hands-on Training · 100% Real Projects',
         'hero.title': 'Odoo<br><span class="accent">Hands-on</span><br>Training for Developers',
@@ -655,6 +669,9 @@ document.addEventListener('keydown', e => {
 });
 
 // ── CERTIFICATE VERIFY SEARCH ──
+const CERT_BASE_URL = 'https://vinc.editech.vn/vinc/certificate/';
+const CERT_REGEX = /^HV\d{8}-C\d{4}$/;
+
 function initCertificateSearch() {
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
@@ -672,14 +689,21 @@ function initCertificateSearch() {
             return;
         }
 
-        if (window.certificatesDatabase && window.certificatesDatabase[certId]) {
-            showVerifyFeedback(i18n[currentLang]['verify.found'], 'success');
-            setTimeout(() => {
-                window.location.href = `certificate/certificate.html?id=${certId}`;
-            }, 800);
-        } else {
-            showVerifyFeedback(i18n[currentLang]['verify.invalid'], 'error');
+        if (!CERT_REGEX.test(certId)) {
+            showVerifyFeedback(i18n[currentLang]['verify.invalidFormat'], 'error');
+            return;
         }
+
+        const certUrl = CERT_BASE_URL + certId;
+        showVerifyFeedback(i18n[currentLang]['verify.found'], 'success');
+
+        fetch(certUrl, { method: 'HEAD', mode: 'no-cors' })
+            .then(() => {
+                showCertPopup(certId, certUrl);
+            })
+            .catch(() => {
+                showCertPopup(certId, certUrl);
+            });
     });
 
     if (sampleBadges && searchInput) {
@@ -701,9 +725,60 @@ function initCertificateSearch() {
         feedbackMsg.innerText = text;
         feedbackMsg.className = `feedback-msg ${type}`;
         feedbackMsg.style.animation = 'none';
-        feedbackMsg.offsetHeight; /* trigger reflow */
+        feedbackMsg.offsetHeight;
         feedbackMsg.style.animation = 'fadeInUp 0.3s ease';
     }
+}
+
+function showCertPopup(certId, certUrl) {
+    const existing = document.getElementById('cert-result-popup');
+    if (existing) existing.remove();
+
+    const t = i18n[currentLang];
+    const popup = document.createElement('div');
+    popup.id = 'cert-result-popup';
+    popup.className = 'cert-result-popup';
+    popup.innerHTML = `
+        <div class="cert-result-card">
+            <button class="cert-result-close" onclick="closeCertPopup()">✕</button>
+            <div class="cert-result-icon"><img src="image/vinc-academy.png" alt="Vinc Academy" class="cert-result-logo"></div>
+            <h3 class="cert-result-title">${t['verify.validCert']}</h3>
+            <div class="cert-result-code"><img src="image/medal.png" alt="medal" class="cert-result-medal"> ${certId}</div>
+            <p class="cert-result-link-label">${t['verify.certLink']}</p>
+            <div class="cert-result-url">${certUrl}</div>
+            <div class="cert-result-actions">
+                <button class="cert-result-btn cert-result-btn-copy" onclick="copyCertLink('${certUrl}')">
+                    <i class="fa-regular fa-copy"></i> ${t['verify.copyLink']}
+                </button>
+                <a href="${certUrl}" target="_blank" rel="noopener noreferrer" class="cert-result-btn cert-result-btn-open">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> ${t['verify.openCert']}
+                </a>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(popup);
+    requestAnimationFrame(() => popup.classList.add('show'));
+}
+
+function closeCertPopup() {
+    const popup = document.getElementById('cert-result-popup');
+    if (popup) {
+        popup.classList.remove('show');
+        setTimeout(() => popup.remove(), 300);
+    }
+}
+
+function copyCertLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.cert-result-btn-copy');
+        if (btn) {
+            const t = i18n[currentLang];
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> ${t['verify.copied']}`;
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-regular fa-copy"></i> ${t['verify.copyLink']}`;
+            }, 2000);
+        }
+    });
 }
 
 // Scroll spy

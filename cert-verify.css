@@ -248,3 +248,178 @@
         border-radius: 12px;
     }
 }
+
+/* ── CERTIFICATE RESULT POPUP ── */
+.cert-result-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cert-result-popup.show {
+    opacity: 1;
+}
+
+.cert-result-card {
+    background: var(--white, #fff);
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-top: 4px solid #22c55e;
+}
+
+.cert-result-popup.show .cert-result-card {
+    transform: scale(1) translateY(0);
+}
+
+.cert-result-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gray-100, #f1f5f9);
+    color: var(--gray-700, #495057);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.cert-result-close:hover {
+    background: var(--gray-200, #e9ecef);
+}
+
+.cert-result-icon {
+    margin-bottom: 0.5rem;
+}
+
+.cert-result-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(14, 34, 71, 0.15);
+}
+
+.cert-result-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary, #0E2247);
+    margin: 0 0 0.75rem;
+}
+
+.cert-result-code {
+    font-family: 'Courier New', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold, #D4AF37);
+    background: var(--cream, #fef9e7);
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    letter-spacing: 1px;
+}
+
+.cert-result-medal {
+    width: 24px;
+    height: 24px;
+}
+
+.cert-result-link-label {
+    font-size: 0.85rem;
+    color: var(--gray-700, #495057);
+    margin: 0 0 0.35rem;
+}
+
+.cert-result-url {
+    font-size: 0.8rem;
+    color: var(--gray-400, #ced4da);
+    word-break: break-all;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.cert-result-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cert-result-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.cert-result-btn-copy {
+    background: var(--gray-100, #f1f5f9);
+    color: var(--gray-800, #343a40);
+    border: 1px solid var(--gray-200, #e9ecef);
+}
+
+.cert-result-btn-copy:hover {
+    background: var(--gray-200, #e9ecef);
+}
+
+.cert-result-btn-open {
+    background: linear-gradient(135deg, var(--primary, #0E2247) 0%, var(--primary-light, #1A3668) 100%);
+    color: var(--white, #fff);
+    box-shadow: 0 4px 12px rgba(14, 34, 71, 0.2);
+}
+
+.cert-result-btn-open:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(14, 34, 71, 0.3);
+}
+
+/* Responsive popup */
+@media (max-width: 540px) {
+    .cert-result-card {
+        padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .cert-result-code {
+        font-size: 1.1rem;
+    }
+
+    .cert-result-actions {
+        flex-direction: column;
+    }
+
+    .cert-result-btn {
+        justify-content: center;
+    }
+}
