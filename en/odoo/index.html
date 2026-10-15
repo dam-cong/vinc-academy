@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Development A–Z for Developers | Vinc Academy</title>
+    <meta name="description" content="A free Odoo 20 development series: modules, ORM, views, security, OWL, APIs and deployment. Written by Vinc Academy, aligned with the official Odoo docs." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/odoo/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Development A–Z for Developers" />
+    <meta property="og:description" content="A free Odoo 20 development series: modules, ORM, views, security, OWL, APIs and deployment." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/odoo/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-hub-en.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Odoo 20 Development A–Z",
+        "description": "A free Odoo 20 development series for developers, written by Vinc Academy.",
+        "url": "https://vinc-academy.vercel.app/en/odoo/",
+        "inLanguage": "en",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "TechArticle", "headline": "What is Odoo? Fundamentals for Developers (Odoo 20)", "url": "https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html" },
+            { "@type": "TechArticle", "headline": "Install Odoo 20: Source & Docker Guide for Developers", "url": "https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../odoo/index.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li aria-current="page">Odoo Dev Guide</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Odoo knowledge · Free</span>
+            <h1>Odoo 20 Development A–Z</h1>
+            <p class="post-lead">A self-study series for developers: from understanding what Odoo is to building modules, access control, OWL interfaces, API integrations and production deployment. Written by Vinc Academy and aligned with the official Odoo 20 Developer documentation.</p>
+        </header>
+
+        <ol class="post-grid">
+            <li><a class="post-card" href="what-is-odoo.html">
+                <span class="post-num">Part 01</span>
+                <h2>What is Odoo? Fundamentals for developers</h2>
+                <p>Three-tier architecture, module anatomy, Community vs Enterprise, Odoo 20 requirements and a learning path.</p>
+                <span class="post-status">Published</span>
+            </a></li>
+            <li><a class="post-card" href="install-odoo-20.html"><span class="post-num">Part 02</span><h2>Setting up an Odoo 20 environment</h2><p>Install from source and Docker Compose, run odoo-bin, enable developer mode, fix common errors.</p><span class="post-status">Published</span></a></li>
+            <li><div class="post-card soon"><span class="post-num">Part 03</span><h2>Your first module &amp; manifest</h2><p>Folder layout, __manifest__.py, installing and upgrading modules.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 04</span><h2>Models, fields &amp; the ORM</h2><p>Field types, recordsets and CRUD with the ORM.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 05</span><h2>Security: access rights &amp; record rules</h2><p>User groups, ir.model.access.csv, record-level rules.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 06</span><h2>Views &amp; actions</h2><p>Form, list, search, kanban; menus and window actions.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 07</span><h2>Relations between models</h2><p>Many2one, One2many and Many2many in practice.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 08</span><h2>Computed fields, onchange &amp; constraints</h2><p>Automated business logic and data validation.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 09</span><h2>Inheritance in Odoo</h2><p>Extending other modules' models and views the right way.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 10</span><h2>PDF reports with QWeb</h2><p>Designing templates and printing business reports.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 11</span><h2>OWL framework basics</h2><p>Components, hooks and services in the Odoo UI.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 12</span><h2>Web controllers &amp; JSON-2 API</h2><p>Building endpoints and integrating external systems.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 13</span><h2>Unit testing in Odoo</h2><p>Tests that protect your modules before every upgrade.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Part 14</span><h2>Deploying Odoo to production</h2><p>Linux, Docker, Nginx, SSL, backups and monitoring.</p><span class="post-status">Coming soon</span></div></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Want to learn faster with a mentor?</h3>
+                <p>The Odoo Developer Foundation program gets you building complete modules in 8 sessions, with a real project and code reviews.</p>
+                <div class="cta-actions">
+                    <a href="../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                    <a href="../../index.html#register" class="ghost">Get free consultation</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">Content copyrighted by Vinc Academy. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -49,22 +49,19 @@ const i18n = {
     vi: {
         'nav.about': 'Giới thiệu',
         'nav.programs': 'Chương trình',
-        'nav.pricing': 'Bảng giá',
-        'nav.roadmap': 'Lộ trình',
-        'nav.why': 'Quyền lợi',
+        'nav.pricing': 'Học phí',
         'nav.faq': 'FAQ',
         'nav.certificate': 'Chứng chỉ',
+        'nav.blog': 'Lập trình Odoo',
 
         'verify.subtitle': 'Vinc Academy Verification System',
         'verify.title': 'XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC',
         'verify.desc': 'Tra cứu nhanh và chính xác văn bằng, chứng chỉ được cấp bởi Vinc Academy. Nhập mã số chứng chỉ ở khung bên dưới để xác thực trực tuyến.',
         'verify.placeholder': 'Nhập mã chứng chỉ (VD: HV20260004-C0002)...',
         'verify.btn': 'Tra cứu',
-        'verify.sampleLabel': 'Mã thử nghiệm nhanh: ',
         'verify.found': 'Tìm thấy chứng nhận! Đang chuyển hướng...',
         'verify.invalid': 'Mã chứng nhận không hợp lệ. Vui lòng kiểm tra lại!',
         'verify.empty': 'Vui lòng nhập mã chứng nhận.',
-        'verify.sampleSelected': 'Đã chọn mã mẫu: {code}. Bấm nút "Tra cứu" để xác minh.',
         'verify.invalidFormat': 'Mã chứng chỉ không đúng định dạng. Định dạng đúng: HVxxxxxxxx-Cxxxx',
         'verify.domainError': 'Không thể xác minh chứng chỉ. Vui lòng thử lại sau.',
         'verify.openCert': 'Xem chứng chỉ',
@@ -76,8 +73,8 @@ const i18n = {
         'hero.badge': 'Đào tạo thực chiến · 100% dự án thật',
         'hero.title': 'Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer',
         'hero.desc': 'Từ Developer Foundation đến AI & Vibe Coding — 6 chương trình Odoo thực chiến, lộ trình rõ ràng, bài tập thực tế, giảng viên kinh nghiệm doanh nghiệp.',
-        'hero.btn1': 'Xem chương trình',
-        'hero.btn2': 'Xem lộ trình',
+        'hero.btn1': 'Nhận tư vấn miễn phí',
+        'hero.btn2': 'Xem chương trình',
         'hero.stat1': 'Chương trình đào tạo',
         'hero.stat2': 'Thực hành dự án thật',
         'hero.stat3': 'Sẵn sàng đi làm ngay',
@@ -176,12 +173,6 @@ const i18n = {
         'p.free': 'trong combo',
         'p.detail': '📖 Xem chi tiết',
 
-        'pricing.tag': 'Học phí',
-        'pricing.title': 'Nhận thông tin học phí từ Vinc Academy',
-        'pricing.sub': 'Giảm 10% khi đăng ký hôm nay — nhắn Zalo để nhận báo giá chi tiết',
-        'pricing.promo': '🎉 Giảm 10% học phí khi đăng ký ngay hôm nay',
-        'pricing.listTitle': '5 combo đào tạo Odoo thực chiến',
-
         'r.1.name': 'Bắt đầu',
         'r.1.badge': '🔥 Phổ biến',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
@@ -200,31 +191,6 @@ const i18n = {
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'Trọn gói',
         'r.5.content': 'Toàn bộ 6 chương trình',
-
-        'pricing.btn': '📱 Nhận báo giá qua Zalo',
-        'pricing.formBtn': '📝 Đăng ký qua Google Form',
-
-        'roadmap.tag': 'Lộ trình học tập',
-        'roadmap.title': '6 cấp độ — từ Foundation đến Senior',
-        'roadmap.sub': 'Xây dựng kỹ năng vững chắc qua từng cấp độ, sẵn sàng cho sự nghiệp Odoo',
-        'road.l1.name': 'L1 — Nền tảng',
-        'road.l1.badge': 'Developer Foundation',
-        'road.l1.detail': 'Python, PostgreSQL, Git — Mini Project: Customer Management. Sẵn sàng học Odoo.',
-        'road.l2.name': 'L2 — Odoo Developer',
-        'road.l2.badge': 'Junior Odoo Developer',
-        'road.l2.detail': 'Odoo Architecture, ORM, Views, Security, Report, Website. Dự án: Training Management System.',
-        'road.l3.name': 'L3 — AI Developer',
-        'road.l3.badge': 'AI-Enhanced Developer',
-        'road.l3.detail': 'Prompt Engineering, AI Pair Programming, AI Review & Debug. Tăng tốc phát triển 2-5 lần.',
-        'road.l4.name': 'L4 — BA / Functional',
-        'road.l4.badge': 'Functional Consultant',
-        'road.l4.detail': 'ERP Process, CRM, Sales, Inventory, Accounting, BA, BRD, Solution Design. Tham gia triển khai dự án.',
-        'road.l5.name': 'L5 — Advanced Dev',
-        'road.l5.badge': 'Senior Developer',
-        'road.l5.detail': 'Advanced ORM, API Integration, OWL, Performance, Testing. Phát triển dự án Enterprise.',
-        'road.l6.name': 'L6 — DevOps',
-        'road.l6.badge': 'DevOps Engineer',
-        'road.l6.detail': 'Linux, Docker, Nginx, SSL, Backup, Monitoring, CI/CD. Triển khai Production Server.',
         'road.card1': 'Nền tảng',
         'road.card1d': 'Python · SQL · Git',
         'road.card2': 'Odoo Core',
@@ -241,30 +207,18 @@ const i18n = {
         'why.tag': 'Tại sao chọn Vinc Academy',
         'why.title': 'Đào tạo như doanh nghiệp phần mềm',
         'why.sub': 'Không chỉ học code — học quy trình phát triển sản phẩm thực tế',
-        'why.brandPromise': 'Không chỉ dạy bạn viết code — Vinc Academy đào tạo bạn trở thành Developer có thể tham gia dự án thực tế ngay sau khi hoàn thành khóa học.',
         'w.1.title': 'Học như đi làm tại doanh nghiệp',
         'w.1.desc': 'Làm việc theo đúng quy trình phát triển phần mềm: từ phân tích yêu cầu, lập kế hoạch, viết code, review code đến triển khai và vận hành hệ thống.',
         'w.2.title': 'Tích lũy kinh nghiệm thực chiến',
         'w.2.desc': 'Thay vì mất nhiều tháng đi thực tập, bạn được thực hành trên dự án mô phỏng sát môi trường doanh nghiệp, xây dựng kinh nghiệm ngay từ ngày đầu.',
         'w.3.title': 'Giảng viên là Developer thực tế',
         'w.3.desc': 'Senior Odoo Developer và Technical Consultant đang trực tiếp triển khai dự án cho doanh nghiệp — kiến thức cập nhật, kinh nghiệm thực tế.',
-        'w.4.title': 'Học quy trình phát triển hiện đại',
-        'w.4.desc': 'Git, Agile/Scrum, Code Review, Docker, CI/CD, Linux, PostgreSQL — những kỹ năng doanh nghiệp yêu cầu nhưng ít trung tâm đào tạo bài bản.',
         'w.5.title': 'Xây dựng Portfolio chuyên nghiệp',
         'w.5.desc': 'Mỗi khóa học có mini project và dự án cuối khóa. Sau khi hoàn thành, bạn sở hữu portfolio và source code để ứng tuyển.',
         'w.6.title': 'Lộ trình rõ ràng đến Developer',
         'w.6.desc': 'Chương trình thiết kế theo từng giai đoạn với mục tiêu cụ thể, giúp bạn biết chính xác học gì, làm gì và đạt được kỹ năng nào.',
         'w.7.title': 'Mentor đồng hành xuyên suốt',
         'w.7.desc': 'Giảng viên và mentor theo sát quá trình học, hỗ trợ giải đáp, review code và định hướng phát triển cá nhân.',
-        'w.8.title': 'Nội dung cập nhật theo doanh nghiệp',
-        'w.8.desc': 'Giáo trình được cập nhật liên tục theo phiên bản mới của Python, Odoo, PostgreSQL, Docker, DevOps — bám sát nhu cầu tuyển dụng.',
-        'w.9.title': 'Cộng đồng học viên',
-        'w.9.desc': 'Tham gia cộng đồng học viên Vinc Academy, trao đổi kiến thức, chia sẻ kinh nghiệm và hỗ trợ lẫn nhau trong suốt quá trình học.',
-        'cv.1': 'Learn by Building — Học qua xây dựng sản phẩm thực tế',
-        'cv.2': 'Learn by Doing — Thực hành là trọng tâm',
-        'cv.3': 'Learn with Mentors — Đồng hành cùng chuyên gia',
-        'cv.4': 'Learn like a Software Company — Quy trình chuyên nghiệp',
-        'cv.5': 'Learn for Your Career — Phát triển sự nghiệp bền vững',
 
         'faq.tag': 'FAQ',
         'faq.title': 'Câu hỏi thường gặp',
@@ -278,11 +232,11 @@ const i18n = {
         'faq.q4': 'Thời gian hoàn thành mỗi chương trình là bao lâu?',
         'faq.a4': 'Developer Foundation: 5 buổi, Odoo Foundation: 8 buổi, AI & Vibe Coding: 5 buổi, Business & Functional: 8 buổi, Advanced: 8 buổi, DevOps: 5 buổi. Trung bình 4–8 tuần nếu học đều đặn 1–2 giờ mỗi ngày. Không có deadline, học viên hoàn toàn chủ động thời gian.',
 
-        'nav.register': 'Đăng ký ngay',
+        'nav.register': 'Tư vấn miễn phí',
 
-        'register.tag': 'Đăng ký học',
-        'register.title': '3 bước bắt đầu đơn giản',
-        'register.sub': 'Chọn combo — nhận tư vấn — bắt đầu học ngay',
+        'register.tag': 'Học phí & Đăng ký',
+        'register.title': 'Chọn combo phù hợp với bạn',
+        'register.sub': 'Chọn combo — nhận tư vấn — bắt đầu học',
         'reg.step1': 'Chọn combo phù hợp',
         'reg.desc1': 'Xem danh sách combo phía trên hoặc chọn chương trình riêng lẻ. Nếu chưa chắc, nhắn Zalo để được tư vấn miễn phí.',
         'reg.tag1': 'Tư vấn miễn phí',
@@ -300,31 +254,33 @@ const i18n = {
         'reg.btn': 'Nhắn tin Zalo ngay · 036 3729 276',
         'reg.formBtn': '📝 Đăng ký qua Google Form',
         'reg.note': 'Phản hồi trong vòng 24h — Cam kết không spam',
+        'reg.social': 'Hoặc chat qua <a href="https://m.me/vinc.academy" target="_blank" rel="noopener">Messenger</a> · theo dõi <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener">Fanpage</a>',
         'page.title': 'Vinc Academy — Đào tạo lập trình thực chiến',
+        'about.badge': 'Đang tuyển sinh 2026',
+        'faq.q5': 'Học phí bao nhiêu? Có hỗ trợ trả góp không?',
+        'faq.a5': 'Học phí tùy theo combo bạn chọn. Nhắn Zalo 036 3729 276 để nhận báo giá chi tiết và các hình thức thanh toán linh hoạt.',
+        'footer.verify': 'Tra cứu chứng chỉ',
 
-        'footer': 'Vinc Academy',
-        'footer.right': '© 2025 Vinc Academy',
+        'footer': 'Vinc <span>Academy</span>',
+        'footer.right': '© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.',
     },
     en: {
         'nav.about': 'About',
         'nav.programs': 'Programs',
-        'nav.pricing': 'Pricing',
-        'nav.roadmap': 'Roadmap',
-        'nav.why': 'Benefits',
+        'nav.pricing': 'Tuition',
         'nav.faq': 'FAQ',
         'nav.certificate': 'Certificate',
-        'nav.register': 'Register Now',
+        'nav.blog': 'Odoo Dev Guide',
+        'nav.register': 'Free Consultation',
 
         'verify.subtitle': 'Vinc Academy Verification System',
         'verify.title': 'VERIFY COURSE COMPLETION CERTIFICATE',
         'verify.desc': 'Quickly and accurately look up diplomas and certificates issued by Vinc Academy. Enter the certificate code in the box below to verify online.',
         'verify.placeholder': 'Enter certificate code (e.g. HV20260004-C0002)...',
         'verify.btn': 'Verify',
-        'verify.sampleLabel': 'Quick sample codes: ',
         'verify.found': 'Certificate found! Redirecting...',
         'verify.invalid': 'Invalid certificate code. Please check again!',
         'verify.empty': 'Please enter a certificate code.',
-        'verify.sampleSelected': 'Selected sample code: {code}. Click "Verify" to authenticate.',
         'verify.invalidFormat': 'Invalid certificate format. Correct format: HVxxxxxxxx-Cxxxx',
         'verify.domainError': 'Unable to verify certificate. Please try again later.',
         'verify.openCert': 'View Certificate',
@@ -336,8 +292,8 @@ const i18n = {
         'hero.badge': 'Hands-on Training · 100% Real Projects',
         'hero.title': 'Odoo<br><span class="accent">Hands-on</span><br>Training for Developers',
         'hero.desc': 'From Developer Foundation to AI & Vibe Coding — 6 hands-on Odoo programs, clear roadmap, real projects, industry-experienced instructors.',
-        'hero.btn1': 'View Programs',
-        'hero.btn2': 'View Roadmap',
+        'hero.btn1': 'Get Free Consultation',
+        'hero.btn2': 'View Programs',
         'hero.stat1': 'Training Programs',
         'hero.stat2': 'Real Project Practice',
         'hero.stat3': 'Job-Ready Skills',
@@ -436,12 +392,6 @@ const i18n = {
         'p.free': 'in combo',
         'p.detail': '📖 View details',
 
-        'pricing.tag': 'Tuition',
-        'pricing.title': 'Get tuition info from Vinc Academy',
-        'pricing.sub': 'Get 10% off when you register today — message Zalo for a detailed quote',
-        'pricing.promo': '🎉 10% off tuition when you register today',
-        'pricing.listTitle': '5 hands-on Odoo training combos',
-
         'r.1.name': 'Starter',
         'r.1.badge': '🔥 Popular',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
@@ -460,31 +410,6 @@ const i18n = {
         'r.5.name': 'Full Stack Odoo',
         'r.5.badge': 'All-in',
         'r.5.content': 'All 6 programs',
-
-        'pricing.btn': '📱 Get a quote via Zalo',
-        'pricing.formBtn': '📝 Register via Google Form',
-
-        'roadmap.tag': 'Learning Path',
-        'roadmap.title': '6 Levels — from Foundation to Senior',
-        'roadmap.sub': 'Build solid skills through each level, ready for your Odoo career',
-        'road.l1.name': 'L1 — Foundation',
-        'road.l1.badge': 'Developer Foundation',
-        'road.l1.detail': 'Python, PostgreSQL, Git — Mini Project: Customer Management. Ready for Odoo.',
-        'road.l2.name': 'L2 — Odoo Developer',
-        'road.l2.badge': 'Junior Odoo Developer',
-        'road.l2.detail': 'Odoo Architecture, ORM, Views, Security, Report, Website. Project: Training Management System.',
-        'road.l3.name': 'L3 — AI Developer',
-        'road.l3.badge': 'AI-Enhanced Developer',
-        'road.l3.detail': 'Prompt Engineering, AI Pair Programming, AI Review & Debug. 2-5x faster development.',
-        'road.l4.name': 'L4 — BA / Functional',
-        'road.l4.badge': 'Functional Consultant',
-        'road.l4.detail': 'ERP Process, CRM, Sales, Inventory, Accounting, BA, BRD, Solution Design.',
-        'road.l5.name': 'L5 — Advanced Dev',
-        'road.l5.badge': 'Senior Developer',
-        'road.l5.detail': 'Advanced ORM, API Integration, OWL, Performance, Testing. Enterprise projects.',
-        'road.l6.name': 'L6 — DevOps',
-        'road.l6.badge': 'DevOps Engineer',
-        'road.l6.detail': 'Linux, Docker, Nginx, SSL, Backup, Monitoring, CI/CD. Production Server deployment.',
         'road.card1': 'Foundation',
         'road.card1d': 'Python · SQL · Git',
         'road.card2': 'Odoo Core',
@@ -501,30 +426,18 @@ const i18n = {
         'why.tag': 'Why Vinc Academy',
         'why.title': 'Training like a Software Company',
         'why.sub': 'Not just coding — learn real product development workflows',
-        'why.brandPromise': 'We don\'t just teach you to code — Vinc Academy trains you to become a Developer ready for real projects right after the course.',
         'w.1.title': 'Work like in a software company',
         'w.1.desc': 'Follow real development workflows: requirements analysis, planning, coding, code review, deployment, and operations.',
         'w.2.title': 'Real experience from day one',
         'w.2.desc': 'Instead of spending months as an intern, you practice on business-simulated projects and build experience from day one.',
         'w.3.title': 'Instructors are active Developers',
         'w.3.desc': 'Senior Odoo Developers and Technical Consultants currently deploying real business projects — up-to-date knowledge, real experience.',
-        'w.4.title': 'Learn modern development workflows',
-        'w.4.desc': 'Git, Agile/Scrum, Code Review, Docker, CI/CD, Linux, PostgreSQL — enterprise skills rarely taught in traditional training centers.',
         'w.5.title': 'Build a professional Portfolio',
         'w.5.desc': 'Every course includes mini projects and a final project. Graduate with a portfolio and source code ready for job applications.',
         'w.6.title': 'Clear path to Developer career',
         'w.6.desc': 'Program designed in stages with specific goals — you always know what to learn, what to build, and what skills you\'ll gain.',
         'w.7.title': 'Mentors guide you all the way',
         'w.7.desc': 'Instructors and mentors track your progress, answer questions, review code, and guide your personal development.',
-        'w.8.title': 'Content updated for the industry',
-        'w.8.desc': 'Curriculum continuously updated with the latest Python, Odoo, PostgreSQL, Docker, DevOps — aligned with hiring needs.',
-        'w.9.title': 'Student Community',
-        'w.9.desc': 'Join the Vinc Academy student community to exchange knowledge, share experience, and support each other throughout your learning journey.',
-        'cv.1': 'Learn by Building — Learn through building real products',
-        'cv.2': 'Learn by Doing — Practice is the core',
-        'cv.3': 'Learn with Mentors — Alongside industry experts',
-        'cv.4': 'Learn like a Software Company — Professional workflow',
-        'cv.5': 'Learn for Your Career — Sustainable career growth',
 
         'faq.tag': 'FAQ',
         'faq.title': 'Frequently Asked Questions',
@@ -538,9 +451,9 @@ const i18n = {
         'faq.q4': 'How long does each program take?',
         'faq.a4': 'Developer Foundation: 5 sessions, Odoo Foundation: 8, AI & Vibe Coding: 5, Business & Functional: 8, Advanced: 8, DevOps: 5. Average 4–8 weeks with 1–2 hours daily. No deadline, learn at your own pace.',
 
-        'register.tag': 'Registration',
-        'register.title': '3 Simple Steps to Start',
-        'register.sub': 'Pick a combo — get advice — start learning today',
+        'register.tag': 'Tuition & Enrollment',
+        'register.title': 'Choose the right combo for you',
+        'register.sub': 'Pick a combo — get advice — start learning',
         'reg.step1': 'Choose your combo',
         'reg.desc1': 'Check the combo list above or pick individual programs. Not sure? Message us on Zalo for free consultation.',
         'reg.tag1': 'Free consultation',
@@ -558,14 +471,22 @@ const i18n = {
         'reg.btn': 'Message us on Zalo · 036 3729 276',
         'reg.formBtn': '📝 Register via Google Form',
         'reg.note': 'Response within 24h — No spam guarantee',
+        'reg.social': 'Or chat via <a href="https://m.me/vinc.academy" target="_blank" rel="noopener">Messenger</a> · follow our <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener">Fanpage</a>',
         'page.title': 'Vinc Academy — Hands-on Programming Training',
+        'about.badge': 'Now enrolling 2026',
+        'faq.q5': 'How much is the tuition? Are installments available?',
+        'faq.a5': 'Tuition depends on the combo you choose. Message us on Zalo 036 3729 276 for a detailed quote and flexible payment options.',
+        'footer.verify': 'Verify Certificate',
 
-        'footer': 'Vinc Academy',
-        'footer.right': '© 2025 Vinc Academy',
+        'footer': 'Vinc <span>Academy</span>',
+        'footer.right': '© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.',
     }
 };
 
-let currentLang = localStorage.getItem('va-lang') || 'vi';
+// Trang bài viết có URL riêng cho từng ngôn ngữ: <html data-lang> quyết định ngôn ngữ
+const pageLang = document.documentElement.dataset.lang;
+let currentLang = pageLang || localStorage.getItem('va-lang') || 'vi';
+if (pageLang) localStorage.setItem('va-lang', pageLang);
 
 function applyLang() {
     document.documentElement.lang = currentLang;
@@ -602,6 +523,8 @@ function applyLang() {
 function toggleLang() {
     currentLang = currentLang === 'vi' ? 'en' : 'vi';
     localStorage.setItem('va-lang', currentLang);
+    const alt = document.querySelector('.lang-toggle')?.dataset.alt;
+    if (alt) return location.assign(alt);
     applyLang();
 }
 
@@ -676,7 +599,6 @@ function initCertificateSearch() {
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
     const feedbackMsg = document.getElementById('feedback-msg');
-    const sampleBadges = document.querySelectorAll('.sample-code-badge');
 
     if (!searchForm || !searchInput) return;
 
@@ -706,19 +628,6 @@ function initCertificateSearch() {
             });
     });
 
-    if (sampleBadges && searchInput) {
-        sampleBadges.forEach(badge => {
-            badge.addEventListener('click', () => {
-                const code = badge.getAttribute('data-code');
-                searchInput.value = code;
-                searchInput.focus();
-                showVerifyFeedback(
-                    i18n[currentLang]['verify.sampleSelected'].replace('{code}', code),
-                    'success'
-                );
-            });
-        });
-    }
 
     function showVerifyFeedback(text, type) {
         if (!feedbackMsg) return;

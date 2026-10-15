@@ -741,74 +741,6 @@
      color: var(--blue-500);
  }
 
- /* ── ROADMAP ── */
- .roadmap {
-     display: flex;
-     flex-direction: column;
-     gap: 0;
- }
-
- .road-item {
-     display: flex;
-     gap: 1.25rem;
-     align-items: flex-start;
-     padding: 1rem 0;
- }
-
- .road-line {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
- }
-
- .road-dot {
-     width: 34px;
-     height: 34px;
-     border-radius: 50%;
-     border: 2px solid var(--blue-100);
-     background: var(--blue-50);
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     font-size: 13px;
-     font-weight: 700;
-     color: var(--blue-500);
-     flex-shrink: 0;
-     font-family: 'Space Mono', monospace;
- }
-
- .road-dot.active {
-     background: var(--blue-500);
-     color: #fff;
-     border-color: var(--blue-500);
- }
-
- .road-connector {
-     width: 2px;
-     flex: 1;
-     min-height: 28px;
-     background: var(--border-light);
-     margin: 3px 0;
- }
-
- .road-content {
-     padding-top: 5px;
-     flex: 1;
- }
-
- .road-name {
-     font-size: 15px;
-     font-weight: 600;
-     color: var(--text-primary);
-     letter-spacing: -0.2px;
-     margin-bottom: 3px;
- }
-
- .road-detail {
-     font-size: 13px;
-     color: var(--text-secondary);
- }
-
  /* ── WHY ── */
  .why-grid {
      display: grid;
@@ -1450,7 +1382,7 @@
  .toast {
      position: fixed;
      bottom: 24px;
-     right: 24px;
+     left: 24px;
      background: #1A1A18;
      color: #fff;
      padding: 14px 20px;
@@ -1702,49 +1634,6 @@
     color: var(--text-muted);
 }
 
-/* ── LEVEL BADGE (Roadmap) ── */
-.level-badge {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-left: 8px;
-    vertical-align: middle;
-}
-
-.level-badge.l1 {
-    background: var(--green-50);
-    color: var(--green-600);
-}
-
-.level-badge.l2 {
-    background: var(--blue-50);
-    color: var(--blue-500);
-}
-
-.level-badge.l3 {
-    background: var(--amber-50);
-    color: var(--amber-600);
-}
-
-.level-badge.l4 {
-    background: var(--purple-50);
-    color: var(--purple-600);
-}
-
-.level-badge.l5 {
-    background: var(--coral-50);
-    color: var(--coral-600);
-}
-
-.level-badge.l6 {
-    background: var(--teal-50);
-    color: var(--teal-600);
-}
-
 /* ── BRAND LEVELS ── */
 .levels-grid {
     display: grid;
@@ -1986,19 +1875,6 @@
 }
 
 /* ── PRICING SECTION (new) ── */
-.pricing-promo {
-    background: linear-gradient(135deg, var(--coral-50), var(--amber-50));
-    border: 1px solid var(--amber-600);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 1.5rem;
-    font-size: 15px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--amber-600);
-    letter-spacing: 0.3px;
-}
-
 .pricing-list-title {
     font-size: 14px;
     font-weight: 600;
@@ -2009,7 +1885,7 @@
 
 .pricing-combos {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
     margin-bottom: 1.5rem;
 }
@@ -2025,16 +1901,6 @@
 .pricing-combos .combo-card .combo-includes {
     font-size: 12px;
     min-height: auto;
-}
-
-.pricing-cta-wrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
 }
 
 .btn-row {
@@ -2053,66 +1919,13 @@
     justify-content: center;
 }
 
-.pricing-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--blue-500);
-    color: #fff;
-    border: none;
-    padding: 14px 32px;
-    border-radius: 10px;
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.15s, transform 0.15s;
-}
-
-.pricing-cta:hover {
-    background: var(--blue-700);
-    transform: translateY(-2px);
-}
-
-.pricing-cta.gform {
-    background: #34A853;
-    box-shadow: 0 4px 12px rgba(52, 168, 83, 0.3);
-}
-
-.pricing-cta.gform:hover {
-    background: #2D9249;
-    box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4);
-}
-
-@media (max-width: 800px) {
-    .pricing-combos {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media (max-width: 600px) {
-    .pricing-cta-wrap {
-        flex-direction: column;
-    }
-
-    .pricing-cta {
-        width: 100%;
-        justify-content: center;
-    }
-
     .btn-row {
         flex-direction: column;
     }
 
     .btn-row .btn-register {
         width: 100%;
-    }
-}
-
-@media (max-width: 500px) {
-    .pricing-combos {
-        grid-template-columns: 1fr;
     }
 }
 
@@ -2217,54 +2030,202 @@
     }
 }
 
-/* ── CORE VALUES (tái sử dụng .levels-grid / .level-card) ── */
-.core-values {
-    margin-top: 2.5rem;
+/* ── NAV: link phụ Chứng chỉ ── */
+.nav-links a.nav-sub {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    font-size: 12.5px;
+}
+
+/* ── ABOUT + WHY ── */
+.why-block {
+    margin-top: 4rem;
+}
+
+/* ── PROGRAMS: thanh lộ trình L1→L6 ── */
+.program-levels {
+    margin: 0 0 2rem;
+}
+
+/* ── FOOTER LINKS ── */
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+.footer-links a {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--blue-500);
+}
+
+@media (max-width: 900px) {
+    .pricing-combos {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .pricing-combos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .pricing-combos {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 800px) {
+    .nav-links a.nav-sub {
+        border: none;
+        border-radius: 0;
+        padding: 0.8rem 0;
+        font-size: 14px;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+}
+
+/* ── REGISTER: link mạng xã hội ── */
+.reg-social {
+    margin-top: 12px;
+    font-size: 13px;
     text-align: center;
+    color: var(--text-muted);
 }
 
-.core-value-icon {
-    font-size: 28px;
-    margin-bottom: 6px;
-    display: block;
+.reg-social a {
+    color: var(--blue-500);
+    font-weight: 600;
+    text-decoration: none;
 }
 
-.core-rows {
+/* ── CHAT BUBBLES (Zalo + Messenger) ── */
+.chat-bubbles {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 150;
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.chat-bubble {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s;
 }
 
-.core-row {
-    display: grid;
-    gap: 10px;
-    max-width: 750px;
-    width: 100%;
+.chat-bubble:hover {
+    transform: scale(1.08);
 }
 
-.core-row:first-child {
-    grid-template-columns: repeat(3, 1fr);
+.chat-bubble.messenger {
+    background: linear-gradient(135deg, #00B2FF, #006AFF);
+    font-size: 26px;
 }
 
-.core-row:last-child {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 500px;
+.chat-bubble.zalo {
+    background: #0068FF;
+    font-size: 14px;
+    font-weight: 700;
 }
 
-@media (max-width: 700px) {
-    .core-row:first-child,
-    .core-row:last-child {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 100%;
+.chat-bubble.zalo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid #0068FF;
+    animation: chat-pulse 1.8s ease-out infinite;
+}
+
+@keyframes chat-pulse {
+    from { transform: scale(1); opacity: 0.8; }
+    to { transform: scale(1.6); opacity: 0; }
+}
+
+.chat-bubble::before {
+    content: attr(data-tip);
+    position: absolute;
+    right: calc(100% + 10px);
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #1A1A18;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.chat-bubble:hover::before {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chat-bubble.zalo::after {
+        animation: none;
     }
 }
 
 @media (max-width: 520px) {
-    .core-row:first-child,
-    .core-row:last-child {
-        grid-template-columns: 1fr;
-        max-width: 100%;
+    .chat-bubbles {
+        right: 14px;
+        bottom: 14px;
+    }
+
+    .chat-bubble {
+        width: 48px;
+        height: 48px;
+    }
+
+    .chat-bubble.messenger {
+        font-size: 22px;
     }
 }
- 
+
+/* ── FOOTER: bản quyền ── */
+.footer-copyright {
+    flex-basis: 100%;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+    line-height: 1.7;
+}
+
+@media (max-width: 520px) {
+    footer,
+    .pd-footer {
+        padding-bottom: 90px;
+    }
+}

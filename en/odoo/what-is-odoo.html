@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What is Odoo? Fundamentals for Developers (Odoo 20)</title>
+    <meta name="description" content="What is Odoo? Learn the architecture, modules, Community vs Enterprise and a step-by-step Odoo 20 development learning path with Vinc Academy." />
+    <meta name="keywords" content="what is odoo, odoo development, odoo developer, odoo 20, odoo module structure, odoo community vs enterprise" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="What is Odoo? Fundamentals for Developers (Odoo 20)" />
+    <meta property="og:description" content="Architecture, modules, Community vs Enterprise and a learning path for Odoo 20 development." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/what-is-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "What is Odoo? Fundamentals for Developers (Odoo 20)",
+                "description": "Architecture, modules, Community vs Enterprise and a learning path for Odoo 20 development.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/what-is-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Odoo Dev Guide", "item": "https://vinc-academy.vercel.app/en/odoo/" },
+                    { "@type": "ListItem", "position": 3, "name": "What is Odoo?" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Is Odoo free?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Odoo Community is open source under the LGPLv3 license, so you can download it, install it and build modules for free. Odoo Enterprise is a paid subscription that adds extra apps, advanced features, support and upgrade services." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What should I know before learning Odoo development?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "You should be comfortable with basic Python (functions, classes, inheritance), SQL with PostgreSQL, and Git. Some HTML, XML and JavaScript makes front-end customization much easier." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the latest Odoo version and what does it require?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Odoo 20 was released in September 2026. According to the official installation guide, it requires Python 3.12 or later and PostgreSQL 16 or later, and runs on Linux, Windows and macOS." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How long does it take to learn Odoo development?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "With a Python background, you can build a complete Odoo module after about 8 guided, hands-on sessions. Complete beginners should add around 5 sessions for Python, PostgreSQL and Git." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I learn Odoo Community or Enterprise?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Start with Community: it is open source and covers the whole framework. Enterprise is built as additional modules on top of Community, so your knowledge carries over naturally when you join real projects." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../odoo/odoo-la-gi.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="index.html">Odoo Dev Guide</a></li>
+            <li aria-current="page">What is Odoo?</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 1 · Odoo 20 Development Series</span>
+            <h1>What is Odoo? Fundamentals for Developers (Odoo 20)</h1>
+            <p class="post-lead">Odoo is more than business management software: for developers it is a complete Python framework for building business applications. This guide helps you understand Odoo properly before you write your first line of code.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick answer</p>
+                    <p><strong>Odoo is an open-source ERP platform written in Python, using PostgreSQL as its database.</strong> Every feature (sales, accounting, inventory, HR…) is a module. Odoo developers build new modules or extend existing ones with Python, XML and JavaScript (OWL). The latest version is Odoo 20 (September 2026).</p>
+                </div>
+
+                <h2 id="what-is-odoo">What is Odoo?</h2>
+                <p>Picture an office-equipment company: sales tracks orders in Excel, accounting uses its own software, the warehouse uses another tool, and HR records attendance on paper. At the end of every month, someone reconciles numbers across four places. <strong>ERP</strong> (Enterprise Resource Planning) exists to bring all of that into one system with a single database.</p>
+                <p><strong>Odoo</strong> is such an ERP, with two key differences:</p>
+                <ul>
+                    <li><strong>Open source:</strong> the Community edition publishes its full source code, so anyone can read, install and extend it.</li>
+                    <li><strong>Modular architecture:</strong> companies install only the apps they need, and each app can be customized by another module without touching the original code.</li>
+                </ul>
+                <p>For end users, Odoo is a management suite. For <strong>developers</strong>, Odoo is a <strong>business application framework</strong>: you declare models in Python and Odoo creates the PostgreSQL tables; you describe screens in XML and Odoo renders forms, lists, kanban boards, filters and access control. Most of an Odoo developer's job is writing and customizing such modules.</p>
+
+                <h2 id="ecosystem">The Odoo app ecosystem</h2>
+                <p>The official Odoo 20 documentation groups apps by business area. Each app below is one or more modules, and each is a place where developers step in when a company needs its own process:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Area</th><th>Typical apps</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Finance</td><td>Accounting, Invoicing, Expenses, Online payments</td></tr>
+                            <tr><td>Sales</td><td>CRM, Sales, Point of Sale, Subscriptions, Rental</td></tr>
+                            <tr><td>Websites</td><td>Website, eCommerce, eLearning, Blog, Live Chat</td></tr>
+                            <tr><td>Supply chain</td><td>Inventory, Purchase, Manufacturing, Quality, Maintenance, Repairs</td></tr>
+                            <tr><td>Human resources</td><td>Employees, Attendances, Time Off, Recruitment, Payroll</td></tr>
+                            <tr><td>Marketing</td><td>Email Marketing, SMS Marketing, Events, Surveys</td></tr>
+                            <tr><td>Services</td><td>Project, Timesheets, Planning, Helpdesk</td></tr>
+                            <tr><td>Productivity</td><td>Documents, Sign, Spreadsheet, Knowledge, Discuss, AI</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Because everything shares one database, a sales order can automatically create a delivery, an invoice and accounting entries. Understanding how data flows between modules is what separates a strong Odoo developer from someone who only writes code.</p>
+
+                <h2 id="community-enterprise">Odoo Community vs Enterprise</h2>
+                <p>Odoo ships two editions side by side. The key point for developers: <strong>Enterprise is not a different product</strong>, it is a set of modules installed on top of Community.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Criteria</th><th>Community</th><th>Enterprise</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>License</td><td>Open source, LGPLv3</td><td>Odoo Enterprise Edition License</td></tr>
+                            <tr><td>Source code</td><td>Public at <code>github.com/odoo/odoo</code></td><td>Separate <code>odoo/enterprise</code> repo, for customers/partners</td></tr>
+                            <tr><td>Cost</td><td>Free</td><td>Paid subscription</td></tr>
+                            <tr><td>Scope</td><td>Framework + core apps</td><td>Extra apps, advanced features, support and upgrade services</td></tr>
+                            <tr><td>For learners</td><td>Enough to learn the whole framework</td><td>Needed for client projects running Enterprise</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="architecture">Odoo 20 technical architecture</h2>
+                <p>Odoo follows a <strong>multitier architecture</strong> that separates presentation, business logic and storage:</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 330" role="img" aria-labelledby="dg-en-title">
+                        <title id="dg-en-title">Odoo three-tier architecture diagram</title>
+                        <rect class="dg-box" x="20" y="10" width="600" height="80" rx="12" />
+                        <text class="dg-title" x="40" y="42">Presentation tier (browser)</text>
+                        <text class="dg-text" x="40" y="68">HTML5 · CSS · JavaScript · OWL components · QWeb templates</text>
+                        <path class="dg-arrow" d="M320 92 v28 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="122" width="600" height="96" rx="12" />
+                        <text class="dg-title" x="40" y="154">Logic tier (Odoo server · Python)</text>
+                        <text class="dg-text" x="40" y="178">Modules · Models &amp; ORM · Security · Controllers · Reports</text>
+                        <text class="dg-text" x="40" y="200">Where developers write most of their code</text>
+                        <path class="dg-arrow" d="M320 220 v28 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="250" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="40" y="280">Data tier</text>
+                        <text class="dg-text" x="40" y="304">PostgreSQL (the only database Odoo supports)</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy, based on the Odoo 20 architecture documentation.</figcaption>
+                </figure>
+
+                <ul>
+                    <li><strong>Presentation tier</strong> runs in the browser. Since version 15, Odoo uses <strong>OWL</strong>, its own component-based JavaScript framework.</li>
+                    <li><strong>Logic tier</strong> is written entirely in <strong>Python</strong>. The Odoo ORM maps Python classes to database tables, so you rarely write SQL by hand.</li>
+                    <li><strong>Data tier</strong> uses <strong>PostgreSQL</strong> only, so solid SQL and PostgreSQL skills pay off when tuning performance.</li>
+                </ul>
+
+                <h3 id="module-structure">Anatomy of an Odoo module</h3>
+                <p>Everything in Odoo is packaged as a <strong>module</strong> (also called an addon), placed in directories listed in <code>addons_path</code>. A module is identified by its <code>__manifest__.py</code> file. Here is the structure of <code>vinc_course</code>, a sample course-management module written by Vinc Academy (similar to the Training Management System project in the <a href="../../program-detail.html?code=ODO-F">Odoo Developer Foundation</a> program):</p>
+                <p class="code-title">vinc_course/</p>
+<pre><code>vinc_course/
+├── __init__.py
+├── __manifest__.py          # Module declaration
+├── models/
+│   ├── __init__.py
+│   └── course.py            # Python model (ORM)
+├── views/
+│   ├── course_views.xml     # Form, list, search views
+│   └── menus.xml            # Menus &amp; actions
+├── security/
+│   └── ir.model.access.csv  # Access rights per group
+├── data/                    # Initial data (XML/CSV)
+└── static/                  # Images, CSS, JavaScript (OWL)</code></pre>
+
+                <p class="code-title">vinc_course/__manifest__.py</p>
+<pre><code>{
+    'name': 'Vinc Course',
+    'version': '20.0.1.0.0',
+    'summary': 'Manage courses and students',
+    'author': 'Vinc Academy',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/course_views.xml',
+        'views/menus.xml',
+    ],
+    'application': True,
+}</code></pre>
+
+                <p class="code-title">vinc_course/models/course.py</p>
+<pre><code>from odoo import api, fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = 'Course'
+
+    name = fields.Char(string='Course name', required=True)
+    session_count = fields.Integer(string='Sessions', default=8)
+    student_ids = fields.Many2many('res.partner', string='Students')
+    student_count = fields.Integer(compute='_compute_student_count')
+
+    @api.depends('student_ids')
+    def _compute_student_count(self):
+        for course in self:
+            course.student_count = len(course.student_ids)</code></pre>
+                <p>With a few dozen lines, Odoo creates the <code>vinc_course</code> table in PostgreSQL, a many-to-many relation to contacts and a computed field that updates itself. That is why Odoo lets teams ship business features quickly.</p>
+
+                <h2 id="requirements-hosting">System requirements and hosting options</h2>
+                <p>According to the Odoo 20 source-install guide, a development environment needs <strong>Python 3.12 or later</strong> and <strong>PostgreSQL 16 or later</strong> (both raised from previous versions), and runs on Linux, Windows and macOS. Community source code comes from the <code>20.0</code> branch of the <code>odoo/odoo</code> repository.</p>
+                <p>In production, companies choose one of three options, and that choice decides whether developers can deploy custom modules:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Option</th><th>Description</th><th>Custom modules</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Odoo Online</td><td>SaaS operated by Odoo</td><td>Not supported</td></tr>
+                            <tr><td>Odoo.sh</td><td>Odoo's cloud platform for code-based projects, managed with branches (development, staging, production)</td><td>Yes</td></tr>
+                            <tr><td>On-premise</td><td>Self-hosted on the company's own servers, with self-managed backups and operations</td><td>Yes, full control</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">In practice</p>
+                    <p>Projects with customizations usually run on Odoo.sh or on-premise. On-premise makes Linux, Docker, Nginx and backups part of the job, which is why Vinc offers a dedicated <a href="../../program-detail.html?code=ODO-D">DevOps for Odoo</a> program.</p>
+                </div>
+
+                <h2 id="odoo-vs-django">How is Odoo different from Django?</h2>
+                <p>Both are Python frameworks, so this is a common question for developers moving to Odoo:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Aspect</th><th>Django</th><th>Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Goal</td><td>General-purpose web framework</td><td>Framework + ready-made business apps</td></tr>
+                            <tr><td>UI</td><td>Build your own templates/front-end; basic admin site</td><td>Forms, lists, kanban, pivot, calendar… declared in XML</td></tr>
+                            <tr><td>Extending</td><td>Write new apps and integrate them yourself</td><td>Inherit models/views of other modules without editing their code</td></tr>
+                            <tr><td>Access control</td><td>Design your own or use a library</td><td>Built-in access rights and record rules</td></tr>
+                            <tr><td>Best for</td><td>Websites, APIs, fully custom products</td><td>ERP and business workflows</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>In short: Django hands you bricks to build from the foundation up, while Odoo hands you a finished building to renovate and extend. The most important Odoo skill is therefore <strong>understanding existing modules and inheriting from them correctly</strong>.</p>
+
+                <h2 id="what-to-learn">What should an Odoo developer learn?</h2>
+                <p>Based on the Developer section of the Odoo 20 documentation and our teaching experience, Vinc Academy recommends this order:</p>
+                <ol>
+                    <li><strong>Foundations:</strong> Python (OOP), SQL with PostgreSQL, Git.</li>
+                    <li><strong>Modules &amp; ORM:</strong> manifests, models, field types, recordsets, CRUD.</li>
+                    <li><strong>User interface:</strong> XML views (form, list, search, kanban), actions and menus.</li>
+                    <li><strong>Security:</strong> user groups, access rights, record rules.</li>
+                    <li><strong>Business logic:</strong> computed fields, onchange, constraints.</li>
+                    <li><strong>Inheritance:</strong> extending models and views of other modules.</li>
+                    <li><strong>Reports:</strong> QWeb and PDF reports.</li>
+                    <li><strong>Front-end:</strong> OWL components, assets.</li>
+                    <li><strong>Integration:</strong> web controllers, External JSON-2 API.</li>
+                    <li><strong>Quality:</strong> unit tests, performance, version upgrades.</li>
+                </ol>
+                <p>Each item will become an article in Vinc Academy's <a href="index.html">Odoo 20 development series</a>.</p>
+
+                <h2 id="careers">Careers and learning path</h2>
+                <p>The Odoo market needs more than developers:</p>
+                <ul>
+                    <li><strong>Odoo Developer:</strong> builds and customizes modules, integrates systems. Path: <a href="../../program-detail.html?code=DEV-F">Developer Foundation</a> → <a href="../../program-detail.html?code=ODO-F">Odoo Developer Foundation</a> → <a href="../../program-detail.html?code=ODO-A">Odoo Advanced Developer</a>.</li>
+                    <li><strong>Functional Consultant / BA:</strong> analyzes processes and configures the system: <a href="../../program-detail.html?code=ODO-B">Odoo Business &amp; Functional</a>.</li>
+                    <li><strong>DevOps:</strong> deploys, operates and backs up Odoo servers: <a href="../../program-detail.html?code=ODO-D">DevOps for Odoo</a>.</li>
+                    <li><strong>AI acceleration:</strong> uses AI to write, review and debug modules: <a href="../../program-detail.html?code=AI-O">AI &amp; Vibe Coding Odoo</a>.</li>
+                </ul>
+                <p>Vinc Academy's 6-level path:</p>
+                <div class="levels-grid">
+                    <div class="level-card"><div class="level-num">L1</div><div class="level-name">Foundation</div><div class="level-desc">Python · SQL · Git</div></div>
+                    <div class="level-card"><div class="level-num">L2</div><div class="level-name">Odoo Core</div><div class="level-desc">Junior Odoo Developer</div></div>
+                    <div class="level-card"><div class="level-num">L3</div><div class="level-name">AI</div><div class="level-desc">AI-Enhanced Developer</div></div>
+                    <div class="level-card"><div class="level-num">L4</div><div class="level-name">BA / Functional</div><div class="level-desc">Functional Consultant</div></div>
+                    <div class="level-card"><div class="level-num">L5</div><div class="level-name">Advanced</div><div class="level-desc">Senior Developer</div></div>
+                    <div class="level-card"><div class="level-num">L6</div><div class="level-name">DevOps</div><div class="level-desc">Production Deployment</div></div>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Start learning Odoo development from zero</h3>
+                    <p>Get a free learning-path consultation tailored to your background.</p>
+                    <div class="cta-actions">
+                        <a href="../../index.html#register">Get free consultation</a>
+                        <a href="../../index.html#programs" class="ghost">View programs</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Is Odoo free?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo Community is open source under the LGPLv3 license, so you can download it, install it and build modules for free. Odoo Enterprise is a paid subscription that adds extra apps, advanced features, support and upgrade services.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What should I know before learning Odoo development?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">You should be comfortable with basic Python (functions, classes, inheritance), SQL with PostgreSQL, and Git. Some HTML, XML and JavaScript makes front-end customization much easier.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the latest Odoo version and what does it require?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo 20 was released in September 2026. According to the official installation guide, it requires Python 3.12 or later and PostgreSQL 16 or later, and runs on Linux, Windows and macOS.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How long does it take to learn Odoo development?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">With a Python background, you can build a complete Odoo module after about 8 guided, hands-on sessions. Complete beginners should add around 5 sessions for Python, PostgreSQL and Git.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I learn Odoo Community or Enterprise?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Start with Community: it is open source and covers the whole framework. Enterprise is built as additional modules on top of Community, so your knowledge carries over naturally when you join real projects.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">References</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer.html" target="_blank" rel="noopener">Odoo 20 – Developer documentation</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/01_architecture.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Architecture overview</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/hosting.html" target="_blank" rel="noopener">Odoo 20 – Hosting</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/legal/licenses.html" target="_blank" rel="noopener">Odoo – Licenses</a></li>
+                    <li><a href="https://www.odoo.com/page/release-notes" target="_blank" rel="noopener">Odoo – Release notes</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fodoo%2Fwhat-is-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fodoo%2Fwhat-is-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="index.html"><small>← Back to series</small>Odoo 20 development A–Z</a>
+                    <a class="next" href="install-odoo-20.html"><small>Next →</small>Setting up an Odoo 20 environment</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#what-is-odoo">What is Odoo?</a></li>
+                        <li><a href="#ecosystem">App ecosystem</a></li>
+                        <li><a href="#community-enterprise">Community vs Enterprise</a></li>
+                        <li><a href="#architecture">Odoo 20 architecture</a></li>
+                        <li><a href="#requirements-hosting">Requirements &amp; hosting</a></li>
+                        <li><a href="#odoo-vs-django">Odoo vs Django</a></li>
+                        <li><a href="#what-to-learn">What to learn</a></li>
+                        <li><a href="#careers">Careers &amp; path</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

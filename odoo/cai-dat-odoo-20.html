@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer</title>
+    <meta name="description" content="Hướng dẫn cài đặt Odoo 20 cho lập trình viên: từ source trên Ubuntu, Docker Compose với PostgreSQL 16, chạy odoo-bin và bật developer mode." />
+    <meta name="keywords" content="cài đặt odoo 20, cài odoo bằng docker, odoo-bin, odoo developer mode, cài odoo ubuntu, odoo docker compose" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer" />
+    <meta property="og:description" content="Cài Odoo 20 từ source hoặc Docker, chạy odoo-bin, bật developer mode và tạo module đầu tiên." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/cai-dat-odoo-20.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer",
+                "description": "Cài Odoo 20 từ source hoặc Docker, chạy odoo-bin, bật developer mode và tạo module đầu tiên.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/cai-dat-odoo-20.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+, PostgreSQL 16+, Git",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Lập trình Odoo", "item": "https://vinc-academy.vercel.app/odoo/" },
+                    { "@type": "ListItem", "position": 3, "name": "Cài đặt Odoo 20" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Nên cài Odoo 20 bằng source hay Docker?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nếu bạn học để trở thành Odoo Developer, nên cài từ source vì dễ đọc mã nguồn, đặt breakpoint và debug. Docker phù hợp khi cần dựng nhanh một môi trường sạch, chạy nhiều phiên bản song song hoặc chuẩn bị triển khai." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Tài khoản đăng nhập mặc định của Odoo là gì?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Với database tạo bằng tham số -d khi chạy odoo-bin, tài khoản quản trị mặc định là admin, mật khẩu admin. Hãy đổi mật khẩu nếu môi trường có thể truy cập từ bên ngoài." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao database mới không có dữ liệu demo?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Ở Odoo 20, mặc định database mới không cài dữ liệu demo. Thêm tham số --with-demo khi tạo database nếu bạn muốn có dữ liệu mẫu để học và thử nghiệm." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Odoo 20 có chạy với PostgreSQL 15 không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không nên. Tài liệu cài đặt chính thức của Odoo 20 yêu cầu PostgreSQL 16 trở lên. Nhiều ví dụ Docker cũ vẫn dùng postgres:15, bạn cần đổi sang postgres:16 hoặc mới hơn." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../en/odoo/install-odoo-20.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Trang chủ</a></li>
+            <li><a href="index.html">Lập trình Odoo</a></li>
+            <li aria-current="page">Cài đặt Odoo 20</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 2 · Series Lập trình Odoo 20</span>
+            <h1>Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer</h1>
+            <p class="post-lead">Một môi trường phát triển chuẩn giúp bạn tiết kiệm hàng giờ debug về sau. Bài này hướng dẫn hai cách cài Odoo 20 mà Vinc Academy dùng khi đào tạo, kèm các lỗi học viên hay gặp và cách xử lý.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Để cài Odoo 20 cho phát triển, bạn cần Python 3.12+, PostgreSQL 16+ và Git.</strong> Clone nhánh <code>20.0</code> từ GitHub, tạo user PostgreSQL riêng, cài thư viện phụ thuộc rồi chạy <code>odoo-bin</code>; hoặc dùng Docker Compose với image <code>odoo:20.0</code> và <code>postgres:16</code>. Truy cập <code>http://localhost:8069</code>, đăng nhập <code>admin/admin</code> và bật developer mode.</p>
+                </div>
+
+                <h2 id="chuan-bi">Chuẩn bị trước khi cài</h2>
+                <p>Odoo 20 nâng yêu cầu tối thiểu so với các bản trước, nên máy đang chạy Odoo 17 hay 18 chưa chắc đã đủ. Kiểm tra danh sách sau:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thành phần</th><th>Yêu cầu</th><th>Ghi chú</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Python</td><td>3.12 trở lên</td><td>Kiểm tra bằng <code>python3 --version</code>, cần có <code>pip</code></td></tr>
+                            <tr><td>PostgreSQL</td><td>16 trở lên</td><td>Không dùng user <code>postgres</code> để chạy Odoo</td></tr>
+                            <tr><td>Git</td><td>Bản bất kỳ</td><td>Để clone mã nguồn và quản lý module</td></tr>
+                            <tr><td>wkhtmltopdf</td><td>0.12.6 (tùy chọn)</td><td>Cần nếu muốn in PDF có header/footer; cài thủ công, không qua pip</td></tr>
+                            <tr><td>Node.js + rtlcss</td><td>Tùy chọn</td><td>Chỉ cần cho ngôn ngữ viết từ phải sang trái</td></tr>
+                            <tr><td>pgvector</td><td>Tùy chọn</td><td>Chỉ cần khi dùng các tính năng AI của Odoo</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="chon-cach-cai">Nên cài từ source hay Docker?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tiêu chí</th><th>Cài từ source</th><th>Docker Compose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Đọc &amp; debug mã nguồn Odoo</td><td>Rất thuận tiện, đặt breakpoint trực tiếp</td><td>Phải cấu hình thêm</td></tr>
+                            <tr><td>Thời gian dựng môi trường</td><td>Lâu hơn, phụ thuộc hệ điều hành</td><td>Vài phút, giống nhau trên mọi máy</td></tr>
+                            <tr><td>Chạy nhiều phiên bản song song</td><td>Cần quản lý nhiều môi trường Python</td><td>Đơn giản, mỗi phiên bản một container</td></tr>
+                            <tr><td>Phù hợp</td><td>Học và phát triển module hằng ngày</td><td>Dựng nhanh, demo, gần với môi trường triển khai</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Khuyến nghị của Vinc Academy:</strong> người học lập trình Odoo nên làm quen với cách cài từ source trước, vì đó là cách hiểu rõ nhất Odoo khởi động thế nào. Docker là kỹ năng bổ sung rất đáng học khi bạn bắt đầu làm dự án.</p>
+
+                <h2 id="cai-tu-source">Cách 1: Cài Odoo 20 từ source trên Ubuntu</h2>
+                <p>Các bước dưới đây dùng Ubuntu/Debian, môi trường phổ biến nhất của developer Odoo. Ghi chú cho Windows và macOS nằm ở cuối mục.</p>
+
+                <h3 id="buoc-1">Bước 1: Lấy mã nguồn</h3>
+                <p>Chỉ lấy đúng nhánh <code>20.0</code> để tiết kiệm dung lượng. Tham số <code>--depth 1</code> bỏ qua lịch sử commit, giúp clone nhanh hơn nhiều:</p>
+<pre><code>mkdir -p ~/odoo-dev &amp;&amp; cd ~/odoo-dev
+git clone https://github.com/odoo/odoo.git --branch 20.0 --single-branch --depth 1</code></pre>
+                <p>Nếu bạn có quyền truy cập Odoo Enterprise, clone thêm repo <code>odoo/enterprise</code> vào cùng thư mục <code>~/odoo-dev</code>. Repo này chỉ chứa module bổ sung, vẫn phải chạy trên nền Community.</p>
+
+                <h3 id="buoc-2">Bước 2: Cài PostgreSQL và tạo user riêng</h3>
+                <p>Odoo không cho kết nối bằng user quản trị <code>postgres</code>. Hãy tạo một user trùng tên tài khoản Linux của bạn, có quyền tạo database:</p>
+<pre><code>sudo apt install postgresql
+sudo -u postgres createuser -d -R -S $USER
+createdb $USER</code></pre>
+                <p>Kiểm tra phiên bản bằng <code>psql --version</code>. Nếu kho gói của bản Ubuntu bạn dùng cung cấp phiên bản cũ hơn 16, hãy cài từ kho chính thức của PostgreSQL.</p>
+
+                <h3 id="buoc-3">Bước 3: Cài thư viện phụ thuộc</h3>
+                <p>Tài liệu Odoo khuyến nghị dùng script đi kèm mã nguồn, script này cài các gói hệ thống tương ứng của Debian/Ubuntu:</p>
+<pre><code>cd ~/odoo-dev/odoo
+sudo ./setup/debinstall.sh</code></pre>
+                <p>Nếu muốn tách riêng thư viện cho từng dự án, bạn có thể dùng môi trường ảo Python và cài qua <code>requirements.txt</code>. Cách này cần các gói hệ thống để biên dịch (như <code>libpq-dev</code>, <code>libldap2-dev</code>, <code>libsasl2-dev</code>):</p>
+<pre><code>python3 -m venv ~/odoo-dev/venv
+source ~/odoo-dev/venv/bin/activate
+pip install -r requirements.txt</code></pre>
+
+                <h3 id="buoc-4">Bước 4: Chạy Odoo</h3>
+<pre><code>python3 odoo-bin --addons-path=addons -d odoo20_dev</code></pre>
+                <p>Khi log hiện dòng <code>odoo.modules.loading: Modules loaded.</code>, mở trình duyệt tại <code>http://localhost:8069</code> và đăng nhập bằng <code>admin</code> / <code>admin</code>. Database <code>odoo20_dev</code> được tạo tự động ở lần chạy đầu tiên.</p>
+
+                <div class="callout tip">
+                    <p class="callout-title">Lưu ý về dữ liệu demo</p>
+                    <p>Từ Odoo 20, database mới mặc định <strong>không</strong> có dữ liệu demo. Khi học, nên thêm <code>--with-demo</code> lúc tạo database để có sẵn khách hàng, sản phẩm, đơn hàng mẫu mà thực hành.</p>
+                </div>
+
+                <h3 id="windows-macos">Ghi chú cho Windows và macOS</h3>
+                <ul>
+                    <li><strong>Windows:</strong> cài Build Tools for Visual Studio (gói C++), thêm thư mục <code>bin</code> của PostgreSQL vào <code>PATH</code>, tạo user đăng nhập có quyền tạo database bằng pgAdmin. Cài thư viện bằng <code>pip install setuptools wheel</code> rồi <code>pip install -r requirements.txt</code>, và chạy kèm thông tin kết nối: <code>python odoo-bin -r dbuser -w dbpassword --addons-path=addons -d odoo20_dev</code>.</li>
+                    <li><strong>macOS:</strong> cài Command Line Tools bằng <code>xcode-select --install</code>, cài thư viện hệ thống qua Homebrew hoặc MacPorts, PostgreSQL qua Homebrew hoặc Postgres.app, sau đó tạo user và chạy giống Linux.</li>
+                </ul>
+
+                <h2 id="cai-bang-docker">Cách 2: Chạy Odoo 20 bằng Docker Compose</h2>
+                <p>Image chính thức <code>odoo</code> trên Docker Hub đã có tag <code>20.0</code>. Thay vì gõ nhiều lệnh <code>docker run</code>, Vinc Academy dùng một file Compose để cả lớp có môi trường giống hệt nhau:</p>
+                <p class="code-title">odoo20/docker-compose.yml</p>
+<pre><code>services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  odoo:
+    image: odoo:20.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - odoo-data:/var/lib/odoo          # filestore, session
+      - ./addons:/mnt/extra-addons       # module tự viết
+
+volumes:
+  db-data:
+  odoo-data:</code></pre>
+<pre><code>cd odoo20
+mkdir -p addons
+docker compose up -d
+docker compose logs -f odoo</code></pre>
+                <p>Mở <code>http://localhost:8069</code>, Odoo sẽ hiện trang tạo database. Module bạn đặt trong thư mục <code>./addons</code> sẽ xuất hiện trong container tại <code>/mnt/extra-addons</code>.</p>
+                <div class="callout">
+                    <p class="callout-title">Điểm dễ sai: phiên bản PostgreSQL</p>
+                    <p>Nhiều hướng dẫn và ví dụ Docker cũ vẫn dùng <code>postgres:15</code>. Odoo 20 yêu cầu PostgreSQL 16 trở lên, vì vậy hãy dùng <code>postgres:16</code> (hoặc mới hơn) ngay từ đầu, tránh phải chuyển dữ liệu về sau.</p>
+                </div>
+
+                <h2 id="developer-mode">Bật developer mode</h2>
+                <p>Developer mode mở ra các công cụ kỹ thuật: xem cấu trúc view, tên field, model, chỉnh menu, action… Đây là thứ developer Odoo bật đầu tiên mỗi ngày. Có nhiều cách tương đương:</p>
+                <ul>
+                    <li><strong>Từ Settings:</strong> vào ứng dụng Settings, kéo xuống mục <em>Developer Tools</em> và chọn <em>Activate the developer mode</em>.</li>
+                    <li><strong>Qua URL:</strong> thêm <code>?debug=1</code> vào địa chỉ, ví dụ <code>http://localhost:8069/odoo?debug=1</code>; dùng <code>?debug=0</code> để tắt.</li>
+                    <li><strong>Debug JavaScript:</strong> dùng <code>?debug=assets</code> để tải file JS/CSS chưa nén, dễ đọc khi debug giao diện.</li>
+                    <li><strong>Command palette:</strong> nhấn <code>Ctrl + K</code> (macOS: <code>Cmd + K</code>) rồi gõ "debug".</li>
+                </ul>
+                <p>Khi bật thành công, biểu tượng con bọ xuất hiện trên thanh menu. Một số công cụ trong đó có thể thay đổi dữ liệu hệ thống, chỉ dùng trên database phát triển.</p>
+
+                <h2 id="tham-so-odoo-bin">Các tham số odoo-bin cần nhớ</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tham số</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>--addons-path</code></td><td>Danh sách thư mục chứa module, cách nhau bởi dấu phẩy</td></tr>
+                            <tr><td><code>-d</code></td><td>Tên database làm việc</td></tr>
+                            <tr><td><code>-i</code></td><td>Cài module trước khi chạy server (cần đi kèm <code>-d</code>)</td></tr>
+                            <tr><td><code>-u</code></td><td>Cập nhật module sau khi sửa code (cần đi kèm <code>-d</code>)</td></tr>
+                            <tr><td><code>--dev</code></td><td>Tính năng hỗ trợ phát triển, ví dụ <code>xml</code> đọc view trực tiếp từ file, <code>reload</code> tự khởi động lại khi sửa Python; <code>all</code> bật nhiều tính năng cùng lúc. Không dùng trên production</td></tr>
+                            <tr><td><code>--with-demo</code></td><td>Cài dữ liệu demo cho database mới</td></tr>
+                            <tr><td><code>-p</code> / <code>--http-port</code></td><td>Đổi cổng HTTP (mặc định 8069)</td></tr>
+                            <tr><td><code>-c</code> / <code>-s</code></td><td>Dùng file cấu hình / lưu các tham số hiện tại vào file cấu hình</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Mẹo: chạy một lần với đầy đủ tham số kèm <code>-c ~/odoo-dev/odoo20.conf -s</code>, từ lần sau chỉ cần <code>python3 odoo-bin -c ~/odoo-dev/odoo20.conf</code>.</p>
+
+                <h2 id="module-dau-tien">Tạo khung module đầu tiên</h2>
+                <p>Môi trường đã sẵn sàng, hãy tạo thư mục riêng cho module tự viết, tách khỏi mã nguồn Odoo. Lệnh <code>scaffold</code> sinh sẵn khung thư mục chuẩn:</p>
+<pre><code>cd ~/odoo-dev
+mkdir -p custom-addons
+python3 odoo/odoo-bin scaffold vinc_course custom-addons
+
+cd odoo
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -i vinc_course --dev=xml</code></pre>
+                <p>Vào Apps (nhớ bật developer mode), tìm <code>vinc_course</code> để thấy module vừa cài. Cấu trúc bên trong module sẽ được giải thích chi tiết ở bài tiếp theo.</p>
+
+                <h2 id="cong-cu">Công cụ nên cài thêm</h2>
+                <ul>
+                    <li><strong>Trình soạn thảo:</strong> VS Code hoặc PyCharm. Bật kiểm tra PEP8 cho Python và ESLint cho JavaScript.</li>
+                    <li><strong>Quản lý PostgreSQL:</strong> pgAdmin hoặc DBeaver để xem bảng mà ORM tạo ra, rất hữu ích khi học model.</li>
+                    <li><strong>Debug Python:</strong> debugger của editor, hoặc <code>pip install ipdb</code> rồi đặt <code>import ipdb; ipdb.set_trace()</code> tại dòng cần dừng.</li>
+                    <li><strong>Odoo shell:</strong> <code>python3 odoo-bin shell -c ~/odoo-dev/odoo20.conf</code> mở console Python có sẵn biến <code>env</code> để thử ORM. Thay đổi chỉ được lưu khi bạn gọi <code>env.cr.commit()</code>.</li>
+                </ul>
+
+                <h2 id="loi-thuong-gap">Lỗi thường gặp và cách xử lý</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hiện tượng</th><th>Nguyên nhân thường gặp</th><th>Cách xử lý</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Odoo từ chối kết nối database</td><td>Đang dùng user <code>postgres</code> hoặc chưa tạo user</td><td>Tạo user riêng bằng <code>createuser -d -R -S $USER</code></td></tr>
+                            <tr><td>Port 8069 đã được sử dụng</td><td>Một tiến trình Odoo khác đang chạy</td><td>Tắt tiến trình cũ hoặc chạy với <code>-p 8070</code></td></tr>
+                            <tr><td>Lỗi <code>ModuleNotFoundError</code> khi khởi động</td><td>Thiếu thư viện hoặc chưa kích hoạt venv</td><td>Kích hoạt venv, cài lại <code>requirements.txt</code></td></tr>
+                            <tr><td>Module mới không có trong Apps</td><td>Sai <code>--addons-path</code> hoặc chưa cập nhật danh sách</td><td>Kiểm tra đường dẫn, bật developer mode rồi chọn <em>Update Apps List</em></td></tr>
+                            <tr><td>Sửa XML nhưng giao diện không đổi</td><td>Chưa cập nhật module</td><td>Chạy lại với <code>-u tên_module</code> hoặc dùng <code>--dev=xml</code></td></tr>
+                            <tr><td>PDF thiếu header/footer</td><td>Chưa cài hoặc sai phiên bản wkhtmltopdf</td><td>Cài wkhtmltopdf 0.12.6</td></tr>
+                            <tr><td>Dùng lại file Docker cũ với <code>postgres:15</code></td><td>Thấp hơn yêu cầu PostgreSQL 16 của Odoo 20</td><td>Đổi sang <code>postgres:16</code> trước khi tạo database</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Cài mãi chưa chạy? Để mentor hỗ trợ bạn</h3>
+                    <p>Ở buổi đầu khóa Odoo Developer Foundation, học viên được hướng dẫn dựng môi trường 1-1 và review cấu hình.</p>
+                    <div class="cta-actions">
+                        <a href="../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên cài Odoo 20 bằng source hay Docker?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nếu bạn học để trở thành Odoo Developer, nên cài từ source vì dễ đọc mã nguồn, đặt breakpoint và debug. Docker phù hợp khi cần dựng nhanh một môi trường sạch, chạy nhiều phiên bản song song hoặc chuẩn bị triển khai.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tài khoản đăng nhập mặc định của Odoo là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Với database tạo bằng tham số -d khi chạy odoo-bin, tài khoản quản trị mặc định là admin, mật khẩu admin. Hãy đổi mật khẩu nếu môi trường có thể truy cập từ bên ngoài.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao database mới không có dữ liệu demo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Ở Odoo 20, mặc định database mới không cài dữ liệu demo. Thêm tham số --with-demo khi tạo database nếu bạn muốn có dữ liệu mẫu để học và thử nghiệm.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo 20 có chạy với PostgreSQL 15 không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không nên. Tài liệu cài đặt chính thức của Odoo 20 yêu cầu PostgreSQL 16 trở lên. Nhiều ví dụ Docker cũ vẫn dùng postgres:15, bạn cần đổi sang postgres:16 hoặc mới hơn.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/setup_guide.html" target="_blank" rel="noopener">Odoo 20 – Setup guide</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/applications/general/developer_mode.html" target="_blank" rel="noopener">Odoo 20 – Developer mode</a></li>
+                    <li><a href="https://hub.docker.com/_/odoo" target="_blank" rel="noopener">Docker Hub – Official Odoo image</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="odoo-la-gi.html"><small>← Bài trước</small>Odoo là gì? Kiến thức nền tảng</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Tạo module đầu tiên &amp; manifest</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#chuan-bi">Chuẩn bị trước khi cài</a></li>
+                        <li><a href="#chon-cach-cai">Source hay Docker?</a></li>
+                        <li><a href="#cai-tu-source">Cài từ source (Ubuntu)</a></li>
+                        <li><a href="#cai-bang-docker">Docker Compose</a></li>
+                        <li><a href="#developer-mode">Bật developer mode</a></li>
+                        <li><a href="#tham-so-odoo-bin">Tham số odoo-bin</a></li>
+                        <li><a href="#module-dau-tien">Khung module đầu tiên</a></li>
+                        <li><a href="#cong-cu">Công cụ nên cài</a></li>
+                        <li><a href="#loi-thuong-gap">Lỗi thường gặp</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

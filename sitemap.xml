@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://vinc-academy.vercel.app/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/odoo/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/odoo/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/odoo/odoo-la-gi.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+  </url>
+</urlset>

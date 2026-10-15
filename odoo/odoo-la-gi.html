@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo là gì? Kiến thức nền tảng cho lập trình viên (Odoo 20)</title>
+    <meta name="description" content="Odoo là gì? Tìm hiểu kiến trúc, module, Community vs Enterprise và lộ trình học lập trình Odoo 20 từ con số 0 cùng Vinc Academy." />
+    <meta name="keywords" content="odoo là gì, lập trình odoo, học odoo, odoo developer, odoo 20, cấu trúc module odoo, odoo community và enterprise" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Odoo là gì? Kiến thức nền tảng cho lập trình viên (Odoo 20)" />
+    <meta property="og:description" content="Kiến trúc, module, Community vs Enterprise và lộ trình học lập trình Odoo 20 từ con số 0." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-la-gi.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo là gì? Kiến thức nền tảng cho lập trình viên (Odoo 20)",
+                "description": "Kiến trúc, module, Community vs Enterprise và lộ trình học lập trình Odoo 20 từ con số 0.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-la-gi.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/odoo/odoo-la-gi.html",
+                "proficiencyLevel": "Beginner",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Lập trình Odoo", "item": "https://vinc-academy.vercel.app/odoo/" },
+                    { "@type": "ListItem", "position": 3, "name": "Odoo là gì?" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Odoo có miễn phí không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Odoo Community là mã nguồn mở theo giấy phép LGPLv3, bạn có thể tải về, cài đặt và phát triển module miễn phí. Odoo Enterprise là bản trả phí theo gói thuê bao, bổ sung thêm ứng dụng, tính năng nâng cao, hỗ trợ và dịch vụ nâng cấp." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Cần biết gì trước khi học lập trình Odoo?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nên vững Python cơ bản (hàm, lớp, kế thừa), SQL với PostgreSQL và Git. Biết thêm HTML, XML và JavaScript sẽ giúp bạn làm giao diện và tùy biến front-end dễ hơn." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Phiên bản Odoo mới nhất là gì và cần cấu hình gì?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Odoo 20 ra mắt tháng 9/2026. Theo tài liệu cài đặt chính thức, Odoo 20 yêu cầu Python 3.12 trở lên và PostgreSQL 16 trở lên, chạy được trên Linux, Windows và macOS." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Học lập trình Odoo mất bao lâu?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nếu đã có nền tảng Python, bạn có thể viết được module Odoo hoàn chỉnh sau khoảng 8 buổi học có hướng dẫn và thực hành. Người bắt đầu từ con số 0 nên dành thêm khoảng 5 buổi cho Python, PostgreSQL và Git." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên học Odoo Community hay Enterprise?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nên bắt đầu với Community vì mã nguồn mở và đủ để học toàn bộ framework. Enterprise được xây dựng như các module cài thêm trên nền Community, nên kiến thức chuyển sang Enterprise rất tự nhiên khi bạn tham gia dự án thực tế." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../en/odoo/what-is-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Trang chủ</a></li>
+            <li><a href="index.html">Lập trình Odoo</a></li>
+            <li aria-current="page">Odoo là gì?</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 1 · Series Lập trình Odoo 20</span>
+            <h1>Odoo là gì? Kiến thức nền tảng cho lập trình viên (Odoo 20)</h1>
+            <p class="post-lead">Odoo không chỉ là phần mềm quản lý doanh nghiệp: với lập trình viên, đó là một framework Python hoàn chỉnh để xây dựng ứng dụng nghiệp vụ. Bài viết giúp bạn hiểu đúng Odoo trước khi viết dòng code đầu tiên.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo là nền tảng ERP mã nguồn mở được xây dựng trên Python, lưu dữ liệu bằng PostgreSQL.</strong> Mọi chức năng (bán hàng, kế toán, kho, nhân sự…) đều là module. Lập trình viên Odoo tạo module mới hoặc mở rộng module có sẵn bằng Python, XML và JavaScript (OWL). Phiên bản mới nhất là Odoo 20 (9/2026).</p>
+                </div>
+
+                <h2 id="odoo-la-gi">Odoo là gì?</h2>
+                <p>Hình dung một công ty bán thiết bị văn phòng: đội kinh doanh ghi đơn trên Excel, kế toán dùng một phần mềm riêng, thủ kho dùng phần mềm khác, còn nhân sự chấm công trên giấy. Mỗi cuối tháng, ai đó phải ngồi đối chiếu số liệu giữa bốn nơi. <strong>ERP</strong> (Enterprise Resource Planning) ra đời để gom tất cả về một hệ thống, một cơ sở dữ liệu duy nhất.</p>
+                <p><strong>Odoo</strong> là một hệ thống ERP như vậy, với hai điểm khác biệt quan trọng:</p>
+                <ul>
+                    <li><strong>Mã nguồn mở:</strong> bản Community công khai toàn bộ mã nguồn, ai cũng có thể đọc, cài đặt và mở rộng.</li>
+                    <li><strong>Kiến trúc module:</strong> doanh nghiệp chỉ cài những ứng dụng cần dùng, và mỗi ứng dụng lại có thể được tùy biến bằng module khác mà không phải sửa mã gốc.</li>
+                </ul>
+                <p>Với người dùng, Odoo là bộ phần mềm quản lý. Nhưng với <strong>lập trình viên</strong>, Odoo là một <strong>framework phát triển ứng dụng doanh nghiệp</strong>: bạn khai báo model bằng Python, Odoo tự tạo bảng trong PostgreSQL; bạn mô tả giao diện bằng XML, Odoo tự dựng form, danh sách, kanban, bộ lọc, phân quyền. Phần lớn công việc của một Odoo Developer là viết và tùy biến các module như thế.</p>
+
+                <h2 id="he-sinh-thai">Hệ sinh thái ứng dụng Odoo</h2>
+                <p>Tài liệu chính thức của Odoo 20 chia ứng dụng thành các nhóm nghiệp vụ. Mỗi ứng dụng bên dưới thực chất là một (hoặc nhiều) module, và đều có thể là "đất diễn" của developer khi doanh nghiệp cần quy trình riêng:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Nhóm</th><th>Ứng dụng tiêu biểu</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Tài chính</td><td>Accounting, Invoicing, Expenses, Online payments</td></tr>
+                            <tr><td>Bán hàng</td><td>CRM, Sales, Point of Sale, Subscriptions, Rental</td></tr>
+                            <tr><td>Website</td><td>Website, eCommerce, eLearning, Blog, Live Chat</td></tr>
+                            <tr><td>Chuỗi cung ứng</td><td>Inventory, Purchase, Manufacturing, Quality, Maintenance, Repairs</td></tr>
+                            <tr><td>Nhân sự</td><td>Employees, Attendances, Time Off, Recruitment, Payroll</td></tr>
+                            <tr><td>Marketing</td><td>Email Marketing, SMS Marketing, Events, Surveys</td></tr>
+                            <tr><td>Dịch vụ</td><td>Project, Timesheets, Planning, Helpdesk</td></tr>
+                            <tr><td>Năng suất</td><td>Documents, Sign, Spreadsheet, Knowledge, Discuss, AI</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Vì tất cả dùng chung một cơ sở dữ liệu, một đơn bán hàng có thể tự sinh phiếu xuất kho, hóa đơn và bút toán kế toán. Hiểu được dòng chảy dữ liệu giữa các module là kỹ năng phân biệt developer giỏi với developer chỉ biết code.</p>
+
+                <h2 id="community-enterprise">Odoo Community và Enterprise khác nhau thế nào?</h2>
+                <p>Odoo phát hành hai phiên bản song song. Điểm developer cần nhớ: <strong>Enterprise không phải một sản phẩm khác</strong>, mà là tập module cài thêm lên nền Community.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tiêu chí</th><th>Community</th><th>Enterprise</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Giấy phép</td><td>Mã nguồn mở LGPLv3</td><td>Odoo Enterprise Edition License</td></tr>
+                            <tr><td>Mã nguồn</td><td>Công khai tại <code>github.com/odoo/odoo</code></td><td>Repo riêng <code>odoo/enterprise</code>, chỉ dành cho khách hàng/đối tác</td></tr>
+                            <tr><td>Chi phí</td><td>Miễn phí</td><td>Thuê bao trả phí</td></tr>
+                            <tr><td>Phạm vi</td><td>Framework + các ứng dụng cốt lõi</td><td>Thêm ứng dụng, tính năng nâng cao, hỗ trợ và dịch vụ nâng cấp</td></tr>
+                            <tr><td>Với người học</td><td>Đủ để học toàn bộ framework</td><td>Cần khi làm dự án cho khách dùng Enterprise</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="kien-truc">Kiến trúc kỹ thuật của Odoo 20</h2>
+                <p>Odoo được xây dựng theo <strong>kiến trúc nhiều tầng</strong>, tách riêng phần hiển thị, phần xử lý nghiệp vụ và phần lưu trữ:</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 330" role="img" aria-labelledby="dg-vi-title">
+                        <title id="dg-vi-title">Sơ đồ kiến trúc 3 tầng của Odoo</title>
+                        <rect class="dg-box" x="20" y="10" width="600" height="80" rx="12" />
+                        <text class="dg-title" x="40" y="42">Tầng trình bày (trình duyệt)</text>
+                        <text class="dg-text" x="40" y="68">HTML5 · CSS · JavaScript · OWL components · QWeb templates</text>
+                        <path class="dg-arrow" d="M320 92 v28 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="122" width="600" height="96" rx="12" />
+                        <text class="dg-title" x="40" y="154">Tầng nghiệp vụ (Odoo server · Python)</text>
+                        <text class="dg-text" x="40" y="178">Module · Model &amp; ORM · Security · Controllers · Báo cáo</text>
+                        <text class="dg-text" x="40" y="200">Đây là nơi developer viết phần lớn mã</text>
+                        <path class="dg-arrow" d="M320 220 v28 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="250" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="40" y="280">Tầng dữ liệu</text>
+                        <text class="dg-text" x="40" y="304">PostgreSQL (hệ quản trị CSDL duy nhất Odoo hỗ trợ)</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu kiến trúc Odoo 20.</figcaption>
+                </figure>
+
+                <ul>
+                    <li><strong>Tầng trình bày</strong> chạy trên trình duyệt. Từ phiên bản 15, Odoo dùng <strong>OWL</strong>, framework JavaScript dạng component do chính Odoo phát triển.</li>
+                    <li><strong>Tầng nghiệp vụ</strong> viết hoàn toàn bằng <strong>Python</strong>. ORM của Odoo ánh xạ class Python thành bảng dữ liệu, nên bạn hiếm khi phải viết SQL thủ công.</li>
+                    <li><strong>Tầng dữ liệu</strong> chỉ dùng <strong>PostgreSQL</strong>, vì vậy hiểu SQL và PostgreSQL là lợi thế lớn khi tối ưu hiệu năng.</li>
+                </ul>
+
+                <h3 id="cau-truc-module">Cấu trúc một module Odoo</h3>
+                <p>Mọi thứ trong Odoo đều được đóng gói thành <strong>module</strong> (còn gọi là addon), đặt trong các thư mục khai báo bởi <code>addons_path</code>. Một module được nhận diện nhờ file <code>__manifest__.py</code>. Dưới đây là cấu trúc của <code>vinc_course</code>, module mẫu quản lý khóa học do Vinc Academy biên soạn (tương tự dự án Training Management System trong khóa <a href="../program-detail.html?code=ODO-F">Odoo Developer Foundation</a>):</p>
+                <p class="code-title">vinc_course/</p>
+<pre><code>vinc_course/
+├── __init__.py
+├── __manifest__.py          # Khai báo module
+├── models/
+│   ├── __init__.py
+│   └── course.py            # Model Python (ORM)
+├── views/
+│   ├── course_views.xml     # Form, list, search view
+│   └── menus.xml            # Menu &amp; action
+├── security/
+│   └── ir.model.access.csv  # Quyền truy cập theo nhóm
+├── data/                    # Dữ liệu khởi tạo (XML/CSV)
+└── static/                  # Ảnh, CSS, JavaScript (OWL)</code></pre>
+
+                <p class="code-title">vinc_course/__manifest__.py</p>
+<pre><code>{
+    'name': 'Vinc Course',
+    'version': '20.0.1.0.0',
+    'summary': 'Quản lý khóa học và học viên',
+    'author': 'Vinc Academy',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/course_views.xml',
+        'views/menus.xml',
+    ],
+    'application': True,
+}</code></pre>
+
+                <p class="code-title">vinc_course/models/course.py</p>
+<pre><code>from odoo import api, fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = 'Khóa học'
+
+    name = fields.Char(string='Tên khóa học', required=True)
+    session_count = fields.Integer(string='Số buổi', default=8)
+    student_ids = fields.Many2many('res.partner', string='Học viên')
+    student_count = fields.Integer(compute='_compute_student_count')
+
+    @api.depends('student_ids')
+    def _compute_student_count(self):
+        for course in self:
+            course.student_count = len(course.student_ids)</code></pre>
+                <p>Chỉ với vài chục dòng, Odoo đã tạo bảng <code>vinc_course</code> trong PostgreSQL, quan hệ nhiều-nhiều với khách hàng, và một trường tính toán tự cập nhật. Đó là lý do Odoo giúp đội phát triển ra sản phẩm nhanh.</p>
+
+                <h2 id="yeu-cau-trien-khai">Yêu cầu hệ thống và các hình thức triển khai</h2>
+                <p>Theo tài liệu cài đặt từ mã nguồn của Odoo 20, môi trường phát triển cần <strong>Python 3.12 trở lên</strong> và <strong>PostgreSQL 16 trở lên</strong> (tăng so với các bản trước), chạy được trên Linux, Windows và macOS. Mã nguồn Community lấy từ nhánh <code>20.0</code> của repo <code>odoo/odoo</code>.</p>
+                <p>Khi đưa vào sử dụng, doanh nghiệp có ba lựa chọn, và lựa chọn này quyết định developer có được cài module tùy biến hay không:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hình thức</th><th>Mô tả</th><th>Module tùy biến</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Odoo Online</td><td>Dịch vụ SaaS do Odoo vận hành</td><td>Không hỗ trợ</td></tr>
+                            <tr><td>Odoo.sh</td><td>Nền tảng cloud của Odoo cho dự án có code, quản lý theo nhánh (development, staging, production)</td><td>Có</td></tr>
+                            <tr><td>On-premise</td><td>Tự cài trên máy chủ của doanh nghiệp, tự quản lý sao lưu và vận hành</td><td>Có, toàn quyền</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">Góc nhìn thực tế</p>
+                    <p>Dự án có tùy biến thường chạy trên Odoo.sh hoặc on-premise. Với on-premise, kỹ năng Linux, Docker, Nginx và sao lưu dữ liệu trở thành một phần công việc, đó là lý do Vinc có riêng khóa <a href="../program-detail.html?code=ODO-D">DevOps for Odoo</a>.</p>
+                </div>
+
+                <h2 id="odoo-vs-django">Odoo khác gì Django?</h2>
+                <p>Cả hai đều là framework Python, nên câu hỏi này rất phổ biến với developer đang chuyển sang Odoo:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Khía cạnh</th><th>Django</th><th>Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Mục tiêu</td><td>Framework web đa dụng</td><td>Framework + bộ ứng dụng doanh nghiệp có sẵn</td></tr>
+                            <tr><td>Giao diện</td><td>Tự xây template/front-end; admin site cơ bản</td><td>Form, list, kanban, pivot, lịch… khai báo bằng XML</td></tr>
+                            <tr><td>Mở rộng</td><td>Viết app mới, tự tích hợp</td><td>Kế thừa model/view của module khác mà không sửa mã gốc</td></tr>
+                            <tr><td>Phân quyền</td><td>Tự thiết kế hoặc dùng thư viện</td><td>Access rights và record rules có sẵn</td></tr>
+                            <tr><td>Phù hợp</td><td>Website, API, sản phẩm tùy biến hoàn toàn</td><td>ERP, quy trình nghiệp vụ doanh nghiệp</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Nói ngắn gọn: Django cho bạn bộ gạch để xây từ móng, còn Odoo cho bạn sẵn một tòa nhà để cải tạo và mở rộng. Kỹ năng quan trọng nhất của Odoo Developer vì thế là <strong>hiểu module có sẵn và kế thừa đúng cách</strong>.</p>
+
+                <h2 id="can-hoc-gi">Lập trình viên Odoo cần học những gì?</h2>
+                <p>Dựa trên mục Developer của tài liệu Odoo 20 và kinh nghiệm đào tạo, Vinc Academy sắp xếp kỹ năng theo thứ tự nên học:</p>
+                <ol>
+                    <li><strong>Nền tảng:</strong> Python (OOP), SQL với PostgreSQL, Git.</li>
+                    <li><strong>Module &amp; ORM:</strong> manifest, model, các loại field, recordset, CRUD.</li>
+                    <li><strong>Giao diện:</strong> view XML (form, list, search, kanban), action và menu.</li>
+                    <li><strong>Bảo mật:</strong> nhóm người dùng, access rights, record rules.</li>
+                    <li><strong>Logic nghiệp vụ:</strong> computed field, onchange, constraints.</li>
+                    <li><strong>Kế thừa:</strong> mở rộng model và view của module khác.</li>
+                    <li><strong>Báo cáo:</strong> QWeb và báo cáo PDF.</li>
+                    <li><strong>Front-end:</strong> OWL components, assets.</li>
+                    <li><strong>Tích hợp:</strong> web controllers, External JSON-2 API.</li>
+                    <li><strong>Chất lượng:</strong> unit test, hiệu năng, nâng cấp phiên bản.</li>
+                </ol>
+                <p>Mỗi mục trên sẽ là một bài trong <a href="index.html">series Lập trình Odoo 20</a> của Vinc Academy.</p>
+
+                <h2 id="co-hoi-nghe-nghiep">Cơ hội nghề nghiệp và lộ trình học Odoo</h2>
+                <p>Thị trường Odoo cần nhiều vai trò khác nhau, không chỉ developer:</p>
+                <ul>
+                    <li><strong>Odoo Developer:</strong> viết và tùy biến module, tích hợp hệ thống. Học từ <a href="../program-detail.html?code=DEV-F">Developer Foundation</a> → <a href="../program-detail.html?code=ODO-F">Odoo Developer Foundation</a> → <a href="../program-detail.html?code=ODO-A">Odoo Advanced Developer</a>.</li>
+                    <li><strong>Functional Consultant / BA:</strong> phân tích quy trình, cấu hình hệ thống: <a href="../program-detail.html?code=ODO-B">Odoo Business &amp; Functional</a>.</li>
+                    <li><strong>DevOps:</strong> triển khai, vận hành, sao lưu máy chủ Odoo: <a href="../program-detail.html?code=ODO-D">DevOps for Odoo</a>.</li>
+                    <li><strong>Tăng tốc với AI:</strong> dùng AI hỗ trợ viết, review và debug module: <a href="../program-detail.html?code=AI-O">AI &amp; Vibe Coding Odoo</a>.</li>
+                </ul>
+                <p>Lộ trình 6 cấp độ tại Vinc Academy:</p>
+                <div class="levels-grid">
+                    <div class="level-card"><div class="level-num">L1</div><div class="level-name">Nền tảng</div><div class="level-desc">Python · SQL · Git</div></div>
+                    <div class="level-card"><div class="level-num">L2</div><div class="level-name">Odoo Core</div><div class="level-desc">Junior Odoo Developer</div></div>
+                    <div class="level-card"><div class="level-num">L3</div><div class="level-name">AI</div><div class="level-desc">AI-Enhanced Developer</div></div>
+                    <div class="level-card"><div class="level-num">L4</div><div class="level-name">BA / Functional</div><div class="level-desc">Functional Consultant</div></div>
+                    <div class="level-card"><div class="level-num">L5</div><div class="level-name">Advanced</div><div class="level-desc">Senior Developer</div></div>
+                    <div class="level-card"><div class="level-num">L6</div><div class="level-name">DevOps</div><div class="level-desc">Production Deployment</div></div>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Bắt đầu học lập trình Odoo từ con số 0</h3>
+                    <p>Nhận tư vấn lộ trình miễn phí, phù hợp với nền tảng hiện tại của bạn.</p>
+                    <div class="cta-actions">
+                        <a href="../index.html#register">Nhận tư vấn miễn phí</a>
+                        <a href="../index.html#programs" class="ghost">Xem chương trình</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo có miễn phí không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo Community là mã nguồn mở theo giấy phép LGPLv3, bạn có thể tải về, cài đặt và phát triển module miễn phí. Odoo Enterprise là bản trả phí theo gói thuê bao, bổ sung thêm ứng dụng, tính năng nâng cao, hỗ trợ và dịch vụ nâng cấp.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Cần biết gì trước khi học lập trình Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nên vững Python cơ bản (hàm, lớp, kế thừa), SQL với PostgreSQL và Git. Biết thêm HTML, XML và JavaScript sẽ giúp bạn làm giao diện và tùy biến front-end dễ hơn.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Phiên bản Odoo mới nhất là gì và cần cấu hình gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo 20 ra mắt tháng 9/2026. Theo tài liệu cài đặt chính thức, Odoo 20 yêu cầu Python 3.12 trở lên và PostgreSQL 16 trở lên, chạy được trên Linux, Windows và macOS.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Học lập trình Odoo mất bao lâu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nếu đã có nền tảng Python, bạn có thể viết được module Odoo hoàn chỉnh sau khoảng 8 buổi học có hướng dẫn và thực hành. Người bắt đầu từ con số 0 nên dành thêm khoảng 5 buổi cho Python, PostgreSQL và Git.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên học Odoo Community hay Enterprise?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nên bắt đầu với Community vì mã nguồn mở và đủ để học toàn bộ framework. Enterprise được xây dựng như các module cài thêm trên nền Community, nên kiến thức chuyển sang Enterprise rất tự nhiên khi bạn tham gia dự án thực tế.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer.html" target="_blank" rel="noopener">Odoo 20 – Developer documentation</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/01_architecture.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Architecture overview</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/hosting.html" target="_blank" rel="noopener">Odoo 20 – Hosting</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/legal/licenses.html" target="_blank" rel="noopener">Odoo – Licenses</a></li>
+                    <li><a href="https://www.odoo.com/page/release-notes" target="_blank" rel="noopener">Odoo – Release notes</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fodoo-la-gi.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fodoo-la-gi.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="index.html"><small>← Về series</small>Lập trình Odoo 20 từ A–Z</a>
+                    <a class="next" href="cai-dat-odoo-20.html"><small>Bài tiếp theo →</small>Cài đặt môi trường Odoo 20</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#odoo-la-gi">Odoo là gì?</a></li>
+                        <li><a href="#he-sinh-thai">Hệ sinh thái ứng dụng</a></li>
+                        <li><a href="#community-enterprise">Community vs Enterprise</a></li>
+                        <li><a href="#kien-truc">Kiến trúc Odoo 20</a></li>
+                        <li><a href="#yeu-cau-trien-khai">Yêu cầu &amp; triển khai</a></li>
+                        <li><a href="#odoo-vs-django">Odoo khác gì Django?</a></li>
+                        <li><a href="#can-hoc-gi">Developer cần học gì?</a></li>
+                        <li><a href="#co-hoi-nghe-nghiep">Nghề nghiệp &amp; lộ trình</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

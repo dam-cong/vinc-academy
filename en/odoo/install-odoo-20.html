@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Install Odoo 20: Source &amp; Docker Guide for Developers</title>
+    <meta name="description" content="Install Odoo 20 for development: from source on Ubuntu, Docker Compose with PostgreSQL 16, running odoo-bin and enabling developer mode." />
+    <meta name="keywords" content="install odoo 20, odoo docker compose, odoo-bin, odoo developer mode, install odoo ubuntu" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Install Odoo 20: Source &amp; Docker Guide for Developers" />
+    <meta property="og:description" content="Install Odoo 20 from source or Docker, run odoo-bin, enable developer mode and scaffold your first module." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/install-odoo-20.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Install Odoo 20: Source & Docker Guide for Developers",
+                "description": "Install Odoo 20 from source or Docker, run odoo-bin, enable developer mode and scaffold your first module.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/install-odoo-20.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+, PostgreSQL 16+, Git",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Odoo Dev Guide", "item": "https://vinc-academy.vercel.app/en/odoo/" },
+                    { "@type": "ListItem", "position": 3, "name": "Install Odoo 20" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Should I install Odoo 20 from source or with Docker?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "If you are learning to become an Odoo developer, install from source: it is easier to read the code, set breakpoints and debug. Docker is better for spinning up a clean environment quickly, running several versions side by side or preparing a deployment." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the default Odoo login?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "For a database created with the -d option of odoo-bin, the default administrator login is admin with password admin. Change it if the environment is reachable from outside." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does my new database have no demo data?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "In Odoo 20, new databases are created without demo data by default. Add --with-demo when creating the database if you want sample data for learning and testing." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does Odoo 20 work with PostgreSQL 15?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "It is not recommended. The official Odoo 20 installation guide requires PostgreSQL 16 or later. Many older Docker examples still use postgres:15, so switch to postgres:16 or newer." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../odoo/cai-dat-odoo-20.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="index.html">Odoo Dev Guide</a></li>
+            <li aria-current="page">Install Odoo 20</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 2 · Odoo 20 Development Series</span>
+            <h1>Install Odoo 20: Source &amp; Docker Guide for Developers</h1>
+            <p class="post-lead">A clean development environment saves you hours of debugging later. This guide covers the two ways Vinc Academy installs Odoo 20 in class, plus the errors students hit most often and how to fix them.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick answer</p>
+                    <p><strong>To install Odoo 20 for development you need Python 3.12+, PostgreSQL 16+ and Git.</strong> Clone the <code>20.0</code> branch from GitHub, create a dedicated PostgreSQL user, install the dependencies and run <code>odoo-bin</code>; or use Docker Compose with the <code>odoo:20.0</code> and <code>postgres:16</code> images. Open <code>http://localhost:8069</code>, log in with <code>admin/admin</code> and enable developer mode.</p>
+                </div>
+
+                <h2 id="prerequisites">Before you install</h2>
+                <p>Odoo 20 raises its minimum requirements compared to previous versions, so a machine that runs Odoo 17 or 18 is not necessarily ready. Check this list:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Component</th><th>Requirement</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Python</td><td>3.12 or later</td><td>Check with <code>python3 --version</code>; <code>pip</code> must be available</td></tr>
+                            <tr><td>PostgreSQL</td><td>16 or later</td><td>Do not run Odoo with the <code>postgres</code> user</td></tr>
+                            <tr><td>Git</td><td>Any version</td><td>To clone the source and manage your modules</td></tr>
+                            <tr><td>wkhtmltopdf</td><td>0.12.6 (optional)</td><td>Needed for PDFs with headers/footers; install manually, not via pip</td></tr>
+                            <tr><td>Node.js + rtlcss</td><td>Optional</td><td>Only for right-to-left languages</td></tr>
+                            <tr><td>pgvector</td><td>Optional</td><td>Only when using Odoo's AI features</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="source-or-docker">Source or Docker?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Criteria</th><th>From source</th><th>Docker Compose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Reading &amp; debugging Odoo code</td><td>Very convenient, set breakpoints directly</td><td>Needs extra configuration</td></tr>
+                            <tr><td>Setup time</td><td>Longer, depends on your OS</td><td>Minutes, identical on every machine</td></tr>
+                            <tr><td>Several versions side by side</td><td>Several Python environments to manage</td><td>Simple, one container per version</td></tr>
+                            <tr><td>Best for</td><td>Learning and daily module development</td><td>Quick setups, demos, deployment-like environments</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Vinc Academy's recommendation:</strong> learners should start with a source install, because it is the clearest way to understand how Odoo boots. Docker is a valuable extra skill once you work on real projects.</p>
+
+                <h2 id="from-source">Option 1: Install Odoo 20 from source on Ubuntu</h2>
+                <p>The steps below use Ubuntu/Debian, the most common setup among Odoo developers. Windows and macOS notes are at the end of this section.</p>
+
+                <h3 id="step-1">Step 1: Get the source code</h3>
+                <p>Fetch only the <code>20.0</code> branch to save space. <code>--depth 1</code> skips the commit history and makes cloning much faster:</p>
+<pre><code>mkdir -p ~/odoo-dev &amp;&amp; cd ~/odoo-dev
+git clone https://github.com/odoo/odoo.git --branch 20.0 --single-branch --depth 1</code></pre>
+                <p>If you have access to Odoo Enterprise, also clone the <code>odoo/enterprise</code> repository into <code>~/odoo-dev</code>. It only contains extra modules and still runs on top of Community.</p>
+
+                <h3 id="step-2">Step 2: Install PostgreSQL and create a dedicated user</h3>
+                <p>Odoo refuses to connect with the <code>postgres</code> superuser. Create a user named after your Linux account, allowed to create databases:</p>
+<pre><code>sudo apt install postgresql
+sudo -u postgres createuser -d -R -S $USER
+createdb $USER</code></pre>
+                <p>Check the version with <code>psql --version</code>. If your Ubuntu release ships a version older than 16, install it from the official PostgreSQL repository.</p>
+
+                <h3 id="step-3">Step 3: Install dependencies</h3>
+                <p>The Odoo documentation recommends the script shipped with the source, which installs the matching Debian/Ubuntu system packages:</p>
+<pre><code>cd ~/odoo-dev/odoo
+sudo ./setup/debinstall.sh</code></pre>
+                <p>To isolate libraries per project, you can use a Python virtual environment and <code>requirements.txt</code> instead. This needs system build packages such as <code>libpq-dev</code>, <code>libldap2-dev</code> and <code>libsasl2-dev</code>:</p>
+<pre><code>python3 -m venv ~/odoo-dev/venv
+source ~/odoo-dev/venv/bin/activate
+pip install -r requirements.txt</code></pre>
+
+                <h3 id="step-4">Step 4: Run Odoo</h3>
+<pre><code>python3 odoo-bin --addons-path=addons -d odoo20_dev</code></pre>
+                <p>Once the log shows <code>odoo.modules.loading: Modules loaded.</code>, open <code>http://localhost:8069</code> and log in with <code>admin</code> / <code>admin</code>. The <code>odoo20_dev</code> database is created automatically on the first run.</p>
+
+                <div class="callout tip">
+                    <p class="callout-title">About demo data</p>
+                    <p>Since Odoo 20, new databases have <strong>no</strong> demo data by default. While learning, add <code>--with-demo</code> when creating the database so you get sample customers, products and orders to practice with.</p>
+                </div>
+
+                <h3 id="windows-macos">Windows and macOS notes</h3>
+                <ul>
+                    <li><strong>Windows:</strong> install Build Tools for Visual Studio (C++ workload), add PostgreSQL's <code>bin</code> folder to <code>PATH</code> and create a login role that can create databases in pgAdmin. Install libraries with <code>pip install setuptools wheel</code> then <code>pip install -r requirements.txt</code>, and pass the connection details: <code>python odoo-bin -r dbuser -w dbpassword --addons-path=addons -d odoo20_dev</code>.</li>
+                    <li><strong>macOS:</strong> install Command Line Tools with <code>xcode-select --install</code>, system libraries via Homebrew or MacPorts, and PostgreSQL via Homebrew or Postgres.app; then create the user and run Odoo as on Linux.</li>
+                </ul>
+
+                <h2 id="docker">Option 2: Run Odoo 20 with Docker Compose</h2>
+                <p>The official <code>odoo</code> image on Docker Hub already provides a <code>20.0</code> tag. Instead of typing several <code>docker run</code> commands, Vinc Academy uses one Compose file so the whole class gets identical environments:</p>
+                <p class="code-title">odoo20/docker-compose.yml</p>
+<pre><code>services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  odoo:
+    image: odoo:20.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - odoo-data:/var/lib/odoo          # filestore, sessions
+      - ./addons:/mnt/extra-addons       # your own modules
+
+volumes:
+  db-data:
+  odoo-data:</code></pre>
+<pre><code>cd odoo20
+mkdir -p addons
+docker compose up -d
+docker compose logs -f odoo</code></pre>
+                <p>Open <code>http://localhost:8069</code> and Odoo shows the database creation page. Modules placed in <code>./addons</code> appear inside the container at <code>/mnt/extra-addons</code>.</p>
+                <div class="callout">
+                    <p class="callout-title">Common pitfall: PostgreSQL version</p>
+                    <p>Many older guides and Docker examples still use <code>postgres:15</code>. Odoo 20 requires PostgreSQL 16 or later, so use <code>postgres:16</code> (or newer) from the start and avoid migrating data later.</p>
+                </div>
+
+                <h2 id="developer-mode">Enable developer mode</h2>
+                <p>Developer mode unlocks technical tools: view structures, field and model names, menus, actions… It is the first thing an Odoo developer turns on every day. Equivalent ways to enable it:</p>
+                <ul>
+                    <li><strong>From Settings:</strong> open the Settings app, scroll to <em>Developer Tools</em> and click <em>Activate the developer mode</em>.</li>
+                    <li><strong>Via URL:</strong> append <code>?debug=1</code>, e.g. <code>http://localhost:8069/odoo?debug=1</code>; use <code>?debug=0</code> to turn it off.</li>
+                    <li><strong>JavaScript debugging:</strong> use <code>?debug=assets</code> to load unminified JS/CSS files.</li>
+                    <li><strong>Command palette:</strong> press <code>Ctrl + K</code> (macOS: <code>Cmd + K</code>) and type "debug".</li>
+                </ul>
+                <p>Once enabled, a bug icon appears in the menu bar. Some of its tools can change system data, so use them on development databases only.</p>
+
+                <h2 id="odoo-bin-options">odoo-bin options worth remembering</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Option</th><th>Purpose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>--addons-path</code></td><td>Comma-separated list of module directories</td></tr>
+                            <tr><td><code>-d</code></td><td>Database to work with</td></tr>
+                            <tr><td><code>-i</code></td><td>Install modules before starting the server (requires <code>-d</code>)</td></tr>
+                            <tr><td><code>-u</code></td><td>Update modules after changing code (requires <code>-d</code>)</td></tr>
+                            <tr><td><code>--dev</code></td><td>Development helpers, e.g. <code>xml</code> reads views straight from files, <code>reload</code> restarts on Python changes; <code>all</code> enables several at once. Never use in production</td></tr>
+                            <tr><td><code>--with-demo</code></td><td>Install demo data in new databases</td></tr>
+                            <tr><td><code>-p</code> / <code>--http-port</code></td><td>Change the HTTP port (default 8069)</td></tr>
+                            <tr><td><code>-c</code> / <code>-s</code></td><td>Use a config file / save current options to the config file</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Tip: run once with all your options plus <code>-c ~/odoo-dev/odoo20.conf -s</code>; afterwards <code>python3 odoo-bin -c ~/odoo-dev/odoo20.conf</code> is enough.</p>
+
+                <h2 id="first-module">Scaffold your first module</h2>
+                <p>With the environment ready, keep your own modules in a separate folder from the Odoo source. The <code>scaffold</code> command generates a standard module skeleton:</p>
+<pre><code>cd ~/odoo-dev
+mkdir -p custom-addons
+python3 odoo/odoo-bin scaffold vinc_course custom-addons
+
+cd odoo
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -i vinc_course --dev=xml</code></pre>
+                <p>Open Apps (with developer mode on) and search for <code>vinc_course</code> to see the installed module. The next article explains everything inside it.</p>
+
+                <h2 id="tools">Recommended tools</h2>
+                <ul>
+                    <li><strong>Editor:</strong> VS Code or PyCharm, with PEP8 checks for Python and ESLint for JavaScript.</li>
+                    <li><strong>PostgreSQL client:</strong> pgAdmin or DBeaver to inspect the tables the ORM creates, very useful when learning models.</li>
+                    <li><strong>Python debugging:</strong> your editor's debugger, or <code>pip install ipdb</code> and add <code>import ipdb; ipdb.set_trace()</code> where you want to stop.</li>
+                    <li><strong>Odoo shell:</strong> <code>python3 odoo-bin shell -c ~/odoo-dev/odoo20.conf</code> opens a Python console with an <code>env</code> variable to try the ORM. Changes are only saved when you call <code>env.cr.commit()</code>.</li>
+                </ul>
+
+                <h2 id="troubleshooting">Common errors and fixes</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Symptom</th><th>Usual cause</th><th>Fix</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Odoo refuses the database connection</td><td>Using the <code>postgres</code> user, or no user created</td><td>Create a dedicated user with <code>createuser -d -R -S $USER</code></td></tr>
+                            <tr><td>Port 8069 already in use</td><td>Another Odoo process is running</td><td>Stop it or run with <code>-p 8070</code></td></tr>
+                            <tr><td><code>ModuleNotFoundError</code> on startup</td><td>Missing libraries or venv not activated</td><td>Activate the venv and reinstall <code>requirements.txt</code></td></tr>
+                            <tr><td>New module missing from Apps</td><td>Wrong <code>--addons-path</code> or app list not refreshed</td><td>Check the path, enable developer mode, then <em>Update Apps List</em></td></tr>
+                            <tr><td>XML changes don't show up</td><td>Module not updated</td><td>Restart with <code>-u module_name</code> or use <code>--dev=xml</code></td></tr>
+                            <tr><td>PDFs without header/footer</td><td>wkhtmltopdf missing or wrong version</td><td>Install wkhtmltopdf 0.12.6</td></tr>
+                            <tr><td>Reusing an old Docker file with <code>postgres:15</code></td><td>Below Odoo 20's PostgreSQL 16 requirement</td><td>Switch to <code>postgres:16</code> before creating databases</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Stuck on setup? Let a mentor help</h3>
+                    <p>In the first session of Odoo Developer Foundation, students set up their environment with 1-on-1 guidance and a configuration review.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I install Odoo 20 from source or with Docker?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">If you are learning to become an Odoo developer, install from source: it is easier to read the code, set breakpoints and debug. Docker is better for spinning up a clean environment quickly, running several versions side by side or preparing a deployment.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the default Odoo login?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">For a database created with the -d option of odoo-bin, the default administrator login is admin with password admin. Change it if the environment is reachable from outside.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does my new database have no demo data?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">In Odoo 20, new databases are created without demo data by default. Add --with-demo when creating the database if you want sample data for learning and testing.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Does Odoo 20 work with PostgreSQL 15?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It is not recommended. The official Odoo 20 installation guide requires PostgreSQL 16 or later. Many older Docker examples still use postgres:15, so switch to postgres:16 or newer.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">References</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/setup_guide.html" target="_blank" rel="noopener">Odoo 20 – Setup guide</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/applications/general/developer_mode.html" target="_blank" rel="noopener">Odoo 20 – Developer mode</a></li>
+                    <li><a href="https://hub.docker.com/_/odoo" target="_blank" rel="noopener">Docker Hub – Official Odoo image</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fodoo%2Finstall-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fodoo%2Finstall-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="what-is-odoo.html"><small>← Previous</small>What is Odoo? Fundamentals</a>
+                    <span class="next"><small>Next · Coming soon</small>Your first module &amp; manifest</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#prerequisites">Before you install</a></li>
+                        <li><a href="#source-or-docker">Source or Docker?</a></li>
+                        <li><a href="#from-source">From source (Ubuntu)</a></li>
+                        <li><a href="#docker">Docker Compose</a></li>
+                        <li><a href="#developer-mode">Developer mode</a></li>
+                        <li><a href="#odoo-bin-options">odoo-bin options</a></li>
+                        <li><a href="#first-module">First module</a></li>
+                        <li><a href="#tools">Recommended tools</a></li>
+                        <li><a href="#troubleshooting">Troubleshooting</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="index.html" data-i18n="nav.blog">Odoo Dev Guide</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>
