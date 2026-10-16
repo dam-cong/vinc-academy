@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git First Commits: status, add, diff, log, .gitignore</title>
+    <meta name="description" content="Run the daily Git loop on an Odoo module: read git status, git diff vs --staged, commit cleanly, check git log and ignore odoo.conf." />
+    <meta name="keywords" content="git commit, git status, git add, git diff, git log, gitignore odoo, git rm cached, git for beginners" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git First Commits: status, add, diff, log, .gitignore" />
+    <meta property="og:description" content="The daily Git loop: status, diff, add, commit, log and .gitignore for an Odoo project, with common pitfalls around commit -a and tracked files." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-first-commits-status-add-log-gitignore.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git First Commits: status, add, diff, log, .gitignore",
+                "description": "The daily Git loop: status, diff, add, commit, log and .gitignore for an Odoo project, with common pitfalls around commit -a and tracked files.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-first-commits-status-add-log-gitignore.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "First commits"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How do git diff and git diff --staged differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git diff compares the working tree with staging, meaning changes not yet added. git diff --staged (or --cached) compares staging with the latest commit, meaning exactly what the next commit will contain."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does a file still show in git status after I add it to .gitignore?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": ".gitignore only affects files Git is not tracking yet. For a file committed earlier, run git rm --cached file_name and commit to stop tracking it while keeping the file on disk."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does git commit -a include new files?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "No. The -a flag only stages files that are already tracked and were modified or deleted. New files (shown as ?? in git status -s) still need git add first."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I commit odoo.conf?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Not if it holds secrets such as admin_passwd or connection details. Put odoo.conf in .gitignore and commit a sample like odoo.conf.example without secrets."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-commit-dau-tien-status-add-log-gitignore.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">First commits</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 2 · Practical Git Series</span>
+            <h1>Git First Commits: status, add, diff, log and .gitignore</h1>
+            <p class="post-lead">Part 2 runs the daily Git loop on the vinc_course module: read git status, tell git diff from --staged, write tidy commits, review them with git log and keep unwanted files out with .gitignore.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-first-commits-status-add-log-gitignore.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>Day to day you repeat one loop: edit files → <code>git status</code> → <code>git diff</code> → <code>git add</code> → <code>git commit</code>.</strong> This part runs that loop on the <code>vinc_course</code> module: reading the symbols of <code>git status -s</code>, telling <code>git diff</code> from <code>git diff --staged</code>, writing commits in Odoo's <code>[TAG] module:</code> style, reviewing them via <code>git log</code> and <code>git show</code>, and using <code>.gitignore</code> so <code>__pycache__</code> and <code>odoo.conf</code> never reach the repo.</p>
+                </div>
+
+                <h2 id="vong-lap">The daily loop on the vinc_course module</h2>
+                <p>Suppose you have just built the module skeleton below (file contents as in the Odoo series). The repo has been <code>git init</code>-ed but has no commits yet, so <code>git status</code> lists everything as <em>untracked</em>: Git sees the files but is not following them.</p>
+<pre><code>vinc_course/
+├── __init__.py
+├── __manifest__.py
+└── models/
+    ├── __init__.py
+    └── course.py</code></pre>
+<pre><code>from odoo import fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = 'Khóa học'
+
+    name = fields.Char(required=True)</code></pre>
+                <p>Use <code>git add .</code> to stage everything and then commit. That is fine for the very first time, but from now on make it a habit to <strong>read <code>git status</code> before <code>add .</code></strong> so you do not drag junk files along.</p>
+<pre><code>$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	__init__.py
+	__manifest__.py
+	models/
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ git add .
+$ git status -s
+A  __init__.py
+A  __manifest__.py
+A  models/__init__.py
+A  models/course.py
+$ git commit -m "[ADD] vinc_course: khung module và model vinc.course"
+[main (root-commit) a79a9aa] [ADD] vinc_course: khung module và model vinc.course
+ 4 files changed, 17 insertions(+)
+ create mode 100644 __init__.py
+ create mode 100644 __manifest__.py
+ create mode 100644 models/__init__.py
+ create mode 100644 models/course.py
+$ git log --oneline
+a79a9aa [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>The first line of the message (<code>[ADD] vinc_course: ...</code>) follows a convention common in Odoo repositories; part 10 covers it in depth. For now just remember: <code>-m</code> gives a one-line message, and each commit should do exactly one thing.</p>
+
+                <h2 id="status">Reading git status -s</h2>
+                <p>The full <code>git status</code> is friendly to newcomers, but the short form <code>-s</code> (<code>--short</code>) is much quicker on a large project. Each line has two symbol columns: the left one is the state in staging, the right one the state in the working tree.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Shown</th><th>Meaning</th><th>Next step</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>?? file</code></td><td>New file Git is not tracking</td><td><code>git add</code> if it belongs, otherwise add it to <code>.gitignore</code></td></tr>
+                            <tr><td><code>A&nbsp;&nbsp;file</code></td><td>New file already staged</td><td>Ready to commit</td></tr>
+                            <tr><td><code>&nbsp;M file</code></td><td>Edited on disk but not staged</td><td><code>git diff</code> to review, <code>git add</code> to stage</td></tr>
+                            <tr><td><code>M&nbsp;&nbsp;file</code></td><td>Modified and staged</td><td>Ready to commit</td></tr>
+                            <tr><td><code>&nbsp;D file</code></td><td>Deleted in the working tree</td><td><code>git add</code> or <code>git rm</code> to record the deletion</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="diff">Seeing what changed: git diff and git diff --staged</h2>
+                <p>These two are easy to mix up. <code>git diff</code> (no flags) compares the working tree with staging, meaning changes that have <strong>not</strong> been added yet. <code>git diff --staged</code> (a synonym of <code>--cached</code>) compares staging with the latest commit, meaning exactly what the next commit will contain. Let us add an <code>hours</code> field to the model and watch:</p>
+<pre><code>$ echo "    hours = fields.Integer(string='Số giờ')" &gt;&gt; models/course.py
+$ git status -s
+ M models/course.py
+$ git diff
+diff --git a/models/course.py b/models/course.py
+index 86951c7..781c9a6 100644
+--- a/models/course.py
++++ b/models/course.py
+@@ -6,3 +6,4 @@ class VincCourse(models.Model):
+     _description = 'Khóa học'
+ 
+     name = fields.Char(required=True)
++    hours = fields.Integer(string='Số giờ')
+$ git add models/course.py
+$ git status -s
+M  models/course.py
+$ git diff
+$ git diff --staged
+diff --git a/models/course.py b/models/course.py
+index 86951c7..781c9a6 100644
+--- a/models/course.py
++++ b/models/course.py
+@@ -6,3 +6,4 @@ class VincCourse(models.Model):
+     _description = 'Khóa học'
+ 
+     name = fields.Char(required=True)
++    hours = fields.Integer(string='Số giờ')
+$ git commit -m "[IMP] vinc_course: thêm trường số giờ"
+[main ef00810] [IMP] vinc_course: thêm trường số giờ
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p>How to read it: a line starting with <code>+</code> was added, <code>-</code> was removed, and the <code>@@</code> line gives the position in the file. Notice the second <code>git diff</code> prints nothing: every change is already in staging, so disk and staging no longer differ. A good habit before each commit is to run <code>git diff --staged</code> as a last self-review, like rereading an email before sending it.</p>
+
+                <h2 id="log">Reading history: git log and git show</h2>
+<pre><code>$ git log --stat --oneline
+ef00810 [IMP] vinc_course: thêm trường số giờ
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+a79a9aa [ADD] vinc_course: khung module và model vinc.course
+ __init__.py        | 1 +
+ __manifest__.py    | 7 +++++++
+ models/__init__.py | 1 +
+ models/course.py   | 8 ++++++++
+ 4 files changed, 17 insertions(+)
+$ git show --stat HEAD
+commit ef00810db8c3ba15ee2751bb6e570d7e13495d19
+Author: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 11:06:00 2026 +0700
+
+    [IMP] vinc_course: thêm trường số giờ
+
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline -n 1
+ef00810 [IMP] vinc_course: thêm trường số giờ</code></pre>
+                <p><code>git log</code> lists commits from newest to oldest; <code>--oneline</code> shrinks each to one line, <code>--stat</code> adds a summary of the files changed and <code>-n 1</code> limits how many commits are shown. <code>git show</code> prints the details of one commit (by default <code>HEAD</code>, the latest): author, time, message and changes.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>What it does</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git log --oneline</code></td><td>One line per commit: short hash + title</td></tr>
+                            <tr><td><code>git log -p -- đường/dẫn</code></td><td>Detailed changes for a single file</td></tr>
+                            <tr><td><code>git log --author="An"</code></td><td>Filter by author</td></tr>
+                            <tr><td><code>git log --since="1 week ago"</code></td><td>Filter by time</td></tr>
+                            <tr><td><code>git show &lt;mã&gt;</code></td><td>Details of any commit</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="gitignore">.gitignore: keeping junk and secrets out of the repo</h2>
+                <p>When you run Odoo, Python generates <code>__pycache__</code> folders, the server writes log files, and you may have an <code>odoo.conf</code> holding <code>admin_passwd</code>. None of these belongs in the repo: junk clutters history, and a password that reaches GitLab is seen by many people. A <code>.gitignore</code> file at the repo root lists name patterns Git will ignore:</p>
+<pre><code>$ git status -s
+?? models/__pycache__/
+?? odoo.conf
+?? odoo.log
+$ printf "__pycache__/\n*.pyc\n*.log\nodoo.conf\n.venv/\n" &gt; .gitignore
+$ git status -s
+?? .gitignore
+$ git check-ignore -v odoo.conf models/__pycache__/course.cpython-312.pyc
+.gitignore:4:odoo.conf	odoo.conf
+.gitignore:1:__pycache__/	models/__pycache__/course.cpython-312.pyc
+$ git add .gitignore
+$ git commit -m "[ADD] vinc_course: .gitignore"
+[main e945725] [ADD] vinc_course: .gitignore
+ 1 file changed, 5 insertions(+)
+ create mode 100644 .gitignore</code></pre>
+                <p><code>git check-ignore -v</code> shows which rule blocks which file (the first column is <code>file:line:pattern</code>), which is handy when you wonder why a file never shows up in <code>status</code>. Remember to <strong>commit <code>.gitignore</code> itself</strong> so the whole team shares the rules.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern</th><th>Matches</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>*.pyc</code></td><td>Every file ending in <code>.pyc</code></td></tr>
+                            <tr><td><code>__pycache__/</code></td><td>Directories named <code>__pycache__</code> (the trailing <code>/</code> matches directories only)</td></tr>
+                            <tr><td><code>odoo.conf</code></td><td>A file of that name at any depth</td></tr>
+                            <tr><td><code>!keep.log</code></td><td>A leading <code>!</code> negates: do not ignore this file</td></tr>
+                            <tr><td><code># ghi chú</code></td><td>A line starting with <code>#</code> is a comment</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="trong-odoo">A starter .gitignore for an Odoo project</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern</th><th>Why ignore it</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__pycache__/</code>, <code>*.pyc</code></td><td>Auto-generated Python bytecode that differs per machine</td></tr>
+                            <tr><td><code>.venv/</code></td><td>The virtual environment (part 1 of the Python series): rebuildable from <code>requirements.txt</code></td></tr>
+                            <tr><td><code>odoo.conf</code>, <code>.env</code></td><td>Hold passwords and API keys; commit a sample <code>odoo.conf.example</code> instead</td></tr>
+                            <tr><td><code>*.log</code></td><td>Server logs: large and constantly changing</td></tr>
+                            <tr><td><code>.idea/</code>, <code>.vscode/</code></td><td>Each person's own editor settings</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="commit-tot">What a good commit looks like</h2>
+                <p>Git does not force any message on you, but six months later you will thank (or blame) that message when you hunt for why a line exists. Odoo's Git guidelines suggest a title of roughly under 50 characters, a body that explains the reason for the change rather than just listing actions, and avoiding vague titles like “bugfix” or “improvements”. A few comparisons on our module:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Avoid</th><th>Prefer</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>update</code></td><td><code>[IMP] vinc_course: thêm trường số giờ cho khóa học</code></td></tr>
+                            <tr><td><code>fix bug</code></td><td><code>[FIX] vinc_course: không cho tạo hai khóa trùng mã</code></td></tr>
+                            <tr><td><code>sửa nhiều thứ</code></td><td>Split into separate commits, one job each</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A practical rule: if you cannot describe a commit in one sentence without the word “and”, it probably does two jobs and should be split by running <code>git add</code> file by file. When you need several lines, drop the <code>-m</code> flag so Git opens the editor you chose in part 1 (<code>core.editor</code>): the first line is the title, then a blank line, then the description.</p>
+
+                <h2 id="doi-ten">Renaming and deleting files properly</h2>
+                <p>Git does not store “rename” as a separate operation; it compares content and recognises that a file moved. Still, <code>git mv</code> and <code>git rm</code> put the change straight into staging, saving a <code>git add</code>. Odoo's guidelines add a warning: when moving files (the <code>[MOV]</code> tag), do not change their content at the same time, or Git may lose track of the file's history.</p>
+<pre><code>$ git mv README.md README.rst
+$ git status -s
+R  README.md -&gt; README.rst
+$ git commit -m "[MOV] vinc_course: đổi README.md thành README.rst"
+[main 2cf6824] [MOV] vinc_course: đổi README.md thành README.rst
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename README.md =&gt; README.rst (100%)
+$ git log --oneline --follow -- README.rst
+2cf6824 [MOV] vinc_course: đổi README.md thành README.rst
+a232969 [ADD] vinc_course: README</code></pre>
+                <p>The <code>R</code> symbol stands for rename. The <code>--follow</code> flag of <code>git log</code> follows the file across the rename, so you still see the earlier history of <code>README.md</code>.</p>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>Added <code>.gitignore</code> but the file still shows <code>M</code>.</strong> <code>.gitignore</code> only applies to files that are <em>not yet</em> tracked; a file committed earlier stays tracked. The <code>gitignore</code> documentation points to <code>git rm --cached</code> to stop tracking while keeping the file on disk. Here it is with an <code>odoo.conf</code> committed by mistake at the start:</li>
+                    </ul>
+<pre><code>$ printf "odoo.conf\n" &gt; .gitignore
+$ echo "db_name = vinc" &gt;&gt; odoo.conf
+$ git status -s
+ M odoo.conf
+?? .gitignore
+$ git rm --cached odoo.conf
+rm 'odoo.conf'
+$ git add .gitignore
+$ git status -s
+A  .gitignore
+D  odoo.conf
+$ git commit -m "[FIX] vinc_course: bỏ odoo.conf khỏi repo"
+[main 527fefc] [FIX] vinc_course: bỏ odoo.conf khỏi repo
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ create mode 100644 .gitignore
+ delete mode 100644 odoo.conf
+$ git status -s</code></pre>
+
+                    <ul>
+                        <li><strong>Deleting a committed password is not enough.</strong> The delete is just a new commit; the old content stays in history. If the secret was pushed to GitLab, rotate that password or key at once, then ask an admin to deal with the history.</li>
+                        <li><strong><code>git commit -a</code> does not take new files.</strong> The <code>-a</code> flag only stages tracked files (modified or deleted); the documentation states files Git has not been told about are not affected. In the example, <code>NOTE.md</code> still shows <code>??</code> after the commit:</li>
+                    </ul>
+<pre><code>$ echo "# ghi chú" &gt; NOTE.md
+$ echo "y = 2" &gt;&gt; models.py
+$ git commit -am "[IMP] vinc_course: sửa models"
+[main 264ae18] [IMP] vinc_course: sửa models
+ 1 file changed, 1 insertion(+)
+$ git status -s
+?? NOTE.md</code></pre>
+
+                    <ul>
+                        <li><strong><code>git add .</code> without looking at <code>status</code>.</strong> You easily sweep temp files, database dumps or screenshots into a commit. Run <code>git status -s</code> first, then <code>git add</code> specific files or folders.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>The loop: edit → <code>status</code> → <code>diff</code> → <code>add</code> → <code>commit</code>.</li>
+                    <li><code>git diff</code> shows unstaged changes; <code>git diff --staged</code> shows what will be committed.</li>
+                    <li><code>git log --oneline</code> and <code>git show</code> read the history.</li>
+                    <li><code>.gitignore</code> only affects untracked files; if you committed by mistake use <code>git rm --cached</code>.</li>
+                    <li>A password that entered history must be changed, not just deleted.</li>
+                </ul>
+                <p>You can now commit along a straight line. But teamwork means several things in parallel: one person edits the model while another builds a report. The next part introduces <strong>branches</strong> so each task gets its own path, then <strong>merging</strong> to bring them back together.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do git diff and git diff --staged differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git diff compares the working tree with staging, meaning changes not yet added. git diff --staged (or --cached) compares staging with the latest commit, meaning exactly what the next commit will contain.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does a file still show in git status after I add it to .gitignore?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">.gitignore only affects files Git is not tracking yet. For a file committed earlier, run git rm --cached file_name and commit to stop tracking it while keeping the file on disk.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Does git commit -a include new files?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">No. The -a flag only stages files that are already tracked and were modified or deleted. New files (shown as ?? in git status -s) still need git add first.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I commit odoo.conf?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Not if it holds secrets such as admin_passwd or connection details. Put odoo.conf in .gitignore and commit a sample like odoo.conf.example without secrets.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://git-scm.com/docs/git-status" target="_blank" rel="noopener">Git – git-status</a></li>
+                    <li><a href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener">Git – git-diff</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit</a></li>
+                    <li><a href="https://git-scm.com/docs/git-log" target="_blank" rel="noopener">Git – git-log</a></li>
+                    <li><a href="https://git-scm.com/docs/gitignore" target="_blank" rel="noopener">Git – gitignore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-mv" target="_blank" rel="noopener">Git – git-mv</a></li>
+                    <li><a href="https://git-scm.com/docs/git-rm" target="_blank" rel="noopener">Git – git-rm</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-first-commits-status-add-log-gitignore.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-first-commits-status-add-log-gitignore.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="what-is-git-install-first-time-setup.html"><small>← Previous</small>What is Git and setup</a>
+                    <span class="next"><small>Next · Coming soon</small>Branches and merging</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#vong-lap">The daily loop on the vinc_course module</a></li>
+                        <li><a href="#status">Reading git status -s</a></li>
+                        <li><a href="#diff">Seeing what changed: git diff and git diff --staged</a></li>
+                        <li><a href="#log">Reading history: git log and git show</a></li>
+                        <li><a href="#gitignore">.gitignore: keeping junk and secrets out of the repo</a></li>
+                        <li><a href="#trong-odoo">A starter .gitignore for an Odoo project</a></li>
+                        <li><a href="#commit-tot">What a good commit looks like</a></li>
+                        <li><a href="#doi-ten">Renaming and deleting files properly</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

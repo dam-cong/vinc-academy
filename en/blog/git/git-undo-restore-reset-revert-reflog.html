@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Undo: restore, reset, revert and reflog Explained</title>
+    <meta name="description" content="Pick the right Git undo command: restore for files, commit --amend, reset --soft/--mixed/--hard, revert for pushed commits and reflog to rescue work." />
+    <meta name="keywords" content="git restore, git reset, git revert, git reflog, git commit amend, undo git, git reset hard, git undo commit" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Undo: restore, reset, revert and reflog Explained" />
+    <meta property="og:description" content="Undo safely in Git: restore, commit --amend, reset --soft/--mixed/--hard, revert and reflog, all run for real on an Odoo module repo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-undo-restore-reset-revert-reflog.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Undo: restore, reset, revert and reflog Explained",
+                "description": "Undo safely in Git: restore, commit --amend, reset --soft/--mixed/--hard, revert and reflog, all run for real on an Odoo module repo.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-undo-restore-reset-revert-reflog.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Undoing safely"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between git reset and git revert?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git reset moves the branch back to an older commit, rewriting history, so use it only before pushing. git revert adds a commit with the reverse effect and leaves history intact, so use it for pushed commits."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do git reset --soft, --mixed and --hard differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "All three move the branch back. --soft leaves staging and the working tree alone; --mixed (the default) updates staging to match the new commit but keeps the files; --hard overwrites the working tree too, losing uncommitted changes."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I recover a commit after git reset --hard?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Run git reflog to find the HEAD@{n} entry from before the reset, then git reset --hard HEAD@{n} or git switch -c new-name <hash>. Reflog entries are kept for 90 days by default, but changes that were never committed cannot be rescued."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When may I use git commit --amend?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When the latest commit has not been pushed. Amend creates a different commit (the hash changes), so if you already pushed, others hold the old commit and you would have to force-push; in that case use git revert or a follow-up commit."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-hoan-tac-restore-reset-revert-reflog.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Undoing safely</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 7 · Practical Git Series</span>
+            <h1>Git Undo: restore, reset, revert and reflog Explained</h1>
+            <p class="post-lead">Part 7 shows how to pick the right Git undo command: restore for files, commit --amend, reset with its three flags, revert for pushed commits and reflog to rescue lost commits, all run for real on the vinc_course repo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-undo-restore-reset-revert-reflog.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>Every kind of mistake has its own undo command; choosing the right one matters more than remembering many.</strong> Edited the wrong file: <code>git restore</code>. Staged by mistake: <code>git restore --staged</code>. Unpushed commit: amend it or use <code>git reset</code> (<code>--soft</code>, default <code>--mixed</code>, <code>--hard</code>). Pushed commit: <code>git revert</code>. Lost a commit: <code>git reflog</code>. This part runs each command on the <code>vinc_course</code> repo so you see exactly what is lost and what stays.</p>
+                </div>
+
+                <h2 id="chon-lenh">Pick the command by “where am I”</h2>
+                <p>The trick is to find which of the three areas from part 1 holds the mistake, then rewind from there. One more deciding question: has the commit been <strong>pushed</strong> to GitLab? An unpushed commit lives only on your machine so you may rewrite it freely; a pushed commit belongs to the team, and rewriting history confuses everyone else.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-en-g07">
+                        <title id="dg-en-g07">Which area each undo command rewinds</title>
+                        <rect class="dg-box" x="10" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="24" y="70">Working</text>
+                        <text class="dg-title" x="24" y="88">tree</text>
+                        <rect class="dg-accent" x="235" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="249" y="70">Staging</text>
+                        <rect class="dg-box" x="460" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="474" y="70">Commit</text>
+                        <text class="dg-title" x="474" y="88">(HEAD)</text>
+                        <path class="dg-arrow" d="M234 80 h-26 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="221" y="34">git restore</text>
+                        <path class="dg-arrow" d="M459 80 h-26 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="446" y="34">restore --staged</text>
+                        <text class="dg-text" x="10" y="145">reset --soft: moves only HEAD · --mixed: staging too · --hard: the working tree as well</text>
+                        <text class="dg-text" x="10" y="168">revert: rewinds nothing, it adds a commit that cancels the earlier one.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Situation</th><th>Command</th><th>What is lost?</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Edited a file by mistake, not added</td><td><code>git restore &lt;file&gt;</code></td><td>The uncommitted changes of that file (unrecoverable)</td></tr>
+                            <tr><td>Added too much</td><td><code>git restore --staged &lt;file&gt;</code></td><td>Nothing; the file keeps its changes</td></tr>
+                            <tr><td>Wrong message or missing file in the latest commit</td><td><code>git commit --amend</code></td><td>The old commit is replaced by a new one (only if unpushed)</td></tr>
+                            <tr><td>Drop unpushed commits</td><td><code>git reset --soft / --mixed / --hard HEAD~N</code></td><td>Depends on the flag, see the table below</td></tr>
+                            <tr><td>Pushed commit that must be undone</td><td><code>git revert &lt;commit&gt;</code></td><td>Nothing; adds a new commit</td></tr>
+                            <tr><td>Lost commits after reset or branch deletion</td><td><code>git reflog</code></td><td>This is the rescue tool</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="restore">Undoing uncommitted changes: git restore</h2>
+                <p><code>git restore &lt;file&gt;</code> returns the file on disk to what staging holds (or to the latest commit if nothing is staged). Remember: restored uncommitted changes <strong>cannot be recovered</strong>, because Git never stored them. <code>git restore --staged</code> only pulls the file out of staging; the changes stay in the file, so it is perfectly safe:</p>
+<pre><code>$ echo "# lỡ tay" &gt;&gt; models/course.py
+$ git status -s
+ M models/course.py
+$ git restore models/course.py
+$ git status -s</code></pre>
+<pre><code>$ echo "# lỡ tay" &gt;&gt; models/course.py
+$ git add models/course.py
+$ git status -s
+M  models/course.py
+$ git restore --staged models/course.py
+$ git status -s
+ M models/course.py
+$ git restore models/course.py</code></pre>
+                <p>To bring back a file from an older commit add <code>--source</code>: <code>git restore --source=HEAD~2 models/course.py</code> puts the file as it was two commits ago (still an uncommitted change, so you can look and then decide).</p>
+
+                <h2 id="amend">Fixing the latest commit: git commit --amend</h2>
+                <p>Mistyped the message or forgot a file? Do not add a “fix typo” commit. <code>--amend</code> replaces the latest commit with a new one with the corrected content. The hash changes, meaning it is a <strong>different commit</strong>; that is why you should amend only before pushing:</p>
+<pre><code>$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_corse: README"
+[main 87e323f] [ADD] vinc_corse: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git commit --amend -m "[ADD] vinc_course: README"
+[main f7f143d] [ADD] vinc_course: README
+ Date: Mon Oct 12 11:20:00 2026 +0700
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ echo "Module quản lý khóa học." &gt;&gt; README.md
+$ git commit -qa --amend --no-edit
+$ git log --oneline -n 2
+b7b55df [ADD] vinc_course: README
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git show --stat --oneline HEAD
+b7b55df [ADD] vinc_course: README
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)</code></pre>
+
+                <h2 id="reset">Dropping unpushed commits: git reset</h2>
+                <p><code>git reset &lt;commit&gt;</code> moves the current branch to that commit. Three flags decide the rest (per the documentation): <code>--soft</code> leaves both staging and the working tree untouched; <code>--mixed</code> (the default) updates staging to match the new commit and leaves the working tree; <code>--hard</code> overwrites the working tree as well. Try it with the price and level commits:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Flag</th><th>HEAD / branch</th><th>Staging</th><th>Working tree</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>--soft</code></td><td>moves back</td><td>kept</td><td>kept</td></tr>
+                            <tr><td><code>--mixed</code></td><td>moves back</td><td>matches new HEAD</td><td>kept</td></tr>
+                            <tr><td><code>--hard</code></td><td>moves back</td><td>matches new HEAD</td><td><strong>overwritten</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm học phí"
+$ echo "    level = fields.Char(string='Cấp độ')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ git reset --soft HEAD~1
+$ git status -s
+M  models/course.py
+$ git log --oneline -n 2
+907ebca [IMP] vinc_course: thêm học phí
+b7b55df [ADD] vinc_course: README</code></pre>
+                <p><code>--soft</code> puts the dropped commit's changes back into staging (<code>M </code> in the left column), handy when you want to <em>combine or rewrite commits</em>. Commit again and try <code>--mixed</code>: the changes become unstaged:</p>
+<pre><code>$ git commit -qm "[IMP] vinc_course: thêm cấp độ"
+$ git reset HEAD~1
+Unstaged changes after reset:
+M	models/course.py
+$ git status -s
+ M models/course.py</code></pre>
+                <p>Finally <code>--hard</code>: it moves the branch and also wipes the changes from the working tree (<code>grep</code> counts 0 because the <code>level</code> line is gone):</p>
+<pre><code>$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ git reset --hard HEAD~1
+HEAD is now at 907ebca [IMP] vinc_course: thêm học phí
+$ git status -sb
+## main
+$ grep -c level models/course.py
+0</code></pre>
+
+                <h2 id="reflog">Rescuing “lost” commits: git reflog</h2>
+                <p>The commit that <code>reset --hard</code> just dropped has not really vanished: Git records every HEAD movement in the <em>reflog</em>. Find the <code>HEAD@{n}</code> entry from before the mistake and move the branch back to it. According to the <code>git config</code> documentation, reflog entries are kept for 90 days by default (30 days for entries no longer reachable from any branch), so rescue early:</p>
+<pre><code>$ git reflog -n 3
+907ebca HEAD@{0}: reset: moving to HEAD~1
+9f21257 HEAD@{1}: commit: [IMP] vinc_course: thêm cấp độ
+907ebca HEAD@{2}: reset: moving to HEAD~1
+$ git reset --hard HEAD@{1}
+HEAD is now at 9f21257 [IMP] vinc_course: thêm cấp độ
+$ grep -c level models/course.py
+1
+$ git log --oneline -n 2
+9f21257 [IMP] vinc_course: thêm cấp độ
+907ebca [IMP] vinc_course: thêm học phí</code></pre>
+                <p>These two ways of counting are easy to mix up. <code>HEAD~1</code> and <code>HEAD~2</code> count back through the branch's <em>commit history</em> (parent, grandparent). <code>HEAD@{1}</code> counts back through the <em>reflog</em>, meaning where HEAD stood at earlier moves, including commits no longer on the branch. So after a <code>reset --hard</code>, <code>HEAD~1</code> takes you further back while <code>HEAD@{1}</code> takes you back where you were.</p>
+
+                <h2 id="revert">Reversing a pushed commit: git revert</h2>
+                <p>Once a commit is on GitLab, do not reset and force-push: others already have it. Use <code>git revert</code>, which makes a <strong>new</strong> commit whose effect is the reverse. History stays intact and anyone who pulls receives the fix:</p>
+<pre><code>$ git revert --no-edit HEAD
+[main ddec0fc] Revert "[IMP] vinc_course: thêm cấp độ"
+ Date: Mon Oct 12 14:08:00 2026 +0700
+ 1 file changed, 1 deletion(-)
+$ git log --oneline -n 3
+ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+9f21257 [IMP] vinc_course: thêm cấp độ
+907ebca [IMP] vinc_course: thêm học phí
+$ grep -c level models/course.py
+0</code></pre>
+                <p>To revert a <em>merge commit</em> you must say which parent counts as the “mainline” with <code>-m 1</code> (the <code>--mainline</code> option in the documentation), usually the <code>main</code> side. Reverting a merge is the standard response when a merge request already in <code>main</code> breaks the staging environment.</p>
+
+                <h2 id="khac">Two more common situations</h2>
+                <p><strong>Committed on <code>main</code> by mistake (mentioned in part 3).</strong> Keep the work by creating a branch at the current commit, then move <code>main</code> back. Done in this order it is safe and no commit is lost:</p>
+<pre><code>$ echo "    code = fields.Char(string='Mã')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm mã khóa (lẽ ra phải ở nhánh riêng)"
+$ git branch feature/course-code
+$ git reset --hard HEAD~1
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git log --oneline --graph --all --decorate -n 4
+* 7bfb9cd (feature/course-code) [IMP] vinc_course: thêm mã khóa (lẽ ra phải ở nhánh riêng)
+* ddec0fc (HEAD -&gt; main) Revert "[IMP] vinc_course: thêm cấp độ"
+* 9f21257 [IMP] vinc_course: thêm cấp độ
+* 907ebca [IMP] vinc_course: thêm học phí</code></pre>
+                <p><strong>Cleaning untracked files.</strong> <code>git clean</code> deletes untracked files; always run <code>-n</code> (dry run) first to see what it would remove, because files deleted this way are not in the reflog:</p>
+<pre><code>$ echo "x" &gt; tam.txt
+$ git clean -n
+Would remove tam.txt
+$ git clean -f
+Removing tam.txt
+$ git status -s</code></pre>
+
+                <h2 id="luoi-an-toan">A safety net before anything risky</h2>
+                <p>The reflog is the last net, but there is a cheaper way never to need it: before a command you are unsure about (<code>reset --hard</code>, <code>rebase</code>, <code>clean</code>), <strong>create a backup branch</strong> at the current position. A branch is only a pointer so it is instant, and if all goes well you delete it. If something breaks, move the working branch back to the marked spot:</p>
+<pre><code>$ git branch backup/truoc-reset
+$ git reset --hard HEAD~1
+HEAD is now at 9f21257 [IMP] vinc_course: thêm cấp độ
+$ git log --oneline -n 1
+9f21257 [IMP] vinc_course: thêm cấp độ
+$ git reset --hard backup/truoc-reset
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git log --oneline -n 1
+ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git branch -d backup/truoc-reset
+Deleted branch backup/truoc-reset (was ddec0fc).</code></pre>
+                <p>This habit is especially valuable in release week, when pressure is high and typos are easy. Together with always reading <code>git status</code> and <code>git log --oneline</code> before undoing anything, it turns the “scary” commands into everyday operations.</p>
+
+                <h2 id="trong-odoo">Undoing in Odoo work</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Situation</th><th>How to handle it</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Committed <code>odoo.conf</code> with a password</td><td>Unpushed: <code>reset --soft</code> or <code>amend</code>. Pushed: rotate the password first, then deal with history with an admin</td></tr>
+                            <tr><td>A merged MR breaks the test server</td><td><code>git revert -m 1 &lt;merge-commit&gt;</code>, push, then fix on a new branch and merge again</td></tr>
+                            <tr><td>Broke a half-edited XML view</td><td><code>git restore views/course_views.xml</code> (accept losing the uncommitted part)</td></tr>
+                            <tr><td>Wrong module name in the commit title</td><td><code>git commit --amend -m "[FIX] vinc_course: ..."</code> if unpushed</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong><code>git reset --hard</code> with work in progress.</strong> It wipes uncommitted changes and the reflog cannot save them because Git never stored them. In the example below the unfinished line vanishes completely; the reflog only records the HEAD movement, not file content:</li>
+                    </ul>
+<pre><code>$ echo "# việc dang dở" &gt;&gt; models/course.py
+$ git reset --hard HEAD
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ grep -c dang models/course.py
+0
+$ git reflog -n 2
+ddec0fc HEAD@{0}: reset: moving to HEAD
+ddec0fc HEAD@{1}: reset: moving to HEAD~1</code></pre>
+
+                    <ul>
+                        <li><strong>Amending or resetting a pushed commit and force-pushing.</strong> Others already pulled the old commit, so their history diverges from the remote and work gets lost easily. For pushed commits use <code>revert</code>.</li>
+                        <li><strong>Mixing up <code>restore</code> and <code>reset</code>.</strong> <code>restore</code> works on files, <code>reset</code> moves the branch. If you only want to discard one file, avoid <code>reset --hard</code> because it touches every file.</li>
+                        <li><strong>Panicking over a “lost” commit.</strong> Stop, run <code>git reflog</code> and find the hash; while it is still in the reflog you can get it back with <code>git reset --hard &lt;hash&gt;</code> or <code>git switch -c rescue &lt;hash&gt;</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>Not committed: <code>restore</code> (files) and <code>restore --staged</code> (staging).</li>
+                    <li>Unpushed commit: <code>--amend</code> or <code>reset</code> (<code>--soft</code> keeps staging, <code>--mixed</code> keeps files, <code>--hard</code> wipes all).</li>
+                    <li>Pushed commit: <code>revert</code>; never rewrite shared history.</li>
+                    <li>Lost a commit: <code>git reflog</code> (90 days by default), which cannot save changes that were never committed.</li>
+                </ul>
+                <p>You can now fix mistakes safely. The next part is the operation many people fear yet every team uses: <strong>rebase</strong>, to tidy history before opening a merge request, and the golden rule that keeps it from ever causing harm.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between git reset and git revert?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git reset moves the branch back to an older commit, rewriting history, so use it only before pushing. git revert adds a commit with the reverse effect and leaves history intact, so use it for pushed commits.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do git reset --soft, --mixed and --hard differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">All three move the branch back. --soft leaves staging and the working tree alone; --mixed (the default) updates staging to match the new commit but keeps the files; --hard overwrites the working tree too, losing uncommitted changes.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I recover a commit after git reset --hard?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Run git reflog to find the HEAD@{n} entry from before the reset, then git reset --hard HEAD@{n} or git switch -c new-name &lt;hash&gt;. Reflog entries are kept for 90 days by default, but changes that were never committed cannot be rescued.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When may I use git commit --amend?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When the latest commit has not been pushed. Amend creates a different commit (the hash changes), so if you already pushed, others hold the old commit and you would have to force-push; in that case use git revert or a follow-up commit.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-restore" target="_blank" rel="noopener">Git – git-restore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-reset" target="_blank" rel="noopener">Git – git-reset</a></li>
+                    <li><a href="https://git-scm.com/docs/git-revert" target="_blank" rel="noopener">Git – git-revert</a></li>
+                    <li><a href="https://git-scm.com/docs/git-reflog" target="_blank" rel="noopener">Git – git-reflog</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit (--amend)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-clean" target="_blank" rel="noopener">Git – git-clean</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (gc.reflogExpire)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-undo-restore-reset-revert-reflog.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-undo-restore-reset-revert-reflog.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-resolving-merge-conflicts.html"><small>← Previous</small>Resolving conflicts</a>
+                    <span class="next"><small>Next · Coming soon</small>Rebase and tidy history</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#chon-lenh">Pick the command by “where am I”</a></li>
+                        <li><a href="#restore">Undoing uncommitted changes: git restore</a></li>
+                        <li><a href="#amend">Fixing the latest commit: git commit --amend</a></li>
+                        <li><a href="#reset">Dropping unpushed commits: git reset</a></li>
+                        <li><a href="#reflog">Rescuing “lost” commits: git reflog</a></li>
+                        <li><a href="#revert">Reversing a pushed commit: git revert</a></li>
+                        <li><a href="#khac">Two more common situations</a></li>
+                        <li><a href="#luoi-an-toan">A safety net before anything risky</a></li>
+                        <li><a href="#trong-odoo">Undoing in Odoo work</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

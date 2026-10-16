@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git thực chiến cho nhóm phát triển | Vinc Academy</title>
+    <meta name="description" content="Học Git cơ bản qua quy trình làm việc thực tế trong doanh nghiệp: commit, nhánh, merge request, xung đột, hoàn tác, rebase, tag và CI. Miễn phí, từ Vinc Academy." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git thực chiến cho nhóm phát triển" />
+    <meta property="og:description" content="Học Git cơ bản qua quy trình làm việc thực tế trong doanh nghiệp: commit, nhánh, merge request, xung đột, hoàn tác, rebase, tag và CI. Miễn phí, từ Vinc Academy." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-hub.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Git thực chiến cho nhóm phát triển",
+        "description": "Học Git cơ bản qua quy trình làm việc thực tế trong doanh nghiệp: commit, nhánh, merge request, xung đột, hoàn tác, rebase, tag và CI. Miễn phí, từ Vinc Academy.",
+        "url": "https://vinc-academy.vercel.app/blog/git/",
+        "inLanguage": "vi",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "TechArticle", "headline": "Git là gì? Cài đặt và cấu hình lần đầu cho dev", "url": "https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" },
+            { "@type": "TechArticle", "headline": "Git commit đầu tiên: status, add, diff, log, .gitignore", "url": "https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" },
+            { "@type": "TechArticle", "headline": "Git branch và merge: làm việc song song không lo đụng nhau", "url": "https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" },
+            { "@type": "TechArticle", "headline": "Git remote: clone, fetch, pull, push và SSH key GitLab", "url": "https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" },
+            { "@type": "TechArticle", "headline": "Merge request GitLab: quy trình review code cho nhóm", "url": "https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" },
+            { "@type": "TechArticle", "headline": "Git conflict: cách giải quyết xung đột khi merge", "url": "https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" },
+            { "@type": "TechArticle", "headline": "Git hoàn tác: restore, reset, revert, reflog khi lỡ sai", "url": "https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" },
+            { "@type": "TechArticle", "headline": "Git rebase: làm gọn lịch sử và quy tắc vàng cho nhóm", "url": "https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" },
+            { "@type": "TechArticle", "headline": "Git stash, cherry-pick và tag: hotfix và phát hành bản mới", "url": "https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" },
+            { "@type": "TechArticle", "headline": "Quy ước commit và chiến lược nhánh Git cho nhóm Odoo", "url": "https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html" },
+            { "@type": "TechArticle", "headline": "Git hook và GitLab CI: tự kiểm tra module Odoo", "url": "https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" },
+            { "@type": "TechArticle", "headline": "Git blame, bisect và dự án tổng hợp cho nhóm Odoo", "url": "https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/index.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li aria-current="page">Git</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Chủ đề · Miễn phí</span>
+            <h1>Git</h1>
+            <p class="post-lead">Học Git vừa đủ để đi làm: mỗi bài dùng repo của dự án quản lý khóa học vinc_course trên GitLab, đi theo quy trình nhóm thật từ commit đến merge request và phát hành. Ít lý thuyết, mọi lệnh đều chạy thật.</p>
+        </header>
+
+        <h2 class="series-title">Series: Git thực chiến cho nhóm phát triển</h2>
+        <p class="series-desc">12 bài từ cài đặt, commit, nhánh, remote, merge request, xung đột, hoàn tác, rebase đến hook, CI và một dự án tổng hợp.</p>
+
+        <ol class="post-grid">
+            <li><a class="post-card" href="git-la-gi-cai-dat-cau-hinh-lan-dau.html"><span class="post-num">Bài 01</span><h2>Git là gì, cài đặt và cấu hình lần đầu</h2><p>Cài Git, đặt tên và email, chọn editor và hiểu ba vùng làm việc của Git.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-commit-dau-tien-status-add-log-gitignore.html"><span class="post-num">Bài 02</span><h2>Commit đầu tiên: status, add, log và .gitignore</h2><p>Vòng lặp hằng ngày trên repo vinc_course và cách loại file không nên theo dõi.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-nhanh-branch-merge.html"><span class="post-num">Bài 03</span><h2>Nhánh và merge</h2><p>Tạo nhánh cho từng tính năng, gộp lại và hiểu fast-forward với merge commit.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-remote-clone-fetch-pull-push-ssh.html"><span class="post-num">Bài 04</span><h2>Remote: clone, fetch, pull, push và SSH</h2><p>Làm việc với GitLab: SSH key, upstream và vì sao nên fetch trước khi pull.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-merge-request-gitlab-quy-trinh-review.html"><span class="post-num">Bài 05</span><h2>Quy trình Merge Request trên GitLab</h2><p>Từ nhánh tính năng đến review, approve và merge vào nhánh được bảo vệ.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-giai-quyet-xung-dot-conflict.html"><span class="post-num">Bài 06</span><h2>Giải quyết xung đột (conflict)</h2><p>Đọc dấu <<<<<<<, sửa tay, kiểm tra rồi hoàn tất merge hoặc hủy để làm lại.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-hoan-tac-restore-reset-revert-reflog.html"><span class="post-num">Bài 07</span><h2>Hoàn tác an toàn: restore, reset, revert, reflog</h2><p>Chọn đúng lệnh khi lỡ sửa, lỡ commit hoặc lỡ đẩy, và cứu lại commit tưởng đã mất.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-rebase-lam-gon-lich-su.html"><span class="post-num">Bài 08</span><h2>Rebase và làm gọn lịch sử</h2><p>Rebase nhánh lên bản mới, gộp commit lẻ bằng interactive rebase và quy tắc vàng.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-stash-cherry-pick-tag-hotfix-release.html"><span class="post-num">Bài 09</span><h2>Stash, cherry-pick và tag</h2><p>Cất việc dở để sửa hotfix, nhặt một commit sang nhánh khác và gắn tag phát hành.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-quy-uoc-commit-chien-luoc-nhanh.html"><span class="post-num">Bài 10</span><h2>Quy ước commit và chiến lược nhánh</h2><p>Cách đặt tên nhánh, viết commit message và chọn GitLab Flow, trunk-based cho nhóm.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-hook-gitlab-ci-kiem-tra-module-odoo.html"><span class="post-num">Bài 11</span><h2>Git hook và GitLab CI cho module Odoo</h2><p>Chặn lỗi trước khi commit bằng pre-commit và chạy kiểm tra tự động trong pipeline.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"><span class="post-num">Bài 12</span><h2>Blame, bisect và dự án tổng hợp</h2><p>Tìm ai/commit nào gây lỗi, rồi chạy trọn một chu kỳ hotfix và phát hành.</p><span class="post-status">Đã xuất bản</span></a></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Muốn học làm việc nhóm với Git cùng mentor?</h3>
+                <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm với bài tập thực tế và review code.</p>
+                <div class="cta-actions">
+                    <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                    <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -10,5 +10,6 @@ Cách làm:
 - Chạy `python3 -m http.server` ở gốc repo (nền, tắt khi xong), duyệt các trang liên quan.
 - Chụp bằng `google-chrome --headless=new --window-size=W,H --screenshot` ở 1366, 800, 520, 390; kiểm tra không tràn ngang (`scrollWidth == clientWidth`), bảng/code cuộn trong khung.
 - Quét `href`/`src`/`data-alt` nội bộ bằng script, báo link 404.
+- Với bài có `figure.diagram`: chạy `python3 -I docs/tools/blog/svgcheck.py` (chữ cắt khung/ngoài viewBox) và xem ảnh chụp sơ đồ ở 390px; báo cả sơ đồ chữ quá nhỏ khó đọc.
 - Kiểm tra dark/light và nút VI/EN.
 Chỉ báo cáo lỗi kèm file và mốc màn hình; không sửa file, không commit.

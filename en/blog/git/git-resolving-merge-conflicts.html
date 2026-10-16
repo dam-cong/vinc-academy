@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Conflicts: How to Resolve Merge Conflicts</title>
+    <meta name="description" content="Read the conflict markers when Git reports a merge conflict, fix __manifest__.py by hand, check, add and commit; use merge --abort to start over." />
+    <meta name="keywords" content="git conflict, resolve merge conflict, git merge conflict, git merge --abort, conflict markers, zdiff3, git diff --check, odoo manifest" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Conflicts: How to Resolve Merge Conflicts" />
+    <meta property="og:description" content="Resolve Git conflicts step by step: read the conflict markers, fix __manifest__.py, git add, commit, merge --abort and the zdiff3 style." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-resolving-merge-conflicts.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Conflicts: How to Resolve Merge Conflicts",
+                "description": "Resolve Git conflicts step by step: read the conflict markers, fix __manifest__.py, git add, commit, merge --abort and the zdiff3 style.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-resolving-merge-conflicts.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Resolving conflicts"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is a merge conflict, and is it a failure?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nothing is broken. It is the moment Git cannot decide which version is right, usually because two branches edited the same lines or one deleted a file the other modified. Git stops the merge, marks the disputed spot and waits for you."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I cancel a conflicted merge and start over?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Run git merge --abort. It returns the repo to its state before the merge, as long as you have not committed the merge result."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does git commit say unmerged files after I edited the file?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Because you have not git add-ed the fixed file. Git treats a conflict as resolved only once the file is staged with git add (or git rm for a deleted file)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I know a conflict marker was left in my code?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Run git diff --check: Git warns about a leftover conflict marker with line numbers. For Python files, py_compile or simply running the program also reports a syntax error on the marker line."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-giai-quyet-xung-dot-conflict.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Resolving conflicts</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 6 · Practical Git Series</span>
+            <h1>Git Conflicts: How to Resolve Merge Conflicts</h1>
+            <p class="post-lead">Part 6 handles a real conflict in vinc_course's __manifest__.py: read the conflict markers, edit by hand, check, git add and commit, know when to use merge --abort and turn on the zdiff3 style for readability.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-resolving-merge-conflicts.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>A conflict happens when Git cannot decide which version to keep, usually because two branches changed the same line; nothing is broken; Git is simply asking you.</strong> This part handles a genuine conflict in <code>vinc_course</code>'s <code>__manifest__.py</code>: reading the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers, editing by hand, checking with <code>py_compile</code> and <code>git diff --check</code>, then <code>git add</code> and commit. You also learn <code>git merge --abort</code> to start over and the <code>zdiff3</code> display style that is easier to read.</p>
+                </div>
+
+                <h2 id="conflict-la-gi">What a conflict is and when it happens</h2>
+                <p>Git is very good at merging: if two people edit two different files, or the same file in two distant areas, it combines them without asking. A conflict appears only when both branches touch the <strong>same lines</strong>, or one side deletes a file the other modified. Git then stops the merge halfway, marks the uncertain spot in the file and waits for you to decide.</p>
+                <p>In an Odoo module a few “hot spots” conflict easily because everybody adds at the same place:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Frequent hot spot</th><th>Why</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__manifest__.py</code> → <code>data</code></td><td>Two features add files to the same list; if the whole list is on one line, both changes hit that line</td></tr>
+                            <tr><td><code>security/ir.model.access.csv</code></td><td>Every new model appends a line at the end, so two branches insert at the same place</td></tr>
+                            <tr><td>XML views of the same model</td><td>Two people edit the same <code>&lt;field&gt;</code> block</td></tr>
+                            <tr><td>Translation <code>.po</code> files</td><td>Updated in bulk, so many branches change the same lines</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="doc-dau">Reading the conflict markers</h2>
+                <p>Let us create a real conflict. Branch <code>feature/security</code> declares the access file, branch <code>feature/views</code> declares the view file, and both edit the <code>'data': []</code> line. Merging the first goes smoothly (fast-forward) because <code>main</code> has not changed; merging the second collides:</p>
+<pre><code>$ git switch main
+Switched to branch 'main'
+$ git merge feature/security
+Updating 47905cb..3c18c3d
+Fast-forward
+ __manifest__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git merge feature/views
+Auto-merging __manifest__.py
+CONFLICT (content): Merge conflict in __manifest__.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add &lt;file&gt;..." to mark resolution)
+	both modified:   __manifest__.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git diff
+diff --cc __manifest__.py
+index a9ec392,9244d07..0000000
+--- a/__manifest__.py
++++ b/__manifest__.py
+@@@ -2,6 -2,6 +2,10 @@@
+      'name': 'Vinc Course',
+      'version': '1.0',
+      'depends': ['base'],
+++&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ +    'data': ['security/ir.model.access.csv'],
+++=======
++     'data': ['views/course_views.xml'],
+++&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views
+      'license': 'LGPL-3',
+  }
+$ cat __manifest__.py
+{
+    'name': 'Vinc Course',
+    'version': '1.0',
+    'depends': ['base'],
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    'data': ['security/ir.model.access.csv'],
+=======
+    'data': ['views/course_views.xml'],
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views
+    'license': 'LGPL-3',
+}</code></pre>
+                <p><code>git status</code> lists the file under <em>Unmerged paths</em> labelled <em>both modified</em>, and suggests both ways out (fix and commit, or <code>--abort</code>). Inside the file Git inserts three kinds of marker:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Marker</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></td><td>Start of the side from the branch <strong>you stand on</strong> (here <code>main</code>)</td></tr>
+                            <tr><td><code>=======</code></td><td>The divider between the two versions</td></tr>
+                            <tr><td><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views</code></td><td>End of the side from the branch <strong>being merged in</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>During a conflict <code>git diff</code> prints an unusual form (a <em>combined diff</em>): every line has two symbol columns, the left compared with your branch and the right compared with the incoming branch. You do not need to memorise how to read it; just know it shows exactly the lines still in dispute and shrinks as you resolve them.</p>
+
+                <h2 id="giai-quyet">Resolving step by step</h2>
+                <p>The routine is always the same, big conflict or small:</p>
+                <ul>
+                    <li><strong>Open the file</strong> and find the markers (or use an editor with a merge UI, such as VS Code with its Accept Current/Incoming/Both buttons).</li>
+                    <li><strong>Decide</strong> the final result: keep one side, keep both or rewrite. Here both are right, so we keep both files in the list.</li>
+                    <li><strong>Remove every marker</strong> (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>) from the file.</li>
+                    <li><strong>Check</strong> the file still works (for Python: <code>py_compile</code>; for an Odoo module: a trial upgrade <code>-u vinc_course</code>).</li>
+                    <li><strong><code>git add</code></strong> the file to say “resolved”, then <strong><code>git commit</code></strong> to finish the merge.</li>
+                </ul>
+<pre><code>$ cat __manifest__.py
+{
+    'name': 'Vinc Course',
+    'version': '1.0',
+    'depends': ['base'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/course_views.xml',
+    ],
+    'license': 'LGPL-3',
+}
+$ python3 -m py_compile __manifest__.py &amp;&amp; echo OK
+OK
+$ git add __manifest__.py
+$ git status -s
+M  __manifest__.py
+$ git commit
+[main 4fb4729] Merge branch 'feature/views'
+$ git log --oneline --graph -n 5
+*   4fb4729 Merge branch 'feature/views'
+|\  
+| * 250f5a1 [ADD] vinc_course: khai báo view
+* | 3c18c3d [ADD] vinc_course: khai báo quyền truy cập
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Running <code>git commit</code> without <code>-m</code> opens your editor with a prefilled <em>“Merge branch …”</em> message; save and close and you are done (in the example the editor is replaced by a no-op so you do not see it). In Odoo's convention, merge commits may carry the <code>[MERGE]</code> tag.</p>
+
+                <h2 id="huy">Too scary? Abort with git merge --abort</h2>
+                <p>You can always return to the state before the merge as long as you have not committed. <code>git merge --abort</code> restores everything as if the merge never ran, and you can start again after asking a colleague which version should win. The example below uses a different conflict: two branches both rename the label of the <code>hours</code> field.</p>
+<pre><code>$ git switch -c feature/hours-label
+Switched to a new branch 'feature/hours-label'
+$ sed -i "s/Số giờ/Số giờ học/" models/course.py
+$ git commit -qam "[IMP] vinc_course: đổi nhãn số giờ"
+$ git switch main
+Switched to branch 'main'
+$ sed -i "s/Số giờ/Tổng số giờ/" models/course.py
+$ git commit -qam "[IMP] vinc_course: đổi nhãn tổng số giờ"
+$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git merge --abort
+$ git status -sb
+## main</code></pre>
+
+                <h2 id="chon-ben">When you just need one side wholesale</h2>
+                <p>If the decision is to keep one branch's version for the whole file, no hand editing is needed. <code>git restore --theirs &lt;file&gt;</code> takes the incoming branch's version, while <code>--ours</code> takes the version from the branch you stand on. You still have to <code>git add</code> and commit. Use it carefully, since this throws away whatever the other side changed in that file:</p>
+<pre><code>$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git restore --theirs models/course.py
+$ grep hours models/course.py
+    hours = fields.Integer(string='Số giờ học')
+$ git add models/course.py
+$ git commit -m "[MERGE] vinc_course: chọn nhãn số giờ học"
+[main 45067cb] [MERGE] vinc_course: chọn nhãn số giờ học</code></pre>
+
+                <h2 id="zdiff3">A more readable display with zdiff3</h2>
+                <p>The default style shows only the two versions, so you sometimes cannot tell what the line looked like originally. The <code>git config</code> documentation describes the <code>diff3</code> and <code>zdiff3</code> styles that add the common ancestor between the branches (after the <code>|||||||</code> marker), letting you see what each side changed relative to the original. Turn it on with <code>git config --global merge.conflictStyle zdiff3</code>:</p>
+<pre><code>$ git config merge.conflictStyle zdiff3
+$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ grep -n -A8 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;" models/course.py
+9:&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+10-    hours = fields.Integer(string='Tổng số giờ')
+11-||||||| 4fb4729
+12-    hours = fields.Integer(string='Số giờ')
+13-=======
+14-    hours = fields.Integer(string='Số giờ học')
+15-&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/hours-label
+$ git merge --abort</code></pre>
+                <p>Reading the output above: the original is “Số giờ”, <code>main</code> changed it to “Tổng số giờ” and the other branch to “Số giờ học”. Knowing the original, you quickly see both sides trying to say the same thing in different words, and you only need to pick one name.</p>
+                <p>Besides editing by hand, you can use a visual tool. Most modern editors (VS Code, JetBrains IDEs) show a conflict as three panes: yours, incoming and the result, with buttons to pick each part. Git also has <code>git mergetool</code>, which opens the merge tool you declared in the <code>merge.tool</code> setting. Any tool only helps you <em>choose faster</em>; deciding what to keep is still your job, so read the final result carefully before <code>git add</code>.</p>
+
+                <h2 id="xoa-sua">The delete versus modify kind of conflict</h2>
+                <p>Not every conflict leaves markers in a file. When one branch deletes a file while the other still modifies it, Git reports <em>modify/delete</em> and leaves the modified version in the working tree. <code>git status -s</code> shows the letter pair <code>UD</code> (deleted on the merged-in side). You choose: keep the file with <code>git add</code>, drop it with <code>git rm</code>, then commit:</p>
+<pre><code>$ git switch -c feature/rm-notes
+Switched to a new branch 'feature/rm-notes'
+$ git rm -q NOTES.md
+$ git commit -qm "[REM] vinc_course: bỏ ghi chú"
+$ git switch main
+Switched to branch 'main'
+$ echo "thêm một dòng" &gt;&gt; NOTES.md
+$ git commit -qam "[IMP] vinc_course: bổ sung ghi chú"
+$ git merge feature/rm-notes
+CONFLICT (modify/delete): NOTES.md deleted in feature/rm-notes and modified in HEAD.  Version HEAD of NOTES.md left in tree.
+Automatic merge failed; fix conflicts and then commit the result.
+$ git status -s
+UD NOTES.md
+$ git rm -q NOTES.md
+$ git commit -m "[MERGE] vinc_course: bỏ ghi chú"
+[main bf19726] [MERGE] vinc_course: bỏ ghi chú</code></pre>
+
+                <h2 id="phong-tranh">Reducing conflicts through how you work</h2>
+                <ul>
+                    <li><strong>Bring <code>main</code> into your branch often</strong> (part 3) so conflicts stay small and appear early.</li>
+                    <li><strong>Small merge requests and short-lived branches</strong> (part 5): less time for others to touch the same place.</li>
+                    <li><strong>One item per line</strong> in the <code>data</code> or <code>depends</code> lists: two changes at different positions merge automatically instead of colliding as they do when the whole list sits on one line.</li>
+                    <li><strong>Tell each other</strong> when both of you edit a big shared file such as the main view or a translation file.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>Leaving conflict markers in the file.</strong> If you forget to remove them, the file breaks at once. With Python the compiler reports a syntax error right on the marker line; <code>git diff --check</code> also warns about a <em>leftover conflict marker</em> before you commit:</li>
+                    </ul>
+<pre><code>$ python3 -m py_compile __manifest__.py
+  File "__manifest__.py", line 5
+    &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    ^^
+SyntaxError: invalid syntax
+$ git diff --check
+__manifest__.py:5: leftover conflict marker
+__manifest__.py:7: leftover conflict marker
+__manifest__.py:9: leftover conflict marker
+$ git commit -m "merge"
+U	__manifest__.py
+error: Committing is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm &lt;file&gt;'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.</code></pre>
+
+                    <ul>
+                        <li>The example above also shows a second mistake: running <code>git commit</code> before <code>git add</code>-ing the fixed file is refused with <em>“Committing is not possible because you have unmerged files”</em>. Run <code>git add</code> to say it is resolved.</li>
+                        <li><strong>Picking a side at random to move on.</strong> Silently losing a colleague's change is the hardest mistake to notice because nothing reports it. When unsure, ask the author of the other side's commit (see <code>git log --merge</code> or <code>git blame</code> in part 12).</li>
+                        <li><strong>Panicking and deleting the whole repo.</strong> You almost never need to: <code>git merge --abort</code> puts everything back, and committed data always remains in <code>.git</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>A conflict = both sides edit the same lines (or one edits while the other deletes); Git stops and waits for you.</li>
+                    <li>Markers: <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> (your side) · <code>=======</code> · <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch</code> (the merged side).</li>
+                    <li>Edit → remove markers → check → <code>git add</code> → <code>git commit</code>; if unsure, <code>git merge --abort</code>.</li>
+                    <li><code>git diff --check</code> catches leftover markers; <code>merge.conflictStyle zdiff3</code> shows the original too.</li>
+                </ul>
+                <p>You can now cope when things collide. What about when you yourself slip: a bad edit, commit or push? Part 7 introduces the undo toolkit: <code>restore</code>, <code>reset</code>, <code>revert</code> and <code>reflog</code> to rescue even commits you thought were lost.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is a merge conflict, and is it a failure?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nothing is broken. It is the moment Git cannot decide which version is right, usually because two branches edited the same lines or one deleted a file the other modified. Git stops the merge, marks the disputed spot and waits for you.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I cancel a conflicted merge and start over?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Run git merge --abort. It returns the repo to its state before the merge, as long as you have not committed the merge result.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does git commit say unmerged files after I edited the file?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Because you have not git add-ed the fixed file. Git treats a conflict as resolved only once the file is staged with git add (or git rm for a deleted file).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I know a conflict marker was left in my code?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Run git diff --check: Git warns about a leftover conflict marker with line numbers. For Python files, py_compile or simply running the program also reports a syntax error on the marker line.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">Git – git-merge</a></li>
+                    <li><a href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener">Git – git-diff</a></li>
+                    <li><a href="https://git-scm.com/docs/git-restore" target="_blank" rel="noopener">Git – git-restore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (merge.conflictStyle)</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-resolving-merge-conflicts.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-resolving-merge-conflicts.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-gitlab-merge-request-review-workflow.html"><small>← Previous</small>Merge requests on GitLab</a>
+                    <span class="next"><small>Next · Coming soon</small>Undoing safely: restore, reset, revert, reflog</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#conflict-la-gi">What a conflict is and when it happens</a></li>
+                        <li><a href="#doc-dau">Reading the conflict markers</a></li>
+                        <li><a href="#giai-quyet">Resolving step by step</a></li>
+                        <li><a href="#huy">Too scary? Abort with git merge --abort</a></li>
+                        <li><a href="#chon-ben">When you just need one side wholesale</a></li>
+                        <li><a href="#zdiff3">A more readable display with zdiff3</a></li>
+                        <li><a href="#xoa-sua">The delete versus modify kind of conflict</a></li>
+                        <li><a href="#phong-tranh">Reducing conflicts through how you work</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

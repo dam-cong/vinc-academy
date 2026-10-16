@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git stash, cherry-pick và tag: hotfix và phát hành bản mới</title>
+    <meta name="description" content="Cất việc dở bằng git stash, mang đúng một commit sang nhánh khác với cherry-pick -x, gắn tag phát hành và xử lý hotfix từ tag cho module Odoo." />
+    <meta name="keywords" content="git stash, git cherry-pick, git tag, hotfix git, release git, semantic versioning, git describe, git stash pop" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git stash, cherry-pick và tag: hotfix và phát hành bản mới" />
+    <meta property="og:description" content="Git stash, cherry-pick và tag qua kịch bản hotfix thật: cất việc dở, tách nhánh từ tag, cherry-pick -x về main và phát hành bản vá." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-stash-cherry-pick-tag-hotfix-release.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git stash, cherry-pick và tag: hotfix và phát hành bản mới",
+                "description": "Git stash, cherry-pick và tag qua kịch bản hotfix thật: cất việc dở, tách nhánh từ tag, cherry-pick -x về main và phát hành bản vá.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-stash-cherry-pick-tag-hotfix-release.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Stash, cherry-pick và tag"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "git stash dùng khi nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi bạn đang làm dở, chưa muốn commit nhưng cần chuyển nhánh ngay (ví dụ sửa lỗi gấp). git stash push -m cất thay đổi chưa commit, git stash pop lấy lại. Thêm -u nếu muốn cất cả file chưa theo dõi."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Cherry-pick khác merge ở điểm nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Merge đưa toàn bộ lịch sử của một nhánh vào nhánh hiện tại. Cherry-pick chỉ áp dụng thay đổi của một hoặc vài commit đã chọn thành commit mới (mã băm khác). Cờ -x ghi lại commit gốc trong lời nhắn."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Tag annotated và lightweight khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Tag annotated (git tag -a) lưu ngày, người tạo và lời nhắn, dành cho bản phát hành. Tag lightweight chỉ là một cái tên trỏ tới commit, dành cho đánh dấu tạm. Một số lệnh như git describe mặc định bỏ qua tag lightweight."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao tag của tôi không thấy trên GitLab?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git push thường không đẩy tag. Bạn phải đẩy tường minh bằng git push origin tên-tag, hoặc git push --tags để đẩy mọi tag. Kiểm tra bằng git ls-remote --tags origin."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-stash-cherry-pick-tags-hotfix-release.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Stash, cherry-pick và tag</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 9 · Series Git thực chiến</span>
+            <h1>Git stash, cherry-pick và tag: hotfix và phát hành bản mới</h1>
+            <p class="post-lead">Bài 9 chạy một kịch bản hotfix thật: cất việc dở bằng git stash, tách nhánh từ tag đang chạy, gắn tag bản vá, cherry-pick -x về main rồi lấy lại việc dở, áp dụng cho module vinc_course.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-stash-cherry-pick-tag-hotfix-release.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Ba công cụ cho ba tình huống “giữa chừng”: <code>stash</code> cất việc dang dở để đổi sang việc khác, <code>cherry-pick</code> mang đúng một commit sang nhánh khác, <code>tag</code> đánh dấu một bản phát hành.</strong> Bài này chạy một kịch bản hotfix thật: đang làm dở nhánh học phí thì có lỗi ở bản 1.0.0 đang chạy; ta cất việc dở, tách nhánh hotfix từ tag, gắn tag 1.0.1, cherry-pick bản sửa về <code>main</code>, rồi lấy lại việc dở.</p>
+                </div>
+
+                <h2 id="tinh-huong">Câu chuyện hotfix chiều thứ Sáu</h2>
+                <p>Bản <code>vinc_course</code> 1.0.0 đã chạy ở khách hàng. Bạn đang viết dở trường học phí trên nhánh riêng thì được báo: nhãn “Số giờ” gây hiểu nhầm, cần sửa gấp. Bạn không thể commit nửa vời, cũng không muốn mang tính năng chưa xong vào bản sửa. Ba công cụ của bài này xử lý lần lượt từng việc:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Việc cần làm</th><th>Công cụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Cất việc dang dở, quay lại sau</td><td><code>git stash</code></td></tr>
+                            <tr><td>Biết chính xác bản đang chạy là commit nào</td><td><code>git tag</code></td></tr>
+                            <tr><td>Sửa lỗi từ đúng bản đã phát hành</td><td>Tách nhánh từ tag</td></tr>
+                            <tr><td>Đưa bản sửa về <code>main</code> mà không kéo theo thứ khác</td><td><code>git cherry-pick</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-vi-g09">
+                        <title id="dg-vi-g09">Hotfix tách từ tag đã phát hành rồi cherry-pick về main</title>
+                        <path class="dg-arrow" d="M60 45 H400" /><path class="dg-arrow" d="M150 45 L240 125" />
+                        <circle class="dg-box" cx="60" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="60" y="50">C1</text>
+                        <circle class="dg-box" cx="150" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="150" y="50">C2</text>
+                        <circle class="dg-box" cx="260" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="260" y="50">C3</text>
+                        <circle class="dg-accent" cx="400" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="400" y="50">H'</text>
+                        <circle class="dg-accent" cx="240" cy="125" r="16" /><text class="dg-title" text-anchor="middle" x="240" y="130">H</text>
+                        <path class="dg-arrow" d="M256 118 Q400 115 400 63 m-5 8 l5 -8 l5 8" /><text class="dg-text" x="330" y="108">cherry-pick</text>
+                        <text class="dg-text" x="116" y="85">v1.0.0</text><text class="dg-text" x="266" y="140">hotfix, gắn tag v1.0.1</text>
+                        <text class="dg-title" x="440" y="50">main</text>
+                        <text class="dg-text" x="10" y="172">H' là bản sao của H trên main (mã băm khác, cùng thay đổi).</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+
+                <h2 id="tag">Tag: đánh dấu bản phát hành</h2>
+                <p>Tag là cái tên cố định gắn vào một commit, thường dùng cho số phiên bản. Khác nhánh, tag không di chuyển khi bạn commit thêm. Theo tài liệu Git có hai loại: tag <strong>annotated</strong> (tạo bằng <code>-a</code>) lưu ngày, người tạo và lời nhắn, dành cho phát hành; tag <strong>lightweight</strong> chỉ là một cái tên, dành cho đánh dấu tạm. Nên đặt tên theo số phiên bản mà manifest khai báo (tài liệu Odoo khuyên dùng semantic versioning cho trường <code>version</code>). Lưu ý <code>git push</code> thường <strong>không</strong> đẩy tag; bạn phải đẩy tường minh, và có thể kiểm tra remote bằng <code>ls-remote</code>:</p>
+<pre><code>$ git tag -a v1.0.0 -m "Phát hành 1.0.0"
+$ git tag
+v1.0.0
+$ git show v1.0.0 --no-patch
+tag v1.0.0
+Tagger: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 10:17:00 2026 +0700
+
+Phát hành 1.0.0
+
+commit 47905cb280043ef4405171ee158d3e8967dd309a
+Author: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 09:49:00 2026 +0700
+
+    [IMP] vinc_course: thêm trường số giờ
+$ git ls-remote --tags origin
+$ git push origin v1.0.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.0.0 -&gt; v1.0.0
+$ git ls-remote --tags origin
+5b6f223733af3ab0cae1c9c3d5de7d98aa06f970	refs/tags/v1.0.0
+47905cb280043ef4405171ee158d3e8967dd309a	refs/tags/v1.0.0^{}</code></pre>
+
+                <h2 id="stash">Stash: cất việc dang dở</h2>
+                <p><code>git stash</code> lấy các thay đổi chưa commit ra khỏi thư mục làm việc, cất vào một ngăn xếp riêng và trả file về đúng như commit gần nhất. Bạn có thể chuyển nhánh sạch sẽ, rồi quay lại lấy ra. Mặc định nó chỉ cất file <em>đã theo dõi</em>: <code>NOTE.md</code> mới tạo vẫn nằm lại (muốn cất cả file mới, thêm <code>-u</code>):</p>
+<pre><code>$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ echo "ghi chú" &gt; NOTE.md
+$ git status -s
+ M models/course.py
+?? NOTE.md
+$ git stash push -m "dở học phí"
+Saved working directory and index state On feature/course-price: dở học phí
+$ git status -s
+?? NOTE.md
+$ git stash list
+stash@{0}: On feature/course-price: dở học phí</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git stash push -m "mô tả"</code></td><td>Cất, kèm tên dễ nhận</td></tr>
+                            <tr><td><code>git stash push -u</code></td><td>Cất cả file chưa theo dõi</td></tr>
+                            <tr><td><code>git stash list</code></td><td>Xem các lần cất</td></tr>
+                            <tr><td><code>git stash show -p</code></td><td>Xem nội dung lần cất gần nhất</td></tr>
+                            <tr><td><code>git stash pop</code></td><td>Lấy ra và xóa khỏi ngăn xếp</td></tr>
+                            <tr><td><code>git stash apply</code></td><td>Lấy ra nhưng giữ lại bản cất</td></tr>
+                            <tr><td><code>git stash drop</code></td><td>Xóa một lần cất</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Stash phù hợp cho khoảng cách ngắn: vài phút tới vài giờ. Nếu việc dở sẽ kéo dài sang ngày hôm sau, hãy commit tạm lên nhánh riêng (<code>[WIP]</code>) rồi sau này gộp bằng rebase tương tác như bài 8; commit có tên và nằm trong lịch sử, còn stash dễ bị quên. Khi bản cất xung đột với thay đổi mới, <code>git stash branch &lt;tên&gt;</code> tạo nhánh mới từ đúng commit lúc cất rồi áp dụng bản cất lên đó, một lối thoát gọn.</p>
+
+                <h2 id="hotfix">Hotfix: tách nhánh từ tag</h2>
+                <p>Nhờ tag, bạn tách nhánh đúng từ bản đang chạy chứ không phải từ <code>main</code> (đã có thêm commit khác). Sửa lỗi, commit, gắn tag 1.0.1 và đẩy lên; người phụ trách triển khai chỉ việc lấy tag đó:</p>
+<pre><code>$ git switch -c hotfix/1.0.1 v1.0.0
+Switched to a new branch 'hotfix/1.0.1'
+$ sed -i "s/Số giờ/Số giờ (giờ)/" models/course.py
+$ git commit -qam "[FIX] vinc_course: ghi rõ đơn vị số giờ"
+$ git tag -a v1.0.1 -m "Hotfix 1.0.1"
+$ git push origin v1.0.1
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.0.1 -&gt; v1.0.1
+$ git log --oneline -n 3 --decorate
+1f85d3e (HEAD -&gt; hotfix/1.0.1, tag: v1.0.1) [FIX] vinc_course: ghi rõ đơn vị số giờ
+47905cb (tag: v1.0.0) [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+
+                <h2 id="cherry-pick">Cherry-pick: mang đúng một commit sang nơi khác</h2>
+                <p>Bản sửa phải có cả ở <code>main</code> để lần phát hành sau không lặp lại lỗi. Merge nhánh hotfix vào <code>main</code> cũng được, nhưng nếu nhánh có nhiều thứ khác bạn chỉ muốn đúng một commit. <code>git cherry-pick &lt;commit&gt;</code> áp dụng thay đổi của commit đó lên nhánh hiện tại thành một commit mới. Cờ <code>-x</code> thêm dòng “(cherry picked from commit …)” để người sau lần ngược được nguồn; tài liệu khuyên dùng khi cherry-pick giữa hai nhánh công khai (như backport sửa lỗi sang nhánh bảo trì):</p>
+<pre><code>$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git cherry-pick -x hotfix/1.0.1
+[main 938fa6a] [FIX] vinc_course: ghi rõ đơn vị số giờ
+ Date: Mon Oct 12 12:09:00 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git log --oneline -n 3
+938fa6a [FIX] vinc_course: ghi rõ đơn vị số giờ
+6305374 [ADD] vinc_course: thêm extra
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git log -1 --format=%B
+[FIX] vinc_course: ghi rõ đơn vị số giờ
+
+(cherry picked from commit 1f85d3e6f42ba67551050559c96ab62364d8feed)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   6305374..938fa6a  main -&gt; main</code></pre>
+                <p>Cherry-pick tạo commit mới (mã băm khác), nên dòng <code>-x</code> là mối liên kết duy nhất với bản gốc. Nếu thay đổi đụng nhau, bạn gặp xung đột như bài 6 và hoàn tất bằng <code>git cherry-pick --continue</code>, hoặc hủy bằng <code>--abort</code>. Có thể chọn một dải: <code>git cherry-pick A..B</code>.</p>
+                <p>Giờ quay lại việc dở. <code>git stash pop</code> đưa thay đổi trở lại và xóa bản cất khỏi danh sách, nhưng theo tài liệu, nếu việc áp dụng gặp xung đột thì bản cất <em>không bị xóa</em> để bạn không mất gì:</p>
+<pre><code>$ git switch feature/course-price
+Switched to branch 'feature/course-price'
+$ git stash pop
+On branch feature/course-price
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   models/course.py
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	NOTE.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (8e6da6bf2eefeff625ca4a09a60da21474acd05b)
+$ git stash list</code></pre>
+
+                <h2 id="quan-ly-tag">Xem, chuyển tới và xóa tag</h2>
+<pre><code>$ git tag -l "v1.*"
+v1.0.0
+v1.0.1
+$ git describe
+v1.0.0-2-g938fa6a
+$ git switch --detach v1.0.0
+HEAD is now at 47905cb [IMP] vinc_course: thêm trường số giờ
+$ git switch -
+Your branch is up to date with 'origin/main'.
+Previous HEAD position was 47905cb [IMP] vinc_course: thêm trường số giờ
+Switched to branch 'main'
+$ git tag -d v1.0.0
+Deleted tag 'v1.0.0' (was 5b6f223)
+$ git push origin --delete v1.0.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         v1.0.0
+$ git tag
+v1.0.1</code></pre>
+                <p><code>git describe</code> in ra tên tag gần nhất (chỉ tính tag annotated theo mặc định), hữu ích để hiển thị phiên bản đang chạy. <code>git switch --detach v1.0.0</code> cho bạn xem code đúng ở bản đó mà không tạo nhánh; <code>git switch -</code> quay lại. Xóa tag cần làm hai nơi: cục bộ với <code>-d</code>, remote với <code>git push origin --delete</code>. Tránh xóa rồi tạo lại tag đã công bố, vì người khác đã có tag cũ. Trên GitLab, quản trị có thể bảo vệ tag theo mẫu tên (protected tags) để chỉ một số vai trò mới được tạo.</p>
+
+                <h2 id="trong-odoo">Phát hành module Odoo bằng tag</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Bước</th><th>Cách làm</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Đặt số phiên bản</td><td>Sửa <code>version</code> trong <code>__manifest__.py</code> theo semantic versioning, commit rồi tag cùng số đó (<code>v1.1.0</code>)</td></tr>
+                            <tr><td>Triển khai</td><td>Trên server: <code>git fetch --tags</code>, chuyển sang tag, nâng cấp module với <code>-u vinc_course</code></td></tr>
+                            <tr><td>Biết đang chạy bản nào</td><td><code>git describe</code> trên server cho ra số phiên bản</td></tr>
+                            <tr><td>Sửa lỗi khẩn</td><td>Tách <code>hotfix/x.y.z</code> từ tag, tag <code>vx.y.z</code> mới, cherry-pick về <code>main</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="phien-ban">Đặt số phiên bản cho tag</h2>
+                <p>Tài liệu manifest của Odoo yêu cầu <code>version</code> tuân theo <em>semantic versioning</em>: ba số <code>MAJOR.MINOR.PATCH</code>. Quy ước này giúp cả khách hàng lẫn đồng nghiệp đoán được mức độ thay đổi chỉ qua con số:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thay đổi</th><th>Số mới</th><th>Ví dụ trên vinc_course</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>PATCH</td><td>1.0.0 → 1.0.1</td><td>Sửa nhãn hay lỗi nhỏ, không đổi cấu trúc dữ liệu</td></tr>
+                            <tr><td>MINOR</td><td>1.0.1 → 1.1.0</td><td>Thêm trường học phí, tương thích ngược</td></tr>
+                            <tr><td>MAJOR</td><td>1.1.0 → 2.0.0</td><td>Đổi tên model hoặc bỏ trường, cần di chuyển dữ liệu</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="checklist">Checklist phát hành gọn</h2>
+                <ul>
+                    <li><code>git switch main</code> và <code>git pull</code>: chắc chắn đang ở bản mới nhất đã review.</li>
+                    <li>Cập nhật <code>version</code> trong <code>__manifest__.py</code>, chạy test và nâng cấp thử trên CSDL thử.</li>
+                    <li>Commit số phiên bản, rồi <code>git tag -a vX.Y.Z -m "..."</code> và <code>git push origin vX.Y.Z</code>.</li>
+                    <li>Triển khai bằng cách chuyển sang đúng tag, không chuyển sang một nhánh còn đang chạy.</li>
+                    <li>Ghi lại điều đã thay đổi cho khách hàng (changelog) kèm tên tag.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Tưởng <code>git push</code> đã đẩy tag.</strong> Ví dụ ở phần tag cho thấy <code>ls-remote</code> rỗng cho tới khi bạn <code>git push origin &lt;tag&gt;</code> (hoặc <code>--tags</code> để đẩy mọi tag).</li>
+                        <li><strong>Quên mình đã stash.</strong> Việc cất đi nằm im trong <code>git stash list</code> cả tuần rồi bị bỏ quên. Luôn đặt <code>-m</code> mô tả và dọn bằng <code>pop</code> hoặc <code>drop</code> sớm.</li>
+                        <li><strong>Stash không có file mới.</strong> Như ví dụ, <code>NOTE.md</code> không vào stash. Muốn cất cả file chưa theo dõi hãy dùng <code>git stash push -u</code>.</li>
+                        <li><strong>Sửa lỗi trên <code>main</code> rồi mới biết bản đang chạy không có nó.</strong> Hãy luôn tách hotfix từ tag của bản đang chạy, rồi mới đưa về <code>main</code> bằng cherry-pick hoặc merge.</li>
+                        <li><strong>Cherry-pick bừa nhiều commit.</strong> Mỗi bản sao tạo ra mã băm riêng nên sau này merge hai nhánh có thể thấy thay đổi “trùng”. Chỉ cherry-pick khi thực sự cần mang riêng một thay đổi.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>stash push -m</code> / <code>pop</code>: cất và lấy lại việc dở; thêm <code>-u</code> để cất cả file mới.</li>
+                    <li>Tag annotated cho bản phát hành; nhớ đẩy tag tường minh.</li>
+                    <li>Hotfix: tách nhánh từ tag đang chạy, gắn tag mới, rồi <code>cherry-pick -x</code> về <code>main</code>.</li>
+                    <li>Gặp xung đột khi cherry-pick: sửa, <code>add</code>, <code>--continue</code> (hoặc <code>--abort</code>).</li>
+                </ul>
+                <p>Bạn đã có đủ công cụ kỹ thuật. Điều còn thiếu để cả nhóm làm việc ăn khớp là <strong>quy ước</strong>: đặt tên nhánh, viết commit message và chọn chiến lược nhánh nào. Đó là chủ đề bài 10.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git stash dùng khi nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi bạn đang làm dở, chưa muốn commit nhưng cần chuyển nhánh ngay (ví dụ sửa lỗi gấp). git stash push -m cất thay đổi chưa commit, git stash pop lấy lại. Thêm -u nếu muốn cất cả file chưa theo dõi.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Cherry-pick khác merge ở điểm nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Merge đưa toàn bộ lịch sử của một nhánh vào nhánh hiện tại. Cherry-pick chỉ áp dụng thay đổi của một hoặc vài commit đã chọn thành commit mới (mã băm khác). Cờ -x ghi lại commit gốc trong lời nhắn.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tag annotated và lightweight khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Tag annotated (git tag -a) lưu ngày, người tạo và lời nhắn, dành cho bản phát hành. Tag lightweight chỉ là một cái tên trỏ tới commit, dành cho đánh dấu tạm. Một số lệnh như git describe mặc định bỏ qua tag lightweight.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao tag của tôi không thấy trên GitLab?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git push thường không đẩy tag. Bạn phải đẩy tường minh bằng git push origin tên-tag, hoặc git push --tags để đẩy mọi tag. Kiểm tra bằng git ls-remote --tags origin.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-stash" target="_blank" rel="noopener">Git – git-stash</a></li>
+                    <li><a href="https://git-scm.com/docs/git-cherry-pick" target="_blank" rel="noopener">Git – git-cherry-pick</a></li>
+                    <li><a href="https://git-scm.com/docs/git-tag" target="_blank" rel="noopener">Git – git-tag</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push (--tags)</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/repository/branches/protected/" target="_blank" rel="noopener">GitLab Docs – Protected branches (protected tags)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-stash-cherry-pick-tag-hotfix-release.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-stash-cherry-pick-tag-hotfix-release.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-rebase-lam-gon-lich-su.html"><small>← Bài trước</small>Rebase và làm gọn lịch sử</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Quy ước commit và chiến lược nhánh</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#tinh-huong">Câu chuyện hotfix chiều thứ Sáu</a></li>
+                        <li><a href="#tag">Tag: đánh dấu bản phát hành</a></li>
+                        <li><a href="#stash">Stash: cất việc dang dở</a></li>
+                        <li><a href="#hotfix">Hotfix: tách nhánh từ tag</a></li>
+                        <li><a href="#cherry-pick">Cherry-pick: mang đúng một commit sang nơi khác</a></li>
+                        <li><a href="#quan-ly-tag">Xem, chuyển tới và xóa tag</a></li>
+                        <li><a href="#trong-odoo">Phát hành module Odoo bằng tag</a></li>
+                        <li><a href="#phien-ban">Đặt số phiên bản cho tag</a></li>
+                        <li><a href="#checklist">Checklist phát hành gọn</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

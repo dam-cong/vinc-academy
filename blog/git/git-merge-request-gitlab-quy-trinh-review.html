@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merge request GitLab: quy trình review code cho nhóm</title>
+    <meta name="description" content="Đi trọn quy trình merge request trên GitLab: nhánh theo issue, push, mô tả MR, sửa theo review, approve, merge, dọn nhánh và nhánh main được bảo vệ." />
+    <meta name="keywords" content="merge request gitlab, quy trình review code, protected branch, git push nhánh, closes issue, approve merge request, gitlab cho người mới" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Merge request GitLab: quy trình review code cho nhóm" />
+    <meta property="og:description" content="Quy trình merge request trên GitLab cho dự án Odoo: nhánh theo issue, push, mô tả MR, review, approve, merge và nhánh main được bảo vệ." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-merge-request-gitlab-quy-trinh-review.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Merge request GitLab: quy trình review code cho nhóm",
+                "description": "Quy trình merge request trên GitLab cho dự án Odoo: nhánh theo issue, push, mô tả MR, review, approve, merge và nhánh main được bảo vệ.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-merge-request-gitlab-quy-trinh-review.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Merge request trên GitLab"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Merge request và pull request khác nhau không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cùng một khái niệm: đề nghị gộp một nhánh vào nhánh khác kèm review. GitLab gọi là merge request, GitHub gọi là pull request. Lệnh Git phía bạn giống hệt, chỉ khác giao diện web."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Sửa theo góp ý của reviewer có phải tạo merge request mới không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không. Bạn commit thêm rồi push lên cùng nhánh, merge request tự cập nhật và giữ nguyên toàn bộ thảo luận. Khi xong, bạn đánh dấu các thread là đã resolve."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao để issue tự đóng khi merge request được merge?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Ghi một từ khóa kèm tham chiếu issue trong mô tả MR hoặc commit, ví dụ Closes #12. Theo tài liệu GitLab, các từ như Close, Fix, Resolve, Implement (và biến thể) đứng trước tham chiếu sẽ đóng issue khi MR merge."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao tôi không push trực tiếp lên main được?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nhánh mặc định của repo trên GitLab được bảo vệ mặc định: chỉ vai trò được cấp quyền mới merge hoặc push vào đó. Hãy push nhánh riêng và mở merge request; Maintainer chỉnh quy tắc tại Settings > Repository > Branch rules."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-gitlab-merge-request-review-workflow.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Merge request trên GitLab</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 5 · Series Git thực chiến</span>
+            <h1>Merge request GitLab: quy trình review code cho nhóm</h1>
+            <p class="post-lead">Bài 5 đi trọn một vòng merge request trên GitLab với module vinc_course: nhánh theo issue, push, mô tả MR, sửa theo góp ý bằng commit mới, merge, dọn nhánh và hiểu vì sao main được bảo vệ.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-merge-request-gitlab-quy-trinh-review.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Merge request (MR) là nơi cả nhóm xem, bàn luận và duyệt thay đổi trước khi nó vào nhánh chính.</strong> Bài này đi trọn một vòng trên GitLab với module <code>vinc_course</code>: tạo nhánh theo issue, push, mở MR với mô tả tốt và <code>Closes #12</code>, sửa theo góp ý của reviewer bằng cách push thêm commit, merge, dọn nhánh, và hiểu vì sao <code>main</code> thường bị bảo vệ không cho push thẳng. Các lệnh chạy thật trên repo giả lập; phần thao tác giao diện lấy theo tài liệu GitLab.</p>
+                </div>
+
+                <h2 id="mr-la-gi">Merge request là gì và vì sao doanh nghiệp bắt buộc dùng</h2>
+                <p>Ở bài 3 bạn tự gõ <code>git merge</code> trên máy mình. Làm vậy trong nhóm sẽ có rủi ro: code chưa ai xem đã vào nhánh chính, và nếu hỏng thì cả nhóm cùng chịu. Merge request giải quyết bằng một bước chặn ở giữa. Theo tài liệu GitLab, MR là nơi tập trung để nhóm review code, thảo luận và theo dõi thay đổi; trong một MR bạn thấy mô tả, các thay đổi code kèm góp ý ngay tại dòng, thông tin pipeline CI/CD, báo cáo khả năng merge, bình luận và danh sách commit.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-vi-g05">
+                        <title id="dg-vi-g05">Đường đi của một tính năng từ máy bạn tới main</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">Máy bạn</text>
+                        <text class="dg-text" x="18" y="115">nhánh + commit</text>
+                        <rect class="dg-accent" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">Merge request</text>
+                        <text class="dg-text" x="184" y="115">mô tả, reviewer</text>
+                        <rect class="dg-box" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Review và CI</text>
+                        <text class="dg-text" x="350" y="115">thread, approve</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">Nhánh main</text>
+                        <text class="dg-text" x="516" y="115">đã bảo vệ</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">git push</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">reviewer</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">merge</text>
+                        <text class="dg-text" x="4" y="150">Nhánh chính được bảo vệ: thay đổi chỉ vào qua merge request đã qua review.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Một MR có hai vai: <strong>assignee</strong> (người sở hữu, thường là tác giả, chịu trách nhiệm tiến độ) và <strong>reviewer</strong> (người xem code, góp ý, và nếu đủ điều kiện thì approve). GitLab gọi tính năng này là <em>merge request</em>; GitHub gọi là <em>pull request</em>, nhưng quy trình gần như giống hệt.</p>
+
+                <h2 id="quy-trinh">Một vòng đầy đủ: từ issue đến main</h2>
+                <p>Giả sử issue #12 trên GitLab yêu cầu “thêm học phí cho khóa học”. Bước đầu là chắc chắn bạn bắt đầu từ <code>main</code> mới nhất, rồi tạo nhánh. Tài liệu GitLab cho biết nhánh có tiền tố là mã issue (ví dụ <code>12-course-price</code>) giúp GitLab điền sẵn tiêu đề và liên kết issue khi mở MR. Dòng thứ hai của commit (<code>-m</code> lần hai) ghi <code>Closes #12</code> để issue tự đóng khi MR được merge:</p>
+<pre><code>$ git switch main
+Your branch is up to date with 'origin/main'.
+Already on 'main'
+$ git pull
+Already up to date.
+$ git switch -c 12-course-price
+Switched to a new branch '12-course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí" -m "Closes #12"
+[12-course-price 25ea246] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)
+$ git push -u origin 12-course-price
+branch '12-course-price' set up to track 'origin/12-course-price'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      12-course-price -&gt; 12-course-price
+$ git log -1 --format=%B
+[IMP] vinc_course: thêm trường học phí
+
+Closes #12</code></pre>
+                <p>Sau khi push, mở GitLab, vào <em>Code → Merge requests</em> và chọn tạo MR mới cho nhánh vừa đẩy (nhiều bản GitLab còn hiện sẵn nút gợi ý ngay trên trang dự án). Điền tiêu đề, mô tả, chọn assignee là bạn và một hoặc hai reviewer; tick <em>Delete source branch when merge request accepted</em> để nhánh nguồn tự xóa sau khi merge. Phần mô tả là chỗ đáng đầu tư nhất, ví dụ:</p>
+<pre><code>## Mục đích
+Thêm trường học phí cho khóa học để bộ phận kinh doanh báo giá.
+
+## Thay đổi
+- models/course.py: thêm trường price (Float)
+- views/course_views.xml: hiển thị price trên form và list
+
+## Cách kiểm tra
+1. Nâng cấp module: odoo-bin -u vinc_course -d vinc_test
+2. Mở Khóa học, nhập học phí, lưu
+
+Closes #12</code></pre>
+                <p>Reviewer sẽ để lại góp ý trên từng dòng. Theo tài liệu, các <em>thread</em> chưa resolve sẽ chặn việc merge, còn bình luận đơn thì không. Để sửa theo góp ý, bạn <strong>không</strong> tạo MR mới: chỉ cần commit và push thêm lên cùng nhánh, MR tự cập nhật. Lệnh <code>git log origin/main..HEAD</code> liệt kê đúng những commit mà MR đang chứa:</p>
+<pre><code>$ sed -i "s/Học phí/Học phí (VND)/" models/course.py
+$ git commit -am "[IMP] vinc_course: ghi rõ đơn vị học phí theo review"
+[12-course-price b190c76] [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   25ea246..b190c76  12-course-price -&gt; 12-course-price
+$ git log --oneline origin/main..HEAD
+b190c76 [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+25ea246 [IMP] vinc_course: thêm trường học phí</code></pre>
+                <p>Khi reviewer hài lòng và pipeline xanh, một người có quyền bấm <strong>Merge</strong>. Quy tắc mặc định theo tài liệu: nhánh mặc định (thường là <code>main</code>) được bảo vệ, chỉ Maintainer trở lên được merge vào đó; Developer merge được MR nhắm vào nhánh không bảo vệ. Dưới đây Bình đóng vai GitLab để bạn thấy kết quả trên lịch sử, rồi An dọn dẹp ở máy mình:</p>
+<pre><code># GitLab thực hiện bước này khi bấm Merge; ở đây Bình giả lập bằng lệnh
+$ cd ../vinc_course_binh
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+ * [new branch]      12-course-price -&gt; origin/12-course-price
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Already on 'main'
+$ git merge --no-ff origin/12-course-price -m "Merge branch '12-course-price' into 'main'"
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   47905cb..828392e  main -&gt; main
+$ git push origin --delete 12-course-price
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         12-course-price</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git pull
+Updating 47905cb..828392e
+Fast-forward
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..828392e  main       -&gt; origin/main
+$ git log --oneline --graph -n 4
+*   828392e Merge branch '12-course-price' into 'main'
+|\  
+| * b190c76 [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+| * 25ea246 [IMP] vinc_course: thêm trường học phí
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+$ git branch -d 12-course-price
+Deleted branch 12-course-price (was b190c76).
+$ git fetch --prune
+From git@gitlab.example.com:vinc/vinc_course
+ - [deleted]         (none)     -&gt; origin/12-course-price</code></pre>
+                <p>Đồ thị cho thấy merge commit ghép nhánh <code>12-course-price</code> vào <code>main</code>, kèm hai commit của MR. Với thiết lập thật, GitLab còn cho chọn <em>squash</em> (gộp các commit của MR thành một) khi merge; bài 8 giải thích squash.</p>
+                <p>Một thói quen nhỏ nhưng giá trị: ngay sau khi MR của bạn được merge, hãy chuyển về <code>main</code>, <code>git pull</code> rồi mới tạo nhánh kế tiếp. Nếu bỏ qua, nhánh mới sẽ tách từ <code>main</code> cũ và MR sau dễ xung đột hoặc kéo theo commit đã merge. Tương tự, đừng để nhánh đã merge nằm lại: xóa cả bản cục bộ lẫn bản trên GitLab như ở bài 4.</p>
+
+                <h2 id="approve">Approve, auto-merge và vai trò của từng gói GitLab</h2>
+                <p>Cách duyệt khác nhau tùy gói GitLab. Theo tài liệu, trên gói Free mọi người từ vai trò Developer trở lên đều có thể approve MR nhưng việc approve chỉ mang tính tùy chọn, không ngăn được merge. Gói Premium và Ultimate cho phép đặt <em>quy tắc bắt buộc</em>: số người duyệt tối thiểu, loại reviewer (backend, frontend, QA...) hoặc dùng file <code>CODEOWNERS</code> để chỉ định người duyệt theo từng thư mục; chưa đủ approval thì không merge được. Khi reviewer đã hài lòng mà pipeline vẫn đang chạy, họ có thể đặt MR ở chế độ <em>auto-merge</em>: khi mọi điều kiện đạt, GitLab tự merge mà bạn không phải làm gì thêm.</p>
+
+                <h2 id="bao-ve">Vì sao không push thẳng được vào main</h2>
+                <p>Theo tài liệu GitLab, nhánh mặc định của repo được bảo vệ sẵn. Nhánh bảo vệ kiểm soát ai được merge và push, ngăn xóa nhầm và có thể bắt buộc review. Maintainer cấu hình ở <em>Settings → Repository → Branch rules</em>. Để bạn thấy hiệu ứng, ví dụ này dùng một hook trên “GitLab” giả để từ chối push vào <code>main</code>; thông báo <em>remote:</em> do chính ta viết, còn GitLab thật sẽ in lời nhắn của riêng nó, nhưng dòng cuối <em>remote rejected</em> thì giống nhau:</p>
+<pre><code>$ echo "# thử đẩy thẳng" &gt;&gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main a5b2c69] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git push
+remote: Nhánh main được bảo vệ: hãy push nhánh riêng và mở merge request.        
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [remote rejected] main -&gt; main (pre-receive hook declined)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'</code></pre>
+                <p>Commit đã nằm trên <code>main</code> cục bộ. Cách xử lý chuẩn: giữ commit bằng cách tạo nhánh từ đây rồi push nhánh đó, sau đó đưa <code>main</code> cục bộ về lại đúng <code>origin/main</code> (lệnh <code>git reset --hard</code> sẽ được giải thích ở bài 7; hãy chắc chắn commit đã nằm an toàn trên nhánh mới trước khi chạy):</p>
+<pre><code>$ git switch -c fix/readme
+Switched to a new branch 'fix/readme'
+$ git push -u origin fix/readme
+branch 'fix/readme' set up to track 'origin/fix/readme'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      fix/readme -&gt; fix/readme
+$ git switch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+Switched to branch 'main'
+$ git reset --hard origin/main
+HEAD is now at 828392e Merge branch '12-course-price' into 'main'
+$ git status -sb
+## main...origin/main</code></pre>
+
+                <h2 id="mr-tot">Viết một merge request dễ duyệt</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Nên</th><th>Vì sao</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>MR nhỏ, một mục đích</td><td>Reviewer đọc nhanh và bắt lỗi tốt hơn; dễ hoàn tác nếu cần</td></tr>
+                            <tr><td>Mô tả rõ lý do, thay đổi, cách kiểm tra</td><td>Người duyệt không phải đoán bạn muốn gì</td></tr>
+                            <tr><td>Liên kết issue bằng <code>Closes #12</code></td><td>Theo tài liệu, các từ như Close/Closes, Fix/Fixes, Resolve/Resolves, Implement/Implements đứng trước tham chiếu issue sẽ tự đóng issue khi merge</td></tr>
+                            <tr><td>Mở MR sớm</td><td>Tài liệu khuyên tạo MR sớm để nhóm có thời gian bắt lỗi; nếu chưa xong, báo rõ trong tiêu đề hoặc mô tả</td></tr>
+                            <tr><td>Tự đọc lại diff trước khi gửi</td><td>Bắt được <code>print</code> quên xóa, file thừa, mật khẩu lỡ commit</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="trong-odoo">Reviewer nhìn gì trong một MR của module Odoo</h2>
+                <ul>
+                    <li><strong>Quyền truy cập:</strong> model mới đã có dòng trong <code>ir.model.access.csv</code> chưa (bài 8 series Odoo).</li>
+                    <li><strong>Manifest:</strong> file XML mới đã nằm trong <code>data</code> của <code>__manifest__.py</code> và đúng thứ tự phụ thuộc chưa.</li>
+                    <li><strong>Nâng cấp module:</strong> đã chạy <code>-u vinc_course</code> trên một CSDL thử và không báo lỗi chưa.</li>
+                    <li><strong>Phạm vi:</strong> MR có sửa nhầm module khác hoặc kéo theo file không liên quan không; Odoo cũng khuyên tránh một commit đụng nhiều module cùng lúc.</li>
+                    <li><strong>Bí mật:</strong> không có mật khẩu, API key hay <code>odoo.conf</code> thật trong diff.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Push thẳng lên <code>main</code> bị chặn.</strong> Đừng cố ép. Tạo nhánh từ commit hiện tại, push nhánh đó và mở MR như ở phần trên.</li>
+                        <li><strong>Tạo MR mới mỗi lần sửa theo góp ý.</strong> Chỉ cần push thêm commit lên cùng nhánh; MR cũ tự cập nhật và giữ nguyên toàn bộ thảo luận.</li>
+                        <li><strong>MR báo xung đột với nhánh đích.</strong> Có người đã sửa cùng dòng trên <code>main</code> trong lúc bạn làm. Hãy lấy <code>main</code> mới về nhánh của bạn và giải quyết xung đột ở máy (bài 6), rồi push lại.</li>
+                        <li><strong>MR to như một dự án.</strong> Hàng chục file và nhiều mục đích khiến reviewer duyệt qua loa. Tách thành nhiều MR nối tiếp nhau; GitLab còn tự chuyển đích của MR phụ thuộc khi MR trước được merge.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>MR là cổng review: code chỉ vào nhánh chính sau khi có người xem và pipeline đạt.</li>
+                    <li>Quy trình: nhánh theo issue → commit → push → mở MR → sửa theo góp ý bằng commit mới → merge → dọn nhánh.</li>
+                    <li><code>Closes #12</code> trong commit hoặc mô tả tự đóng issue khi merge.</li>
+                    <li>Nhánh mặc định được bảo vệ: push thẳng bị từ chối, hãy đi qua MR.</li>
+                </ul>
+                <p>Khi hai MR cùng sửa một chỗ, bạn sẽ gặp <strong>xung đột</strong>. Đó là điều đáng sợ nhất với người mới, và cũng dễ hơn bạn nghĩ. Bài 6 hướng dẫn đọc các dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, sửa tay và hoàn tất merge.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Merge request và pull request khác nhau không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cùng một khái niệm: đề nghị gộp một nhánh vào nhánh khác kèm review. GitLab gọi là merge request, GitHub gọi là pull request. Lệnh Git phía bạn giống hệt, chỉ khác giao diện web.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Sửa theo góp ý của reviewer có phải tạo merge request mới không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Bạn commit thêm rồi push lên cùng nhánh, merge request tự cập nhật và giữ nguyên toàn bộ thảo luận. Khi xong, bạn đánh dấu các thread là đã resolve.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao để issue tự đóng khi merge request được merge?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Ghi một từ khóa kèm tham chiếu issue trong mô tả MR hoặc commit, ví dụ Closes #12. Theo tài liệu GitLab, các từ như Close, Fix, Resolve, Implement (và biến thể) đứng trước tham chiếu sẽ đóng issue khi MR merge.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao tôi không push trực tiếp lên main được?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nhánh mặc định của repo trên GitLab được bảo vệ mặc định: chỉ vai trò được cấp quyền mới merge hoặc push vào đó. Hãy push nhánh riêng và mở merge request; Maintainer chỉnh quy tắc tại Settings &gt; Repository &gt; Branch rules.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/repository/branches/protected/" target="_blank" rel="noopener">GitLab Docs – Protected branches</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/approvals/" target="_blank" rel="noopener">GitLab Docs – Merge request approvals</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/issues/managing_issues/" target="_blank" rel="noopener">GitLab Docs – Managing issues (closing patterns)</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-merge-request-gitlab-quy-trinh-review.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-merge-request-gitlab-quy-trinh-review.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-remote-clone-fetch-pull-push-ssh.html"><small>← Bài trước</small>Remote và SSH</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Giải quyết xung đột (conflict)</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#mr-la-gi">Merge request là gì và vì sao doanh nghiệp bắt buộc dùng</a></li>
+                        <li><a href="#quy-trinh">Một vòng đầy đủ: từ issue đến main</a></li>
+                        <li><a href="#approve">Approve, auto-merge và vai trò của từng gói GitLab</a></li>
+                        <li><a href="#bao-ve">Vì sao không push thẳng được vào main</a></li>
+                        <li><a href="#mr-tot">Viết một merge request dễ duyệt</a></li>
+                        <li><a href="#trong-odoo">Reviewer nhìn gì trong một MR của module Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

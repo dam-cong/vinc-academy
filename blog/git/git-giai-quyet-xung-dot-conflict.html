@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git conflict: cách giải quyết xung đột khi merge</title>
+    <meta name="description" content="Đọc dấu conflict khi Git báo xung đột merge, sửa tay trong __manifest__.py, kiểm tra, add và commit; biết cách merge --abort để làm lại." />
+    <meta name="keywords" content="git conflict, giải quyết xung đột git, merge conflict, git merge --abort, conflict marker, zdiff3, git diff --check, manifest odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git conflict: cách giải quyết xung đột khi merge" />
+    <meta property="og:description" content="Giải quyết xung đột Git từng bước: đọc dấu conflict, sửa __manifest__.py, git add, commit, merge --abort và kiểu hiển thị zdiff3." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-giai-quyet-xung-dot-conflict.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git conflict: cách giải quyết xung đột khi merge",
+                "description": "Giải quyết xung đột Git từng bước: đọc dấu conflict, sửa __manifest__.py, git add, commit, merge --abort và kiểu hiển thị zdiff3.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-giai-quyet-xung-dot-conflict.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Giải quyết xung đột"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Merge conflict là gì và có phải lỗi không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không phải lỗi. Đó là lúc Git không tự quyết định được phiên bản nào đúng, thường vì hai nhánh sửa cùng dòng hoặc một bên xóa file bên kia sửa. Git dừng merge, đánh dấu chỗ tranh chấp và chờ bạn quyết định."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao hủy merge đang xung đột để làm lại?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Chạy git merge --abort. Lệnh này đưa repo về trạng thái trước khi merge, miễn là bạn chưa commit kết quả merge."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Sao git commit báo unmerged files dù tôi đã sửa file?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Vì bạn chưa git add file đã sửa. Git chỉ coi xung đột là đã giải quyết khi file được đưa vào staging bằng git add (hoặc git rm với file bị xóa)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao biết còn sót dấu xung đột trong code?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Chạy git diff --check: Git cảnh báo leftover conflict marker kèm số dòng. Với file Python, py_compile hoặc việc chạy chương trình cũng báo lỗi cú pháp ở đúng dòng dấu."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-resolving-merge-conflicts.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Giải quyết xung đột</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 6 · Series Git thực chiến</span>
+            <h1>Git conflict: cách giải quyết xung đột khi merge</h1>
+            <p class="post-lead">Bài 6 xử lý một xung đột thật trong __manifest__.py của vinc_course: đọc các dấu conflict, sửa tay, kiểm tra, git add và commit, biết khi nào dùng merge --abort và bật kiểu zdiff3 cho dễ đọc.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-giai-quyet-xung-dot-conflict.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Xung đột (conflict) xảy ra khi Git không thể tự quyết định giữ phiên bản nào, thường vì hai nhánh sửa cùng một dòng; đó không phải lỗi mà là Git hỏi ý bạn.</strong> Bài này xử lý một xung đột có thật ở <code>__manifest__.py</code> của <code>vinc_course</code>: đọc ba loại dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, sửa tay, kiểm tra bằng <code>py_compile</code> và <code>git diff --check</code>, rồi <code>git add</code> và commit. Bạn cũng học cách <code>git merge --abort</code> để làm lại và bật kiểu hiển thị <code>zdiff3</code> cho dễ đọc.</p>
+                </div>
+
+                <h2 id="conflict-la-gi">Xung đột là gì và khi nào xảy ra</h2>
+                <p>Git gộp rất giỏi: nếu hai người sửa hai file khác nhau, hoặc cùng file nhưng ở hai vùng xa nhau, nó tự ghép mà không hỏi. Xung đột chỉ xuất hiện khi cả hai nhánh động vào <strong>cùng vùng dòng</strong>, hoặc một bên xóa file trong khi bên kia sửa nó. Lúc đó Git dừng việc merge giữa chừng, đánh dấu chỗ không chắc vào file và chờ bạn quyết định.</p>
+                <p>Trong module Odoo, vài chỗ “nóng” dễ xung đột vì mọi người cùng thêm vào một vị trí:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Chỗ hay xung đột</th><th>Vì sao</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__manifest__.py</code> → <code>data</code></td><td>Hai tính năng cùng thêm file vào danh sách; nếu cả danh sách nằm trên một dòng, hai thay đổi chạm đúng dòng đó</td></tr>
+                            <tr><td><code>security/ir.model.access.csv</code></td><td>Mỗi model mới thêm một dòng ở cuối file nên hai nhánh cùng chèn vào một chỗ</td></tr>
+                            <tr><td>View XML của cùng một model</td><td>Hai người cùng sửa một khối <code>&lt;field&gt;</code></td></tr>
+                            <tr><td>File dịch <code>.po</code></td><td>Được cập nhật hàng loạt nên nhiều nhánh cùng đổi các dòng giống nhau</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="doc-dau">Đọc các dấu đánh dấu xung đột</h2>
+                <p>Hãy làm một xung đột thật. Nhánh <code>feature/security</code> khai báo file quyền truy cập, nhánh <code>feature/views</code> khai báo file view, và cả hai sửa dòng <code>'data': []</code>. Merge nhánh đầu thì suôn sẻ (fast-forward) vì <code>main</code> chưa đổi gì; merge nhánh thứ hai thì đụng nhau:</p>
+<pre><code>$ git switch main
+Switched to branch 'main'
+$ git merge feature/security
+Updating 47905cb..3c18c3d
+Fast-forward
+ __manifest__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git merge feature/views
+Auto-merging __manifest__.py
+CONFLICT (content): Merge conflict in __manifest__.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git status
+On branch main
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add &lt;file&gt;..." to mark resolution)
+	both modified:   __manifest__.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git diff
+diff --cc __manifest__.py
+index a9ec392,9244d07..0000000
+--- a/__manifest__.py
++++ b/__manifest__.py
+@@@ -2,6 -2,6 +2,10 @@@
+      'name': 'Vinc Course',
+      'version': '1.0',
+      'depends': ['base'],
+++&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ +    'data': ['security/ir.model.access.csv'],
+++=======
++     'data': ['views/course_views.xml'],
+++&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views
+      'license': 'LGPL-3',
+  }
+$ cat __manifest__.py
+{
+    'name': 'Vinc Course',
+    'version': '1.0',
+    'depends': ['base'],
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    'data': ['security/ir.model.access.csv'],
+=======
+    'data': ['views/course_views.xml'],
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views
+    'license': 'LGPL-3',
+}</code></pre>
+                <p><code>git status</code> liệt kê file ở mục <em>Unmerged paths</em> với nhãn <em>both modified</em>, và gợi ý luôn hai lối thoát (sửa rồi commit, hoặc <code>--abort</code>). Bên trong file, Git chèn ba loại dấu:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Dấu</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></td><td>Bắt đầu phần của nhánh <strong>bạn đang đứng</strong> (ở đây là <code>main</code>)</td></tr>
+                            <tr><td><code>=======</code></td><td>Ranh giới giữa hai phiên bản</td></tr>
+                            <tr><td><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/views</code></td><td>Kết thúc phần của nhánh <strong>đang được gộp vào</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Lệnh <code>git diff</code> trong lúc đang xung đột in một dạng khác thường (<em>combined diff</em>): mỗi dòng có hai cột ký hiệu, cột trái so với nhánh của bạn, cột phải so với nhánh được gộp vào. Bạn không cần thuộc cách đọc; chỉ cần biết dạng này cho thấy chính xác những dòng còn tranh chấp và sẽ ngắn lại khi bạn giải quyết xong.</p>
+
+                <h2 id="giai-quyet">Giải quyết từng bước</h2>
+                <p>Quy trình luôn giống nhau, dù xung đột nhỏ hay lớn:</p>
+                <ul>
+                    <li><strong>Mở file</strong> và tìm các dấu (hoặc dùng editor có giao diện merge, như VS Code với các nút Accept Current/Incoming/Both).</li>
+                    <li><strong>Quyết định</strong> kết quả cuối: giữ một bên, giữ cả hai, hoặc viết lại. Ở đây cả hai đều đúng nên ta giữ cả hai file trong danh sách.</li>
+                    <li><strong>Xóa hết dấu</strong> <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> khỏi file.</li>
+                    <li><strong>Kiểm tra</strong> file còn chạy được (với Python: <code>py_compile</code>; với module Odoo: nâng cấp thử <code>-u vinc_course</code>).</li>
+                    <li><strong><code>git add</code></strong> file đó để báo “đã xử lý xong”, rồi <strong><code>git commit</code></strong> để hoàn tất merge.</li>
+                </ul>
+<pre><code>$ cat __manifest__.py
+{
+    'name': 'Vinc Course',
+    'version': '1.0',
+    'depends': ['base'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/course_views.xml',
+    ],
+    'license': 'LGPL-3',
+}
+$ python3 -m py_compile __manifest__.py &amp;&amp; echo OK
+OK
+$ git add __manifest__.py
+$ git status -s
+M  __manifest__.py
+$ git commit
+[main 4fb4729] Merge branch 'feature/views'
+$ git log --oneline --graph -n 5
+*   4fb4729 Merge branch 'feature/views'
+|\  
+| * 250f5a1 [ADD] vinc_course: khai báo view
+* | 3c18c3d [ADD] vinc_course: khai báo quyền truy cập
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Khi chạy <code>git commit</code> không có <code>-m</code>, Git mở trình soạn thảo với lời nhắn sẵn <em>“Merge branch …”</em>; bạn lưu và đóng là xong (trong ví dụ, editor được thay bằng lệnh rỗng nên không thấy). Theo quy ước Odoo, merge commit có thể gắn thẻ <code>[MERGE]</code>.</p>
+
+                <h2 id="huy">Sợ quá thì hủy: git merge --abort</h2>
+                <p>Bạn luôn có thể quay về trạng thái trước khi merge, miễn là chưa commit. <code>git merge --abort</code> đưa mọi thứ về như chưa từng chạy lệnh merge, và bạn có thể bắt đầu lại sau khi hỏi đồng nghiệp xem nên giữ phiên bản nào. Ví dụ dưới đây dùng một xung đột khác: hai nhánh cùng đổi nhãn trường <code>hours</code>.</p>
+<pre><code>$ git switch -c feature/hours-label
+Switched to a new branch 'feature/hours-label'
+$ sed -i "s/Số giờ/Số giờ học/" models/course.py
+$ git commit -qam "[IMP] vinc_course: đổi nhãn số giờ"
+$ git switch main
+Switched to branch 'main'
+$ sed -i "s/Số giờ/Tổng số giờ/" models/course.py
+$ git commit -qam "[IMP] vinc_course: đổi nhãn tổng số giờ"
+$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git merge --abort
+$ git status -sb
+## main</code></pre>
+
+                <h2 id="chon-ben">Khi chỉ cần lấy trọn một bên</h2>
+                <p>Nếu quyết định là giữ nguyên phiên bản của một nhánh cho cả file, không cần sửa tay. <code>git restore --theirs &lt;file&gt;</code> lấy phiên bản của nhánh đang gộp vào, còn <code>--ours</code> lấy phiên bản của nhánh bạn đứng. Sau đó vẫn phải <code>git add</code> và commit. Hãy dùng thận trọng vì cách này bỏ toàn bộ thay đổi của bên còn lại trong file đó:</p>
+<pre><code>$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ git restore --theirs models/course.py
+$ grep hours models/course.py
+    hours = fields.Integer(string='Số giờ học')
+$ git add models/course.py
+$ git commit -m "[MERGE] vinc_course: chọn nhãn số giờ học"
+[main 45067cb] [MERGE] vinc_course: chọn nhãn số giờ học</code></pre>
+
+                <h2 id="zdiff3">Hiển thị dễ đọc hơn với zdiff3</h2>
+                <p>Kiểu mặc định chỉ cho thấy hai phiên bản, nên đôi khi bạn không biết ban đầu dòng đó như thế nào. Tài liệu <code>git config</code> mô tả các kiểu <code>diff3</code> và <code>zdiff3</code> thêm vào phần gốc chung giữa hai nhánh (sau dấu <code>|||||||</code>), giúp bạn thấy mỗi bên đã đổi gì so với bản gốc. Bật bằng <code>git config --global merge.conflictStyle zdiff3</code>:</p>
+<pre><code>$ git config merge.conflictStyle zdiff3
+$ git merge feature/hours-label
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Automatic merge failed; fix conflicts and then commit the result.
+$ grep -n -A8 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;" models/course.py
+9:&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+10-    hours = fields.Integer(string='Tổng số giờ')
+11-||||||| 4fb4729
+12-    hours = fields.Integer(string='Số giờ')
+13-=======
+14-    hours = fields.Integer(string='Số giờ học')
+15-&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/hours-label
+$ git merge --abort</code></pre>
+                <p>Đọc kết quả trên: bản gốc là “Số giờ”, <code>main</code> đổi thành “Tổng số giờ”, nhánh kia đổi thành “Số giờ học”. Biết bản gốc, bạn nhanh chóng thấy hai bên đang cố nói cùng một ý khác từ ngữ, và chỉ cần chọn một cách gọi.</p>
+                <p>Ngoài việc sửa tay, bạn có thể dùng công cụ trực quan. Hầu hết editor hiện đại (VS Code, các IDE của JetBrains) hiển thị xung đột thành ba khung: bản của bạn, bản đến và kết quả, với nút chọn từng phần. Git còn có lệnh <code>git mergetool</code> mở công cụ hợp nhất mà bạn khai báo trong cấu hình <code>merge.tool</code>. Công cụ nào cũng chỉ giúp bạn <em>chọn nhanh hơn</em>; quyết định giữ gì vẫn là của bạn, nên hãy đọc kỹ kết quả cuối trước khi <code>git add</code>.</p>
+
+                <h2 id="xoa-sua">Xung đột kiểu một bên xóa, một bên sửa</h2>
+                <p>Không phải xung đột nào cũng có dấu trong file. Khi một nhánh xóa file còn nhánh kia vẫn sửa nó, Git báo <em>modify/delete</em> và để nguyên phiên bản đã sửa trong thư mục làm việc. <code>git status -s</code> hiện cặp chữ <code>UD</code> (đã xóa ở phía được gộp vào). Bạn chọn: giữ file thì <code>git add</code>, bỏ file thì <code>git rm</code>, rồi commit:</p>
+<pre><code>$ git switch -c feature/rm-notes
+Switched to a new branch 'feature/rm-notes'
+$ git rm -q NOTES.md
+$ git commit -qm "[REM] vinc_course: bỏ ghi chú"
+$ git switch main
+Switched to branch 'main'
+$ echo "thêm một dòng" &gt;&gt; NOTES.md
+$ git commit -qam "[IMP] vinc_course: bổ sung ghi chú"
+$ git merge feature/rm-notes
+CONFLICT (modify/delete): NOTES.md deleted in feature/rm-notes and modified in HEAD.  Version HEAD of NOTES.md left in tree.
+Automatic merge failed; fix conflicts and then commit the result.
+$ git status -s
+UD NOTES.md
+$ git rm -q NOTES.md
+$ git commit -m "[MERGE] vinc_course: bỏ ghi chú"
+[main bf19726] [MERGE] vinc_course: bỏ ghi chú</code></pre>
+
+                <h2 id="phong-tranh">Giảm xung đột ngay từ cách làm việc</h2>
+                <ul>
+                    <li><strong>Kéo <code>main</code> về nhánh của bạn thường xuyên</strong> (bài 3) để xung đột nhỏ và xuất hiện sớm.</li>
+                    <li><strong>Merge request nhỏ, nhánh ngắn hạn</strong> (bài 5): ít thời gian để người khác chạm vào cùng chỗ.</li>
+                    <li><strong>Mỗi mục một dòng</strong> trong danh sách <code>data</code> hay <code>depends</code>: hai thay đổi ở hai vị trí khác nhau sẽ tự gộp, không đụng nhau như khi cả danh sách nằm trên một dòng.</li>
+                    <li><strong>Thông báo cho nhau</strong> khi cùng sửa một file lớn như view chính hay file dịch.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Để sót dấu xung đột trong file.</strong> Nếu bạn quên xóa dấu, file hỏng ngay. Với Python, trình biên dịch báo lỗi cú pháp ở đúng dòng dấu; <code>git diff --check</code> cũng cảnh báo <em>leftover conflict marker</em> trước khi bạn commit:</li>
+                    </ul>
+<pre><code>$ python3 -m py_compile __manifest__.py
+  File "__manifest__.py", line 5
+    &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+    ^^
+SyntaxError: invalid syntax
+$ git diff --check
+__manifest__.py:5: leftover conflict marker
+__manifest__.py:7: leftover conflict marker
+__manifest__.py:9: leftover conflict marker
+$ git commit -m "merge"
+U	__manifest__.py
+error: Committing is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm &lt;file&gt;'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.</code></pre>
+
+                    <ul>
+                        <li>Ví dụ trên cũng cho thấy một lỗi thứ hai: gõ <code>git commit</code> khi chưa <code>git add</code> file đã sửa sẽ bị từ chối với <em>“Committing is not possible because you have unmerged files”</em>. Hãy <code>git add</code> để báo đã giải quyết.</li>
+                        <li><strong>Chọn bừa một bên cho nhanh.</strong> Mất thay đổi của đồng nghiệp là lỗi khó phát hiện nhất vì không có thông báo nào. Khi chưa chắc, hãy hỏi tác giả của commit bên kia (xem <code>git log --merge</code> hoặc <code>git blame</code> ở bài 12).</li>
+                        <li><strong>Hoảng và xóa cả repo.</strong> Bạn gần như không bao giờ cần làm vậy: <code>git merge --abort</code> đưa mọi thứ về lại, và dữ liệu đã commit luôn còn trong <code>.git</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Xung đột = hai bên sửa cùng dòng (hoặc sửa/xóa file); Git dừng và chờ bạn.</li>
+                    <li>Dấu: <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> (bên bạn) · <code>=======</code> · <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; nhánh</code> (bên được gộp).</li>
+                    <li>Sửa → xóa dấu → kiểm tra → <code>git add</code> → <code>git commit</code>; không chắc thì <code>git merge --abort</code>.</li>
+                    <li><code>git diff --check</code> bắt dấu sót; <code>merge.conflictStyle zdiff3</code> cho thấy cả bản gốc.</li>
+                </ul>
+                <p>Bạn đã biết xử lý khi mọi thứ va chạm. Còn khi chính bạn làm sai, lỡ sửa, lỡ commit hay lỡ đẩy? Bài 7 giới thiệu bộ công cụ hoàn tác: <code>restore</code>, <code>reset</code>, <code>revert</code> và <code>reflog</code> để cứu lại cả commit tưởng đã mất.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Merge conflict là gì và có phải lỗi không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không phải lỗi. Đó là lúc Git không tự quyết định được phiên bản nào đúng, thường vì hai nhánh sửa cùng dòng hoặc một bên xóa file bên kia sửa. Git dừng merge, đánh dấu chỗ tranh chấp và chờ bạn quyết định.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao hủy merge đang xung đột để làm lại?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Chạy git merge --abort. Lệnh này đưa repo về trạng thái trước khi merge, miễn là bạn chưa commit kết quả merge.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Sao git commit báo unmerged files dù tôi đã sửa file?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Vì bạn chưa git add file đã sửa. Git chỉ coi xung đột là đã giải quyết khi file được đưa vào staging bằng git add (hoặc git rm với file bị xóa).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao biết còn sót dấu xung đột trong code?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Chạy git diff --check: Git cảnh báo leftover conflict marker kèm số dòng. Với file Python, py_compile hoặc việc chạy chương trình cũng báo lỗi cú pháp ở đúng dòng dấu.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">Git – git-merge</a></li>
+                    <li><a href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener">Git – git-diff</a></li>
+                    <li><a href="https://git-scm.com/docs/git-restore" target="_blank" rel="noopener">Git – git-restore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (merge.conflictStyle)</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-giai-quyet-xung-dot-conflict.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-giai-quyet-xung-dot-conflict.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-merge-request-gitlab-quy-trinh-review.html"><small>← Bài trước</small>Merge request trên GitLab</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Hoàn tác an toàn: restore, reset, revert, reflog</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#conflict-la-gi">Xung đột là gì và khi nào xảy ra</a></li>
+                        <li><a href="#doc-dau">Đọc các dấu đánh dấu xung đột</a></li>
+                        <li><a href="#giai-quyet">Giải quyết từng bước</a></li>
+                        <li><a href="#huy">Sợ quá thì hủy: git merge --abort</a></li>
+                        <li><a href="#chon-ben">Khi chỉ cần lấy trọn một bên</a></li>
+                        <li><a href="#zdiff3">Hiển thị dễ đọc hơn với zdiff3</a></li>
+                        <li><a href="#xoa-sua">Xung đột kiểu một bên xóa, một bên sửa</a></li>
+                        <li><a href="#phong-tranh">Giảm xung đột ngay từ cách làm việc</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

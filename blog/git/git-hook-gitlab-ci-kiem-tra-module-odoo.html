@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git hook và GitLab CI: tự kiểm tra module Odoo</title>
+    <meta name="description" content="Viết hook pre-commit và commit-msg, chia sẻ bằng core.hooksPath, rồi thêm .gitlab-ci.yml để mỗi merge request tự lint và chạy test module Odoo." />
+    <meta name="keywords" content="git hook, pre-commit hook, commit-msg hook, core.hooksPath, gitlab ci, .gitlab-ci.yml, gitlab pipeline, odoo test ci, no-verify" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git hook và GitLab CI: tự kiểm tra module Odoo" />
+    <meta property="og:description" content="Git hook pre-commit, commit-msg và GitLab CI cho module Odoo: chặn bí mật, code lỗi, commit sai mẫu và tự chạy test trong merge request." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-hook-gitlab-ci-kiem-tra-module-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git hook và GitLab CI: tự kiểm tra module Odoo",
+                "description": "Git hook pre-commit, commit-msg và GitLab CI cho module Odoo: chặn bí mật, code lỗi, commit sai mẫu và tự chạy test trong merge request.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-hook-gitlab-ci-kiem-tra-module-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Git hook và GitLab CI"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Git hook là gì và nằm ở đâu?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Hook là chương trình Git tự chạy ở những thời điểm cố định như trước khi commit. Mặc định chúng nằm trong .git/hooks và phải có quyền thực thi; bạn đổi thư mục bằng core.hooksPath. Hook thoát với mã khác 0 thì thao tác bị hủy."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao chia sẻ hook cho cả nhóm?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Thư mục .git/hooks không được commit. Hãy để hook trong thư mục của repo, ví dụ .githooks/, commit nó, rồi mỗi người chạy một lần git config core.hooksPath .githooks, tốt nhất ghi vào README."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Có bỏ qua được hook không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Có. git commit --no-verify bỏ qua pre-commit và commit-msg. Vì vậy hook chỉ là lớp bảo vệ trên máy; nhóm cần pipeline CI trên GitLab làm chốt chặn chung."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "GitLab CI cần những gì để chạy?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cần ít nhất một runner hoạt động (GitLab.com cung cấp sẵn) và file .gitlab-ci.yml ở thư mục gốc repo khai báo các job. Khi bạn push, GitLab tạo pipeline và hiển thị kết quả trong merge request."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-hooks-gitlab-ci-odoo-module-checks.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Git hook và GitLab CI</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 11 · Series Git thực chiến</span>
+            <h1>Git hook và GitLab CI: tự kiểm tra module Odoo</h1>
+            <p class="post-lead">Bài 11 biến quy ước thành kiểm tra tự động: hook pre-commit và commit-msg chặn bí mật, code lỗi, lời nhắn sai mẫu ngay trên máy, rồi .gitlab-ci.yml chạy lint và test của module Odoo trong từng merge request.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-hook-gitlab-ci-kiem-tra-module-odoo.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Hook là kịch bản Git tự chạy ở những thời điểm cố định (trước khi commit, khi nhập lời nhắn...) và chặn thao tác nếu kịch bản thoát với mã khác 0.</strong> Bài này viết hai hook thật cho <code>vinc_course</code>: <code>pre-commit</code> chặn file bí mật và Python sai cú pháp, <code>commit-msg</code> bắt buộc tiêu đề dạng <code>[TAG] module: mô tả</code>; chia sẻ chúng cho cả nhóm bằng <code>core.hooksPath</code>. Sau đó là lớp kiểm tra thứ hai chạy trên server: <strong>GitLab CI</strong> với file <code>.gitlab-ci.yml</code> kiểm tra từng merge request, gồm cả bước chạy test của Odoo.</p>
+                </div>
+
+                <h2 id="hook-la-gi">Git hook là gì</h2>
+                <p>Quy ước ở bài 10 chỉ có giá trị khi mọi người tuân theo, mà con người thì hay quên lúc gấp. Hook để máy nhắc thay bạn. Theo tài liệu <code>githooks</code>, hook là chương trình nằm trong thư mục <code>hooks</code> của Git (hoặc thư mục bạn chỉ định bằng <code>core.hooksPath</code>) và <strong>phải có quyền thực thi</strong>; tên file chính là tên sự kiện. Nếu hook thoát với mã khác 0, thao tác tương ứng bị hủy.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hook</th><th>Chạy khi nào</th><th>Dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>pre-commit</code></td><td>Trước khi tạo commit, chưa có lời nhắn</td><td>Soát file: cú pháp, bí mật, dấu xung đột</td></tr>
+                            <tr><td><code>commit-msg</code></td><td>Sau khi có lời nhắn, nhận file chứa lời nhắn</td><td>Kiểm tra hoặc chuẩn hóa tiêu đề</td></tr>
+                            <tr><td><code>pre-push</code></td><td>Trước khi đẩy lên remote</td><td>Chạy test nhanh trước khi lên GitLab</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Hai điểm cần nhớ từ tài liệu: <code>pre-commit</code> và <code>commit-msg</code> đều có thể bị bỏ qua bằng <code>git commit --no-verify</code>, và thư mục <code>.git/hooks</code> <strong>không</strong> được commit nên không tự theo repo tới máy đồng nghiệp. Cách chia sẻ: đặt hook trong thư mục của repo (ví dụ <code>.githooks/</code>) rồi mỗi người chạy một lần <code>git config core.hooksPath .githooks</code>.</p>
+
+                <h2 id="pre-commit">Hook pre-commit: chặn bí mật và code lỗi</h2>
+                <p>Hook dưới đây duyệt từng file đã staging. Gặp <code>odoo.conf</code> hay <code>.env</code> nó từ chối; gặp file <code>.py</code> nó kiểm tra cú pháp bằng Python; cuối cùng <code>git diff --cached --check</code> bắt các dấu xung đột còn sót (bài 6). Lưu thành <code>.githooks/pre-commit</code> và cấp quyền thực thi:</p>
+<pre><code>#!/bin/sh
+# Chặn commit chứa file bí mật, dấu xung đột hoặc Python sai cú pháp
+for f in $(git diff --cached --name-only --diff-filter=ACM); do
+  case "$f" in
+    odoo.conf|.env) echo "pre-commit: không được commit $f" &gt;&amp;2; exit 1 ;;
+    *.py)
+      err=$(python3 -c "import ast,sys; ast.parse(open(sys.argv[1], encoding='utf-8').read())" "$f" 2&gt;&amp;1) || {
+        echo "pre-commit: lỗi cú pháp trong $f" &gt;&amp;2; echo "$err" | tail -n 1 &gt;&amp;2; exit 1; } ;;
+  esac
+done
+git diff --cached --check || exit 1</code></pre>
+                <p>Hook thứ hai kiểm tra tiêu đề commit theo mẫu Odoo của bài 10. Git đưa cho nó đường dẫn file chứa lời nhắn (<code>$1</code>); ta chỉ đọc dòng đầu. Các merge commit và revert do Git tự sinh được cho qua:</p>
+<pre><code>#!/bin/sh
+# Tiêu đề phải dạng [TAG] module: mô tả (cho phép Merge/Revert tự sinh)
+head -n 1 "$1" | grep -Eq '^(\[(ADD|IMP|FIX|REF|REM|REV|MOV|MERGE|REL|I18N|PERF|CLN|LINT)\] [a-z0-9_]+: .+|Merge |Revert )' || {
+  echo "commit-msg: tiêu đề phải có dạng [TAG] module: mô tả" &gt;&amp;2
+  echo "            ví dụ: [FIX] vinc_course: sửa nhãn số giờ" &gt;&amp;2
+  exit 1; }</code></pre>
+                <p>Bật hook cho repo và thử ngay. Lệnh commit đầu tiên chính là commit thêm hai hook, và nó đã phải qua cả hai kiểm tra:</p>
+<pre><code>$ git config core.hooksPath .githooks
+$ git add .githooks
+$ git commit -m "[ADD] vinc_course: hook kiểm tra commit"
+[main 8bf05a8] [ADD] vinc_course: hook kiểm tra commit
+ 2 files changed, 17 insertions(+)
+ create mode 100755 .githooks/commit-msg
+ create mode 100755 .githooks/pre-commit</code></pre>
+
+                <h2 id="thu-hook">Thử cho hook chặn</h2>
+                <p>Python sai cú pháp bị chặn trước khi thành commit; commit không được tạo và file vẫn nằm trong staging để bạn sửa:</p>
+<pre><code>$ echo "def broken(:" &gt; models/bad.py
+$ git add models/bad.py
+$ git commit -m "[ADD] vinc_course: file lỗi"
+pre-commit: lỗi cú pháp trong models/bad.py
+SyntaxError: invalid syntax
+$ git restore --staged models/bad.py
+$ rm models/bad.py</code></pre>
+                <p>Thử commit file cấu hình chứa mật khẩu (đã phải <code>add -f</code> vì <code>.gitignore</code> thường chặn nó):</p>
+<pre><code>$ echo "admin_passwd = secret" &gt; odoo.conf
+$ git add -f odoo.conf
+$ git commit -m "[ADD] vinc_course: cấu hình"
+pre-commit: không được commit odoo.conf
+$ git restore --staged odoo.conf
+$ rm odoo.conf</code></pre>
+                <p>Rồi đến lời nhắn sai mẫu. Hook <code>commit-msg</code> từ chối, in ví dụ đúng, và khi bạn viết lại cho đúng thì commit đi qua:</p>
+<pre><code>$ echo "# ghi chú" &gt;&gt; models/course.py
+$ git commit -am "update"
+commit-msg: tiêu đề phải có dạng [TAG] module: mô tả
+            ví dụ: [FIX] vinc_course: sửa nhãn số giờ
+$ git commit -am "[IMP] vinc_course: ghi chú trong model"
+[main 4062c7d] [IMP] vinc_course: ghi chú trong model
+ 1 file changed, 1 insertion(+)</code></pre>
+
+                <h2 id="bo-qua">Hai cách hook không chạy: --no-verify và quyền thực thi</h2>
+                <p>Cờ <code>--no-verify</code> cho phép bỏ qua hook, hợp lý khi bạn cần commit khẩn cấp hay commit tạm trên nhánh riêng. Nhưng chính vì ai cũng làm được, hook không thể là chốt chặn duy nhất:</p>
+<pre><code>$ echo "# thêm" &gt;&gt; models/course.py
+$ git commit --no-verify -am "update"
+[main 0f50aa1] update
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p>Lỗi thứ hai tinh vi hơn: nếu file hook mất quyền thực thi, Git âm thầm bỏ qua nó và chỉ để lại một dòng gợi ý (<code>hint</code>) ở cuối. Commit vẫn thành công dù kiểm tra không hề chạy:</p>
+<pre><code>$ chmod -x .githooks/pre-commit
+$ echo "# lần nữa" &gt;&gt; models/course.py
+$ git add models/course.py
+$ git commit -m "[IMP] vinc_course: thêm ghi chú"
+[main 1f8b27e] [IMP] vinc_course: thêm ghi chú
+ 1 file changed, 1 insertion(+)
+hint: The '.githooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.</code></pre>
+
+                <h2 id="gitlab-ci">Lớp kiểm tra thứ hai: GitLab CI</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-vi-g11">
+                        <title id="dg-vi-g11">Hook trên máy bạn và pipeline trên GitLab là hai lớp kiểm tra</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">git commit</text>
+                        <text class="dg-text" x="18" y="115">hook chạy ở đây</text>
+                        <rect class="dg-box" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">git push</text>
+                        <text class="dg-text" x="184" y="115">nhánh lên GitLab</text>
+                        <rect class="dg-accent" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Pipeline</text>
+                        <text class="dg-text" x="350" y="115">lint, test trong MR</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">Merge</text>
+                        <text class="dg-text" x="516" y="115">chỉ khi xanh</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">hook</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">.gitlab-ci.yml</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">review</text>
+                        <text class="dg-text" x="4" y="150">Hook bắt lỗi sớm nhưng bỏ qua được bằng --no-verify; pipeline mới là chốt chặn chung của cả nhóm.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Theo tài liệu GitLab, để chạy CI/CD bạn cần hai thứ: một <strong>runner</strong> (tác nhân thực thi job; GitLab.com cung cấp sẵn, còn GitLab nội bộ thì quản trị viên đăng ký) và file <code>.gitlab-ci.yml</code> ở thư mục gốc repo mô tả các job. Khi bạn push, GitLab tạo một <em>pipeline</em> gồm các job chạy theo thứ tự <em>stage</em>; kết quả hiện ngay trong merge request. File cho <code>vinc_course</code> gồm ba job: kiểm tra cú pháp Python, kiểm tra không lọt bí mật, và chạy test của Odoo:</p>
+<pre><code>stages: [lint, test]
+
+lint-python:
+  stage: lint
+  image: python:3.12
+  script:
+    - python -m compileall -q .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+no-secrets:
+  stage: lint
+  image: alpine:3
+  script:
+    - test ! -e odoo.conf
+    - '! grep -rIn "admin_passwd" --include="*.py" --include="*.xml" .'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+odoo-tests:
+  stage: test
+  image: registry.example.com/vinc/odoo-ci:20.0   # image nội bộ có sẵn Odoo 20 và PostgreSQL
+  script:
+    - odoo-bin -d ci_db -i vinc_course --test-tags /vinc_course --stop-after-init
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Từ khóa</th><th>Ý nghĩa (theo tài liệu GitLab)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>stages</code></td><td>Tên và thứ tự các stage; job cùng stage chạy song song</td></tr>
+                            <tr><td><code>image</code></td><td>Docker image dùng để chạy job</td></tr>
+                            <tr><td><code>script</code></td><td>Lệnh shell mà runner thực thi; một lệnh thoát khác 0 làm job thất bại</td></tr>
+                            <tr><td><code>rules</code></td><td>Điều kiện để job được tạo; ở đây chỉ chạy cho pipeline của merge request</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Hai job đầu dùng đúng những lệnh bạn có thể chạy thử trên máy trước khi push, và kết quả như dưới đây (không in gì và mã thoát 0 nghĩa là qua):</p>
+<pre><code>$ python3 -m compileall -q . ; echo "exit=$?"
+exit=0
+$ test ! -e odoo.conf &amp;&amp; echo "không có odoo.conf"
+không có odoo.conf
+$ ! grep -rIn "admin_passwd" --include="*.py" --include="*.xml" . ; echo "exit=$?"
+exit=0</code></pre>
+                <p>Job thứ ba dùng cờ <code>-i</code> để cài module vào CSDL <code>ci_db</code>, <code>--test-tags /vinc_course</code> để chỉ chạy test của module này (cú pháp <code>[-][tag][/module][:class][.method]</code> trong tài liệu test Odoo) và <code>--stop-after-init</code> để tiến trình thoát sau khi xong; test thất bại làm job thất bại. Tên image ở trên là ví dụ: nhóm bạn tự dựng một image có Odoo 20 và PostgreSQL rồi thay vào.</p>
+                <p>Khi quen, bạn sẽ gặp thêm vài từ khóa hữu ích khác trong tài liệu tham chiếu của GitLab:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Từ khóa</th><th>Dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>before_script</code></td><td>Lệnh chạy trước <code>script</code> của mỗi job, ví dụ cài thư viện</td></tr>
+                            <tr><td><code>cache</code></td><td>Giữ lại thư mục (như <code>.venv</code>) giữa các lần chạy để pipeline nhanh hơn</td></tr>
+                            <tr><td><code>artifacts</code></td><td>Đính kèm file kết quả của job, ví dụ báo cáo test</td></tr>
+                            <tr><td><code>allow_failure</code></td><td>Cho phép job lỗi mà không làm hỏng cả pipeline (hợp với kiểm tra cảnh báo)</td></tr>
+                            <tr><td><code>variables</code></td><td>Khai báo biến môi trường cho job, ví dụ tên CSDL kiểm thử</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Một mẹo giữ mọi thứ đồng nhất: đưa các lệnh kiểm tra vào một file trong repo (ví dụ <code>scripts/check.sh</code>) rồi cho cả hook lẫn job CI gọi cùng file đó. Khi muốn thêm một quy tắc, bạn sửa ở một chỗ, và kết quả trên máy bạn khớp với kết quả trên GitLab.</p>
+
+                <h2 id="trong-odoo">Đưa vào quy trình nhóm</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Bước</th><th>Cách làm</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Cài hook cho người mới</td><td>Thêm dòng <code>git config core.hooksPath .githooks</code> vào mục “Bắt đầu” của README</td></tr>
+                            <tr><td>Bảo vệ <code>main</code></td><td>Chỉ merge qua MR (bài 5) và yêu cầu pipeline xanh trước khi merge</td></tr>
+                            <tr><td>Test của module</td><td>Viết test bằng <code>TransactionCase</code> của Odoo (bài 13 series Odoo) để job <code>odoo-tests</code> có gì để chạy</td></tr>
+                            <tr><td>Tăng dần</td><td>Bắt đầu với lint và kiểm tra bí mật, thêm test và triển khai khi nhóm đã quen</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Hook không chạy mà không ai biết.</strong> Thiếu quyền thực thi, hoặc đồng nghiệp chưa đặt <code>core.hooksPath</code>. Ví dụ ở trên cho thấy Git chỉ in một dòng hint. Hãy ghi bước cài hook vào README và dùng pipeline làm lớp bảo vệ chính.</li>
+                        <li><strong>Dùng <code>--no-verify</code> thành thói quen.</strong> Mỗi lần bỏ qua là một lần quy ước bị phá. Chỉ dùng cho trường hợp khẩn, và để pipeline bắt lại.</li>
+                        <li><strong>Hook quá chậm.</strong> Chạy cả bộ test trong <code>pre-commit</code> khiến mọi người né nó. Giữ hook dưới vài giây (cú pháp, bí mật), dồn việc nặng sang CI.</li>
+                        <li><strong>Job CI treo ở trạng thái chờ.</strong> Thường là chưa có runner hoạt động cho dự án; tài liệu GitLab hướng dẫn kiểm tra runner ở Settings → CI/CD. Hãy hỏi quản trị viên GitLab của công ty.</li>
+                        <li><strong>Sai thụt lề hoặc dấu nháy trong YAML.</strong> YAML nhạy cảm với khoảng trắng; dòng lệnh bắt đầu bằng <code>!</code> như trong job <code>no-secrets</code> phải đặt trong dấu nháy. Hãy kiểm tra file bằng công cụ lint YAML hoặc trình soạn pipeline trong GitLab trước khi push.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Hook là kịch bản chạy tự động; thoát mã khác 0 thì Git hủy thao tác. Cần quyền thực thi.</li>
+                    <li><code>pre-commit</code> soát file, <code>commit-msg</code> soát lời nhắn; chia sẻ qua thư mục trong repo và <code>core.hooksPath</code>.</li>
+                    <li>Hook bỏ qua được bằng <code>--no-verify</code> nên cần CI làm lớp bảo vệ chung.</li>
+                    <li><code>.gitlab-ci.yml</code> khai báo <code>stages</code>, job, <code>image</code>, <code>script</code>, <code>rules</code>; runner thực thi và kết quả hiện trong merge request.</li>
+                </ul>
+                <p>Bài cuối ghép mọi thứ lại. Bạn sẽ dùng <code>git blame</code> và <code>git bisect</code> để truy ra commit gây lỗi, rồi chạy trọn một chu kỳ làm việc: tính năng, merge request, hotfix và phát hành.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Git hook là gì và nằm ở đâu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Hook là chương trình Git tự chạy ở những thời điểm cố định như trước khi commit. Mặc định chúng nằm trong .git/hooks và phải có quyền thực thi; bạn đổi thư mục bằng core.hooksPath. Hook thoát với mã khác 0 thì thao tác bị hủy.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao chia sẻ hook cho cả nhóm?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Thư mục .git/hooks không được commit. Hãy để hook trong thư mục của repo, ví dụ .githooks/, commit nó, rồi mỗi người chạy một lần git config core.hooksPath .githooks, tốt nhất ghi vào README.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Có bỏ qua được hook không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Có. git commit --no-verify bỏ qua pre-commit và commit-msg. Vì vậy hook chỉ là lớp bảo vệ trên máy; nhóm cần pipeline CI trên GitLab làm chốt chặn chung.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>GitLab CI cần những gì để chạy?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cần ít nhất một runner hoạt động (GitLab.com cung cấp sẵn) và file .gitlab-ci.yml ở thư mục gốc repo khai báo các job. Khi bạn push, GitLab tạo pipeline và hiển thị kết quả trong merge request.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/githooks" target="_blank" rel="noopener">Git – githooks</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (core.hooksPath)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit (--no-verify)</a></li>
+                    <li><a href="https://docs.gitlab.com/ci/quick_start/" target="_blank" rel="noopener">GitLab Docs – Get started with GitLab CI/CD</a></li>
+                    <li><a href="https://docs.gitlab.com/ci/yaml/" target="_blank" rel="noopener">GitLab Docs – CI/CD YAML syntax reference</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-hook-gitlab-ci-kiem-tra-module-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-hook-gitlab-ci-kiem-tra-module-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-quy-uoc-commit-chien-luoc-nhanh.html"><small>← Bài trước</small>Quy ước commit và nhánh</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Blame, bisect và dự án tổng hợp</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#hook-la-gi">Git hook là gì</a></li>
+                        <li><a href="#pre-commit">Hook pre-commit: chặn bí mật và code lỗi</a></li>
+                        <li><a href="#thu-hook">Thử cho hook chặn</a></li>
+                        <li><a href="#bo-qua">Hai cách hook không chạy: --no-verify và quyền thực thi</a></li>
+                        <li><a href="#gitlab-ci">Lớp kiểm tra thứ hai: GitLab CI</a></li>
+                        <li><a href="#trong-odoo">Đưa vào quy trình nhóm</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

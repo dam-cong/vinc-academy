@@ -501,4 +501,228 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html"/>
   </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/linux/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/linux/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/linux/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/linux/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/linux/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/linux/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/linux/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/linux/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-giai-quyet-xung-dot-conflict.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-commit-conventions-branching-strategies.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-commit-conventions-branching-strategies.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-commit-conventions-branching-strategies.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"/>
+  </url>
 </urlset>

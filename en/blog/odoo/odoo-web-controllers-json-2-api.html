@@ -192,6 +192,8 @@
                 <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
             </div>
         </header>
+        <figure class="post-cover"><img src="../../../image/cover/odoo-web-controllers-json-2-api.webp" alt="" width="960" height="504" decoding="async"></figure>
+
 
         <div class="post-layout">
             <article class="prose">
@@ -275,19 +277,19 @@ class VincCourseController(http.Controller):
                 <figure class="diagram">
                     <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-en-12">
                         <title id="dg-en-12">Flow of one JSON-2 API call</title>
-                        <rect class="dg-box" x="10" y="15" width="180" height="96" rx="12" />
+                        <rect class="dg-box" x="10" y="15" width="198" height="96" rx="12" />
                         <text class="dg-title" x="26" y="43">External software</text>
                         <text class="dg-text" x="26" y="95">POST /json/2/model/method</text>
-                        <path class="dg-arrow" d="M192 63 h26 m-8 -6 l8 6 l-8 6" />
-                        <rect class="dg-accent" x="220" y="15" width="200" height="96" rx="12" />
-                        <text class="dg-title" x="236" y="43">Odoo</text>
-                        <text class="dg-text" x="236" y="76">1. Check the bearer API key</text><text class="dg-text" x="236" y="96">2. Apply the key owner's rights</text>
-                        <path class="dg-arrow" d="M422 63 h26 m-8 -6 l8 6 l-8 6" />
-                        <rect class="dg-box" x="450" y="15" width="180" height="96" rx="12" />
-                        <text class="dg-title" x="466" y="43">Model + method</text>
-                        <text class="dg-text" x="466" y="95">one transaction per call</text>
-                        <path class="dg-arrow" d="M540 113 v22 m-6 -8 l6 8 l6 -8" />
-                        <text class="dg-text" x="220" y="152">Success: HTTP 200 + JSON. Failure: 4xx/5xx + JSON error object (rollback)</text>
+                        <path class="dg-arrow" d="M210 63 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="236" y="15" width="198" height="96" rx="12" />
+                        <text class="dg-title" x="252" y="43">Odoo</text>
+                        <text class="dg-text" x="252" y="76">1. Check the bearer API key</text><text class="dg-text" x="252" y="96">2. Check the owner's rights</text>
+                        <path class="dg-arrow" d="M436 63 h18 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="458" y="15" width="172" height="96" rx="12" />
+                        <text class="dg-title" x="474" y="43">Model + method</text>
+                        <text class="dg-text" x="474" y="95">one transaction per call</text>
+                        <path class="dg-arrow" d="M541 113 v22 m-6 -8 l6 8 l6 -8" />
+                        <text class="dg-text" x="10" y="152">Success: HTTP 200 + JSON. Failure: 4xx/5xx + JSON error object (rollback)</text>
                     </svg>
                     <figcaption>Diagram by Vinc Academy based on the Odoo 20 documentation.</figcaption>
                 </figure>

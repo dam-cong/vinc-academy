@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git là gì? Cài đặt và cấu hình lần đầu cho dev</title>
+    <meta name="description" content="Hiểu Git và GitLab khác nhau thế nào, cài Git, đặt tên và email, nắm ba vùng làm việc rồi tạo repo và commit đầu tiên cho dự án vinc_course." />
+    <meta name="keywords" content="git là gì, cài đặt git, git config user.name, git init, git cho người mới, staging area, git gitlab, học git cơ bản" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git là gì? Cài đặt và cấu hình lần đầu cho dev" />
+    <meta property="og:description" content="Git là gì, cài đặt và cấu hình lần đầu: user.name, user.email, ba vùng làm việc, git init và commit đầu tiên cho dự án Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-la-gi-cai-dat-cau-hinh-lan-dau.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git là gì? Cài đặt và cấu hình lần đầu cho dev",
+                "description": "Git là gì, cài đặt và cấu hình lần đầu: user.name, user.email, ba vùng làm việc, git init và commit đầu tiên cho dự án Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-la-gi-cai-dat-cau-hinh-lan-dau.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Git là gì và cài đặt"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Git và GitLab khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Git là chương trình cài trên máy bạn để lưu lịch sử thay đổi của mã nguồn. GitLab là dịch vụ lưu repo trên máy chủ cho cả nhóm, có thêm merge request, phân quyền và CI. Bạn dùng Git trọn vẹn mà không cần GitLab; GitHub là dịch vụ tương tự GitLab."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Có bắt buộc phải đặt user.name và user.email không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Mỗi commit ghi tên và email tác giả, nên nên đặt ngay. Nếu bạn chưa đặt, nhiều máy vẫn commit được vì Git tự đoán từ tài khoản máy và in cảnh báo; nếu bật user.useConfigOnly hoặc Git không đoán được, commit bị từ chối với thông báo Author identity unknown."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên dùng nhánh mặc định là main hay master?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cả hai đều chạy được; Git cho phép tự chọn bằng init.defaultBranch. Nhiều nhóm dùng main và GitLab cũng đặt main cho dự án mới, nên bạn đặt git config --global init.defaultBranch main để thống nhất với nhóm."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Staging area dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Staging (index) là nơi bạn chọn những thay đổi sẽ vào commit kế tiếp bằng git add. Nhờ đó bạn sửa nhiều file nhưng chỉ commit những file liên quan nhau, giữ mỗi commit làm đúng một việc."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"what-is-git-install-first-time-setup.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Git là gì và cài đặt</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 1 · Series Git thực chiến</span>
+            <h1>Git là gì? Cài đặt và cấu hình lần đầu cho dev</h1>
+            <p class="post-lead">Bài đầu của series Git: phân biệt Git với GitLab, cài đặt, khai báo tên và email, hiểu ba vùng làm việc rồi tạo repo và commit đầu tiên cho module vinc_course.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 9 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-la-gi-cai-dat-cau-hinh-lan-dau.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Git là công cụ lưu lịch sử thay đổi của mã nguồn ngay trên máy bạn, còn GitLab hay GitHub là nơi cả nhóm chia sẻ và review.</strong> Bài này đưa bạn từ máy trống đến commit đầu tiên của repo <code>vinc_course</code>: cài Git, khai báo tên và email, tạo repo bằng <code>git init</code>, hiểu ba vùng (thư mục làm việc, staging, repo) và biết tự tra cứu bằng <code>git help</code>. Mọi lệnh trong bài đều đã chạy thật trên Git 2.47.</p>
+                </div>
+
+                <h2 id="git-la-gi">Git là gì và vì sao nhóm nào cũng dùng</h2>
+                <p>Hãy hình dung module <code>vinc_course</code> của bạn đang có 20 file Python và XML. Hôm nay bạn sửa model, mai sửa view, tuần sau đồng nghiệp thêm báo cáo. Nếu chỉ dùng thư mục thường, bạn sẽ có những thứ như <code>vinc_course_final</code>, <code>vinc_course_final_2</code> hay <code>vinc_course_dung_that</code>, và khi lỗi xuất hiện thì không ai biết ai đã đổi dòng nào. Git giải quyết đúng chỗ đó: nó chụp lại trạng thái của cả dự án mỗi khi bạn <em>commit</em>, kèm tên người sửa, thời điểm và lời nhắn giải thích.</p>
+                <p>Git là hệ thống quản lý phiên bản <strong>phân tán</strong>: mỗi máy giữ một bản sao đầy đủ của lịch sử, nên bạn xem log, so sánh hay tạo nhánh ngay cả khi không có mạng. Mạng chỉ cần khi bạn muốn đồng bộ với đồng nghiệp. Trong doanh nghiệp, điều này đi kèm một quy trình quen thuộc: mỗi người làm trên nhánh riêng, đẩy lên GitLab, mở merge request để đồng nghiệp xem lại rồi mới gộp vào nhánh chính. Cả quy trình đó sẽ được mở dần qua 12 bài của series; bài này đặt nền móng.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tên</th><th>Là gì</th><th>Bạn dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Git</strong></td><td>Chương trình dòng lệnh cài trên máy bạn</td><td>Commit, tạo nhánh, xem lịch sử, gộp thay đổi</td></tr>
+                            <tr><td><strong>GitLab</strong></td><td>Dịch vụ lưu repo của nhóm, có merge request, phân quyền và CI</td><td>Chia sẻ code, review, tự động kiểm tra</td></tr>
+                            <tr><td><strong>GitHub</strong></td><td>Dịch vụ tương tự GitLab (gọi là pull request)</td><td>Cùng mục đích; lệnh Git phía bạn giống hệt</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Điểm cần nhớ: <strong>Git không phụ thuộc GitLab</strong>. Bạn có thể dùng Git hoàn toàn trên máy, rồi sau này mới nối với GitLab hay GitHub. Series dùng GitLab vì nhiều doanh nghiệp tự dựng GitLab nội bộ cho code của khách hàng; mọi lệnh Git đều dùng được nguyên vẹn với GitHub.</p>
+
+                <h2 id="cai-dat">Cài đặt Git</h2>
+                <p>Cài một lần, dùng mãi. Theo trang tải về chính thức của Git, mỗi hệ điều hành có một cách quen thuộc:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hệ điều hành</th><th>Cách cài</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Windows</td><td>Tải <em>Git for Windows</em> từ git-scm.com, giữ các tùy chọn mặc định, dùng Git Bash hoặc terminal của VS Code</td></tr>
+                            <tr><td>Ubuntu / Debian</td><td><code>sudo apt install git</code></td></tr>
+                            <tr><td>macOS</td><td><code>brew install git</code>, hoặc chạy <code>git</code> lần đầu để hệ thống mời cài Xcode Command Line Tools</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Sau khi cài, mở terminal và chạy <code>git --version</code>. Series này kiểm thử trên Git 2.47; các lệnh hiện đại như <code>git switch</code> và <code>git restore</code> có từ bản 2.23, nên bất kỳ bản 2.30 trở lên đều đủ dùng.</p>
+
+                <h2 id="cau-hinh">Cấu hình lần đầu: tên, email, nhánh mặc định</h2>
+                <p>Mỗi commit ghi lại tác giả, nên việc đầu tiên là nói cho Git biết bạn là ai. Hãy dùng đúng email bạn đăng ký trên GitLab để commit được gắn vào tài khoản của bạn. Ba cài đặt khác cũng nên đặt ngay: nhánh mặc định của repo mới (<code>main</code>), và trình soạn thảo mà Git mở khi cần bạn gõ lời nhắn dài.</p>
+<pre><code>$ git --version
+git version 2.47.3
+$ git config --global user.name "Nguyễn Văn An"
+$ git config --global user.email "an.nguyen@example.com"
+$ git config --global init.defaultBranch main
+$ git config --global core.editor "code --wait"
+$ git config --global --list --show-origin
+file:~/.gitconfig	user.name=Nguyễn Văn An
+file:~/.gitconfig	user.email=an.nguyen@example.com
+file:~/.gitconfig	init.defaultbranch=main
+file:~/.gitconfig	core.editor=code --wait</code></pre>
+                <p>Cờ <code>--global</code> lưu vào file <code>.gitconfig</code> trong thư mục home của bạn (kết quả trên cho thấy nguồn nhờ <code>--show-origin</code>). Git còn hai tầng nữa, tầng sau ghi đè tầng trước:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tầng</th><th>Cờ</th><th>Lưu ở</th><th>Phạm vi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>system</td><td><code>--system</code></td><td>File cấu hình của hệ thống</td><td>Mọi người dùng trên máy</td></tr>
+                            <tr><td>global</td><td><code>--global</code></td><td><code>~/.gitconfig</code></td><td>Mọi repo của bạn</td></tr>
+                            <tr><td>local</td><td><code>--local</code> (mặc định)</td><td><code>.git/config</code></td><td>Chỉ repo hiện tại</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Tầng <em>local</em> rất hữu ích khi bạn dùng một máy cho cả dự án công ty lẫn dự án cá nhân: đặt email công ty ở global, rồi trong repo cá nhân chạy <code>git config user.email "ban@example.com"</code> (không cờ) để chỉ repo đó dùng email khác. </p>
+
+                <h2 id="ba-vung">Ba vùng làm việc: hiểu một lần dùng cả đời</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-vi-g01">
+                        <title id="dg-vi-g01">Ba vùng làm việc của Git và remote</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">Thư mục</text>
+                        <text class="dg-title" x="18" y="86">làm việc</text>
+                        <text class="dg-text" x="18" y="115">file bạn đang sửa</text>
+                        <rect class="dg-accent" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">Staging</text>
+                        <text class="dg-title" x="184" y="86">(index)</text>
+                        <text class="dg-text" x="184" y="115">thứ sẽ commit</text>
+                        <rect class="dg-box" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Repo cục bộ</text>
+                        <text class="dg-text" x="350" y="115">lịch sử trong .git</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">Remote</text>
+                        <text class="dg-text" x="516" y="115">GitLab của nhóm</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">git add</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">git commit</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">git push</text>
+                        <text class="dg-text" x="4" y="150">Chiều ngược lại: git restore làm mới thư mục làm việc; git fetch/pull mang commit từ remote về.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Hầu hết nhầm lẫn của người mới đều đến từ việc không phân biệt ba nơi mà file có thể nằm:</p>
+                <ul>
+                    <li><strong>Thư mục làm việc</strong> là các file bạn thấy và sửa hằng ngày.</li>
+                    <li><strong>Staging</strong> (còn gọi là <em>index</em>) là “giỏ hàng” chứa những thay đổi bạn đã chọn cho lần commit kế tiếp, nhờ <code>git add</code>.</li>
+                    <li><strong>Repo cục bộ</strong> là lịch sử commit, nằm trong thư mục ẩn <code>.git</code>. Xóa <code>.git</code> là mất toàn bộ lịch sử, nên đừng nghịch thư mục này.</li>
+                </ul>
+                <p>Tách staging khỏi commit nghe thừa, nhưng đó là lợi thế lớn: bạn có thể sửa năm file mà chỉ commit hai file liên quan, giữ mỗi commit làm đúng một việc. Vùng thứ tư, <strong>remote</strong>, chỉ xuất hiện khi bạn nối repo với GitLab ở bài 4.</p>
+
+                <h2 id="repo-dau-tien">Tạo repo đầu tiên cho vinc_course</h2>
+                <p><code>git init</code> biến một thư mục thành repo bằng cách tạo thư mục <code>.git</code> bên trong. <code>git status</code> là lệnh bạn sẽ gõ nhiều nhất: nó luôn cho biết bạn đang ở nhánh nào và cái gì đang chờ xử lý.</p>
+<pre><code>$ mkdir vinc_course
+$ cd vinc_course
+$ git init
+Initialized empty Git repository in ~/work/vinc_course/.git/
+$ git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+$ ls -A
+.git
+$ cat .git/HEAD
+ref: refs/heads/main</code></pre>
+                <p>Tệp <code>.git/HEAD</code> cho biết nhánh hiện tại là <code>main</code>, đúng như ta đã đặt ở <code>init.defaultBranch</code>. Giờ thử vòng đời nhỏ nhất: tạo file, đưa vào staging, commit.</p>
+<pre><code>$ echo "# vinc_course" &gt; README.md
+$ git status -s
+?? README.md
+$ git add README.md
+$ git status -s
+A  README.md
+$ git commit -m "Thêm README cho vinc_course"
+[main (root-commit) dce25f0] Thêm README cho vinc_course
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git log --oneline
+dce25f0 Thêm README cho vinc_course
+$ git status
+On branch main
+nothing to commit, working tree clean</code></pre>
+                <p>Hãy đọc kỹ hai lần <code>git status -s</code>: dấu <code>??</code> nghĩa là file chưa được theo dõi, còn <code>A</code> ở cột đầu nghĩa là file đã nằm trong staging. Mã băm như <code>dce25f0</code> là định danh ngắn của commit; trên máy bạn nó sẽ khác vì phụ thuộc thời gian và tác giả.</p>
+
+                <h2 id="tro-giup">Tự tra cứu khi quên lệnh</h2>
+                <p>Không ai nhớ hết tùy chọn của Git, kể cả người dùng lâu năm. Có hai thói quen cứu bạn: <code>git help &lt;lệnh&gt;</code> (hoặc <code>git &lt;lệnh&gt; --help</code>) mở trang hướng dẫn đầy đủ, còn <code>git &lt;lệnh&gt; -h</code> in nhanh cú pháp ngay trong terminal. Gõ sai tên lệnh, Git còn gợi ý lệnh gần giống bằng thông báo <em>“is not a git command”</em>.</p>
+                <p>Muốn gõ ít hơn, bạn đặt <em>alias</em> cho lệnh hay dùng. Ví dụ dưới đây biến <code>git st</code> thành bản rút gọn của <code>git status</code>, rồi dùng <code>git config --get</code> và <code>--show-origin</code> để biết một giá trị đang lấy từ đâu:</p>
+<pre><code>$ git config --global alias.st "status -sb"
+$ git st
+## main
+$ git config --get user.name
+Nguyễn Văn An
+$ git config --show-origin user.email
+file:~/.gitconfig	an.nguyen@example.com</code></pre>
+
+                <h2 id="trong-odoo">Bạn gặp Git ở đâu khi làm Odoo</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tình huống</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Lấy mã nguồn Odoo</td><td><code>git clone --branch 20.0 --single-branch https://github.com/odoo/odoo.git</code></td></tr>
+                            <tr><td>Quản lý module riêng</td><td>Repo <code>vinc_course</code> chứa thư mục module, thêm vào <code>--addons-path</code></td></tr>
+                            <tr><td>Chuẩn commit của Odoo</td><td>Tài liệu Odoo yêu cầu đặt <code>user.email</code> và <code>user.name</code> trước khi commit, và có quy ước tiêu đề <code>[TAG] module: mô tả</code> (xem bài 10)</td></tr>
+                            <tr><td>Tách môi trường</td><td>Nhánh riêng cho từng khách hàng hay phiên bản Odoo</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Commit bằng danh tính sai.</strong> Nếu chưa cấu hình, nhiều máy vẫn commit được vì Git tự đoán tên và email từ tài khoản máy, nhưng sẽ in cảnh báo <em>“Your name and email address were configured automatically based on your username and hostname. Please check that they are accurate.”</em> Đừng bỏ qua dòng này. Cách sửa commit vừa tạo là <code>git commit --amend --reset-author</code> sau khi đã đặt đúng <code>user.name</code> và <code>user.email</code>.</li>
+                        <li><strong>Gặp “Author identity unknown”.</strong> Khi Git không đoán được (hoặc bạn bật <code>user.useConfigOnly</code> để cấm đoán), commit bị từ chối với thông báo dưới đây. Chỉ cần chạy hai lệnh <code>git config</code> mà nó gợi ý.</li>
+</ul>
+<pre><code>$ git commit -m "Thêm README"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: no email was given and auto-detection is disabled</code></pre>
+<ul>
+<li><strong>Tạo repo trong repo.</strong> Chạy <code>git init</code> bên trong một thư mục đã nằm trong repo khác sẽ tạo repo lồng nhau và làm <code>git status</code> khó hiểu. Hãy kiểm tra bằng <code>git status</code> trước khi <code>init</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Git lưu lịch sử ngay trên máy bạn; GitLab/GitHub chỉ là nơi chia sẻ và review.</li>
+                    <li>Cấu hình một lần: <code>user.name</code>, <code>user.email</code>, <code>init.defaultBranch</code>; tầng local ghi đè global.</li>
+                    <li>Ba vùng: thư mục làm việc → staging (<code>git add</code>) → repo (<code>git commit</code>); thêm remote khi đẩy lên GitLab.</li>
+                    <li><code>git status</code> luôn cho bạn biết bước tiếp theo; <code>git help</code> và <code>-h</code> giúp tự tra cứu.</li>
+                </ul>
+                <p>Bạn đã có repo và commit đầu tiên. Bài tiếp theo đi vào vòng lặp hằng ngày: sửa file, xem khác biệt bằng <code>git diff</code>, chọn thứ cần commit, đọc <code>git log</code> và loại những file không bao giờ nên vào repo bằng <code>.gitignore</code>.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Git và GitLab khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Git là chương trình cài trên máy bạn để lưu lịch sử thay đổi của mã nguồn. GitLab là dịch vụ lưu repo trên máy chủ cho cả nhóm, có thêm merge request, phân quyền và CI. Bạn dùng Git trọn vẹn mà không cần GitLab; GitHub là dịch vụ tương tự GitLab.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Có bắt buộc phải đặt user.name và user.email không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Mỗi commit ghi tên và email tác giả, nên nên đặt ngay. Nếu bạn chưa đặt, nhiều máy vẫn commit được vì Git tự đoán từ tài khoản máy và in cảnh báo; nếu bật user.useConfigOnly hoặc Git không đoán được, commit bị từ chối với thông báo Author identity unknown.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên dùng nhánh mặc định là main hay master?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cả hai đều chạy được; Git cho phép tự chọn bằng init.defaultBranch. Nhiều nhóm dùng main và GitLab cũng đặt main cho dự án mới, nên bạn đặt git config --global init.defaultBranch main để thống nhất với nhóm.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Staging area dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Staging (index) là nơi bạn chọn những thay đổi sẽ vào commit kế tiếp bằng git add. Nhờ đó bạn sửa nhiều file nhưng chỉ commit những file liên quan nhau, giữ mỗi commit làm đúng một việc.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial (A Tutorial Introduction to Git)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config</a></li>
+                    <li><a href="https://git-scm.com/docs/git-init" target="_blank" rel="noopener">Git – git-init</a></li>
+                    <li><a href="https://git-scm.com/docs/giteveryday" target="_blank" rel="noopener">Git – giteveryday (Everyday Git)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-la-gi-cai-dat-cau-hinh-lan-dau.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-la-gi-cai-dat-cau-hinh-lan-dau.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="index.html"><small>← Bài trước</small>← Về series</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Commit đầu tiên: status, add, log và .gitignore</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#git-la-gi">Git là gì và vì sao nhóm nào cũng dùng</a></li>
+                        <li><a href="#cai-dat">Cài đặt Git</a></li>
+                        <li><a href="#cau-hinh">Cấu hình lần đầu: tên, email, nhánh mặc định</a></li>
+                        <li><a href="#ba-vung">Ba vùng làm việc: hiểu một lần dùng cả đời</a></li>
+                        <li><a href="#repo-dau-tien">Tạo repo đầu tiên cho vinc_course</a></li>
+                        <li><a href="#tro-giup">Tự tra cứu khi quên lệnh</a></li>
+                        <li><a href="#trong-odoo">Bạn gặp Git ở đâu khi làm Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

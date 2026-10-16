@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Rebase: Tidy History and the Golden Rule for Teams</title>
+    <meta name="description" content="How rebase differs from merge: update a branch with git rebase main, fold commits with rebase -i and autosquash, fix conflicts, follow the golden rule." />
+    <meta name="keywords" content="git rebase, git rebase -i, git squash, git fixup, autosquash, force-with-lease, git pull --rebase, rebase vs merge" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Rebase: Tidy History and the Golden Rule for Teams" />
+    <meta property="og:description" content="Practical Git rebase: rebase vs merge, git rebase main, rebase -i fixup/squash, autosquash, rebase conflicts and the golden rule." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-rebase-tidy-history.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Rebase: Tidy History and the Golden Rule for Teams",
+                "description": "Practical Git rebase: rebase vs merge, git rebase main, rebase -i fixup/squash, autosquash, rebase conflicts and the golden rule.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-rebase-tidy-history.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Rebase and tidy history"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How does rebase differ from merge?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Merge joins two branches with a merge commit and keeps the history that split. Rebase replays your branch's commits on the new tip of the target, giving a straight history, but those commits get new hashes."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I not use rebase?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Do not rebase commits others have built on, such as main or a shared branch. The Git manual warns it leaves everyone downstream repairing their own history. Rebase your own branch freely."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why must I push --force-with-lease after a rebase?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Because rebase changes the commits' hashes, the remote copy is no longer an ancestor of your branch and a normal push is rejected. --force-with-lease overwrites but refuses if the remote has commits you have not seen, which is safer than --force."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do squash and fixup differ in rebase -i?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Both fold a commit into the one before it. squash keeps and combines both messages for you to edit; fixup discards the folded commit's message. Use fixup for small corrections such as wip or fix typo commits."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-rebase-lam-gon-lich-su.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Rebase and tidy history</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 8 · Practical Git Series</span>
+            <h1>Git Rebase: Tidy History and the Golden Rule for Teams</h1>
+            <p class="post-lead">Part 8 shows how rebase differs from merge: update a branch with git rebase main, combine small commits with rebase -i and autosquash, resolve rebase conflicts and follow the golden rule: never rebase what is shared.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <figure class="post-cover"><img src="../../../image/cover/git-rebase-tidy-history.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>Rebase “rewrites” a branch's commits so they sit on top of the latest tip of another branch, giving a straight, tidy history.</strong> This part uses <code>git rebase main</code> to update a feature branch, <code>git rebase -i</code> to combine small commits (<code>fixup</code>, <code>squash</code>, <code>reword</code>), <code>--autosquash</code> to fold small fix commits automatically, resolves conflicts during a rebase (where <em>ours</em> and <em>theirs</em> swap) and covers the <strong>golden rule</strong>: never rebase commits that are shared. Every command ran for real on the <code>vinc_course</code> repo.</p>
+                </div>
+
+                <h2 id="rebase-la-gi">What rebase is and how it differs from merge</h2>
+                <p>In part 3 you saw that <code>merge</code> joins two branches with a merge commit, preserving the “split then join” history. <code>rebase</code> does it differently: it takes your branch's own commits, sets them aside, moves the branch to the new tip of the target and then <strong>replays</strong> each commit on top. The result is a single straight line of history, as if you had started from the new tip all along.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 180" role="img" aria-labelledby="dg-en-g08">
+                        <title id="dg-en-g08">Rebase moves the branch's commits onto the new tip of main</title>
+                        <text class="dg-title" x="10" y="45">Before</text><text class="dg-title" x="10" y="130">After</text>
+                        <path class="dg-arrow" d="M130 40 H270" /><path class="dg-arrow" d="M200 40 L270 85 H340" />
+                        <circle class="dg-box" cx="130" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="45">C1</text>
+                        <circle class="dg-box" cx="200" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="200" y="45">C2</text>
+                        <circle class="dg-box" cx="270" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="45">C3</text>
+                        <circle class="dg-accent" cx="270" cy="85" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="90">F1</text>
+                        <circle class="dg-accent" cx="340" cy="85" r="16" /><text class="dg-title" text-anchor="middle" x="340" y="90">F2</text>
+                        <text class="dg-text" x="300" y="44">main</text><text class="dg-text" x="372" y="90">feature</text>
+                        <path class="dg-arrow" d="M130 130 H410" />
+                        <circle class="dg-box" cx="130" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="135">C1</text>
+                        <circle class="dg-box" cx="200" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="200" y="135">C2</text>
+                        <circle class="dg-box" cx="270" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="135">C3</text>
+                        <circle class="dg-accent" cx="340" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="340" y="135">F1'</text>
+                        <circle class="dg-accent" cx="410" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="410" y="135">F2'</text>
+                        <text class="dg-text" x="440" y="135">feature (rebased)</text>
+                        <text class="dg-text" x="10" y="165">F1' and F2' carry the same changes as F1 and F2 but are new commits (different hashes).</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>The thing to remember most: a replayed commit is <strong>no longer the old commit</strong>. The changes are the same but the parent differs, so the hash is new (<code>F1'</code> and <code>F2'</code> in the diagram). That is why rebase is only safe on commits nobody else builds on.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>merge</th><th>rebase</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>History</td><td>Has a merge commit; the moment of joining is visible</td><td>Straight, no merge commit</td></tr>
+                            <tr><td>Old commits</td><td>Keep their hashes</td><td>Recreated with new hashes</td></tr>
+                            <tr><td>Use it when</td><td>Joining shared branches; keeping a record</td><td>Tidying your own branch before review</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="cap-nhat">Updating a feature branch with rebase</h2>
+                <p>Suppose you work on the price branch with three messy commits (one “wip”, one “fix typo”) and have pushed it as a backup. Meanwhile <code>main</code> gained a README commit, so your branch is behind. The graph shows the two lines splitting:</p>
+<pre><code>$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường học phí"
+$ echo "# wip" &gt;&gt; models/course.py
+$ git commit -qam "wip"
+$ echo "# sửa lỗi gõ" &gt;&gt; models/course.py
+$ git commit -qam "fix typo"
+$ git push -q -u origin feature/course-price
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -qm "[ADD] vinc_course: README"
+$ git push -q
+$ git switch feature/course-price
+Your branch is up to date with 'origin/feature/course-price'.
+Switched to branch 'feature/course-price'
+$ git log --oneline --graph --all
+* eeb11a2 [ADD] vinc_course: README
+| * cffbf1a fix typo
+| * 394aee0 wip
+| * 4815c9b [IMP] vinc_course: thêm trường học phí
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Run <code>git rebase main</code> from the feature branch. Git replays each commit after the README commit; the graph is now one straight line and all three commits have new hashes:</p>
+<pre><code>$ git rebase main
+Rebasing (1/3)
+Rebasing (2/3)
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline --graph
+* 5ab820d fix typo
+* de07295 wip
+* 371e622 [IMP] vinc_course: thêm trường học phí
+* eeb11a2 [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>A practical note: a rebase without textual conflicts can still introduce logic errors, because your code now runs on top of your colleagues' new work. Re-run the tests or a trial module upgrade (<code>-u vinc_course</code>) before you push.</p>
+                <p>Because the commits changed hash while GitLab still holds the old ones, a plain <code>git push</code> is normally rejected. For <strong>your own branch</strong> the right tool is <code>--force-with-lease</code>: it overwrites the remote branch but refuses if the remote has commits you have not seen, so it will not trample someone else's work:</p>
+<pre><code>$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [rejected]        feature/course-price -&gt; feature/course-price (non-fast-forward)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+$ git push --force-with-lease
+To git@gitlab.example.com:vinc/vinc_course.git
+ + cffbf1a...5ab820d feature/course-price -&gt; feature/course-price (forced update)</code></pre>
+
+                <h2 id="squash">Combining small commits with interactive rebase</h2>
+                <p>Review is easier when the branch tells a short story. <code>git rebase -i main</code> opens a list (in your editor) of the branch's commits, each line starting with a command. You change the first word and save; Git then executes from top to bottom:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>pick</code></td><td>Keep the commit as is</td></tr>
+                            <tr><td><code>reword</code></td><td>Keep the content, edit the message</td></tr>
+                            <tr><td><code>edit</code></td><td>Stop so you can change the commit's content</td></tr>
+                            <tr><td><code>squash</code></td><td>Fold into the previous commit and combine both messages</td></tr>
+                            <tr><td><code>fixup</code></td><td>Fold into the previous commit and discard its message</td></tr>
+                            <tr><td><code>drop</code></td><td>Remove the commit entirely</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The lines starting with <code># editor:</code> below are the list Git opened. We change <code>pick</code> on lines 2 and 3 to <code>fixup</code> so “wip” and “fix typo” melt into the first commit:</p>
+<pre><code>$ git rebase -i main
+# editor: pick 371e622 [IMP] vinc_course: thêm trường học phí
+# editor: pick de07295 wip
+# editor: pick 5ab820d fix typo
+Rebasing (2/3)
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline --graph
+* 16412cc [IMP] vinc_course: thêm trường học phí
+* eeb11a2 [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git push --force-with-lease
+To git@gitlab.example.com:vinc/vinc_course.git
+ + 5ab820d...16412cc feature/course-price -&gt; feature/course-price (forced update)</code></pre>
+                <p>Three commits became one, and since it was rewritten you need <code>--force-with-lease</code> when pushing. If you know in advance which commit a small change fixes, create it with <code>git commit --fixup</code>; then <code>rebase -i --autosquash</code> puts the fix commit in the right place and turns it into <code>fixup</code> by itself (see the last line of the list):</p>
+<pre><code>$ echo "    level = fields.Char(string='Cấp độ')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ echo "# thiếu dấu" &gt;&gt; models/course.py
+$ git commit -q --fixup HEAD -a
+$ git log --oneline -n 3
+e12996a fixup! [IMP] vinc_course: thêm cấp độ
+01b13bf [IMP] vinc_course: thêm cấp độ
+16412cc [IMP] vinc_course: thêm trường học phí
+$ git rebase -i --autosquash main
+# editor: pick 16412cc [IMP] vinc_course: thêm trường học phí
+# editor: pick 01b13bf [IMP] vinc_course: thêm cấp độ
+# editor: fixup e12996a fixup! [IMP] vinc_course: thêm cấp độ
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline -n 3
+f5dc751 [IMP] vinc_course: thêm cấp độ
+16412cc [IMP] vinc_course: thêm trường học phí
+eeb11a2 [ADD] vinc_course: README</code></pre>
+                <p>GitLab also offers a <em>squash</em> option when merging a merge request, so many teams do not require interactive rebase. Even so, tidying your own branch is useful because you control each commit's message.</p>
+
+                <h2 id="xung-dot">Conflicts during a rebase: “ours” and “theirs” swap</h2>
+                <p>A rebase replays commits one by one so a conflict can arise at any step. The handling is as in part 6, but you finish with <code>git rebase --continue</code> instead of <code>git commit</code>. One source of confusion: according to the documentation, during a rebase <em>ours</em> is the already-rebased series starting from the target, and <em>theirs</em> is your working branch, so <strong>the sides are swapped</strong> compared with a merge. Example: <code>main</code> renamed the label to “Tổng số giờ” while your branch renamed it to “Số giờ học”:</p>
+<pre><code>$ git rebase main
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Rebasing (1/1)
+error: could not apply 5f72b8e... [IMP] vinc_course: đổi nhãn số giờ học
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm &lt;conflicted_files&gt;", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config advice.mergeConflict false"
+Could not apply 5f72b8e... [IMP] vinc_course: đổi nhãn số giờ học
+$ git status -sb
+## HEAD (no branch)
+UU models/course.py
+$ grep -n -A5 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;" models/course.py
+9:&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+10-    hours = fields.Integer(string='Tổng số giờ')
+11-=======
+12-    hours = fields.Integer(string='Số giờ học')
+13-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 5f72b8e ([IMP] vinc_course: đổi nhãn số giờ học)</code></pre>
+                <p>The part after <code>HEAD</code> is <code>main</code>'s version (the target), the lower part is your commit being replayed. We pick a combined label, then mark it resolved and let the rebase go on:</p>
+<pre><code>$ grep hours models/course.py
+    hours = fields.Integer(string='Tổng số giờ học')
+$ git add models/course.py
+$ git rebase --continue
+[detached HEAD aaf80fe] [IMP] vinc_course: đổi nhãn số giờ học
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Successfully rebased and updated refs/heads/feature/hours-label.
+$ git log --oneline --graph
+* aaf80fe [IMP] vinc_course: đổi nhãn số giờ học
+* fa3c870 [IMP] vinc_course: đổi nhãn tổng số giờ
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>If it gets messy, <code>git rebase --abort</code> returns the branch exactly to how it was before the rebase; <code>git rebase --skip</code> skips the commit that is causing the conflict.</p>
+
+                <h2 id="pull-rebase">git pull --rebase: fetching without a merge commit</h2>
+                <p>In part 4, when An had a local commit and Binh had already pushed, <code>git pull --no-rebase</code> created a merge commit named “Merge branch 'main' of …” just to join the two lines. If you prefer a straight history use <code>git pull --rebase</code>: Git fetches and then replays your local commits on top of the remote's new ones. Because your commit is not pushed yet, this is the safest kind of rebase:</p>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường học phí"
+$ git pull --rebase
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..4c7a4cb  main       -&gt; origin/main
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/main.
+$ git log --oneline --graph
+* b7faa54 [IMP] vinc_course: thêm trường học phí
+* 4c7a4cb [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   4c7a4cb..b7faa54  main -&gt; main</code></pre>
+                <p>No merge commit appears, and the <code>git push</code> afterwards goes through cleanly because your history now continues straight from the remote's. This is also what a team chooses when it sets <code>pull.rebase true</code>.</p>
+
+                <h2 id="quy-tac-vang">The golden rule: never rebase what is shared</h2>
+                <p>The Git manual is blunt: rewriting commits your colleagues already build on is risky, because everyone downstream ends up repairing their history by hand. Practical rules for a team:</p>
+                <ul>
+                    <li><strong>Rebase freely</strong> your own feature branch, before or during a merge request.</li>
+                    <li><strong>Never rebase</strong> <code>main</code>, release branches or any branch someone else is working on.</li>
+                    <li>After rebasing your own branch push with <code>--force-with-lease</code>, never bare <code>--force</code>.</li>
+                    <li>To make <code>git pull</code> rebase instead of merge: <code>git config --global pull.rebase true</code> (agree with your team, as in part 4).</li>
+                </ul>
+
+                <h2 id="trong-odoo">Rebase in a team's Odoo workflow</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Moment</th><th>Do</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Before opening the MR</td><td>Fold “wip” and “fix typo” commits; use Odoo's <code>[TAG] module: ...</code> messages</td></tr>
+                            <tr><td><code>main</code> moved on while the MR is open</td><td><code>git rebase main</code> then <code>push --force-with-lease</code> so GitLab stops reporting it behind</td></tr>
+                            <tr><td>After reviewers commented</td><td>Prefer adding commits over rewriting, so reviewers can see what changed</td></tr>
+                            <tr><td>A client's release branch (for example <code>20.0</code>)</td><td>Do not rebase; use merge or cherry-pick (part 9)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>A plain push is rejected after a rebase.</strong> That is normal because the hashes changed (see the push above). Use <code>--force-with-lease</code> on your own branch; if someone else shares the branch, stop and talk first.</li>
+                        <li><strong>Rebasing a shared branch and force-pushing.</strong> Colleagues who pull will see duplicated commits or odd conflicts. If you did it, tell the team right away and use the <code>reflog</code> (part 7) to restore the old state.</li>
+                        <li><strong>Mixing up “ours” and “theirs”.</strong> During a rebase, <code>git restore --theirs</code> takes <em>your</em> version, the opposite of a merge. Read the resulting file instead of trusting the flag name.</li>
+                        <li><strong>Forgetting you are in the middle of a rebase.</strong> <code>git status</code> says <em>rebase in progress</em>; finish with <code>--continue</code> or bail out with <code>--abort</code> rather than committing at random.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>Rebase replays a branch's commits on a new tip for a straight history; commits get new hashes.</li>
+                    <li><code>rebase -i</code> with <code>fixup</code>/<code>squash</code>/<code>reword</code>/<code>drop</code> tidies a branch; <code>--autosquash</code> handles <code>--fixup</code> commits.</li>
+                    <li>Conflicts during a rebase: fix, <code>git add</code>, <code>git rebase --continue</code>; “ours” and “theirs” are swapped.</li>
+                    <li>Only rebase your own branch; push again with <code>--force-with-lease</code>.</li>
+                </ul>
+                <p>The next part tackles real-life “mid-task” situations: an urgent hotfix lands while you are halfway through something (<code>stash</code>), you need to carry exactly one commit to another branch (<code>cherry-pick</code>) and you want to mark a release (<code>tag</code>).</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does rebase differ from merge?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Merge joins two branches with a merge commit and keeps the history that split. Rebase replays your branch's commits on the new tip of the target, giving a straight history, but those commits get new hashes.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I not use rebase?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Do not rebase commits others have built on, such as main or a shared branch. The Git manual warns it leaves everyone downstream repairing their own history. Rebase your own branch freely.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why must I push --force-with-lease after a rebase?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Because rebase changes the commits' hashes, the remote copy is no longer an ancestor of your branch and a normal push is rejected. --force-with-lease overwrites but refuses if the remote has commits you have not seen, which is safer than --force.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do squash and fixup differ in rebase -i?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Both fold a commit into the one before it. squash keeps and combines both messages for you to edit; fixup discards the folded commit's message. Use fixup for small corrections such as wip or fix typo commits.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-rebase" target="_blank" rel="noopener">Git – git-rebase</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push (--force-with-lease)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-pull" target="_blank" rel="noopener">Git – git-pull (--rebase)</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-rebase-tidy-history.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-rebase-tidy-history.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-undo-restore-reset-revert-reflog.html"><small>← Previous</small>Undoing safely</a>
+                    <span class="next"><small>Next · Coming soon</small>Stash, cherry-pick and tags</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#rebase-la-gi">What rebase is and how it differs from merge</a></li>
+                        <li><a href="#cap-nhat">Updating a feature branch with rebase</a></li>
+                        <li><a href="#squash">Combining small commits with interactive rebase</a></li>
+                        <li><a href="#xung-dot">Conflicts during a rebase: “ours” and “theirs” swap</a></li>
+                        <li><a href="#pull-rebase">git pull --rebase: fetching without a merge commit</a></li>
+                        <li><a href="#quy-tac-vang">The golden rule: never rebase what is shared</a></li>
+                        <li><a href="#trong-odoo">Rebase in a team's Odoo workflow</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

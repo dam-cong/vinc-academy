@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git rebase: làm gọn lịch sử và quy tắc vàng cho nhóm</title>
+    <meta name="description" content="Hiểu rebase khác merge thế nào, cập nhật nhánh bằng git rebase main, gộp commit với rebase -i và autosquash, xử lý xung đột, không rebase nhánh chung." />
+    <meta name="keywords" content="git rebase, git rebase -i, git squash, git fixup, autosquash, force-with-lease, git pull --rebase, rebase vs merge" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git rebase: làm gọn lịch sử và quy tắc vàng cho nhóm" />
+    <meta property="og:description" content="Git rebase thực chiến: rebase vs merge, git rebase main, rebase -i fixup/squash, autosquash, xung đột khi rebase và quy tắc vàng." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-rebase-lam-gon-lich-su.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git rebase: làm gọn lịch sử và quy tắc vàng cho nhóm",
+                "description": "Git rebase thực chiến: rebase vs merge, git rebase main, rebase -i fixup/squash, autosquash, xung đột khi rebase và quy tắc vàng.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-rebase-lam-gon-lich-su.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-rebase-lam-gon-lich-su.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Rebase và làm gọn lịch sử"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Rebase khác merge ở điểm nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Merge ghép hai nhánh bằng một merge commit và giữ nguyên lịch sử đã rẽ. Rebase phát lại các commit của nhánh bạn lên đỉnh mới của nhánh đích, cho lịch sử thẳng nhưng các commit đó có mã băm mới."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào không nên dùng rebase?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không rebase những commit mà người khác đã dựa vào, như main hoặc nhánh chung. Tài liệu Git cảnh báo điều này buộc mọi người ở hạ nguồn phải tự sửa lịch sử của họ. Rebase thoải mái nhánh riêng của bạn."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao sau khi rebase tôi phải push --force-with-lease?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Vì rebase đổi mã băm của các commit, bản trên remote không còn là tổ tiên của nhánh bạn nên push thường bị từ chối. --force-with-lease ghi đè nhưng từ chối nếu remote có commit bạn chưa thấy, an toàn hơn --force."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "squash và fixup trong rebase -i khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cả hai gộp commit vào commit đứng trước. squash giữ và ghép cả hai lời nhắn để bạn chỉnh; fixup bỏ lời nhắn của commit được gộp. Dùng fixup cho các commit sửa nhỏ như wip hay fix typo."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-rebase-tidy-history.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Rebase và làm gọn lịch sử</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 8 · Series Git thực chiến</span>
+            <h1>Git rebase: làm gọn lịch sử và quy tắc vàng cho nhóm</h1>
+            <p class="post-lead">Bài 8 cho thấy rebase khác merge thế nào: cập nhật nhánh bằng git rebase main, gộp commit lẻ với rebase -i và autosquash, xử lý xung đột khi rebase và nắm quy tắc vàng: không rebase thứ đã chia sẻ.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <figure class="post-cover"><img src="../../image/cover/git-rebase-lam-gon-lich-su.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Rebase “viết lại” các commit của nhánh để chúng nối tiếp trên đỉnh mới nhất của nhánh khác, cho lịch sử thẳng và gọn.</strong> Bài này dùng <code>git rebase main</code> để cập nhật nhánh tính năng, <code>git rebase -i</code> để gộp commit lẻ (<code>fixup</code>, <code>squash</code>, <code>reword</code>), <code>--autosquash</code> để tự gộp commit sửa nhỏ, xử lý xung đột khi rebase (hai bên <em>ours</em>/<em>theirs</em> bị đảo) và nắm <strong>quy tắc vàng</strong>: không rebase commit đã chia sẻ. Mọi lệnh chạy thật trên repo <code>vinc_course</code>.</p>
+                </div>
+
+                <h2 id="rebase-la-gi">Rebase là gì và khác merge ở đâu</h2>
+                <p>Ở bài 3 bạn thấy <code>merge</code> ghép hai nhánh bằng một merge commit, giữ nguyên lịch sử “đã rẽ rồi nhập lại”. <code>rebase</code> làm khác: nó lấy các commit riêng của nhánh bạn, tạm cất đi, đưa nhánh về đỉnh mới của nhánh đích rồi <strong>phát lại</strong> từng commit lên trên. Kết quả là lịch sử một đường thẳng như thể bạn bắt đầu làm việc từ đỉnh mới ngay từ đầu.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 180" role="img" aria-labelledby="dg-vi-g08">
+                        <title id="dg-vi-g08">Rebase dời các commit của nhánh sang đỉnh mới của main</title>
+                        <text class="dg-title" x="10" y="45">Trước</text><text class="dg-title" x="10" y="130">Sau</text>
+                        <path class="dg-arrow" d="M130 40 H270" /><path class="dg-arrow" d="M200 40 L270 85 H340" />
+                        <circle class="dg-box" cx="130" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="45">C1</text>
+                        <circle class="dg-box" cx="200" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="200" y="45">C2</text>
+                        <circle class="dg-box" cx="270" cy="40" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="45">C3</text>
+                        <circle class="dg-accent" cx="270" cy="85" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="90">F1</text>
+                        <circle class="dg-accent" cx="340" cy="85" r="16" /><text class="dg-title" text-anchor="middle" x="340" y="90">F2</text>
+                        <text class="dg-text" x="300" y="44">main</text><text class="dg-text" x="372" y="90">feature</text>
+                        <path class="dg-arrow" d="M130 130 H410" />
+                        <circle class="dg-box" cx="130" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="135">C1</text>
+                        <circle class="dg-box" cx="200" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="200" y="135">C2</text>
+                        <circle class="dg-box" cx="270" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="270" y="135">C3</text>
+                        <circle class="dg-accent" cx="340" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="340" y="135">F1'</text>
+                        <circle class="dg-accent" cx="410" cy="130" r="16" /><text class="dg-title" text-anchor="middle" x="410" y="135">F2'</text>
+                        <text class="dg-text" x="440" y="135">feature (rebase)</text>
+                        <text class="dg-text" x="10" y="165">F1' và F2' có nội dung như F1, F2 nhưng là commit mới (mã băm khác).</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Điều cần ghi nhớ nhất: commit phát lại <strong>không còn là commit cũ</strong>. Nội dung thay đổi giống nhau nhưng cha khác, nên mã băm mới (<code>F1'</code>, <code>F2'</code> trong sơ đồ). Đó là lý do rebase chỉ an toàn với commit chưa ai khác dựa vào.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>merge</th><th>rebase</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Lịch sử</td><td>Có merge commit, thấy rõ lúc gộp</td><td>Thẳng, không merge commit</td></tr>
+                            <tr><td>Commit cũ</td><td>Giữ nguyên mã băm</td><td>Được tạo lại với mã mới</td></tr>
+                            <tr><td>Khi nào dùng</td><td>Gộp nhánh đã chia sẻ, giữ bằng chứng lịch sử</td><td>Làm gọn nhánh riêng của bạn trước khi review</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="cap-nhat">Cập nhật nhánh tính năng bằng rebase</h2>
+                <p>Giả sử bạn làm nhánh học phí với ba commit lộn xộn (một “wip”, một “fix typo”) và đã push để sao lưu. Trong lúc đó <code>main</code> có thêm một commit README, nên nhánh của bạn lệch phía sau. Đồ thị cho thấy hai đường rẽ:</p>
+<pre><code>$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường học phí"
+$ echo "# wip" &gt;&gt; models/course.py
+$ git commit -qam "wip"
+$ echo "# sửa lỗi gõ" &gt;&gt; models/course.py
+$ git commit -qam "fix typo"
+$ git push -q -u origin feature/course-price
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -qm "[ADD] vinc_course: README"
+$ git push -q
+$ git switch feature/course-price
+Your branch is up to date with 'origin/feature/course-price'.
+Switched to branch 'feature/course-price'
+$ git log --oneline --graph --all
+* eeb11a2 [ADD] vinc_course: README
+| * cffbf1a fix typo
+| * 394aee0 wip
+| * 4815c9b [IMP] vinc_course: thêm trường học phí
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Chạy <code>git rebase main</code> từ nhánh tính năng. Git phát lại từng commit lên sau commit README; đồ thị giờ là một đường thẳng và cả ba commit có mã băm mới:</p>
+<pre><code>$ git rebase main
+Rebasing (1/3)
+Rebasing (2/3)
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline --graph
+* 5ab820d fix typo
+* de07295 wip
+* 371e622 [IMP] vinc_course: thêm trường học phí
+* eeb11a2 [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Một lưu ý thực tế: rebase không có xung đột về chữ vẫn có thể gây lỗi logic, vì code của bạn giờ chạy trên nền mới của đồng nghiệp. Hãy chạy lại test hoặc nâng cấp thử module (<code>-u vinc_course</code>) trước khi push.</p>
+                <p>Vì commit đã đổi mã băm mà bản trên GitLab vẫn là bản cũ, <code>git push</code> thường sẽ bị từ chối. Với <strong>nhánh riêng của bạn</strong>, cách đúng là <code>--force-with-lease</code>: nó ghi đè nhánh remote nhưng từ chối nếu remote có commit bạn chưa thấy, nên không đè nhầm công việc của người khác:</p>
+<pre><code>$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [rejected]        feature/course-price -&gt; feature/course-price (non-fast-forward)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+$ git push --force-with-lease
+To git@gitlab.example.com:vinc/vinc_course.git
+ + cffbf1a...5ab820d feature/course-price -&gt; feature/course-price (forced update)</code></pre>
+
+                <h2 id="squash">Gộp commit lẻ bằng rebase tương tác</h2>
+                <p>Review dễ hơn khi nhánh kể một câu chuyện gọn. <code>git rebase -i main</code> mở một danh sách (trong editor) gồm các commit của nhánh, mỗi dòng bắt đầu bằng một lệnh. Bạn đổi chữ đầu dòng rồi lưu; Git thực hiện từ trên xuống:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>pick</code></td><td>Giữ commit như cũ</td></tr>
+                            <tr><td><code>reword</code></td><td>Giữ nội dung, sửa lời nhắn</td></tr>
+                            <tr><td><code>edit</code></td><td>Dừng lại để bạn sửa nội dung commit</td></tr>
+                            <tr><td><code>squash</code></td><td>Gộp vào commit trước, ghép cả hai lời nhắn</td></tr>
+                            <tr><td><code>fixup</code></td><td>Gộp vào commit trước, bỏ lời nhắn của nó</td></tr>
+                            <tr><td><code>drop</code></td><td>Bỏ hẳn commit</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Các dòng bắt đầu bằng <code># editor:</code> dưới đây là danh sách mà Git đã mở. Ta đổi <code>pick</code> ở dòng 2 và 3 thành <code>fixup</code> để “wip” và “fix typo” hòa vào commit đầu:</p>
+<pre><code>$ git rebase -i main
+# editor: pick 371e622 [IMP] vinc_course: thêm trường học phí
+# editor: pick de07295 wip
+# editor: pick 5ab820d fix typo
+Rebasing (2/3)
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline --graph
+* 16412cc [IMP] vinc_course: thêm trường học phí
+* eeb11a2 [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git push --force-with-lease
+To git@gitlab.example.com:vinc/vinc_course.git
+ + 5ab820d...16412cc feature/course-price -&gt; feature/course-price (forced update)</code></pre>
+                <p>Ba commit thành một, và vì đã viết lại nên cần <code>--force-with-lease</code> khi push. Nếu bạn biết trước một commit nhỏ sửa cho commit nào, hãy tạo nó bằng <code>git commit --fixup</code>; sau đó <code>rebase -i --autosquash</code> tự đặt commit sửa vào đúng chỗ và đổi nó thành <code>fixup</code> (xem dòng cuối của danh sách):</p>
+<pre><code>$ echo "    level = fields.Char(string='Cấp độ')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ echo "# thiếu dấu" &gt;&gt; models/course.py
+$ git commit -q --fixup HEAD -a
+$ git log --oneline -n 3
+e12996a fixup! [IMP] vinc_course: thêm cấp độ
+01b13bf [IMP] vinc_course: thêm cấp độ
+16412cc [IMP] vinc_course: thêm trường học phí
+$ git rebase -i --autosquash main
+# editor: pick 16412cc [IMP] vinc_course: thêm trường học phí
+# editor: pick 01b13bf [IMP] vinc_course: thêm cấp độ
+# editor: fixup e12996a fixup! [IMP] vinc_course: thêm cấp độ
+Rebasing (3/3)
+Successfully rebased and updated refs/heads/feature/course-price.
+$ git log --oneline -n 3
+f5dc751 [IMP] vinc_course: thêm cấp độ
+16412cc [IMP] vinc_course: thêm trường học phí
+eeb11a2 [ADD] vinc_course: README</code></pre>
+                <p>GitLab cũng có tùy chọn <em>squash</em> khi merge một merge request, nên nhiều nhóm không bắt buộc rebase tương tác. Dù vậy, biết tự làm gọn nhánh vẫn hữu ích vì bạn kiểm soát được lời nhắn của từng commit.</p>
+
+                <h2 id="xung-dot">Xung đột khi rebase: bên “ours” và “theirs” bị đảo</h2>
+                <p>Rebase phát lại từng commit nên xung đột có thể xảy ra ở từng bước. Cách xử lý giống bài 6, nhưng kết thúc bằng <code>git rebase --continue</code> thay vì <code>git commit</code>. Một điểm gây nhầm: theo tài liệu, khi rebase phía <em>ours</em> là chuỗi đã rebase tính từ nhánh đích, còn <em>theirs</em> là nhánh làm việc của bạn, tức <strong>hai bên bị đảo</strong> so với merge. Ví dụ: <code>main</code> đổi nhãn thành “Tổng số giờ”, nhánh của bạn đổi thành “Số giờ học”:</p>
+<pre><code>$ git rebase main
+Auto-merging models/course.py
+CONFLICT (content): Merge conflict in models/course.py
+Rebasing (1/1)
+error: could not apply 5f72b8e... [IMP] vinc_course: đổi nhãn số giờ học
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm &lt;conflicted_files&gt;", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config advice.mergeConflict false"
+Could not apply 5f72b8e... [IMP] vinc_course: đổi nhãn số giờ học
+$ git status -sb
+## HEAD (no branch)
+UU models/course.py
+$ grep -n -A5 "&lt;&lt;&lt;&lt;&lt;&lt;&lt;" models/course.py
+9:&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+10-    hours = fields.Integer(string='Tổng số giờ')
+11-=======
+12-    hours = fields.Integer(string='Số giờ học')
+13-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 5f72b8e ([IMP] vinc_course: đổi nhãn số giờ học)</code></pre>
+                <p>Phần sau <code>HEAD</code> là phiên bản của <code>main</code> (đích), phần dưới là commit của bạn đang được phát lại. Ta chọn nhãn kết hợp, rồi báo đã xử lý và cho rebase đi tiếp:</p>
+<pre><code>$ grep hours models/course.py
+    hours = fields.Integer(string='Tổng số giờ học')
+$ git add models/course.py
+$ git rebase --continue
+[detached HEAD aaf80fe] [IMP] vinc_course: đổi nhãn số giờ học
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Successfully rebased and updated refs/heads/feature/hours-label.
+$ git log --oneline --graph
+* aaf80fe [IMP] vinc_course: đổi nhãn số giờ học
+* fa3c870 [IMP] vinc_course: đổi nhãn tổng số giờ
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Nếu thấy rối, <code>git rebase --abort</code> trả nhánh về đúng như trước khi rebase; <code>git rebase --skip</code> bỏ qua commit đang gây xung đột.</p>
+
+                <h2 id="pull-rebase">git pull --rebase: kéo về mà không sinh merge commit</h2>
+                <p>Ở bài 4, khi An có commit cục bộ còn Bình đã push, <code>git pull --no-rebase</code> tạo ra một merge commit tên “Merge branch 'main' of …” chỉ để nối hai đường. Nếu bạn muốn lịch sử thẳng, hãy dùng <code>git pull --rebase</code>: Git fetch rồi phát lại commit cục bộ của bạn lên trên commit mới của remote. Vì commit của bạn chưa push nên đây là cách rebase an toàn nhất:</p>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường học phí"
+$ git pull --rebase
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..4c7a4cb  main       -&gt; origin/main
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/main.
+$ git log --oneline --graph
+* b7faa54 [IMP] vinc_course: thêm trường học phí
+* 4c7a4cb [ADD] vinc_course: README
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   4c7a4cb..b7faa54  main -&gt; main</code></pre>
+                <p>Không có merge commit nào, và <code>git push</code> sau đó chạy suôn sẻ vì lịch sử của bạn giờ là hậu duệ trực tiếp của remote. Đây cũng là cấu hình mà nhóm chọn khi đặt <code>pull.rebase true</code>.</p>
+
+                <h2 id="quy-tac-vang">Quy tắc vàng: đừng rebase thứ đã chia sẻ</h2>
+                <p>Tài liệu Git nói thẳng: rebase một nhánh mà người khác đã dựa vào là ý tồi, vì mọi người ở hạ nguồn buộc phải tự sửa lịch sử của họ. Quy tắc thực tế cho nhóm:</p>
+                <ul>
+                    <li><strong>Rebase thoải mái</strong> nhánh tính năng riêng của bạn, trước khi hoặc trong lúc mở merge request.</li>
+                    <li><strong>Không rebase</strong> <code>main</code>, nhánh phát hành hay bất kỳ nhánh nào có người khác đang làm trên đó.</li>
+                    <li>Đã rebase nhánh riêng thì push bằng <code>--force-with-lease</code>, không dùng <code>--force</code> trần.</li>
+                    <li>Muốn <code>git pull</code> luôn rebase thay vì merge: đặt <code>git config --global pull.rebase true</code> (nhớ thống nhất với nhóm, như ở bài 4).</li>
+                </ul>
+
+                <h2 id="trong-odoo">Rebase trong quy trình Odoo của nhóm</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thời điểm</th><th>Làm gì</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Trước khi mở MR</td><td>Gộp commit “wip”, “fix typo”; lời nhắn theo <code>[TAG] module: ...</code> của Odoo</td></tr>
+                            <tr><td><code>main</code> đã đi trước khi MR còn mở</td><td><code>git rebase main</code> rồi <code>push --force-with-lease</code> để GitLab hết báo lệch</td></tr>
+                            <tr><td>Sau khi reviewer đã comment</td><td>Ưu tiên thêm commit mới thay vì viết lại, để reviewer thấy được phần đã sửa</td></tr>
+                            <tr><td>Nhánh phát hành của khách (ví dụ <code>20.0</code>)</td><td>Không rebase; dùng merge hoặc cherry-pick (bài 9)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Push thường bị từ chối sau rebase.</strong> Đó là điều bình thường vì mã băm đã đổi (xem phần push ở trên). Dùng <code>--force-with-lease</code> trên nhánh riêng; nếu nhánh có người khác cùng làm thì dừng lại và trao đổi.</li>
+                        <li><strong>Rebase lên nhánh chung rồi ép push.</strong> Đồng nghiệp kéo về sẽ thấy các commit trùng lặp hoặc xung đột lạ. Nếu lỡ làm, báo ngay cho nhóm và dùng <code>reflog</code> (bài 7) để khôi phục trạng thái cũ.</li>
+                        <li><strong>Nhầm “ours” và “theirs”.</strong> Khi rebase, <code>git restore --theirs</code> lấy phiên bản <em>của bạn</em>, ngược với merge. Hãy đọc file kết quả thay vì tin vào tên cờ.</li>
+                        <li><strong>Quên mình đang giữa một rebase.</strong> <code>git status</code> sẽ ghi <em>rebase in progress</em>; hoàn tất bằng <code>--continue</code> hoặc thoát bằng <code>--abort</code> chứ đừng commit lung tung.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Rebase phát lại commit của nhánh lên đỉnh mới, cho lịch sử thẳng; commit sau rebase có mã băm mới.</li>
+                    <li><code>rebase -i</code> với <code>fixup</code>/<code>squash</code>/<code>reword</code>/<code>drop</code> làm gọn nhánh; <code>--autosquash</code> lo các commit <code>--fixup</code>.</li>
+                    <li>Xung đột khi rebase: sửa, <code>git add</code>, <code>git rebase --continue</code>; “ours” và “theirs” bị đảo.</li>
+                    <li>Chỉ rebase nhánh riêng; push lại bằng <code>--force-with-lease</code>.</li>
+                </ul>
+                <p>Bài tiếp theo giải quyết những tình huống “giữa chừng” của đời thực: đang dở tay thì có hotfix gấp (<code>stash</code>), cần mang đúng một commit sang nhánh khác (<code>cherry-pick</code>) và đánh dấu bản phát hành (<code>tag</code>).</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Rebase khác merge ở điểm nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Merge ghép hai nhánh bằng một merge commit và giữ nguyên lịch sử đã rẽ. Rebase phát lại các commit của nhánh bạn lên đỉnh mới của nhánh đích, cho lịch sử thẳng nhưng các commit đó có mã băm mới.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào không nên dùng rebase?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không rebase những commit mà người khác đã dựa vào, như main hoặc nhánh chung. Tài liệu Git cảnh báo điều này buộc mọi người ở hạ nguồn phải tự sửa lịch sử của họ. Rebase thoải mái nhánh riêng của bạn.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao sau khi rebase tôi phải push --force-with-lease?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Vì rebase đổi mã băm của các commit, bản trên remote không còn là tổ tiên của nhánh bạn nên push thường bị từ chối. --force-with-lease ghi đè nhưng từ chối nếu remote có commit bạn chưa thấy, an toàn hơn --force.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>squash và fixup trong rebase -i khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cả hai gộp commit vào commit đứng trước. squash giữ và ghép cả hai lời nhắn để bạn chỉnh; fixup bỏ lời nhắn của commit được gộp. Dùng fixup cho các commit sửa nhỏ như wip hay fix typo.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-rebase" target="_blank" rel="noopener">Git – git-rebase</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push (--force-with-lease)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-pull" target="_blank" rel="noopener">Git – git-pull (--rebase)</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-rebase-lam-gon-lich-su.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-rebase-lam-gon-lich-su.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-hoan-tac-restore-reset-revert-reflog.html"><small>← Bài trước</small>Hoàn tác an toàn</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Stash, cherry-pick và tag</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#rebase-la-gi">Rebase là gì và khác merge ở đâu</a></li>
+                        <li><a href="#cap-nhat">Cập nhật nhánh tính năng bằng rebase</a></li>
+                        <li><a href="#squash">Gộp commit lẻ bằng rebase tương tác</a></li>
+                        <li><a href="#xung-dot">Xung đột khi rebase: bên “ours” và “theirs” bị đảo</a></li>
+                        <li><a href="#pull-rebase">git pull --rebase: kéo về mà không sinh merge commit</a></li>
+                        <li><a href="#quy-tac-vang">Quy tắc vàng: đừng rebase thứ đã chia sẻ</a></li>
+                        <li><a href="#trong-odoo">Rebase trong quy trình Odoo của nhóm</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

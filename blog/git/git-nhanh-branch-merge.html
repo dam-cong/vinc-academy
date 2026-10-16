@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git branch và merge: làm việc song song không lo đụng nhau</title>
+    <meta name="description" content="Tạo nhánh bằng git switch -c, gộp bằng git merge (fast-forward và merge commit), xóa nhánh xong việc và xử lý detached HEAD khi làm module Odoo." />
+    <meta name="keywords" content="git branch, git merge, git switch, fast-forward, merge commit, no-ff, detached head, nhánh git, git cho người mới" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git branch và merge: làm việc song song không lo đụng nhau" />
+    <meta property="og:description" content="Git branch và merge cho người mới: git switch -c, fast-forward, merge commit, --no-ff, xóa nhánh và lỗi detached HEAD trên module Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-nhanh-branch-merge.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git branch và merge: làm việc song song không lo đụng nhau",
+                "description": "Git branch và merge cho người mới: git switch -c, fast-forward, merge commit, --no-ff, xóa nhánh và lỗi detached HEAD trên module Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-nhanh-branch-merge.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Nhánh và merge"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Git branch là gì, nó có sao chép code không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nhánh chỉ là một cái tên trỏ tới một commit, không sao chép file. Khi bạn commit, tên nhánh hiện tại tự dịch sang commit mới. Vì vậy tạo hay xóa nhánh gần như tức thì."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Fast-forward và merge commit khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Fast-forward xảy ra khi nhánh nhận không có commit mới: Git chỉ đẩy con trỏ nhánh tới trước và không tạo commit. Nếu hai nhánh đã rẽ, Git tạo một merge commit có hai commit cha. Cờ --no-ff buộc luôn tạo merge commit."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "git switch khác git checkout ra sao?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git switch (từ Git 2.23) chỉ làm việc chuyển và tạo nhánh; git restore làm việc khôi phục file. Cả hai tách ra từ git checkout vốn đảm nhiệm quá nhiều việc. git checkout vẫn chạy bình thường."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào dùng git branch -D thay vì -d?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "-d chỉ xóa nhánh đã được merge và từ chối nếu bạn sẽ mất commit. -D ép xóa bất kể trạng thái merge, dùng khi bạn chắc chắn muốn bỏ hẳn nhánh thử nghiệm."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-branches-and-merging.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Nhánh và merge</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 3 · Series Git thực chiến</span>
+            <h1>Git branch và merge: làm việc song song không lo đụng nhau</h1>
+            <p class="post-lead">Bài 3 tạo nhánh cho từng tính năng của module vinc_course, gộp lại bằng git merge (fast-forward và merge commit), dọn nhánh xong việc và xử lý hai lỗi hay gặp: chuyển nhánh khi còn sửa dở và detached HEAD.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-nhanh-branch-merge.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Nhánh là một con trỏ nhẹ tới commit, nên tạo nhánh gần như tức thì và rẻ như xóa nhánh.</strong> Nhóm nào cũng quy định mỗi tính năng một nhánh, để việc dang dở của người này không làm hỏng việc của người kia. Bài này dùng <code>git switch -c</code> để tạo nhánh cho trường mới của <code>vinc_course</code>, gộp lại bằng <code>git merge</code> (fast-forward và merge commit), xóa nhánh xong việc và cách xử lý hai tình huống hay gặp: chuyển nhánh khi còn sửa dở và <em>detached HEAD</em>.</p>
+                </div>
+
+                <h2 id="nhanh-la-gi">Nhánh là gì và vì sao mỗi việc một nhánh</h2>
+                <p>Hãy tưởng tượng nhóm có ba việc đang chạy: thêm trường học phí, thêm cấp độ khóa học và sửa tài liệu. Nếu cả ba cùng commit lên một đường duy nhất, một việc dang dở sẽ lẫn vào các việc khác, và bạn không thể phát hành chỉ riêng việc đã xong. Git giải bằng nhánh: mỗi việc có một đường lịch sử riêng xuất phát từ cùng một điểm, và khi xong thì gộp (<em>merge</em>) lại vào nhánh chính.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 180" role="img" aria-labelledby="dg-vi-g03">
+                        <title id="dg-vi-g03">Hai nhánh tách ra từ main rồi được merge lại</title>
+                        <path class="dg-arrow" d="M50 50 H450" /><path class="dg-arrow" d="M130 50 L210 120 H370 L450 50" />
+                        <circle class="dg-box" cx="50" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="50" y="55">C1</text>
+                        <circle class="dg-box" cx="130" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="55">C2</text>
+                        <circle class="dg-box" cx="300" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="300" y="55">C3</text>
+                        <circle class="dg-accent" cx="450" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="450" y="55">M</text>
+                        <circle class="dg-box" cx="210" cy="120" r="16" /><text class="dg-title" text-anchor="middle" x="210" y="125">F1</text>
+                        <circle class="dg-box" cx="290" cy="120" r="16" /><text class="dg-title" text-anchor="middle" x="290" y="125">F2</text>
+                        <text class="dg-title" x="490" y="55">main</text><text class="dg-text" x="490" y="73">HEAD đang ở đây</text>
+                        <text class="dg-title" x="400" y="125">feature/course-level</text>
+                        <text class="dg-text" x="20" y="165">C3 là commit mới trên main sau khi nhánh tách ra; M là merge commit có hai commit cha.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Về kỹ thuật, nhánh chỉ là tên gắn với một commit. Khi bạn commit, tên nhánh hiện tại tự dịch chuyển sang commit mới. <code>HEAD</code> là con trỏ cho biết bạn đang đứng ở nhánh nào. Vì không có thư mục nào được sao chép, tạo nhánh mất chưa tới một giây dù repo lớn thế nào.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git branch</code></td><td>Liệt kê nhánh cục bộ, dấu <code>*</code> là nhánh hiện tại</td></tr>
+                            <tr><td><code>git branch -a</code></td><td>Liệt kê cả nhánh remote (bài 4)</td></tr>
+                            <tr><td><code>git switch &lt;nhánh&gt;</code></td><td>Chuyển sang nhánh có sẵn</td></tr>
+                            <tr><td><code>git switch -c &lt;nhánh&gt;</code></td><td>Tạo nhánh mới từ vị trí hiện tại và chuyển sang đó</td></tr>
+                            <tr><td><code>git merge &lt;nhánh&gt;</code></td><td>Gộp nhánh đó vào nhánh hiện tại</td></tr>
+                            <tr><td><code>git branch -d &lt;nhánh&gt;</code></td><td>Xóa nhánh đã merge (an toàn)</td></tr>
+                            <tr><td><code>git branch -m &lt;mới&gt;</code></td><td>Đổi tên nhánh hiện tại</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Bạn có thể tự nhìn thấy điều đó: file <code>.git/HEAD</code> chứa tên nhánh hiện tại, và <code>git rev-parse</code> cho biết commit mà tên nhánh đang trỏ tới.</p>
+<pre><code>$ cat .git/HEAD
+ref: refs/heads/main
+$ git rev-parse --short main
+58544f6
+$ git branch -v
+* main 58544f6 Merge branch 'feature/course-code'</code></pre>
+                <p>Từ Git 2.23 có hai lệnh <code>git switch</code> (chuyển nhánh) và <code>git restore</code> (khôi phục file) tách nhỏ vai trò của <code>git checkout</code> vốn làm quá nhiều việc. Các hướng dẫn cũ vẫn dùng <code>git checkout</code> và lệnh đó vẫn chạy, nhưng series này dùng lệnh mới vì tên gọi nói đúng việc làm.</p>
+
+                <h2 id="tao-chuyen">Tạo nhánh và chuyển qua lại</h2>
+                <p>Quy ước chung là đặt tên nhánh theo loại việc: <code>feature/</code> cho tính năng, <code>fix/</code> cho sửa lỗi. Ta tạo nhánh cho trường học phí, commit một thay đổi, rồi chuyển về <code>main</code>. Chú ý hai lần <code>grep</code>: nội dung file thật sự đổi theo nhánh bạn đang đứng.</p>
+<pre><code>$ git branch
+* main
+$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ git branch
+* feature/course-price
+  main
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí"
+[feature/course-price 3d09a30] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph --all
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git switch main
+Switched to branch 'main'
+$ grep -c price models/course.py
+0
+$ git switch feature/course-price
+Switched to branch 'feature/course-price'
+$ grep -c price models/course.py
+1</code></pre>
+                <p>Đồ thị <code>--graph</code> cho thấy nhánh mới đi trước <code>main</code> đúng một commit. Việc cần làm tiếp là gộp nhánh vào <code>main</code>.</p>
+                <p>Hai mẹo nhỏ giúp thao tác nhanh hơn. Thứ nhất, <code>git switch -</code> quay về nhánh bạn vừa rời, tiện khi nhảy qua lại giữa hai nhánh. Thứ hai, <code>git switch -c &lt;tên&gt; &lt;điểm-bắt-đầu&gt;</code> cho phép tạo nhánh từ một commit hay nhánh khác thay vì từ vị trí hiện tại, như ví dụ <code>main~2</code> ở phần sau. Nhớ rằng nhánh luôn bắt đầu từ chỗ bạn chỉ định, nên hãy chuyển về <code>main</code> đã cập nhật trước khi tạo nhánh tính năng mới.</p>
+
+                <h2 id="merge">Merge: fast-forward và merge commit</h2>
+                <p>Lệnh <code>git merge</code> luôn chạy từ nhánh <strong>nhận</strong> thay đổi: bạn đứng ở <code>main</code> rồi gọi tên nhánh cần gộp. Có hai kết quả tùy hình dạng lịch sử. Nếu <code>main</code> không có commit nào mới kể từ lúc tách nhánh, Git chỉ cần đẩy con trỏ <code>main</code> tới trước: đó là <strong>fast-forward</strong>, không sinh commit mới.</p>
+<pre><code>$ git switch main
+Switched to branch 'main'
+$ git merge feature/course-price
+Updating 47905cb..3d09a30
+Fast-forward
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git branch -d feature/course-price
+Deleted branch feature/course-price (was 3d09a30).
+$ git branch
+* main</code></pre>
+                <p>Tình huống thực tế hơn: trong lúc bạn làm nhánh cấp độ, đồng nghiệp đã commit thêm lên <code>main</code>. Hai đường lịch sử đã rẽ, nên Git tạo một <strong>merge commit</strong> có hai commit cha để nối chúng lại. Sơ đồ ở đầu bài chính là tình huống này.</p>
+<pre><code>$ git switch -c feature/course-level
+Switched to a new branch 'feature/course-level'
+$ echo "    level = fields.Selection([('basic', 'Cơ bản'), ('adv', 'Nâng cao')])" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường cấp độ"
+[feature/course-level 82624ed] [IMP] vinc_course: thêm trường cấp độ
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main e26c754] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git merge feature/course-level
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph
+*   f2e2ab5 Merge branch 'feature/course-level'
+|\  
+| * 82624ed [IMP] vinc_course: thêm trường cấp độ
+* | e26c754 [ADD] vinc_course: README
+|/  
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git branch --merged
+  feature/course-level
+* main
+$ git branch -d feature/course-level
+Deleted branch feature/course-level (was 82624ed).</code></pre>
+                <p>Hãy đọc đồ thị: ngôi sao thứ hai bên trái là commit README trên <code>main</code>, nhánh bên phải là commit cấp độ, và dòng trên cùng là merge commit nối cả hai. Vì hai thay đổi nằm ở file khác nhau (hoặc khác dòng), Git tự gộp được; khi chúng đụng cùng một dòng sẽ có <em>xung đột</em>, chủ đề của bài 6. <code>git branch --merged</code> liệt kê nhánh đã nằm gọn trong nhánh hiện tại, tức là an toàn để xóa.</p>
+                <p>Nhiều nhóm muốn <em>luôn</em> có merge commit để lịch sử ghi lại “tính năng này được gộp lúc nào”, kể cả khi fast-forward được. Cờ <code>--no-ff</code> làm đúng việc đó:</p>
+<pre><code>$ git switch -c feature/course-code
+Switched to a new branch 'feature/course-code'
+$ echo "    code = fields.Char(string='Mã khóa')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm mã khóa học"
+[feature/course-code 303f5c8] [IMP] vinc_course: thêm mã khóa học
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ git merge --no-ff feature/course-code
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph -n 4
+*   58544f6 Merge branch 'feature/course-code'
+|\  
+| * 303f5c8 [IMP] vinc_course: thêm mã khóa học
+|/  
+*   f2e2ab5 Merge branch 'feature/course-level'
+|\  
+| * 82624ed [IMP] vinc_course: thêm trường cấp độ
+$ git branch -d feature/course-code
+Deleted branch feature/course-code (was 303f5c8).</code></pre>
+
+                <h2 id="xoa-nhanh">Dọn nhánh sau khi xong việc</h2>
+                <p>Nhánh đã merge không còn giá trị, nên xóa để danh sách gọn. <code>git branch -d</code> chỉ xóa nhánh đã được merge và từ chối nếu bạn sẽ mất commit. Muốn bỏ hẳn một thử nghiệm, dùng <code>-D</code> (viết hoa) để ép xóa, nhưng hãy chắc chắn rằng bạn không cần các commit đó nữa.</p>
+<pre><code>$ git switch -c experiment/video
+Switched to a new branch 'experiment/video'
+$ echo "# thử video" &gt;&gt; README.md
+$ git commit -am "[IMP] vinc_course: thử nhúng video"
+[experiment/video 9a15432] [IMP] vinc_course: thử nhúng video
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ git branch -d experiment/video
+error: the branch 'experiment/video' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D experiment/video'
+hint: Disable this message with "git config advice.forceDeleteBranch false"
+$ git branch -D experiment/video
+Deleted branch experiment/video (was 9a15432).</code></pre>
+
+                <h2 id="thoi-quen">Thói quen giữ nhánh gọn gàng</h2>
+                <ul>
+                    <li><strong>Nhánh ngắn hạn.</strong> Nhánh sống càng lâu càng lệch xa <code>main</code>, nên việc merge càng đau. Chia việc để nhánh sống vài ngày, không phải vài tuần.</li>
+                    <li><strong>Một nhánh một mục đích.</strong> Đừng gom “thêm trường học phí” và “sửa báo cáo” vào cùng nhánh; khi cần hoàn tác hay review sẽ khó tách.</li>
+                    <li><strong>Không commit trực tiếp lên <code>main</code>.</strong> Hầu hết nhóm bảo vệ nhánh chính và chỉ cho gộp qua merge request (bài 5).</li>
+                    <li><strong>Cập nhật từ <code>main</code> thường xuyên.</strong> Khi <code>main</code> có thay đổi mới, kéo chúng vào nhánh của bạn để phát hiện xung đột sớm:</li>
+                </ul>
+<pre><code>$ git switch -c feature/course-sync main~2
+Switched to a new branch 'feature/course-sync'
+$ echo "ghi chú đồng bộ" &gt; SYNC.md
+$ git add SYNC.md
+$ git commit -m "[ADD] vinc_course: ghi chú đồng bộ"
+[feature/course-sync e6ebc3c] [ADD] vinc_course: ghi chú đồng bộ
+ 1 file changed, 1 insertion(+)
+ create mode 100644 SYNC.md
+$ git merge main
+Merge made by the 'ort' strategy.
+ models/course.py | 2 ++
+ 1 file changed, 2 insertions(+)
+$ git log --oneline --graph -n 1
+*   fd027f5 Merge branch 'main' into feature/course-sync
+|\  
+$ git switch main
+Switched to branch 'main'
+$ git branch -D feature/course-sync
+Deleted branch feature/course-sync (was fd027f5).</code></pre>
+                <p>Lần này <code>git merge main</code> được chạy từ nhánh tính năng, nghĩa là nhánh tính năng là bên <em>nhận</em>. Cách này không đụng gì tới <code>main</code>, nên an toàn. Bài 8 sẽ cho thấy lựa chọn khác là <code>rebase</code>.</p>
+
+                <h2 id="trong-odoo">Nhánh trong công việc Odoo</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cách dùng nhánh</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Nhánh theo phiên bản Odoo</td><td>Tài liệu cài từ mã nguồn dùng <code>git clone --branch 20.0 --single-branch ...</code>: nhánh <code>20.0</code> của Odoo là bản 20</td></tr>
+                            <tr><td>Nhánh theo tính năng</td><td><code>feature/course-price</code>, <code>feature/course-level</code></td></tr>
+                            <tr><td>Nhánh sửa lỗi</td><td><code>fix/duplicate-course-code</code> rồi merge qua merge request (bài 5)</td></tr>
+                            <tr><td>Nhánh thử nghiệm</td><td><code>experiment/video</code>, xóa bằng <code>-D</code> nếu bỏ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Với module tùy biến cho khách hàng, nhiều nhóm giữ một nhánh ổn định cho mỗi phiên bản Odoo mà khách đang chạy (ví dụ <code>20.0</code>) và tách nhánh tính năng từ đó. Chi tiết chiến lược nhánh nằm ở bài 10.</p>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Chuyển nhánh khi còn sửa dở.</strong> Nếu file bạn sửa khác nhau giữa hai nhánh, Git từ chối để bảo vệ công việc của bạn:</li>
+                    </ul>
+<pre><code>$ git switch -c feature/x
+Switched to a new branch 'feature/x'
+$ echo "    x = fields.Char()" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường x"
+$ git switch main
+Switched to branch 'main'
+$ echo "    y = fields.Char()" &gt;&gt; models/course.py
+$ git switch feature/x
+error: Your local changes to the following files would be overwritten by checkout:
+	models/course.py
+Please commit your changes or stash them before you switch branches.
+Aborting</code></pre>
+
+                    <ul>
+                        <li>Có ba lối thoát: commit tạm, <code>git stash</code> (bài 9), hoặc bỏ thay đổi bằng <code>git restore</code> (bài 7). Đừng ép chuyển bằng cờ <code>-f</code> khi chưa hiểu nó vứt gì.</li>
+                        <li><strong>Rơi vào “detached HEAD”.</strong> Gõ <code>git checkout &lt;commit&gt;</code> hay <code>git switch --detach</code> đưa HEAD tới một commit không thuộc nhánh nào. Commit tạo ra lúc này dễ bị “lạc”. Muốn giữ, hãy <code>git switch -c &lt;tên-nhánh&gt;</code>; muốn quay lại, <code>git switch -</code>:</li>
+                    </ul>
+<pre><code>$ git stash -q
+$ git checkout HEAD~1 2&gt;&amp;1 | head -5
+Note: switching to 'HEAD~1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+$ git switch -
+Previous HEAD position was 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+Switched to branch 'feature/course-price'</code></pre>
+
+                    <ul>
+                        <li><strong>Tên nhánh có dấu cách.</strong> Tên nhánh không được chứa khoảng trắng; hãy nối bằng dấu gạch ngang (và dùng chữ thường không dấu để dễ gõ trong terminal):</li>
+                    </ul>
+<pre><code>$ git switch -c "feature/course price"
+fatal: 'feature/course price' is not a valid branch name
+hint: See `man git check-ref-format`
+hint: Disable this message with "git config advice.refSyntax false"
+$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'</code></pre>
+
+                    <ul>
+                        <li><strong>Commit nhầm lên <code>main</code>.</strong> Quên tạo nhánh rồi commit thẳng lên <code>main</code> là lỗi phổ biến; hãy nhìn dấu <code>*</code> của <code>git branch</code> hoặc dòng đầu của <code>git status</code> trước khi commit. Cách cứu nằm ở bài 7.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Nhánh là con trỏ nhẹ; mỗi việc một nhánh, đặt tên <code>feature/...</code>, <code>fix/...</code>.</li>
+                    <li><code>git switch -c</code> tạo và chuyển nhánh; nội dung file đổi theo nhánh.</li>
+                    <li><code>git merge</code> chạy từ nhánh nhận: fast-forward khi lịch sử thẳng, merge commit khi đã rẽ; <code>--no-ff</code> ép luôn có merge commit.</li>
+                    <li><code>-d</code> xóa nhánh đã merge, <code>-D</code> ép xóa.</li>
+                    <li>Còn sửa dở thì commit hoặc stash trước khi đổi nhánh.</li>
+                </ul>
+                <p>Tất cả mới diễn ra trên máy bạn. Bài tiếp theo nối repo với <strong>GitLab</strong>: <code>clone</code>, <code>fetch</code>, <code>pull</code>, <code>push</code>, và tạo SSH key để không phải gõ mật khẩu mỗi lần.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Git branch là gì, nó có sao chép code không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nhánh chỉ là một cái tên trỏ tới một commit, không sao chép file. Khi bạn commit, tên nhánh hiện tại tự dịch sang commit mới. Vì vậy tạo hay xóa nhánh gần như tức thì.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Fast-forward và merge commit khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Fast-forward xảy ra khi nhánh nhận không có commit mới: Git chỉ đẩy con trỏ nhánh tới trước và không tạo commit. Nếu hai nhánh đã rẽ, Git tạo một merge commit có hai commit cha. Cờ --no-ff buộc luôn tạo merge commit.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git switch khác git checkout ra sao?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git switch (từ Git 2.23) chỉ làm việc chuyển và tạo nhánh; git restore làm việc khôi phục file. Cả hai tách ra từ git checkout vốn đảm nhiệm quá nhiều việc. git checkout vẫn chạy bình thường.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào dùng git branch -D thay vì -d?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">-d chỉ xóa nhánh đã được merge và từ chối nếu bạn sẽ mất commit. -D ép xóa bất kể trạng thái merge, dùng khi bạn chắc chắn muốn bỏ hẳn nhánh thử nghiệm.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-branch" target="_blank" rel="noopener">Git – git-branch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-switch" target="_blank" rel="noopener">Git – git-switch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">Git – git-merge</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-nhanh-branch-merge.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-nhanh-branch-merge.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-commit-dau-tien-status-add-log-gitignore.html"><small>← Bài trước</small>Commit đầu tiên với Git</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Remote: clone, fetch, pull, push và SSH</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#nhanh-la-gi">Nhánh là gì và vì sao mỗi việc một nhánh</a></li>
+                        <li><a href="#tao-chuyen">Tạo nhánh và chuyển qua lại</a></li>
+                        <li><a href="#merge">Merge: fast-forward và merge commit</a></li>
+                        <li><a href="#xoa-nhanh">Dọn nhánh sau khi xong việc</a></li>
+                        <li><a href="#thoi-quen">Thói quen giữ nhánh gọn gàng</a></li>
+                        <li><a href="#trong-odoo">Nhánh trong công việc Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

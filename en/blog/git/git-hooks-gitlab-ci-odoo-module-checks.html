@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Hooks and GitLab CI: Auto-Checks for Odoo Modules</title>
+    <meta name="description" content="Write pre-commit and commit-msg hooks, share them with core.hooksPath, then add .gitlab-ci.yml so every merge request lints and tests your Odoo module." />
+    <meta name="keywords" content="git hooks, pre-commit hook, commit-msg hook, core.hooksPath, gitlab ci, .gitlab-ci.yml, gitlab pipeline, odoo test ci, no-verify" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hook-gitlab-ci-kiem-tra-module-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Hooks and GitLab CI: Auto-Checks for Odoo Modules" />
+    <meta property="og:description" content="Git pre-commit and commit-msg hooks plus GitLab CI for Odoo modules: block secrets, broken code and bad messages, and run tests in merge requests." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-hooks-gitlab-ci-odoo-module-checks.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Hooks and GitLab CI: Auto-Checks for Odoo Modules",
+                "description": "Git pre-commit and commit-msg hooks plus GitLab CI for Odoo modules: block secrets, broken code and bad messages, and run tests in merge requests.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-hooks-gitlab-ci-odoo-module-checks.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Git hooks and GitLab CI"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is a Git hook and where does it live?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A hook is a program Git runs by itself at fixed moments such as before a commit. By default hooks live in .git/hooks and must be executable; change the folder with core.hooksPath. A non-zero exit cancels the action."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I share hooks with the whole team?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The .git/hooks folder is not committed. Keep the hooks in a folder of the repo, for example .githooks/, commit it, then have everyone run git config core.hooksPath .githooks once, ideally documented in the README."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can hooks be skipped?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. git commit --no-verify skips both of those hooks. So hooks are only a safeguard on your machine; the team needs a GitLab CI pipeline as the shared gatekeeper."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What does GitLab CI need to run?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "At least one active runner (GitLab.com provides them) and the .gitlab-ci.yml configuration in the repository root declaring the jobs. When you push, GitLab creates a pipeline and shows the result in the merge request."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-hook-gitlab-ci-kiem-tra-module-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Git hooks and GitLab CI</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 11 · Practical Git Series</span>
+            <h1>Git Hooks and GitLab CI: Auto-Checks for Odoo Modules</h1>
+            <p class="post-lead">Part 11 turns conventions into automatic checks: pre-commit and commit-msg hooks stop secrets, broken code and badly formatted messages on your machine, then .gitlab-ci.yml lints and tests the Odoo module in every merge request.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-hooks-gitlab-ci-odoo-module-checks.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>A hook is a script Git runs by itself at fixed moments (before a commit, when the message is entered...) and blocks the action if the script exits non-zero.</strong> This part writes two real hooks for <code>vinc_course</code>: <code>pre-commit</code> stops secret files and syntactically broken Python, <code>commit-msg</code> enforces a <code>[TAG] module: description</code> header; and shares them with the team through <code>core.hooksPath</code>. Then comes the second layer of checks that runs on the server: <strong>GitLab CI</strong> with a <code>.gitlab-ci.yml</code> file that checks every merge request, including a step that runs Odoo's tests.</p>
+                </div>
+
+                <h2 id="hook-la-gi">What a Git hook is</h2>
+                <p>The conventions of part 10 only matter if everyone follows them, and people forget under pressure. Hooks let the machine remind you. According to the <code>githooks</code> documentation a hook is a program in Git's <code>hooks</code> folder (or a folder you set with <code>core.hooksPath</code>) that <strong>must be executable</strong>; the file name is the event name. A non-zero exit cancels the matching action.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hook</th><th>Runs when</th><th>Use it to</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>pre-commit</code></td><td>Ahead of the commit itself, before any message</td><td>Inspect files: syntax, secrets, conflict markers</td></tr>
+                            <tr><td><code>commit-msg</code></td><td>After the message is written; receives the message file</td><td>Validate or normalise the header</td></tr>
+                            <tr><td><code>pre-push</code></td><td>Before pushing to a remote</td><td>Run quick tests before reaching GitLab</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Two points from the documentation: the first two hooks can be skipped with <code>git commit --no-verify</code>, and the <code>.git/hooks</code> folder is <strong>not</strong> committed so it does not travel with the repo to colleagues. To share them, keep the hooks in a folder of the repo (for example <code>.githooks/</code>) and have everyone run <code>git config core.hooksPath .githooks</code> once.</p>
+
+                <h2 id="pre-commit">The pre-commit hook: stopping secrets and broken code</h2>
+                <p>The hook below walks every staged file. On <code>odoo.conf</code> or <code>.env</code> it refuses; on a <code>.py</code> file it checks the syntax with Python; finally <code>git diff --cached --check</code> catches leftover conflict markers (part 6). Save it as <code>.githooks/pre-commit</code> and make it executable:</p>
+<pre><code>#!/bin/sh
+# Chặn commit chứa file bí mật, dấu xung đột hoặc Python sai cú pháp
+for f in $(git diff --cached --name-only --diff-filter=ACM); do
+  case "$f" in
+    odoo.conf|.env) echo "pre-commit: không được commit $f" &gt;&amp;2; exit 1 ;;
+    *.py)
+      err=$(python3 -c "import ast,sys; ast.parse(open(sys.argv[1], encoding='utf-8').read())" "$f" 2&gt;&amp;1) || {
+        echo "pre-commit: lỗi cú pháp trong $f" &gt;&amp;2; echo "$err" | tail -n 1 &gt;&amp;2; exit 1; } ;;
+  esac
+done
+git diff --cached --check || exit 1</code></pre>
+                <p>The second hook checks the commit header against part 10's Odoo pattern. Git passes it the path of the file with the message (<code>$1</code>); we read only the first line. Merge and revert commits generated by Git are let through:</p>
+<pre><code>#!/bin/sh
+# Tiêu đề phải dạng [TAG] module: mô tả (cho phép Merge/Revert tự sinh)
+head -n 1 "$1" | grep -Eq '^(\[(ADD|IMP|FIX|REF|REM|REV|MOV|MERGE|REL|I18N|PERF|CLN|LINT)\] [a-z0-9_]+: .+|Merge |Revert )' || {
+  echo "commit-msg: tiêu đề phải có dạng [TAG] module: mô tả" &gt;&amp;2
+  echo "            ví dụ: [FIX] vinc_course: sửa nhãn số giờ" &gt;&amp;2
+  exit 1; }</code></pre>
+                <p>Enable the hooks for the repo and try them. The first commit below adds the two hooks themselves, and it already had to pass both checks:</p>
+<pre><code>$ git config core.hooksPath .githooks
+$ git add .githooks
+$ git commit -m "[ADD] vinc_course: hook kiểm tra commit"
+[main 8bf05a8] [ADD] vinc_course: hook kiểm tra commit
+ 2 files changed, 17 insertions(+)
+ create mode 100755 .githooks/commit-msg
+ create mode 100755 .githooks/pre-commit</code></pre>
+
+                <h2 id="thu-hook">Watching the hooks block</h2>
+                <p>Python with a syntax error is stopped before it becomes a commit; no commit is created and the file stays staged for you to fix:</p>
+<pre><code>$ echo "def broken(:" &gt; models/bad.py
+$ git add models/bad.py
+$ git commit -m "[ADD] vinc_course: file lỗi"
+pre-commit: lỗi cú pháp trong models/bad.py
+SyntaxError: invalid syntax
+$ git restore --staged models/bad.py
+$ rm models/bad.py</code></pre>
+                <p>Try committing a config file holding a password (it needed <code>add -f</code> because <code>.gitignore</code> would normally block it):</p>
+<pre><code>$ echo "admin_passwd = secret" &gt; odoo.conf
+$ git add -f odoo.conf
+$ git commit -m "[ADD] vinc_course: cấu hình"
+pre-commit: không được commit odoo.conf
+$ git restore --staged odoo.conf
+$ rm odoo.conf</code></pre>
+                <p>Then a message that breaks the pattern. The <code>commit-msg</code> hook refuses, prints a correct example, and once you rewrite it properly the commit goes through:</p>
+<pre><code>$ echo "# ghi chú" &gt;&gt; models/course.py
+$ git commit -am "update"
+commit-msg: tiêu đề phải có dạng [TAG] module: mô tả
+            ví dụ: [FIX] vinc_course: sửa nhãn số giờ
+$ git commit -am "[IMP] vinc_course: ghi chú trong model"
+[main 4062c7d] [IMP] vinc_course: ghi chú trong model
+ 1 file changed, 1 insertion(+)</code></pre>
+
+                <h2 id="bo-qua">Two ways a hook does not run: --no-verify and the executable bit</h2>
+                <p>The <code>--no-verify</code> flag skips the hooks, reasonable for an urgent commit or a temporary one on your own branch. But precisely because anyone can do it, hooks cannot be the only gate:</p>
+<pre><code>$ echo "# thêm" &gt;&gt; models/course.py
+$ git commit --no-verify -am "update"
+[main 0f50aa1] update
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p>The second failure is subtler: if the hook file loses its executable bit, Git quietly ignores it and leaves just a <code>hint</code> line at the end. The commit succeeds even though the check never ran:</p>
+<pre><code>$ chmod -x .githooks/pre-commit
+$ echo "# lần nữa" &gt;&gt; models/course.py
+$ git add models/course.py
+$ git commit -m "[IMP] vinc_course: thêm ghi chú"
+[main 1f8b27e] [IMP] vinc_course: thêm ghi chú
+ 1 file changed, 1 insertion(+)
+hint: The '.githooks/pre-commit' hook was ignored because it's not set as executable.
+hint: You can disable this warning with `git config advice.ignoredHook false`.</code></pre>
+
+                <h2 id="gitlab-ci">The second layer: GitLab CI</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-en-g11">
+                        <title id="dg-en-g11">Hooks on your machine and the pipeline on GitLab are two layers of checks</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">git commit</text>
+                        <text class="dg-text" x="18" y="115">hooks run here</text>
+                        <rect class="dg-box" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">git push</text>
+                        <text class="dg-text" x="184" y="115">branch to GitLab</text>
+                        <rect class="dg-accent" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Pipeline</text>
+                        <text class="dg-text" x="350" y="115">lint, tests in the MR</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">Merge</text>
+                        <text class="dg-text" x="516" y="115">only when green</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">hook</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">.gitlab-ci.yml</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">review</text>
+                        <text class="dg-text" x="4" y="150">Hooks catch mistakes early but --no-verify skips them; the pipeline is the team's shared gatekeeper.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>According to GitLab's documentation you need two things to run CI/CD: a <strong>runner</strong> (the agent that executes jobs; GitLab.com provides them, while on a self-managed GitLab an admin registers them) and the <code>.gitlab-ci.yml</code> configuration in the repository root describing the jobs. When you push, GitLab creates a <em>pipeline</em> of jobs that run in <em>stage</em> order, and the result shows up in the merge request. The file for <code>vinc_course</code> has three jobs: a Python syntax check, a no-secrets check and a run of Odoo's tests:</p>
+<pre><code>stages: [lint, test]
+
+lint-python:
+  stage: lint
+  image: python:3.12
+  script:
+    - python -m compileall -q .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+no-secrets:
+  stage: lint
+  image: alpine:3
+  script:
+    - test ! -e odoo.conf
+    - '! grep -rIn "admin_passwd" --include="*.py" --include="*.xml" .'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+odoo-tests:
+  stage: test
+  image: registry.example.com/vinc/odoo-ci:20.0   # image nội bộ có sẵn Odoo 20 và PostgreSQL
+  script:
+    - odoo-bin -d ci_db -i vinc_course --test-tags /vinc_course --stop-after-init
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Keyword</th><th>Meaning (per the GitLab documentation)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>stages</code></td><td>Names and order of stages; jobs in one stage run in parallel</td></tr>
+                            <tr><td><code>image</code></td><td>The Docker image the job runs in</td></tr>
+                            <tr><td><code>script</code></td><td>Shell commands the runner executes; a non-zero exit fails the job</td></tr>
+                            <tr><td><code>rules</code></td><td>Conditions deciding whether the job is created; here only for merge request pipelines</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The first two jobs use exactly the commands you can try on your machine before pushing, with the results below (no output and exit code 0 mean pass):</p>
+<pre><code>$ python3 -m compileall -q . ; echo "exit=$?"
+exit=0
+$ test ! -e odoo.conf &amp;&amp; echo "không có odoo.conf"
+không có odoo.conf
+$ ! grep -rIn "admin_passwd" --include="*.py" --include="*.xml" . ; echo "exit=$?"
+exit=0</code></pre>
+                <p>The third job uses <code>-i</code> to install the module into the <code>ci_db</code> database, <code>--test-tags /vinc_course</code> to run only this module's tests (the <code>[-][tag][/module][:class][.method]</code> syntax from the Odoo testing documentation) and <code>--stop-after-init</code> so the process exits when done; a failing test fails the job. The image name above is an example: your team builds an image with Odoo 20 and PostgreSQL and substitutes it.</p>
+                <p>Once comfortable, you will meet a few more useful keywords in GitLab's keyword reference:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Keyword</th><th>Used for</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>before_script</code></td><td>Commands executed ahead of every job's <code>script</code>, for example installing libraries</td></tr>
+                            <tr><td><code>cache</code></td><td>Keep folders (such as <code>.venv</code>) between runs so pipelines are faster</td></tr>
+                            <tr><td><code>artifacts</code></td><td>Attach a job's output files, such as a test report</td></tr>
+                            <tr><td><code>allow_failure</code></td><td>Let a job fail without failing the pipeline (fits advisory checks)</td></tr>
+                            <tr><td><code>variables</code></td><td>Define environment variables for jobs, such as the test database name</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A tip to keep everything consistent: put the check commands in one file inside the repo (for example <code>scripts/check.sh</code>) and have both the hook and the CI job call that same file. To add a rule you edit one place, and the result on your machine matches the one on GitLab.</p>
+
+                <h2 id="trong-odoo">Fitting it into the team workflow</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Step</th><th>How</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Hooks for newcomers</td><td>Add <code>git config core.hooksPath .githooks</code> to the README's “Getting started”</td></tr>
+                            <tr><td>Protect <code>main</code></td><td>Merge only through MRs (part 5) and require a green pipeline before merging</td></tr>
+                            <tr><td>Module tests</td><td>Write tests with Odoo's <code>TransactionCase</code> (the testing part of the Odoo series) so the <code>odoo-tests</code> job has something to run</td></tr>
+                            <tr><td>Grow gradually</td><td>Start with lint and secret checks, add tests and deployment once the team is used to it</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>A hook not running and nobody noticing.</strong> A missing executable bit, or a colleague who never set <code>core.hooksPath</code>. The example above shows Git printing only a hint line. Document the hook setup in the README and let the pipeline be the main safeguard.</li>
+                        <li><strong>Making <code>--no-verify</code> a habit.</strong> Every skip breaks the convention once. Use it only in emergencies and let the pipeline catch what slips by.</li>
+                        <li><strong>Hooks that are too slow.</strong> Running the whole test suite in <code>pre-commit</code> makes everyone avoid it. Keep hooks to a few seconds (syntax, secrets) and move the heavy work to CI.</li>
+                        <li><strong>A CI job stuck waiting.</strong> Usually no active runner is available for the project; GitLab's documentation shows how to check runners under Settings → CI/CD. Ask your company's GitLab admin.</li>
+                        <li><strong>Wrong indentation or quoting in YAML.</strong> YAML is sensitive to whitespace; a command starting with <code>!</code>, as in the <code>no-secrets</code> job, must be quoted. Check the file with a YAML linter or GitLab's pipeline editor before pushing.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>A hook is an automatic script; a non-zero exit makes Git cancel the action. It must be executable.</li>
+                    <li><code>pre-commit</code> inspects files, <code>commit-msg</code> inspects the message; share them via a repo folder and <code>core.hooksPath</code>.</li>
+                    <li>Hooks can be skipped with <code>--no-verify</code>, so CI is needed as the shared safeguard.</li>
+                    <li><code>.gitlab-ci.yml</code> declares <code>stages</code>, jobs, <code>image</code>, <code>script</code> and <code>rules</code>; a runner executes them and results show in the merge request.</li>
+                </ul>
+                <p>The final part puts it all together. You will use <code>git blame</code> and <code>git bisect</code> to track down the commit that caused a bug, then run a complete working cycle: feature, merge request, hotfix and release.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is a Git hook and where does it live?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A hook is a program Git runs by itself at fixed moments such as before a commit. By default hooks live in .git/hooks and must be executable; change the folder with core.hooksPath. A non-zero exit cancels the action.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I share hooks with the whole team?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The .git/hooks folder is not committed. Keep the hooks in a folder of the repo, for example .githooks/, commit it, then have everyone run git config core.hooksPath .githooks once, ideally documented in the README.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Can hooks be skipped?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Yes. git commit --no-verify skips both of those hooks. So hooks are only a safeguard on your machine; the team needs a GitLab CI pipeline as the shared gatekeeper.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What does GitLab CI need to run?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">At least one active runner (GitLab.com provides them) and the .gitlab-ci.yml configuration in the repository root declaring the jobs. When you push, GitLab creates a pipeline and shows the result in the merge request.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/githooks" target="_blank" rel="noopener">Git – githooks</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (core.hooksPath)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit (--no-verify)</a></li>
+                    <li><a href="https://docs.gitlab.com/ci/quick_start/" target="_blank" rel="noopener">GitLab Docs – Get started with GitLab CI/CD</a></li>
+                    <li><a href="https://docs.gitlab.com/ci/yaml/" target="_blank" rel="noopener">GitLab Docs – CI/CD YAML syntax reference</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-hooks-gitlab-ci-odoo-module-checks.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-hooks-gitlab-ci-odoo-module-checks.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-commit-conventions-branching-strategies.html"><small>← Previous</small>Commit and branch conventions</a>
+                    <span class="next"><small>Next · Coming soon</small>Blame, bisect and a capstone project</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#hook-la-gi">What a Git hook is</a></li>
+                        <li><a href="#pre-commit">The pre-commit hook: stopping secrets and broken code</a></li>
+                        <li><a href="#thu-hook">Watching the hooks block</a></li>
+                        <li><a href="#bo-qua">Two ways a hook does not run: --no-verify and the executable bit</a></li>
+                        <li><a href="#gitlab-ci">The second layer: GitLab CI</a></li>
+                        <li><a href="#trong-odoo">Fitting it into the team workflow</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

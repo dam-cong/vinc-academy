@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Branch and Merge: Work in Parallel Without Clashes</title>
+    <meta name="description" content="Create branches with git switch -c, merge with git merge (fast-forward and merge commit), clean up branches and handle detached HEAD in an Odoo module." />
+    <meta name="keywords" content="git branch, git merge, git switch, fast-forward, merge commit, no-ff, detached head, git branches, git for beginners" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-nhanh-branch-merge.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Branch and Merge: Work in Parallel Without Clashes" />
+    <meta property="og:description" content="Git branch and merge for beginners: git switch -c, fast-forward, merge commits, --no-ff, deleting branches and detached HEAD on an Odoo module." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-branches-and-merging.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Branch and Merge: Work in Parallel Without Clashes",
+                "description": "Git branch and merge for beginners: git switch -c, fast-forward, merge commits, --no-ff, deleting branches and detached HEAD on an Odoo module.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-branches-and-merging.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Branches and merging"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is a Git branch, and does it copy the code?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A branch is just a name pointing at a commit; no files are copied. When you commit, the current branch name moves to the new commit. That is why branches are created and removed almost instantly."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do fast-forward and merge commits differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A fast-forward happens when the receiving branch has no new commits: Git just moves the branch pointer ahead and creates no commit. If the two branches went separate ways, Git creates a merge commit with two parents. The --no-ff flag always forces a merge commit."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How is git switch different from git checkout?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git switch (since Git 2.23) only changes and creates branches; git restore restores files. Both were split out of git checkout, which used to do too many jobs. git checkout still works as before."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use git branch -D instead of -d?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "-d deletes only merged branches and refuses if you would lose commits. -D forces deletion regardless of merge state; use it when you are sure you want to drop an experimental branch for good."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-nhanh-branch-merge.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Branches and merging</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 3 · Practical Git Series</span>
+            <h1>Git Branch and Merge: Work in Parallel Without Clashes</h1>
+            <p class="post-lead">Part 3 creates a branch for each feature of the vinc_course module, merges them back with git merge (fast-forward and merge commit), cleans up finished branches and handles two common mistakes: switching with unfinished edits and detached HEAD.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-branches-and-merging.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>A branch is a lightweight pointer to a commit, so a new branch appears almost instantly and removing it costs just as little.</strong> Every team agrees on one branch per feature so that one person's unfinished work cannot break another's. This part uses <code>git switch -c</code> to create branches for new <code>vinc_course</code> fields, merges them back with <code>git merge</code> (fast-forward and merge commit), deletes finished branches and handles two common situations: switching with unfinished edits and <em>detached HEAD</em>.</p>
+                </div>
+
+                <h2 id="nhanh-la-gi">What a branch is and why one branch per task</h2>
+                <p>Imagine the team has three jobs running: adding a price field, adding a course level and fixing docs. If all three commit to one single line, an unfinished job leaks into the others and you cannot release only the finished one. Git answers with branches: each job gets its own line of history starting from the same point, and when it is done you <em>merge</em> it back into the main branch.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 180" role="img" aria-labelledby="dg-en-g03">
+                        <title id="dg-en-g03">Two branches split from main and merged back</title>
+                        <path class="dg-arrow" d="M50 50 H450" /><path class="dg-arrow" d="M130 50 L210 120 H370 L450 50" />
+                        <circle class="dg-box" cx="50" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="50" y="55">C1</text>
+                        <circle class="dg-box" cx="130" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="130" y="55">C2</text>
+                        <circle class="dg-box" cx="300" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="300" y="55">C3</text>
+                        <circle class="dg-accent" cx="450" cy="50" r="16" /><text class="dg-title" text-anchor="middle" x="450" y="55">M</text>
+                        <circle class="dg-box" cx="210" cy="120" r="16" /><text class="dg-title" text-anchor="middle" x="210" y="125">F1</text>
+                        <circle class="dg-box" cx="290" cy="120" r="16" /><text class="dg-title" text-anchor="middle" x="290" y="125">F2</text>
+                        <text class="dg-title" x="490" y="55">main</text><text class="dg-text" x="490" y="73">HEAD is here</text>
+                        <text class="dg-title" x="400" y="125">feature/course-level</text>
+                        <text class="dg-text" x="20" y="165">C3 is a new commit on main after the branch split off; M is the merge commit with two parents.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>Technically a branch is only a name attached to a commit. When you commit, the current branch name moves to the new commit. <code>HEAD</code> is the pointer telling you which branch you are on. Because nothing is copied, creating a branch takes under a second no matter how big the repo is.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>What it does</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git branch</code></td><td>List local branches; the <code>*</code> marks the current one</td></tr>
+                            <tr><td><code>git branch -a</code></td><td>Also list remote branches (part 4)</td></tr>
+                            <tr><td><code>git switch &lt;nhánh&gt;</code></td><td>Move to an existing branch</td></tr>
+                            <tr><td><code>git switch -c &lt;nhánh&gt;</code></td><td>Create a new branch from here and move to it</td></tr>
+                            <tr><td><code>git merge &lt;nhánh&gt;</code></td><td>Merge that branch into the current one</td></tr>
+                            <tr><td><code>git branch -d &lt;nhánh&gt;</code></td><td>Delete a merged branch (safe)</td></tr>
+                            <tr><td><code>git branch -m &lt;mới&gt;</code></td><td>Rename the current branch</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>You can see this for yourself: the <code>.git/HEAD</code> file holds the current branch name, and <code>git rev-parse</code> shows the commit a branch name points to.</p>
+<pre><code>$ cat .git/HEAD
+ref: refs/heads/main
+$ git rev-parse --short main
+58544f6
+$ git branch -v
+* main 58544f6 Merge branch 'feature/course-code'</code></pre>
+                <p>Since Git 2.23 the commands <code>git switch</code> (change branch) and <code>git restore</code> (restore files) split up the many jobs of <code>git checkout</code>. Older guides still use <code>git checkout</code> and it still works, but this series uses the new commands because their names say what they do.</p>
+
+                <h2 id="tao-chuyen">Creating branches and moving between them</h2>
+                <p>A common convention is to name branches by kind of work: <code>feature/</code> for features, <code>fix/</code> for bug fixes. We create a branch for the price field, commit a change, then go back to <code>main</code>. Watch the two <code>grep</code> calls: the file content really changes with the branch you stand on.</p>
+<pre><code>$ git branch
+* main
+$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ git branch
+* feature/course-price
+  main
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí"
+[feature/course-price 3d09a30] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph --all
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git switch main
+Switched to branch 'main'
+$ grep -c price models/course.py
+0
+$ git switch feature/course-price
+Switched to branch 'feature/course-price'
+$ grep -c price models/course.py
+1</code></pre>
+                <p>The <code>--graph</code> view shows the new branch one commit ahead of <code>main</code>. The next step is to merge it into <code>main</code>.</p>
+                <p>Two small tips speed you up. First, <code>git switch -</code> returns to the branch you just left, handy when hopping between two branches. Second, <code>git switch -c &lt;name&gt; &lt;start-point&gt;</code> creates a branch from another commit or branch instead of from where you stand, as with <code>main~2</code> later on. Remember a branch always starts where you point it, so move to an up-to-date <code>main</code> before creating a new feature branch.</p>
+
+                <h2 id="merge">Merging: fast-forward and merge commits</h2>
+                <p><code>git merge</code> always runs from the branch that <strong>receives</strong> the changes: you stand on <code>main</code> and name the branch to bring in. There are two outcomes depending on the shape of history. If <code>main</code> has no new commits since the branch split off, Git just slides the <code>main</code> pointer forward: a <strong>fast-forward</strong>, no new commit.</p>
+<pre><code>$ git switch main
+Switched to branch 'main'
+$ git merge feature/course-price
+Updating 47905cb..3d09a30
+Fast-forward
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git branch -d feature/course-price
+Deleted branch feature/course-price (was 3d09a30).
+$ git branch
+* main</code></pre>
+                <p>A more realistic case: while you work on the level branch a colleague commits to <code>main</code>. The two histories went separate ways, so Git creates a <strong>merge commit</strong> with two parents to join them. The diagram at the top is exactly this case.</p>
+<pre><code>$ git switch -c feature/course-level
+Switched to a new branch 'feature/course-level'
+$ echo "    level = fields.Selection([('basic', 'Cơ bản'), ('adv', 'Nâng cao')])" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường cấp độ"
+[feature/course-level 82624ed] [IMP] vinc_course: thêm trường cấp độ
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main e26c754] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git merge feature/course-level
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph
+*   f2e2ab5 Merge branch 'feature/course-level'
+|\  
+| * 82624ed [IMP] vinc_course: thêm trường cấp độ
+* | e26c754 [ADD] vinc_course: README
+|/  
+* 3d09a30 [IMP] vinc_course: thêm trường học phí
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git branch --merged
+  feature/course-level
+* main
+$ git branch -d feature/course-level
+Deleted branch feature/course-level (was 82624ed).</code></pre>
+                <p>Read the graph: the second star on the left is the README commit on <code>main</code>, the branch on the right is the level commit, and the top line is the merge commit joining both. Because the two changes touch different files (or different lines) Git can merge them by itself; when they touch the same line you get a <em>conflict</em>, the subject of part 6. <code>git branch --merged</code> lists branches already contained in the current one, meaning they are safe to delete.</p>
+                <p>Many teams want a merge commit <em>every time</em> so history records “when this feature was merged”, even when a fast-forward is possible. The <code>--no-ff</code> flag does exactly that:</p>
+<pre><code>$ git switch -c feature/course-code
+Switched to a new branch 'feature/course-code'
+$ echo "    code = fields.Char(string='Mã khóa')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm mã khóa học"
+[feature/course-code 303f5c8] [IMP] vinc_course: thêm mã khóa học
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ git merge --no-ff feature/course-code
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph -n 4
+*   58544f6 Merge branch 'feature/course-code'
+|\  
+| * 303f5c8 [IMP] vinc_course: thêm mã khóa học
+|/  
+*   f2e2ab5 Merge branch 'feature/course-level'
+|\  
+| * 82624ed [IMP] vinc_course: thêm trường cấp độ
+$ git branch -d feature/course-code
+Deleted branch feature/course-code (was 303f5c8).</code></pre>
+
+                <h2 id="xoa-nhanh">Cleaning up after the work is done</h2>
+                <p>A merged branch has no more value, so delete it to keep the list tidy. <code>git branch -d</code> deletes only merged branches and refuses if you would lose commits. To drop an experiment for good use <code>-D</code> (capital) to force it, but be sure you no longer need those commits.</p>
+<pre><code>$ git switch -c experiment/video
+Switched to a new branch 'experiment/video'
+$ echo "# thử video" &gt;&gt; README.md
+$ git commit -am "[IMP] vinc_course: thử nhúng video"
+[experiment/video 9a15432] [IMP] vinc_course: thử nhúng video
+ 1 file changed, 1 insertion(+)
+$ git switch main
+Switched to branch 'main'
+$ git branch -d experiment/video
+error: the branch 'experiment/video' is not fully merged
+hint: If you are sure you want to delete it, run 'git branch -D experiment/video'
+hint: Disable this message with "git config advice.forceDeleteBranch false"
+$ git branch -D experiment/video
+Deleted branch experiment/video (was 9a15432).</code></pre>
+
+                <h2 id="thoi-quen">Habits that keep branches tidy</h2>
+                <ul>
+                    <li><strong>Short-lived branches.</strong> The longer a branch lives the further it drifts from <code>main</code>, and the more painful the merge. Slice work so branches live days, not weeks.</li>
+                    <li><strong>One purpose per branch.</strong> Do not bundle “add price field” with “fix the report”; undoing or reviewing them separately becomes hard.</li>
+                    <li><strong>Never commit straight to <code>main</code>.</strong> Most teams protect the main branch and allow changes only through merge requests (part 5).</li>
+                    <li><strong>Catch up with <code>main</code> often.</strong> When <code>main</code> gets new changes, bring them into your branch so conflicts show up early:</li>
+                </ul>
+<pre><code>$ git switch -c feature/course-sync main~2
+Switched to a new branch 'feature/course-sync'
+$ echo "ghi chú đồng bộ" &gt; SYNC.md
+$ git add SYNC.md
+$ git commit -m "[ADD] vinc_course: ghi chú đồng bộ"
+[feature/course-sync e6ebc3c] [ADD] vinc_course: ghi chú đồng bộ
+ 1 file changed, 1 insertion(+)
+ create mode 100644 SYNC.md
+$ git merge main
+Merge made by the 'ort' strategy.
+ models/course.py | 2 ++
+ 1 file changed, 2 insertions(+)
+$ git log --oneline --graph -n 1
+*   fd027f5 Merge branch 'main' into feature/course-sync
+|\  
+$ git switch main
+Switched to branch 'main'
+$ git branch -D feature/course-sync
+Deleted branch feature/course-sync (was fd027f5).</code></pre>
+                <p>This time <code>git merge main</code> runs from the feature branch, so the feature branch is the <em>receiving</em> side. It does not touch <code>main</code>, which makes it safe. Part 8 shows the alternative, <code>rebase</code>.</p>
+
+                <h2 id="trong-odoo">Branches in Odoo work</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Branch usage</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>A branch per Odoo version</td><td>The source-install documentation uses <code>git clone --branch 20.0 --single-branch ...</code>: Odoo's <code>20.0</code> branch is version 20</td></tr>
+                            <tr><td>A branch per feature</td><td><code>feature/course-price</code>, <code>feature/course-level</code></td></tr>
+                            <tr><td>A branch for fixes</td><td><code>fix/duplicate-course-code</code> then merged via merge request (part 5)</td></tr>
+                            <tr><td>An experiment branch</td><td><code>experiment/video</code>, deleted with <code>-D</code> if abandoned</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>For custom modules built for a client, many teams keep one stable branch for each Odoo version the client runs (for example <code>20.0</code>) and branch features off it. Part 10 covers branching strategies in detail.</p>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>Switching branches with unfinished edits.</strong> If the file you edited differs between the two branches, Git refuses to protect your work:</li>
+                    </ul>
+<pre><code>$ git switch -c feature/x
+Switched to a new branch 'feature/x'
+$ echo "    x = fields.Char()" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm trường x"
+$ git switch main
+Switched to branch 'main'
+$ echo "    y = fields.Char()" &gt;&gt; models/course.py
+$ git switch feature/x
+error: Your local changes to the following files would be overwritten by checkout:
+	models/course.py
+Please commit your changes or stash them before you switch branches.
+Aborting</code></pre>
+
+                    <ul>
+                        <li>Three ways out: commit it, <code>git stash</code> (part 9), or discard it with <code>git restore</code> (part 7). Do not force the switch with <code>-f</code> before you understand what it throws away.</li>
+                        <li><strong>Falling into “detached HEAD”.</strong> Running <code>git checkout &lt;commit&gt;</code> or <code>git switch --detach</code> puts HEAD on a commit that is on no branch. Commits made now are easy to lose. To keep them run <code>git switch -c &lt;branch-name&gt;</code>; to go back run <code>git switch -</code>:</li>
+                    </ul>
+<pre><code>$ git stash -q
+$ git checkout HEAD~1 2&gt;&amp;1 | head -5
+Note: switching to 'HEAD~1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+$ git switch -
+Previous HEAD position was 847d6e3 [ADD] vinc_course: khung module và model vinc.course
+Switched to branch 'feature/course-price'</code></pre>
+
+                    <ul>
+                        <li><strong>Spaces in a branch name.</strong> Branch names cannot contain spaces; join words with hyphens (and prefer lowercase ASCII so they are easy to type in a terminal):</li>
+                    </ul>
+<pre><code>$ git switch -c "feature/course price"
+fatal: 'feature/course price' is not a valid branch name
+hint: See `man git check-ref-format`
+hint: Disable this message with "git config advice.refSyntax false"
+$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'</code></pre>
+
+                    <ul>
+                        <li><strong>Committing on <code>main</code> by mistake.</strong> Forgetting to create a branch and committing straight to <code>main</code> is common; look at the <code>*</code> in <code>git branch</code> or the first line of <code>git status</code> before committing. Part 7 shows the rescue.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>A branch is a light pointer; one branch per task, named <code>feature/...</code>, <code>fix/...</code>.</li>
+                    <li><code>git switch -c</code> creates and moves; file content follows the branch.</li>
+                    <li><code>git merge</code> runs from the receiving branch: fast-forward for straight history, merge commit when diverged; <code>--no-ff</code> always forces a merge commit.</li>
+                    <li><code>-d</code> deletes merged branches, <code>-D</code> forces it.</li>
+                    <li>With unfinished edits, commit or stash before changing branch.</li>
+                </ul>
+                <p>So far everything happened on your machine. The next part connects the repo to <strong>GitLab</strong>: <code>clone</code>, <code>fetch</code>, <code>pull</code>, <code>push</code>, and creating an SSH key so you do not type a password every time.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is a Git branch, and does it copy the code?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A branch is just a name pointing at a commit; no files are copied. When you commit, the current branch name moves to the new commit. That is why branches are created and removed almost instantly.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do fast-forward and merge commits differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A fast-forward happens when the receiving branch has no new commits: Git just moves the branch pointer ahead and creates no commit. If the two branches went separate ways, Git creates a merge commit with two parents. The --no-ff flag always forces a merge commit.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How is git switch different from git checkout?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git switch (since Git 2.23) only changes and creates branches; git restore restores files. Both were split out of git checkout, which used to do too many jobs. git checkout still works as before.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use git branch -D instead of -d?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">-d deletes only merged branches and refuses if you would lose commits. -D forces deletion regardless of merge state; use it when you are sure you want to drop an experimental branch for good.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-branch" target="_blank" rel="noopener">Git – git-branch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-switch" target="_blank" rel="noopener">Git – git-switch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">Git – git-merge</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-branches-and-merging.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-branches-and-merging.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-first-commits-status-add-log-gitignore.html"><small>← Previous</small>Your first commits with Git</a>
+                    <span class="next"><small>Next · Coming soon</small>Remotes: clone, fetch, pull, push and SSH</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#nhanh-la-gi">What a branch is and why one branch per task</a></li>
+                        <li><a href="#tao-chuyen">Creating branches and moving between them</a></li>
+                        <li><a href="#merge">Merging: fast-forward and merge commits</a></li>
+                        <li><a href="#xoa-nhanh">Cleaning up after the work is done</a></li>
+                        <li><a href="#thoi-quen">Habits that keep branches tidy</a></li>
+                        <li><a href="#trong-odoo">Branches in Odoo work</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

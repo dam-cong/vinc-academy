@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git commit đầu tiên: status, add, diff, log, .gitignore</title>
+    <meta name="description" content="Chạy vòng lặp Git hằng ngày trên module Odoo: đọc git status, so git diff với --staged, commit gọn, xem git log và dùng .gitignore tránh lộ odoo.conf." />
+    <meta name="keywords" content="git commit, git status, git add, git diff, git log, gitignore odoo, git rm cached, git cho người mới" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git commit đầu tiên: status, add, diff, log, .gitignore" />
+    <meta property="og:description" content="Vòng lặp Git hằng ngày: status, diff, add, commit, log và .gitignore cho dự án Odoo, kèm lỗi hay gặp với commit -a và file đã theo dõi." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-commit-dau-tien-status-add-log-gitignore.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git commit đầu tiên: status, add, diff, log, .gitignore",
+                "description": "Vòng lặp Git hằng ngày: status, diff, add, commit, log và .gitignore cho dự án Odoo, kèm lỗi hay gặp với commit -a và file đã theo dõi.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-commit-dau-tien-status-add-log-gitignore.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-commit-dau-tien-status-add-log-gitignore.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Commit đầu tiên"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "git diff và git diff --staged khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git diff so thư mục làm việc với staging, tức những thay đổi chưa git add. git diff --staged (hay --cached) so staging với commit gần nhất, tức đúng nội dung sẽ vào commit tiếp theo."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao thêm .gitignore rồi mà file vẫn hiện trong git status?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": ".gitignore chỉ áp dụng cho file chưa được Git theo dõi. Với file đã commit từ trước, hãy chạy git rm --cached tên_file rồi commit để dừng theo dõi mà vẫn giữ file trên đĩa."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "git commit -a có thêm cả file mới không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không. Cờ -a chỉ tự đưa vào staging các file đã được theo dõi và đã sửa hoặc xóa. File mới (hiện ?? trong git status -s) vẫn phải git add trước."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên commit file odoo.conf không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không nên nếu file chứa mật khẩu như admin_passwd hay thông tin kết nối. Hãy đưa odoo.conf vào .gitignore và commit một file mẫu như odoo.conf.example không có bí mật."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-first-commits-status-add-log-gitignore.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Commit đầu tiên</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 2 · Series Git thực chiến</span>
+            <h1>Git commit đầu tiên: status, add, diff, log và .gitignore</h1>
+            <p class="post-lead">Bài 2 chạy vòng lặp Git hằng ngày trên module vinc_course: đọc git status, phân biệt git diff với --staged, viết commit gọn, xem lại bằng git log và loại file không nên vào repo bằng .gitignore.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-commit-dau-tien-status-add-log-gitignore.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Hằng ngày bạn chỉ lặp một vòng: sửa file → <code>git status</code> → <code>git diff</code> → <code>git add</code> → <code>git commit</code>.</strong> Bài này chạy vòng đó trên module <code>vinc_course</code>: đọc ký hiệu của <code>git status -s</code>, phân biệt <code>git diff</code> với <code>git diff --staged</code>, viết commit theo quy ước <code>[TAG] module:</code> của Odoo, xem lại bằng <code>git log</code>/<code>git show</code> và dùng <code>.gitignore</code> để <code>__pycache__</code>, <code>odoo.conf</code> không lọt vào repo.</p>
+                </div>
+
+                <h2 id="vong-lap">Vòng lặp hằng ngày trên module vinc_course</h2>
+                <p>Giả sử bạn vừa dựng khung module với cấu trúc dưới đây (nội dung từng file như series Odoo). Repo đã <code>git init</code> nhưng chưa có commit nào, nên <code>git status</code> liệt kê mọi thứ là <em>untracked</em>: Git thấy file nhưng chưa theo dõi.</p>
+<pre><code>vinc_course/
+├── __init__.py
+├── __manifest__.py
+└── models/
+    ├── __init__.py
+    └── course.py</code></pre>
+<pre><code>from odoo import fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = 'Khóa học'
+
+    name = fields.Char(required=True)</code></pre>
+                <p>Dùng <code>git add .</code> để đưa tất cả vào staging rồi commit. Với lần đầu tiên thì như vậy là ổn, nhưng từ lần sau hãy tập thói quen <strong>xem <code>git status</code> trước khi <code>add .</code></strong> để chắc không kéo theo file rác.</p>
+<pre><code>$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	__init__.py
+	__manifest__.py
+	models/
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ git add .
+$ git status -s
+A  __init__.py
+A  __manifest__.py
+A  models/__init__.py
+A  models/course.py
+$ git commit -m "[ADD] vinc_course: khung module và model vinc.course"
+[main (root-commit) a79a9aa] [ADD] vinc_course: khung module và model vinc.course
+ 4 files changed, 17 insertions(+)
+ create mode 100644 __init__.py
+ create mode 100644 __manifest__.py
+ create mode 100644 models/__init__.py
+ create mode 100644 models/course.py
+$ git log --oneline
+a79a9aa [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Dòng đầu của commit message (<code>[ADD] vinc_course: ...</code>) là thông lệ trong các repo Odoo; ta sẽ nói kỹ ở bài 10. Hiện tại chỉ cần nhớ: <code>-m</code> cho thông điệp một dòng, và mỗi commit nên làm đúng một việc.</p>
+
+                <h2 id="status">Đọc git status -s như đọc bảng điểm</h2>
+                <p>Bản đầy đủ của <code>git status</code> dễ đọc cho người mới, nhưng bản rút gọn <code>-s</code> (<code>--short</code>) nhanh hơn nhiều khi dự án lớn. Mỗi dòng có hai cột ký hiệu: cột trái là trạng thái trong staging, cột phải là trạng thái trong thư mục làm việc.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hiển thị</th><th>Ý nghĩa</th><th>Làm gì tiếp</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>?? file</code></td><td>File mới, Git chưa theo dõi</td><td><code>git add</code> nếu cần commit, hoặc thêm vào <code>.gitignore</code></td></tr>
+                            <tr><td><code>A&nbsp;&nbsp;file</code></td><td>File mới đã vào staging</td><td>Sẵn sàng commit</td></tr>
+                            <tr><td><code>&nbsp;M file</code></td><td>Đã sửa trong thư mục làm việc, chưa staging</td><td><code>git diff</code> để xem, <code>git add</code> để chọn</td></tr>
+                            <tr><td><code>M&nbsp;&nbsp;file</code></td><td>Đã sửa và đã staging</td><td>Sẵn sàng commit</td></tr>
+                            <tr><td><code>&nbsp;D file</code></td><td>Đã xóa trong thư mục làm việc</td><td><code>git add</code> hoặc <code>git rm</code> để ghi nhận việc xóa</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="diff">Xem mình đã đổi gì: git diff và git diff --staged</h2>
+                <p>Hai lệnh này hay bị nhầm. <code>git diff</code> (không cờ) so thư mục làm việc với staging, tức là những thay đổi <strong>chưa</strong> được <code>add</code>. <code>git diff --staged</code> (đồng nghĩa với <code>--cached</code>) so staging với commit gần nhất, tức là đúng thứ sẽ vào commit tiếp theo. Hãy thêm trường <code>hours</code> vào model và theo dõi:</p>
+<pre><code>$ echo "    hours = fields.Integer(string='Số giờ')" &gt;&gt; models/course.py
+$ git status -s
+ M models/course.py
+$ git diff
+diff --git a/models/course.py b/models/course.py
+index 86951c7..781c9a6 100644
+--- a/models/course.py
++++ b/models/course.py
+@@ -6,3 +6,4 @@ class VincCourse(models.Model):
+     _description = 'Khóa học'
+ 
+     name = fields.Char(required=True)
++    hours = fields.Integer(string='Số giờ')
+$ git add models/course.py
+$ git status -s
+M  models/course.py
+$ git diff
+$ git diff --staged
+diff --git a/models/course.py b/models/course.py
+index 86951c7..781c9a6 100644
+--- a/models/course.py
++++ b/models/course.py
+@@ -6,3 +6,4 @@ class VincCourse(models.Model):
+     _description = 'Khóa học'
+ 
+     name = fields.Char(required=True)
++    hours = fields.Integer(string='Số giờ')
+$ git commit -m "[IMP] vinc_course: thêm trường số giờ"
+[main ef00810] [IMP] vinc_course: thêm trường số giờ
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p>Cách đọc: dòng bắt đầu bằng <code>+</code> là dòng thêm, <code>-</code> là dòng xóa, dòng <code>@@</code> cho biết vị trí trong file. Để ý lần <code>git diff</code> thứ hai không in gì: mọi thay đổi đã nằm trong staging nên không còn khác biệt giữa thư mục làm việc và staging. Thói quen tốt trước mỗi lần commit là chạy <code>git diff --staged</code> để tự review lần cuối, giống như đọc lại email trước khi gửi.</p>
+
+                <h2 id="log">Đọc lại lịch sử: git log và git show</h2>
+<pre><code>$ git log --stat --oneline
+ef00810 [IMP] vinc_course: thêm trường số giờ
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+a79a9aa [ADD] vinc_course: khung module và model vinc.course
+ __init__.py        | 1 +
+ __manifest__.py    | 7 +++++++
+ models/__init__.py | 1 +
+ models/course.py   | 8 ++++++++
+ 4 files changed, 17 insertions(+)
+$ git show --stat HEAD
+commit ef00810db8c3ba15ee2751bb6e570d7e13495d19
+Author: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 11:06:00 2026 +0700
+
+    [IMP] vinc_course: thêm trường số giờ
+
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git log --oneline -n 1
+ef00810 [IMP] vinc_course: thêm trường số giờ</code></pre>
+                <p><code>git log</code> liệt kê commit từ mới đến cũ; <code>--oneline</code> rút mỗi commit còn một dòng, <code>--stat</code> thêm thống kê file đã đổi, <code>-n 1</code> giới hạn số commit. <code>git show</code> in chi tiết một commit (mặc định là <code>HEAD</code>, commit mới nhất): tác giả, thời gian, lời nhắn và thay đổi.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git log --oneline</code></td><td>Mỗi commit một dòng: mã ngắn + tiêu đề</td></tr>
+                            <tr><td><code>git log -p -- đường/dẫn</code></td><td>Xem thay đổi chi tiết của riêng một file</td></tr>
+                            <tr><td><code>git log --author="An"</code></td><td>Lọc theo tác giả</td></tr>
+                            <tr><td><code>git log --since="1 week ago"</code></td><td>Lọc theo thời gian</td></tr>
+                            <tr><td><code>git show &lt;mã&gt;</code></td><td>Chi tiết một commit bất kỳ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="gitignore">.gitignore: giữ file rác và file bí mật ngoài repo</h2>
+                <p>Khi chạy Odoo, Python tự sinh thư mục <code>__pycache__</code>, server ghi file log, và bạn có thể có file cấu hình <code>odoo.conf</code> chứa <code>admin_passwd</code>. Không thứ nào nên nằm trong repo: rác làm lịch sử nhiễu, còn mật khẩu một khi đã lên GitLab thì nhiều người nhìn thấy. File <code>.gitignore</code> ở thư mục gốc repo liệt kê mẫu tên mà Git sẽ lờ đi:</p>
+<pre><code>$ git status -s
+?? models/__pycache__/
+?? odoo.conf
+?? odoo.log
+$ printf "__pycache__/\n*.pyc\n*.log\nodoo.conf\n.venv/\n" &gt; .gitignore
+$ git status -s
+?? .gitignore
+$ git check-ignore -v odoo.conf models/__pycache__/course.cpython-312.pyc
+.gitignore:4:odoo.conf	odoo.conf
+.gitignore:1:__pycache__/	models/__pycache__/course.cpython-312.pyc
+$ git add .gitignore
+$ git commit -m "[ADD] vinc_course: .gitignore"
+[main e945725] [ADD] vinc_course: .gitignore
+ 1 file changed, 5 insertions(+)
+ create mode 100644 .gitignore</code></pre>
+                <p><code>git check-ignore -v</code> cho biết file nào bị luật nào chặn (cột đầu là <code>file:dòng:mẫu</code>), rất tiện khi bạn không hiểu vì sao một file không hiện trong <code>status</code>. Nhớ <strong>commit cả chính <code>.gitignore</code></strong> để cả nhóm dùng chung luật.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mẫu</th><th>Khớp với</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>*.pyc</code></td><td>Mọi file có đuôi <code>.pyc</code></td></tr>
+                            <tr><td><code>__pycache__/</code></td><td>Thư mục tên <code>__pycache__</code> (dấu <code>/</code> cuối chỉ khớp thư mục)</td></tr>
+                            <tr><td><code>odoo.conf</code></td><td>File tên đó ở mọi cấp thư mục</td></tr>
+                            <tr><td><code>!keep.log</code></td><td>Dấu <code>!</code> đảo ngược: không bỏ qua file này</td></tr>
+                            <tr><td><code># ghi chú</code></td><td>Dòng bắt đầu bằng <code>#</code> là chú thích</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="trong-odoo">Gợi ý .gitignore cho dự án Odoo</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mẫu</th><th>Vì sao nên bỏ qua</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__pycache__/</code>, <code>*.pyc</code></td><td>Bytecode Python tự sinh, khác nhau giữa máy</td></tr>
+                            <tr><td><code>.venv/</code></td><td>Môi trường ảo (bài 1 series Python): dựng lại được từ <code>requirements.txt</code></td></tr>
+                            <tr><td><code>odoo.conf</code>, <code>.env</code></td><td>Chứa mật khẩu và API key; commit file mẫu <code>odoo.conf.example</code> thay thế</td></tr>
+                            <tr><td><code>*.log</code></td><td>Log chạy server, lớn và đổi liên tục</td></tr>
+                            <tr><td><code>.idea/</code>, <code>.vscode/</code></td><td>Cấu hình riêng của editor mỗi người</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="commit-tot">Một commit tốt trông như thế nào</h2>
+                <p>Git không ép bạn viết gì trong lời nhắn, nhưng sáu tháng sau chính bạn sẽ cảm ơn (hoặc trách) lời nhắn đó khi tìm vì sao một dòng code tồn tại. Hướng dẫn Git của Odoo gợi ý tiêu đề khoảng dưới 50 ký tự, mô tả lý do thay đổi chứ không chỉ liệt kê thao tác, và tránh những tiêu đề chung chung như “bugfix” hay “improvements”. Một vài so sánh trên module của chúng ta:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tránh</th><th>Nên viết</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>update</code></td><td><code>[IMP] vinc_course: thêm trường số giờ cho khóa học</code></td></tr>
+                            <tr><td><code>fix bug</code></td><td><code>[FIX] vinc_course: không cho tạo hai khóa trùng mã</code></td></tr>
+                            <tr><td><code>sửa nhiều thứ</code></td><td>Tách thành từng commit, mỗi commit một việc</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Quy tắc thực dụng: nếu bạn không thể mô tả commit trong một câu mà không dùng chữ “và”, rất có thể nó đang làm hai việc và nên tách bằng cách <code>git add</code> từng file. Khi cần viết nhiều dòng, bỏ cờ <code>-m</code> để Git mở trình soạn thảo bạn đã chọn ở bài 1 (<code>core.editor</code>): dòng đầu là tiêu đề, cách một dòng trống rồi tới phần mô tả.</p>
+
+                <h2 id="doi-ten">Đổi tên và xóa file đúng cách</h2>
+                <p>Git không lưu “đổi tên” như một thao tác riêng; nó so nội dung rồi tự nhận ra file đã được chuyển. Dù vậy dùng <code>git mv</code> và <code>git rm</code> giúp thay đổi vào staging ngay, đỡ một bước <code>git add</code>. Hướng dẫn của Odoo còn nhắc: khi chuyển file (tag <code>[MOV]</code>), đừng sửa nội dung cùng lúc, nếu không Git có thể mất dấu lịch sử của file.</p>
+<pre><code>$ git mv README.md README.rst
+$ git status -s
+R  README.md -&gt; README.rst
+$ git commit -m "[MOV] vinc_course: đổi README.md thành README.rst"
+[main 2cf6824] [MOV] vinc_course: đổi README.md thành README.rst
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename README.md =&gt; README.rst (100%)
+$ git log --oneline --follow -- README.rst
+2cf6824 [MOV] vinc_course: đổi README.md thành README.rst
+a232969 [ADD] vinc_course: README</code></pre>
+                <p>Ký hiệu <code>R</code> là rename. Cờ <code>--follow</code> của <code>git log</code> đi theo file qua lần đổi tên, nên bạn vẫn thấy lịch sử cũ của <code>README.md</code>.</p>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Thêm <code>.gitignore</code> rồi mà file vẫn hiện <code>M</code>.</strong> <code>.gitignore</code> chỉ áp dụng cho file <em>chưa</em> được theo dõi; file đã commit từ trước vẫn bị theo dõi. Tài liệu <code>gitignore</code> hướng dẫn dùng <code>git rm --cached</code> để dừng theo dõi mà vẫn giữ file trên đĩa. Minh họa với <code>odoo.conf</code> lỡ commit từ đầu:</li>
+                    </ul>
+<pre><code>$ printf "odoo.conf\n" &gt; .gitignore
+$ echo "db_name = vinc" &gt;&gt; odoo.conf
+$ git status -s
+ M odoo.conf
+?? .gitignore
+$ git rm --cached odoo.conf
+rm 'odoo.conf'
+$ git add .gitignore
+$ git status -s
+A  .gitignore
+D  odoo.conf
+$ git commit -m "[FIX] vinc_course: bỏ odoo.conf khỏi repo"
+[main 527fefc] [FIX] vinc_course: bỏ odoo.conf khỏi repo
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ create mode 100644 .gitignore
+ delete mode 100644 odoo.conf
+$ git status -s</code></pre>
+
+                    <ul>
+                        <li><strong>Mật khẩu đã commit thì xóa file chưa đủ.</strong> Commit xóa chỉ là một commit mới; nội dung cũ vẫn nằm trong lịch sử. Nếu bí mật đã được đẩy lên GitLab, hãy đổi mật khẩu/khóa đó ngay, rồi nhờ quản trị viên xử lý lịch sử.</li>
+                        <li><strong><code>git commit -a</code> không lấy file mới.</strong> Cờ <code>-a</code> chỉ tự staging file đã theo dõi (đã sửa hoặc xóa); tài liệu nói rõ file chưa được Git biết đến không bị ảnh hưởng. Trong ví dụ, <code>NOTE.md</code> vẫn còn <code>??</code> sau commit:</li>
+                    </ul>
+<pre><code>$ echo "# ghi chú" &gt; NOTE.md
+$ echo "y = 2" &gt;&gt; models.py
+$ git commit -am "[IMP] vinc_course: sửa models"
+[main 264ae18] [IMP] vinc_course: sửa models
+ 1 file changed, 1 insertion(+)
+$ git status -s
+?? NOTE.md</code></pre>
+
+                    <ul>
+                        <li><strong><code>git add .</code> mà không nhìn <code>status</code>.</strong> Bạn dễ kéo cả file tạm, dump database hay ảnh chụp màn hình vào commit. Hãy <code>git status -s</code> trước, rồi <code>git add</code> đích danh từng file hoặc thư mục.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Vòng lặp: sửa → <code>status</code> → <code>diff</code> → <code>add</code> → <code>commit</code>.</li>
+                    <li><code>git diff</code> xem thay đổi chưa staging; <code>git diff --staged</code> xem thứ sẽ vào commit.</li>
+                    <li><code>git log --oneline</code> và <code>git show</code> để đọc lịch sử.</li>
+                    <li><code>.gitignore</code> chỉ tác dụng với file chưa theo dõi; lỡ commit thì dùng <code>git rm --cached</code>.</li>
+                    <li>Mật khẩu đã vào lịch sử thì phải đổi mật khẩu, không chỉ xóa file.</li>
+                </ul>
+                <p>Bạn đã commit được trên một đường thẳng. Nhưng làm việc nhóm nghĩa là nhiều việc chạy song song: một người sửa model, người khác làm báo cáo. Bài tiếp theo giới thiệu <strong>nhánh</strong> để mỗi việc có đường đi riêng, rồi <strong>merge</strong> để gộp lại.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git diff và git diff --staged khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git diff so thư mục làm việc với staging, tức những thay đổi chưa git add. git diff --staged (hay --cached) so staging với commit gần nhất, tức đúng nội dung sẽ vào commit tiếp theo.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao thêm .gitignore rồi mà file vẫn hiện trong git status?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">.gitignore chỉ áp dụng cho file chưa được Git theo dõi. Với file đã commit từ trước, hãy chạy git rm --cached tên_file rồi commit để dừng theo dõi mà vẫn giữ file trên đĩa.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git commit -a có thêm cả file mới không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Cờ -a chỉ tự đưa vào staging các file đã được theo dõi và đã sửa hoặc xóa. File mới (hiện ?? trong git status -s) vẫn phải git add trước.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên commit file odoo.conf không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không nên nếu file chứa mật khẩu như admin_passwd hay thông tin kết nối. Hãy đưa odoo.conf vào .gitignore và commit một file mẫu như odoo.conf.example không có bí mật.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://git-scm.com/docs/git-status" target="_blank" rel="noopener">Git – git-status</a></li>
+                    <li><a href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener">Git – git-diff</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit</a></li>
+                    <li><a href="https://git-scm.com/docs/git-log" target="_blank" rel="noopener">Git – git-log</a></li>
+                    <li><a href="https://git-scm.com/docs/gitignore" target="_blank" rel="noopener">Git – gitignore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-mv" target="_blank" rel="noopener">Git – git-mv</a></li>
+                    <li><a href="https://git-scm.com/docs/git-rm" target="_blank" rel="noopener">Git – git-rm</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-commit-dau-tien-status-add-log-gitignore.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-commit-dau-tien-status-add-log-gitignore.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-la-gi-cai-dat-cau-hinh-lan-dau.html"><small>← Bài trước</small>Git là gì và cài đặt</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Nhánh và merge</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#vong-lap">Vòng lặp hằng ngày trên module vinc_course</a></li>
+                        <li><a href="#status">Đọc git status -s như đọc bảng điểm</a></li>
+                        <li><a href="#diff">Xem mình đã đổi gì: git diff và git diff --staged</a></li>
+                        <li><a href="#log">Đọc lại lịch sử: git log và git show</a></li>
+                        <li><a href="#gitignore">.gitignore: giữ file rác và file bí mật ngoài repo</a></li>
+                        <li><a href="#trong-odoo">Gợi ý .gitignore cho dự án Odoo</a></li>
+                        <li><a href="#commit-tot">Một commit tốt trông như thế nào</a></li>
+                        <li><a href="#doi-ten">Đổi tên và xóa file đúng cách</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

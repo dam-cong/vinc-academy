@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Remotes: clone, fetch, pull, push and GitLab SSH Keys</title>
+    <meta name="description" content="Connect a repo to GitLab: create an SSH key, clone, push a branch, fetch to look, pull to merge and fix rejected pushes and divergent branches." />
+    <meta name="keywords" content="git remote, git clone, git fetch, git pull, git push, gitlab ssh key, git rejected, divergent branches, origin main" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Remotes: clone, fetch, pull, push and GitLab SSH Keys" />
+    <meta property="og:description" content="Git remotes for beginners: GitLab SSH keys, clone, push -u, how fetch and pull differ, and fixing rejected pushes and divergent branches." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-remotes-clone-fetch-pull-push-ssh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Remotes: clone, fetch, pull, push and GitLab SSH Keys",
+                "description": "Git remotes for beginners: GitLab SSH keys, clone, push -u, how fetch and pull differ, and fixing rejected pushes and divergent branches.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-remotes-clone-fetch-pull-push-ssh.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Remotes and SSH"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between fetch and pull?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git fetch only downloads new commits from the remote and updates the origin/... branches, leaving the branch you work on alone. git pull is git fetch followed by integrating the result into the branch you are on. Fetch first to see what is coming, then integrate."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why is my push rejected (fetch first)?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Because the remote already has commits your machine lacks, usually a colleague who just pushed to the same branch. Run git pull (or fetch then merge), resolve any conflict, then push again. Do not use --force to get past it."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I use SSH or HTTPS with GitLab?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Both work. SSH uses a key pair so you do not enter credentials on every push or pull; HTTPS asks for credentials when connecting. Most teams choose SSH with an ED25519 key for regular work machines."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What does -u do in git push -u origin main?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "-u (--set-upstream) remembers that the local branch tracks the branch on origin. Afterwards a plain git push and git pull are enough, and git status tells you how many commits you are ahead or behind the remote."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-remote-clone-fetch-pull-push-ssh.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Remotes and SSH</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 4 · Practical Git Series</span>
+            <h1>Git Remotes: clone, fetch, pull, push and GitLab SSH Keys</h1>
+            <p class="post-lead">Part 4 connects the vinc_course repo to GitLab: create an SSH key, clone, push a branch, fetch to look, pull to merge, and fix the rejected push or divergent branches error every team meets.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-remotes-clone-fetch-pull-push-ssh.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>A remote is a copy of the repository on a server (usually GitLab) so the whole team can push and fetch commits.</strong> This part connects the <code>vinc_course</code> repo to GitLab: creating an SSH key and registering it, <code>clone</code>, <code>push</code> a branch, <code>fetch</code> to see colleagues' work without merging it, <code>pull</code> to fetch and merge, and the <em>rejected</em> and <em>divergent branches</em> errors everyone meets. To run for real, the examples use a local bare repo that plays GitLab; the commands are identical with a real GitLab.</p>
+                </div>
+
+                <h2 id="remote-la-gi">Remotes, origin and tracking branches</h2>
+                <p>So far every commit lives only on your machine. To collaborate, the team keeps a central repo on GitLab; each person has their own repo locally and syncs through it. Git calls the faraway repo a <strong>remote</strong>, and the default name of the remote you cloned from is <code>origin</code>. A repo can have several remotes (say the company's <code>origin</code> and an <code>upstream</code> of the original project).</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-en-g04">
+                        <title id="dg-en-g04">Pushing and fetching commits between your machine and GitLab</title>
+                        <rect class="dg-box" x="10" y="15" width="200" height="110" rx="12" />
+                        <text class="dg-title" x="26" y="43">Repo on your machine</text>
+                        <text class="dg-text" x="26" y="74">main</text><text class="dg-text" x="26" y="96">origin/main (a memory)</text>
+                        <rect class="dg-accent" x="430" y="15" width="200" height="110" rx="12" />
+                        <text class="dg-title" x="446" y="43">GitLab (origin)</text>
+                        <text class="dg-text" x="446" y="74">main</text><text class="dg-text" x="446" y="96">feature/...</text>
+                        <path class="dg-arrow" d="M214 60 h212 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="320" y="50">git push</text>
+                        <path class="dg-arrow" d="M426 100 h-212 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="320" y="90">git fetch</text>
+                        <text class="dg-text" x="10" y="150">git pull = git fetch, then merge origin/main into the current branch.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>The point that most often confuses people is <code>origin/main</code>: it is <em>not</em> a branch you work on but a <strong>memory</strong> on your machine of where GitLab's <code>main</code> stood the last time you talked to it. It only updates when you <code>fetch</code>, <code>pull</code> or <code>push</code>. So “has the remote got new commits?” is a question Git answers correctly only after you fetch.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>What it does</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git remote -v</code></td><td>List remotes and their URLs</td></tr>
+                            <tr><td><code>git remote add origin &lt;url&gt;</code></td><td>Attach an existing local repo to a remote</td></tr>
+                            <tr><td><code>git clone &lt;url&gt;</code></td><td>Copy a repo to your machine and set <code>origin</code> automatically</td></tr>
+                            <tr><td><code>git fetch</code></td><td>Download new commits without touching your branches</td></tr>
+                            <tr><td><code>git pull</code></td><td><code>fetch</code> followed by a merge into where you stand</td></tr>
+                            <tr><td><code>git push</code></td><td>Send your branch's commits to the remote</td></tr>
+                            <tr><td><code>git push -u origin &lt;nhánh&gt;</code></td><td>First push, remembering the tracking branch</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="ssh">Connecting to GitLab with an SSH key</h2>
+                <p>There are two ways to authenticate when cloning: HTTPS (asks for credentials) or SSH. According to GitLab's documentation, SSH uses a key pair made of a <strong>public key</strong> (given to GitLab) and a <strong>private key</strong> (kept secret on your machine), so you do not enter a username and password on every push or pull. One key works for every project your account can reach; you do not need one per project. The preferred key type is <strong>ED25519</strong>. Do this once per machine:</p>
+<pre><code># 1. Create the key pair (the comment is your email, to identify the key)
+ssh-keygen -t ed25519 -C "an.nguyen@example.com"
+# Press Enter to accept the default file ~/.ssh/id_ed25519, and set a passphrase
+
+# 2. Load the private key into ssh-agent
+ssh-add ~/.ssh/id_ed25519
+
+# 3. Print the PUBLIC key to copy (the .pub file, not the extensionless one)
+cat ~/.ssh/id_ed25519.pub
+
+# 4. After pasting the key into GitLab, test the connection
+ssh -T git@gitlab.example.com
+# Welcome to GitLab, @your-name!</code></pre>
+                <ul>
+                    <li>In GitLab: click your avatar → <em>Edit profile</em> → <em>Access</em> → <em>SSH keys</em> → <em>Add new key</em>, paste the public key, give it a title such as “Work laptop” and click <em>Add key</em>.</li>
+                    <li>Replace <code>gitlab.example.com</code> with your company's GitLab address (<code>gitlab.com</code> for GitLab.com). On first connection ssh asks you to confirm the server; compare its fingerprint with GitLab's documentation before typing <code>yes</code>.</li>
+                    <li><strong>Never paste or send the private key</strong> (the <code>id_ed25519</code> file). Only the <code>.pub</code> file may be shared.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Type</th><th>Example URL</th><th>Authentication</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SSH</td><td><code>git@gitlab.example.com:vinc/vinc_course.git</code></td><td>An SSH key pair, no password prompt each time</td></tr>
+                            <tr><td>HTTPS</td><td><code>https://gitlab.example.com/vinc/vinc_course.git</code></td><td>Asks for credentials when connecting</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Both URLs point to the same repo; they differ only in how you prove who you are. If you cloned with one and want the other, use <code>git remote set-url origin &lt;new-url&gt;</code>. The project page on GitLab has a <em>Code</em> button to copy either form.</p>
+
+                <h2 id="clone-push">Connecting a repo to GitLab: first push and clone</h2>
+                <p>If the repo already exists on your machine (like our <code>vinc_course</code>), create an empty project on GitLab, add the remote and push. The <code>-u</code> flag (<code>--set-upstream</code>) remembers that <code>main</code> tracks <code>origin/main</code>, so from now on a plain <code>git push</code> and <code>git pull</code> are enough.</p>
+<pre><code>$ git remote add origin git@gitlab.example.com:vinc/vinc_course.git
+$ git remote -v
+origin	git@gitlab.example.com:vinc/vinc_course.git (fetch)
+origin	git@gitlab.example.com:vinc/vinc_course.git (push)
+$ git push -u origin main
+branch 'main' set up to track 'origin/main'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      main -&gt; main
+$ git branch -vv
+* main 47905cb [origin/main] [IMP] vinc_course: thêm trường số giờ
+$ git status -sb
+## main...origin/main</code></pre>
+                <p><code>git status -sb</code> now prints <code>## main...origin/main</code>: your branch and its memory match. Your colleague Binh, on another machine, gets the repo with <code>git clone</code>, which creates the folder, points <code>origin</code> and checks out the default branch:</p>
+<pre><code>$ cd ..
+$ git clone git@gitlab.example.com:vinc/vinc_course.git vinc_course_binh
+Cloning into 'vinc_course_binh'...
+done.
+$ cd vinc_course_binh</code></pre>
+
+                <h2 id="push-fetch">Working in parallel: pushing a branch and fetching to look</h2>
+                <p>Binh creates the level branch, commits and pushes it to GitLab. It is a new branch so the remote does not know it yet, and <code>-u</code> comes in handy again:</p>
+<pre><code>$ git switch -c feature/course-level
+Switched to a new branch 'feature/course-level'
+$ echo "    level = fields.Selection([('basic', 'Cơ bản'), ('adv', 'Nâng cao')])" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường cấp độ"
+[feature/course-level 6c73d41] [IMP] vinc_course: thêm trường cấp độ
+ 1 file changed, 1 insertion(+)
+$ git push -u origin feature/course-level
+branch 'feature/course-level' set up to track 'origin/feature/course-level'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      feature/course-level -&gt; feature/course-level</code></pre>
+                <p>Nothing changes on An's machine until An runs <code>fetch</code>. After the fetch, Binh's branch appears as <code>origin/feature/course-level</code> for An to inspect or review without touching any of An's own branches. Switching to that name makes Git create a local branch called the same and wire up tracking:</p>
+<pre><code>$ cd ../vinc_course
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+ * [new branch]      feature/course-level -&gt; origin/feature/course-level
+$ git branch -a
+* main
+  remotes/origin/feature/course-level
+  remotes/origin/main
+$ git switch feature/course-level
+branch 'feature/course-level' set up to track 'origin/feature/course-level'.
+Switched to a new branch 'feature/course-level'
+$ git log --oneline -n 2
+6c73d41 [IMP] vinc_course: thêm trường cấp độ
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'</code></pre>
+
+                <h2 id="pull">fetch and pull: where they differ</h2>
+                <p><code>git pull</code> is in effect <code>git fetch</code> plus a <code>git merge</code> into the branch you are on. A safe habit is <strong>fetch first, look, then merge</strong>, so you see which commits are coming. For example Binh pushes a README commit to <code>main</code>; An fetches, sees <em>behind 1</em>, then pulls and Git simply fast-forwards:</p>
+<pre><code>$ cd ../vinc_course_binh
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main 518a39d] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   47905cb..518a39d  main -&gt; main</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..518a39d  main       -&gt; origin/main
+$ git status -sb
+## main...origin/main [behind 1]
+$ git pull
+Updating 47905cb..518a39d
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git log --oneline -n 2
+518a39d [ADD] vinc_course: README
+47905cb [IMP] vinc_course: thêm trường số giờ</code></pre>
+
+                <h2 id="bi-tu-choi">When a push is rejected and pull says “divergent”</h2>
+                <p>The classic team situation: An commits locally while Binh pushes another commit to the same branch. Their histories have split, so GitLab does not let An push over it. Let us reproduce it:</p>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí"
+[main 7b05493] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)</code></pre>
+<pre><code>$ cd ../vinc_course_binh
+$ echo "Module quản lý khóa học." &gt;&gt; README.md
+$ git commit -am "[IMP] vinc_course: mô tả README"
+[main b6a59e9] [IMP] vinc_course: mô tả README
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   518a39d..b6a59e9  main -&gt; main</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.</code></pre>
+                <p>The <em>rejected … (fetch first)</em> message means the remote holds commits your machine does not have. Fetch them first. But this time <code>git pull</code> refuses to run because Git does not know whether to reconcile with merge or rebase:</p>
+<pre><code>$ git pull
+From git@gitlab.example.com:vinc/vinc_course
+   518a39d..b6a59e9  main       -&gt; origin/main
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.</code></pre>
+                <p>Git lists three configuration choices. For now pick merge with the <code>--no-rebase</code> flag; part 8 compares it with rebase. Because the two commits touch different files, Git merges them on its own and then you push:</p>
+<pre><code>$ git pull --no-rebase
+Merge made by the 'ort' strategy.
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   b6a59e9..bfdc341  main -&gt; main
+$ git log --oneline --graph -n 4
+*   bfdc341 Merge branch 'main' of git@gitlab.example.com:vinc/vinc_course
+|\  
+| * b6a59e9 [IMP] vinc_course: mô tả README
+* | 7b05493 [IMP] vinc_course: thêm trường học phí
+|/  
+* 518a39d [ADD] vinc_course: README</code></pre>
+                <p>To avoid the question every time you can set a default: <code>git config --global pull.rebase false</code> (merge), <code>pull.rebase true</code> (rebase) or <code>pull.ff only</code> (accept fast-forward only, the most cautious). Agree on one with your team.</p>
+
+                <h2 id="don-nhanh">Cleaning up remote branches</h2>
+                <p>Once a branch is merged, delete the copy on GitLab as well. <code>git push origin --delete &lt;branch&gt;</code> removes the remote branch; colleagues still hold the old memory of it, so they run <code>git fetch --prune</code> to tidy up. A local copy with that name remains and must be deleted separately with <code>git branch -d</code>.</p>
+<pre><code>$ cd ../vinc_course_binh
+$ git push origin --delete feature/course-level
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         feature/course-level
+$ cd ../vinc_course
+$ git fetch --prune
+From git@gitlab.example.com:vinc/vinc_course
+ - [deleted]         (none)     -&gt; origin/feature/course-level
+$ git branch -a
+  feature/course-level
+* main
+  remotes/origin/main</code></pre>
+
+                <h2 id="trong-odoo">Remotes in Odoo work</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Situation</th><th>What to do</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Getting the Odoo source</td><td><code>git clone --branch 20.0 --single-branch https://github.com/odoo/odoo.git</code>: only branch 20.0, to keep it light</td></tr>
+                            <tr><td>The company's own module</td><td>One GitLab repo for <code>vinc_course</code>; everyone clones and pushes feature branches</td></tr>
+                            <tr><td>Updating a staging server</td><td>Many teams <code>git fetch</code> then switch to the exact branch or tag to deploy instead of copying files</td></tr>
+                            <tr><td>Two remotes</td><td><code>git remote add upstream &lt;url&gt;</code> to follow the original project next to <code>origin</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>A push is <em>rejected</em>.</strong> Do not rush to force it. Run <code>git pull</code> (or <code>fetch</code> and look), resolve, then push again as above.</li>
+                        <li><strong>Using <code>git push --force</code> to get it over with.</strong> A forced push overwrites colleagues' commits on the remote. If you truly must (say after rebasing your own branch) use <code>--force-with-lease</code>: it refuses when the remote holds commits you have not seen. Never force onto a shared branch such as <code>main</code>.</li>
+                        <li><strong>Pasting the private key into GitLab.</strong> Paste only the contents of the <code>.pub</code> file (it starts with <code>ssh-ed25519</code>). If a private key leaks, generate a new pair and delete the old key from GitLab.</li>
+                        <li><strong>Assuming <code>origin/main</code> is always current.</strong> It is only as fresh as your last <code>fetch</code>; fetch before comparing or deciding to merge.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>The remote (<code>origin</code>) is the central repo; <code>origin/main</code> is a memory on your machine, fresh only after <code>fetch</code>.</li>
+                    <li>ED25519 SSH key: the public key goes to GitLab, the private key stays on your machine.</li>
+                    <li><code>clone</code> gets the repo; <code>push -u</code> sends a branch the first time; <code>fetch</code> looks first; <code>pull</code> = fetch + merge.</li>
+                    <li><em>Rejected</em> and <em>divergent</em> mean history has split: fetch, integrate, then push; avoid <code>--force</code>.</li>
+                </ul>
+                <p>You now have branches on GitLab. But in a company hardly anyone merges directly with a command: they open a <strong>merge request</strong> so colleagues review the code before it reaches the main branch. That is the subject of part 5.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between fetch and pull?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git fetch only downloads new commits from the remote and updates the origin/... branches, leaving the branch you work on alone. git pull is git fetch followed by integrating the result into the branch you are on. Fetch first to see what is coming, then integrate.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why is my push rejected (fetch first)?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Because the remote already has commits your machine lacks, usually a colleague who just pushed to the same branch. Run git pull (or fetch then merge), resolve any conflict, then push again. Do not use --force to get past it.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I use SSH or HTTPS with GitLab?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Both work. SSH uses a key pair so you do not enter credentials on every push or pull; HTTPS asks for credentials when connecting. Most teams choose SSH with an ED25519 key for regular work machines.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What does -u do in git push -u origin main?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">-u (--set-upstream) remembers that the local branch tracks the branch on origin. Afterwards a plain git push and git pull are enough, and git status tells you how many commits you are ahead or behind the remote.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-remote" target="_blank" rel="noopener">Git – git-remote</a></li>
+                    <li><a href="https://git-scm.com/docs/git-clone" target="_blank" rel="noopener">Git – git-clone</a></li>
+                    <li><a href="https://git-scm.com/docs/git-fetch" target="_blank" rel="noopener">Git – git-fetch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-pull" target="_blank" rel="noopener">Git – git-pull</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial-2" target="_blank" rel="noopener">Git – gittutorial-2</a></li>
+                    <li><a href="https://docs.gitlab.com/user/ssh/" target="_blank" rel="noopener">GitLab Docs – Use SSH keys with GitLab</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-remotes-clone-fetch-pull-push-ssh.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-remotes-clone-fetch-pull-push-ssh.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-branches-and-merging.html"><small>← Previous</small>Branches and merging</a>
+                    <span class="next"><small>Next · Coming soon</small>The merge request workflow on GitLab</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#remote-la-gi">Remotes, origin and tracking branches</a></li>
+                        <li><a href="#ssh">Connecting to GitLab with an SSH key</a></li>
+                        <li><a href="#clone-push">Connecting a repo to GitLab: first push and clone</a></li>
+                        <li><a href="#push-fetch">Working in parallel: pushing a branch and fetching to look</a></li>
+                        <li><a href="#pull">fetch and pull: where they differ</a></li>
+                        <li><a href="#bi-tu-choi">When a push is rejected and pull says “divergent”</a></li>
+                        <li><a href="#don-nhanh">Cleaning up remote branches</a></li>
+                        <li><a href="#trong-odoo">Remotes in Odoo work</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

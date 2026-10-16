@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quy ước commit và chiến lược nhánh Git cho nhóm Odoo</title>
+    <meta name="description" content="Viết commit message theo mẫu [TAG] module của Odoo, đặt tên nhánh feature/fix/hotfix và chọn chiến lược nhánh gọn: main bảo vệ, MR, tag phát hành." />
+    <meta name="keywords" content="quy ước commit message, git commit convention, odoo git guidelines, đặt tên nhánh git, chiến lược nhánh, trunk based, git flow, git log grep" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-commit-conventions-branching-strategies.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Quy ước commit và chiến lược nhánh Git cho nhóm Odoo" />
+    <meta property="og:description" content="Quy ước commit message theo Odoo, cách đặt tên nhánh và chiến lược nhánh gọn cho nhóm làm module Odoo trên GitLab." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-quy-uoc-commit-chien-luoc-nhanh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Quy ước commit và chiến lược nhánh Git cho nhóm Odoo",
+                "description": "Quy ước commit message theo Odoo, cách đặt tên nhánh và chiến lược nhánh gọn cho nhóm làm module Odoo trên GitLab.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-quy-uoc-commit-chien-luoc-nhanh.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-quy-uoc-commit-chien-luoc-nhanh.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Quy ước commit và nhánh"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Commit message tốt trông như thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo hướng dẫn Git của Odoo: [TAG] module: tiêu đề một câu ngắn (lý tưởng dưới 50 ký tự), dòng trống, rồi phần mô tả giải thích vì sao thay đổi, kết thúc bằng tham chiếu như Closes #14. Tiêu đề nên nối được vào câu “commit này sẽ…”."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Các thẻ [ADD], [IMP], [FIX], [REF] khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "[ADD] thêm module hay thành phần mới, [IMP] là cải tiến tăng dần, [FIX] sửa lỗi, [REF] tái cấu trúc lớn. Ngoài ra có [REM] xóa, [REV] revert, [MOV] di chuyển file, [MERGE] cho merge commit, [REL] phát hành và [I18N] cho file dịch."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên chọn chiến lược nhánh nào cho dự án Odoo của khách hàng?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Với nhóm nhỏ đến vừa, hãy bắt đầu đơn giản: một nhánh main được bảo vệ, nhánh tính năng ngắn hạn merge qua merge request, và tag cho mỗi bản phát hành. Chỉ thêm nhánh release hoặc nhánh theo phiên bản Odoo khi phải duy trì nhiều bản song song."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao biết bản phát hành mới khác bản cũ ở đâu?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng git log --oneline v1.0.0..HEAD để liệt kê các commit chưa có trong tag cũ; thêm --grep=\"^\\[FIX\\]\" để lọc riêng các bản sửa lỗi. Việc này dễ khi commit message theo quy ước có thẻ."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-commit-conventions-branching-strategies.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Quy ước commit và nhánh</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 10 · Series Git thực chiến</span>
+            <h1>Quy ước commit và chiến lược nhánh Git cho nhóm Odoo</h1>
+            <p class="post-lead">Bài 10 chốt ba quy ước giúp cả nhóm đọc được lịch sử: lời nhắn commit theo mẫu [TAG] module của Odoo, cách đặt tên nhánh và một chiến lược nhánh gọn với main được bảo vệ, merge request và tag phát hành.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-quy-uoc-commit-chien-luoc-nhanh.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Công cụ Git ai cũng như nhau; thứ làm nên nhóm làm việc trơn tru là quy ước chung.</strong> Bài này chốt ba quy ước: <strong>lời nhắn commit</strong> theo mẫu <code>[TAG] module: mô tả</code> của Odoo (giải thích <em>vì sao</em>), <strong>tên nhánh</strong> (<code>feature/</code>, <code>fix/</code>, <code>hotfix/</code>, mã issue) và <strong>chiến lược nhánh</strong> gọn cho module khách hàng (main được bảo vệ, nhánh ngắn hạn, merge request, tag phát hành). Có kèm lệnh <code>git log --grep</code> để thấy quy ước giúp tìm kiếm thế nào.</p>
+                </div>
+
+                <h2 id="vi-sao">Vì sao cần quy ước</h2>
+                <p>Thử hình dung lịch sử repo toàn các dòng “update”, “fix”, “sửa lại”, “final”. Ba tháng sau khách hàng hỏi “từ khi nào trường mã khóa học bắt buộc nhập?”, và không ai trả lời được. Lịch sử Git chỉ có giá trị khi đọc được: nó là nhật ký mà <code>git log</code>, <code>git blame</code> và <code>git bisect</code> (bài 12) dựa vào. Tài liệu <code>gitworkflows</code> của Git tóm lại bằng quy tắc đầu tiên: chia thay đổi thành những bước logic nhỏ, mỗi bước là một commit nhất quán, chạy được độc lập và qua được bộ test. Điều đó làm review dễ hơn và lịch sử hữu ích hơn cho việc truy vết sau này.</p>
+
+                <h2 id="commit-message">Quy ước lời nhắn commit theo Odoo</h2>
+                <p>Hướng dẫn Git của Odoo mô tả lời nhắn gồm bốn phần: thẻ (tag), tên module, tiêu đề ngắn và mô tả đầy đủ. Mẫu là <code>[TAG] module: mô tả một câu ngắn</code>, tiêu đề lý tưởng dưới 50 ký tự, rồi một dòng trống và phần mô tả dài hơn, kết thúc bằng tham chiếu như <code>Closes #14</code> hay <code>Fixes #14</code>. Dùng tên kỹ thuật của module (<code>vinc_course</code>), vì tên hiển thị có thể đổi theo thời gian. Các thẻ theo tài liệu:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thẻ</th><th>Dùng cho</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>[ADD]</code></td><td>Thêm module hay thành phần mới</td></tr>
+                            <tr><td><code>[IMP]</code></td><td>Cải tiến, thay đổi tăng dần</td></tr>
+                            <tr><td><code>[FIX]</code></td><td>Sửa lỗi</td></tr>
+                            <tr><td><code>[REF]</code></td><td>Tái cấu trúc, viết lại lớn</td></tr>
+                            <tr><td><code>[REM]</code></td><td>Xóa code, view hoặc module không dùng</td></tr>
+                            <tr><td><code>[REV]</code></td><td>Revert một commit</td></tr>
+                            <tr><td><code>[MOV]</code></td><td>Di chuyển file (không đổi nội dung)</td></tr>
+                            <tr><td><code>[MERGE]</code></td><td>Merge commit</td></tr>
+                            <tr><td><code>[REL]</code></td><td>Commit phát hành phiên bản mới</td></tr>
+                            <tr><td><code>[I18N]</code></td><td>Thay đổi file dịch</td></tr>
+                            <tr><td><code>[PERF]</code> / <code>[CLN]</code> / <code>[LINT]</code></td><td>Tối ưu hiệu năng / dọn code / lint</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Điểm tinh tế nhất là tiêu đề nên ghép được thành một câu hợp lệ sau cụm “nếu áp dụng, commit này sẽ…”: <code>[IMP] vinc_course: thêm mã khóa học</code> đọc là “nếu áp dụng, commit này sẽ thêm mã khóa học”. Phần mô tả giải thích <strong>vì sao</strong>, vì “cái gì” đã nằm trong diff. Hãy tạo một commit như vậy:</p>
+<pre><code>$ echo "    code = fields.Char(string='Mã khóa')" &gt;&gt; models/course.py
+$ git commit -aq -m "[IMP] vinc_course: thêm mã khóa học" -m "Phòng đào tạo tra cứu khóa theo mã nên mỗi khóa cần một trường mã riêng." -m "Closes #14"
+$ git log -1
+commit ca324bbdd38a5a698d7573fc962ebddea73a1975
+Author: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 10:10:00 2026 +0700
+
+    [IMP] vinc_course: thêm mã khóa học
+    
+    Phòng đào tạo tra cứu khóa theo mã nên mỗi khóa cần một trường mã riêng.
+    
+    Closes #14</code></pre>
+                <p>Mỗi <code>-m</code> thêm một đoạn, nên lệnh trên tạo tiêu đề, một đoạn lý do và dòng <code>Closes #14</code> (GitLab dùng nó để đóng issue khi merge, bài 5). Để tiện, bạn có thể cho Git mở sẵn một mẫu mỗi khi commit không có <code>-m</code>, bằng cấu hình <code>commit.template</code>:</p>
+<pre><code>$ git config --global commit.template ~/.gitmessage
+$ git config --get commit.template
+~/.gitmessage
+$ cat ~/.gitmessage
+[TAG] module: tóm tắt thay đổi
+
+Vì sao cần thay đổi (WHY).
+
+Closes #</code></pre>
+                <p>Quy ước có lợi ích thấy ngay khi tìm kiếm. Vì tiêu đề bắt đầu bằng thẻ, bạn lọc được mọi bản sửa lỗi bằng <code>--grep</code>, xem lịch sử của riêng thư mục <code>models/</code>, hay đếm đóng góp mỗi người:</p>
+<pre><code>$ git log --oneline
+4fa042a [REF] vinc_course: tách hàm tiện ích
+3609b42 [ADD] vinc_course: README
+ff4824e [FIX] vinc_course: nhãn số giờ gây hiểu nhầm
+ca324bb [IMP] vinc_course: thêm mã khóa học
+47905cb [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git log --oneline --grep='^\[FIX\]'
+ff4824e [FIX] vinc_course: nhãn số giờ gây hiểu nhầm
+$ git log --oneline -- models/
+4fa042a [REF] vinc_course: tách hàm tiện ích
+ff4824e [FIX] vinc_course: nhãn số giờ gây hiểu nhầm
+ca324bb [IMP] vinc_course: thêm mã khóa học
+47905cb [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git shortlog -sn --no-merges HEAD
+     6	Nguyễn Văn An</code></pre>
+                <p>Hai lời khuyên nữa từ tài liệu Odoo: tránh một commit đụng nhiều module cùng lúc (khó revert từng module), và tránh tiêu đề chung chung như “bugfix” hay “improvements”.</p>
+                <p>Một lợi ích nữa: viết changelog gần như miễn phí. Giả sử bản <code>v1.0.0</code> đã phát hành ở commit thứ hai trong lịch sử trên; mọi thứ sau đó là nội dung cho bản kế tiếp, và nhờ thẻ bạn tách riêng được các bản sửa lỗi để báo khách hàng:</p>
+<pre><code>$ git tag -a v1.0.0 -m "Phát hành 1.0.0" HEAD~4
+$ git log --oneline v1.0.0..HEAD
+4fa042a [REF] vinc_course: tách hàm tiện ích
+3609b42 [ADD] vinc_course: README
+ff4824e [FIX] vinc_course: nhãn số giờ gây hiểu nhầm
+ca324bb [IMP] vinc_course: thêm mã khóa học
+$ git log --oneline v1.0.0..HEAD --grep='^\[FIX\]'
+ff4824e [FIX] vinc_course: nhãn số giờ gây hiểu nhầm</code></pre>
+                <p>Cú pháp <code>v1.0.0..HEAD</code> nghĩa là “các commit có trong <code>HEAD</code> mà không có trong <code>v1.0.0</code>”. Kết hợp với tag phát hành (bài 9), đây là cách nhóm trả lời câu hỏi “bản này khác bản trước ở đâu?” trong vài giây.</p>
+                <p>Để mỗi commit làm đúng một việc ngay cả khi bạn lỡ sửa nhiều thứ trong cùng một file, hãy dùng <code>git add -p</code> (<code>--patch</code>): Git đưa từng đoạn thay đổi (<em>hunk</em>) ra và hỏi bạn có đưa vào staging không, nhờ vậy bạn tách “thêm trường” khỏi “dọn comment” thành hai commit riêng.</p>
+
+                <h2 id="ten-nhanh">Quy ước đặt tên nhánh</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tiền tố</th><th>Dùng cho</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>feature/</code></td><td>Tính năng mới</td><td><code>feature/course-price</code></td></tr>
+                            <tr><td><code>fix/</code></td><td>Sửa lỗi không khẩn</td><td><code>fix/duplicate-code</code></td></tr>
+                            <tr><td><code>hotfix/</code></td><td>Sửa gấp bản đang chạy</td><td><code>hotfix/1.0.1</code></td></tr>
+                            <tr><td><code>release/</code></td><td>Chuẩn bị hoặc duy trì một bản phát hành</td><td><code>release/1.0</code></td></tr>
+                            <tr><td><code>experiment/</code></td><td>Thử nghiệm có thể bỏ</td><td><code>experiment/video</code></td></tr>
+                            <tr><td>mã issue</td><td>Theo tài liệu GitLab, tiền tố mã issue giúp điền sẵn tiêu đề và đóng issue</td><td><code>12-course-price</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Hãy viết chữ thường, nối bằng dấu gạch ngang và tránh ký tự đặc biệt. Git từ chối vài tên không hợp lệ; lệnh <code>git check-ref-format --branch</code> cho bạn kiểm tra trước:</p>
+<pre><code>$ git check-ref-format --branch feature/course-price
+feature/course-price
+$ git check-ref-format --branch "feature/course price"
+fatal: 'feature/course price' is not a valid branch name
+$ git check-ref-format --branch 12-course-price
+12-course-price</code></pre>
+
+                <h2 id="chien-luoc">Chiến lược nhánh gọn cho module khách hàng</h2>
+                <p>Tài liệu <code>gitworkflows</code> mô tả quy trình đầy đủ của chính dự án Git, với bốn nhánh tích hợp (<code>maint</code>, <code>master</code>, <code>next</code>, <code>seen</code>) và chính nó nhắc rằng với dự án nhỏ, ít người thì không cần quy trình đầy đủ. Với một nhóm làm module Odoo cho khách hàng, một phiên bản đơn giản là đủ và dễ giữ kỷ luật:</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 218" role="img" aria-labelledby="dg-vi-g10">
+                        <title id="dg-vi-g10">Chiến lược nhánh gợi ý cho module khách hàng</title>
+                        <path class="dg-arrow" d="M20 90 H620" />
+                        <path class="dg-arrow" d="M80 90 L100 40 H200 L220 90" /><path class="dg-arrow" d="M260 90 L280 40 H380 L400 90" />
+                        <path class="dg-arrow" d="M440 90 L460 140 H600" />
+                        <circle class="dg-box" cx="20" cy="90" r="9" />
+                        <circle class="dg-box" cx="80" cy="90" r="9" />
+                        <circle class="dg-box" cx="220" cy="90" r="9" />
+                        <circle class="dg-box" cx="260" cy="90" r="9" />
+                        <circle class="dg-box" cx="400" cy="90" r="9" />
+                        <circle class="dg-box" cx="440" cy="90" r="9" />
+                        <circle class="dg-box" cx="540" cy="90" r="9" />
+                        <circle class="dg-box" cx="100" cy="40" r="9" />
+                        <circle class="dg-box" cx="200" cy="40" r="9" />
+                        <circle class="dg-box" cx="280" cy="40" r="9" />
+                        <circle class="dg-box" cx="380" cy="40" r="9" />
+                        <circle class="dg-accent" cx="460" cy="140" r="9" />
+                        <circle class="dg-accent" cx="600" cy="140" r="9" />
+                        <text class="dg-title" x="20" y="120">main</text>
+                        <text class="dg-text" x="115" y="30">feature/…</text><text class="dg-text" x="295" y="30">feature/…</text>
+                        <text class="dg-text" x="215" y="115">MR</text><text class="dg-text" x="395" y="115">MR</text>
+                        <text class="dg-text" x="525" y="75">v1.0.0</text><text class="dg-text" x="470" y="162">release/1.0 (hotfix)</text>
+                        <text class="dg-text" x="10" y="185">Nhánh tính năng ngắn hạn vào main qua MR; tag đánh dấu bản phát hành;</text>
+                        <text class="dg-text" x="10" y="205">nhánh release chỉ nhận hotfix.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Chiến lược</th><th>Cách hoạt động</th><th>Hợp với</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Trunk-based / GitLab-style đơn giản</strong></td><td>Một nhánh <code>main</code> được bảo vệ; nhánh tính năng ngắn hạn merge qua MR; tag cho mỗi bản phát hành</td><td>Nhóm nhỏ–vừa, phát hành thường xuyên (khuyến nghị)</td></tr>
+                            <tr><td><strong>Thêm nhánh release</strong></td><td>Tách <code>release/x.y</code> khi cần duy trì nhiều bản cùng lúc; chỉ nhận hotfix</td><td>Khách hàng giữ bản cũ lâu</td></tr>
+                            <tr><td><strong>Nhánh theo phiên bản Odoo</strong></td><td>Mỗi phiên bản Odoo có nhánh riêng (ví dụ <code>20.0</code>), tính năng tách từ đó</td><td>Module phải hỗ trợ nhiều bản Odoo</td></tr>
+                            <tr><td><strong>Nhánh <code>develop</code> dài hạn</strong></td><td>Có thêm tầng tích hợp giữa tính năng và <code>main</code></td><td>Chỉ khi thật cần; dễ sinh xung đột lớn</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>GitLab cho phép chọn <em>cách merge</em> của dự án, trong đó có fast-forward (không tạo merge commit), nên thống nhất với nhóm: merge commit để thấy rõ từng MR, hay lịch sử thẳng bằng squash hoặc fast-forward. Dù chọn gì, hãy ghi lại trong README hoặc tài liệu đóng góp để người mới không phải đoán.</p>
+
+                <h2 id="quy-tac-nhom">Bộ quy tắc nhóm một trang</h2>
+                <ul>
+                    <li>Không commit thẳng lên <code>main</code>; mọi thay đổi đi qua merge request có ít nhất một người xem.</li>
+                    <li>Một nhánh, một mục đích; sống tối đa vài ngày; xóa sau khi merge (cả cục bộ và remote).</li>
+                    <li>Lời nhắn commit theo <code>[TAG] module: mô tả</code> và nêu lý do ở phần thân.</li>
+                    <li>Chỉ rebase nhánh riêng; không viết lại lịch sử đã chia sẻ (bài 8).</li>
+                    <li>Mỗi bản phát hành có tag annotated <code>vX.Y.Z</code> khớp với <code>version</code> trong manifest (bài 9).</li>
+                    <li>Không commit bí mật; <code>.gitignore</code> có sẵn từ commit đầu (bài 2).</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Lời nhắn vô nghĩa.</strong> “update”, “fix bug”, “sửa lại” không cho ai biết gì. Hãy viết tiêu đề đọc được như một câu và thêm lý do ở thân.</li>
+                        <li><strong>Một commit khổng lồ.</strong> Gom tính năng, sửa lỗi và dọn code vào một commit khiến review khó và không thể revert riêng từng phần. Chia nhỏ bằng <code>git add</code> từng file hoặc <code>git add -p</code>.</li>
+                        <li><strong>Nhánh sống quá lâu.</strong> Nhánh tồn tại hàng tuần lệch xa <code>main</code> và gây xung đột lớn khi merge. Hãy cắt việc nhỏ hơn và kéo <code>main</code> về thường xuyên.</li>
+                        <li><strong>Mỗi người một quy ước.</strong> Người viết “Feature:”, người viết “feat:”, người viết “[IMP]”: tìm kiếm trở nên vô nghĩa. Hãy chọn một mẫu, ghi vào tài liệu nhóm và để công cụ kiểm tra (bài 11).</li>
+                        <li><strong>Tên nhánh có dấu cách hoặc ký tự lạ.</strong> Git từ chối với <em>“is not a valid branch name”</em> như kết quả <code>check-ref-format</code> ở trên; dùng dấu gạch ngang.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Commit: <code>[TAG] module: mô tả</code>, tiêu đề ngắn, thân giải thích <em>vì sao</em>, kết thúc bằng <code>Closes #n</code>.</li>
+                    <li>Nhánh: tiền tố <code>feature/</code>, <code>fix/</code>, <code>hotfix/</code>, <code>release/</code>; chữ thường nối bằng gạch ngang.</li>
+                    <li>Chiến lược: <code>main</code> được bảo vệ, nhánh ngắn hạn, merge request, tag phát hành, nhánh release khi cần.</li>
+                    <li>Quy ước chỉ có tác dụng khi được viết ra và có công cụ kiểm tra.</li>
+                </ul>
+                <p>Quy ước viết trong tài liệu dễ bị quên lúc gấp. Bài tiếp theo biến chúng thành thứ máy kiểm tra giúp bạn: <strong>Git hook</strong> chặn commit sai mẫu hay lọt mật khẩu ngay trên máy, và <strong>GitLab CI</strong> chạy kiểm tra tự động cho module Odoo trong mỗi merge request.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Commit message tốt trông như thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo hướng dẫn Git của Odoo: [TAG] module: tiêu đề một câu ngắn (lý tưởng dưới 50 ký tự), dòng trống, rồi phần mô tả giải thích vì sao thay đổi, kết thúc bằng tham chiếu như Closes #14. Tiêu đề nên nối được vào câu “commit này sẽ…”.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Các thẻ [ADD], [IMP], [FIX], [REF] khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">[ADD] thêm module hay thành phần mới, [IMP] là cải tiến tăng dần, [FIX] sửa lỗi, [REF] tái cấu trúc lớn. Ngoài ra có [REM] xóa, [REV] revert, [MOV] di chuyển file, [MERGE] cho merge commit, [REL] phát hành và [I18N] cho file dịch.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên chọn chiến lược nhánh nào cho dự án Odoo của khách hàng?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Với nhóm nhỏ đến vừa, hãy bắt đầu đơn giản: một nhánh main được bảo vệ, nhánh tính năng ngắn hạn merge qua merge request, và tag cho mỗi bản phát hành. Chỉ thêm nhánh release hoặc nhánh theo phiên bản Odoo khi phải duy trì nhiều bản song song.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao biết bản phát hành mới khác bản cũ ở đâu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng git log --oneline v1.0.0..HEAD để liệt kê các commit chưa có trong tag cũ; thêm --grep="^\[FIX\]" để lọc riêng các bản sửa lỗi. Việc này dễ khi commit message theo quy ước có thẻ.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://git-scm.com/docs/git-log" target="_blank" rel="noopener">Git – git-log</a></li>
+                    <li><a href="https://git-scm.com/docs/git-branch" target="_blank" rel="noopener">Git – git-branch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (commit.template)</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/repository/branches/protected/" target="_blank" rel="noopener">GitLab Docs – Protected branches</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-quy-uoc-commit-chien-luoc-nhanh.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-quy-uoc-commit-chien-luoc-nhanh.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-stash-cherry-pick-tag-hotfix-release.html"><small>← Bài trước</small>Stash, cherry-pick và tag</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Git hook và GitLab CI cho module Odoo</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#vi-sao">Vì sao cần quy ước</a></li>
+                        <li><a href="#commit-message">Quy ước lời nhắn commit theo Odoo</a></li>
+                        <li><a href="#ten-nhanh">Quy ước đặt tên nhánh</a></li>
+                        <li><a href="#chien-luoc">Chiến lược nhánh gọn cho module khách hàng</a></li>
+                        <li><a href="#quy-tac-nhom">Bộ quy tắc nhóm một trang</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -34,7 +34,6 @@ vinc-academy/
     ├── vinc-academy.png
     ├── python.png
     ├── postgresql.jpg
-    ├── git.png
     ├── odoo.png
     └── devops.jpg
 ```

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Blame, Bisect and a Capstone Project for Odoo Teams</title>
+    <meta name="description" content="Find the commit that broke things with git blame, git log -S and git bisect run, then run a full issue-to-hotfix cycle." />
+    <meta name="keywords" content="git blame, git bisect, git bisect run, git log -S, git troubleshooting, git team workflow, git hotfix, git cheat sheet, git gitlab odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Blame, Bisect and a Capstone Project for Odoo Teams" />
+    <meta property="og:description" content="Find the bug-causing commit with git blame, log -S and bisect run, then join the whole Git series into one complete working cycle for an Odoo module." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-blame-bisect-troubleshooting-capstone.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Blame, Bisect and a Capstone Project for Odoo Teams",
+                "description": "Find the bug-causing commit with git blame, log -S and bisect run, then join the whole Git series into one complete working cycle for an Odoo module.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-blame-bisect-troubleshooting-capstone.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Blame, bisect and capstone"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is git blame for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git blame prints every line of a file with the commit, author and time of its latest change, helping you see when and why the line appeared. Use -L to limit lines or a function, and -M and -C to trace lines relocated or duplicated."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does git bisect work?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "You mark one good and one bad commit; Git binary-searches the range between them, jumping to the halfway commit at each step for you to test, halving the range each time. With git bisect run script, Git runs your script at every step and reads the exit code as good or bad."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Which exit codes of a bisect script are special?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Per the Git documentation: 0 means good, 1 to 127 (except 125) means bad, 125 means skip a commit that cannot be tested, and any other code aborts the bisect."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I find the commit that added or removed a piece of text?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Use git log -S\"text\" (the pickaxe) to list the commits that changed how many times that text occurs; git log -G uses a regular expression. Then git show commit-id to read it."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Blame, bisect and capstone</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 12 · Practical Git Series</span>
+            <h1>Git Blame, Bisect and a Capstone Project for Odoo Teams</h1>
+            <p class="post-lead">The final part of the Git series: use git blame, git log -S and git bisect run to find the commit that broke things, then run a whole cycle from issue and merge request to tag, hotfix and cherry-pick, with a cheat-sheet of all 12 parts.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-blame-bisect-troubleshooting-capstone.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>The final part finds “who and which commit broke it”, then joins the whole series into one complete working cycle.</strong> <code>git blame</code> shows which commit last changed each line, <code>git log -S</code> finds the commit that added or removed a piece of text, and <code>git bisect run</code> binary-searches the culprit commit by itself. The capstone really runs the workflow: take an issue, branch, commit, rebase, push, merge request, tag, hotfix and cherry-pick back to <code>main</code>, with a cheat-sheet of all 12 parts.</p>
+                </div>
+
+                <h2 id="blame">Tracing line by line: git blame and git log -S</h2>
+                <p>When a function returns a wrong result the first question is “since when is this line here, and why?”. <code>git blame</code> prints every line with the commit, author and time of its latest change; <code>-L</code> limits it to a line range or a function name. In this sample repo <code>price_per_hour</code> originally divided the price by the hours, but a colleague “optimised” it. Blame points straight at it: the <code>return</code> line belongs to Binh's commit while the <code>def</code> line is still An's.</p>
+                <p>If you do not know where the line is, search by content. <code>git log -S"text"</code> (the “pickaxe” style) lists the commits that changed how many times that text occurs, meaning they added or removed it:</p>
+<pre><code>$ git log --oneline
+6dbb5c3 [IMP] vinc_course: thêm nhãn số giờ
+4acd6a9 [ADD] vinc_course: changelog
+fa33586 [IMP] vinc_course: thêm tổng số giờ
+8cff483 [IMP] vinc_course: tối ưu price_per_hour
+c7d5e2b [IMP] vinc_course: thêm kiểm tra khóa miễn phí
+8c373a3 [ADD] vinc_course: README
+e5d613b [IMP] vinc_course: thêm định dạng giá
+661615e [ADD] vinc_course: hàm giá theo giờ
+47905cb [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git blame -L 1,3 models/utils.py
+661615e6 (Nguyễn Văn An 2026-10-12 10:03:00 +0700 1) def price_per_hour(price, hours):
+8cff4837 (Trần Thị Bình 2026-10-12 10:38:00 +0700 2)     return price * hours
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 3) 
+$ git blame -L :price_per_hour models/utils.py
+661615e6 (Nguyễn Văn An 2026-10-12 10:03:00 +0700 1) def price_per_hour(price, hours):
+8cff4837 (Trần Thị Bình 2026-10-12 10:38:00 +0700 2)     return price * hours
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 3) 
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 4) 
+$ git log -S"price * hours" --oneline
+8cff483 [IMP] vinc_course: tối ưu price_per_hour</code></pre>
+                <p>Blame reports the <em>last</em> commit that touched a line, which is not always the root of the problem: if someone only reformatted it, blame points at them. The <code>-M</code> and <code>-C</code> flags trace lines relocated or duplicated across files, and <code>--ignore-rev</code> lets you skip a bulk formatting commit. Use blame to <strong>understand context and ask the right person</strong>, not to assign blame.</p>
+
+                <h2 id="bisect">Binary-searching the culprit: git bisect</h2>
+                <p>When you know an older version worked (tag <code>v1.0.0</code>) and the current one is wrong, but dozens of commits lie between them, <code>git bisect</code> finds the first bad commit by binary search: at each step it takes you to the commit halfway through the suspect range, you say “good” or “bad”, and the range halves. 1,000 commits take only about 10 steps. You can press <code>good</code>/<code>bad</code> yourself or hand it a script: per the documentation, <code>git bisect run</code> calls the script at each step and reads exit code 0 as good, 1–127 (except 125) as bad, 125 as “cannot test this commit, skip it”, and any other code aborts the process.</p>
+                <p>Our test script checks exactly one thing: a price of 4,500,000 over 24 hours must equal 187,500. It lives outside the repo so bisect can switch commits without losing it:</p>
+<pre><code>python3 -c "import sys;sys.path.insert(0,'models');from utils import price_per_hour;sys.exit(0 if price_per_hour(4500000, 24) == 187500 else 1)"</code></pre>
+<pre><code>$ git bisect start
+status: waiting for both good and bad commits
+$ git bisect bad
+status: waiting for good commit(s), bad commit known
+$ git bisect good v1.0.0
+Bisecting: 3 revisions left to test after this (roughly 2 steps)
+[c7d5e2b0dbab2a4db579d1efc11cb7a69e32b386] [IMP] vinc_course: thêm kiểm tra khóa miễn phí
+$ git bisect run sh $HOME/check.sh
+running 'sh' '~/check.sh'
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[fa33586cc06db6844f1b37aecbeb46bfd77662f2] [IMP] vinc_course: thêm tổng số giờ
+running 'sh' '~/check.sh'
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[8cff483750110e61a69409ab211f99136dc1f400] [IMP] vinc_course: tối ưu price_per_hour
+running 'sh' '~/check.sh'
+8cff483750110e61a69409ab211f99136dc1f400 is the first bad commit
+commit 8cff483750110e61a69409ab211f99136dc1f400
+Author: Trần Thị Bình &lt;binh.tran@example.com&gt;
+Date:   Mon Oct 12 10:38:00 2026 +0700
+
+    [IMP] vinc_course: tối ưu price_per_hour
+
+ models/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bisect found first bad commit
+$ git bisect reset
+Previous HEAD position was 8cff483 [IMP] vinc_course: tối ưu price_per_hour
+Switched to branch 'main'</code></pre>
+                <p>In just three checks across seven commits Git concludes <code>8cff483</code> is the first bad commit, and we read it with <code>git show</code>. Remember <code>git bisect reset</code> to return to your working branch:</p>
+<pre><code>$ git show --stat --oneline 8cff483
+8cff483 [IMP] vinc_course: tối ưu price_per_hour
+ models/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
+                <p>For bisect to be effective, <strong>every commit must work on its own</strong>, exactly the “small, consistent steps” advice of the <code>gitworkflows</code> document from part 10. A history full of half-broken commits forces bisect to skip many steps.</p>
+
+                <h2 id="tong-hop">Capstone: one complete working cycle</h2>
+                <p>Now we join the parts into a working day. An takes issue #21 “add a course code”, works on a dedicated branch, pushes to GitLab, the MR is approved and merged and the team tags 1.1.0; then a label problem is found in the running version so a hotfix 1.1.1 is made and brought back to <code>main</code>. Each step maps to a part of the series:</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 190" role="img" aria-labelledby="dg-en-g12">
+                        <title id="dg-en-g12">A complete work cycle with Git and GitLab</title>
+                        <rect class="dg-box" x="4" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="18" y="41">Take issue</text><text class="dg-text" x="18" y="61">Part 3</text>
+                        <path class="dg-arrow" d="M141 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="170" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="184" y="41">Commit</text><text class="dg-text" x="184" y="61">Part 2, 10</text>
+                        <path class="dg-arrow" d="M307 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="336" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="350" y="41">Push + MR</text><text class="dg-text" x="350" y="61">Part 4, 5</text>
+                        <path class="dg-arrow" d="M473 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="502" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="516" y="41">Review + CI</text><text class="dg-text" x="516" y="61">Part 5, 11</text>
+                        <rect class="dg-box" x="4" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="18" y="141">Merge, clean</text><text class="dg-text" x="18" y="161">Part 5</text>
+                        <path class="dg-arrow" d="M141 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="170" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="184" y="141">Tag</text><text class="dg-text" x="184" y="161">Part 9</text>
+                        <path class="dg-arrow" d="M307 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="336" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="350" y="141">Hotfix</text><text class="dg-text" x="350" y="161">Part 9</text>
+                        <path class="dg-arrow" d="M473 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="502" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="516" y="141">Trace bugs</text><text class="dg-text" x="516" y="161">Part 12</text>
+                        <path class="dg-arrow" d="M569 75 V95 H71 V113 m-6 -8 l6 8 l6 -8" />
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p><strong>Steps 1–2. Get the repo, branch by issue, commit with the convention</strong> (parts 2, 3, 4, 10):</p>
+<pre><code>$ cd ..
+$ git clone git@gitlab.example.com:vinc/vinc_course.git vinc_course_an
+Cloning into 'vinc_course_an'...
+done.
+$ cd vinc_course_an</code></pre>
+<pre><code>$ git switch -c 21-course-code
+Switched to a new branch '21-course-code'
+$ echo "    code = fields.Char(string='Mã khóa')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm mã khóa học" -m "Closes #21"
+[21-course-code 6802e7d] [IMP] vinc_course: thêm mã khóa học
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p><strong>Step 3. Bring the branch up to date with <code>main</code> and push</strong> (parts 4, 8). While An worked, Binh pushed a README to <code>main</code>, so An fetches and rebases the branch onto it before pushing:</p>
+<pre><code>$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..23457e4  main       -&gt; origin/main
+$ git rebase origin/main
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/21-course-code.
+$ git push -u origin 21-course-code
+branch '21-course-code' set up to track 'origin/21-course-code'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      21-course-code -&gt; 21-course-code</code></pre>
+                <p><strong>Step 4. The merge request is approved, merged and the branch cleaned up</strong> (part 5). Binh plays GitLab, then An updates <code>main</code> and deletes the finished branch:</p>
+<pre><code># GitLab merge MR #21 (giả lập)
+$ cd ../vinc_course_binh
+$ git pull -q
+$ git merge --no-ff origin/21-course-code -m "Merge branch '21-course-code' into 'main'"
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push -q
+$ cd ../vinc_course_an
+$ git switch main
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+Switched to branch 'main'
+$ git pull -q
+$ git branch -d 21-course-code
+Deleted branch 21-course-code (was 57220b2).
+$ git push -q origin --delete 21-course-code
+$ git fetch --prune</code></pre>
+                <p><strong>Step 5. Release and hotfix</strong> (part 9). Tag, push the tag, branch the hotfix from the tag, tag the patch and cherry-pick it to <code>main</code>. The final graph tells the whole story:</p>
+<pre><code>$ git tag -a v1.1.0 -m "Phát hành 1.1.0"
+$ git push origin v1.1.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.1.0 -&gt; v1.1.0
+$ git switch -c hotfix/1.1.1 v1.1.0
+Switched to a new branch 'hotfix/1.1.1'
+$ sed -i "s/Mã khóa/Mã khóa học/" models/course.py
+$ git commit -am "[FIX] vinc_course: nhãn mã khóa học đầy đủ"
+[hotfix/1.1.1 2196638] [FIX] vinc_course: nhãn mã khóa học đầy đủ
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git tag -a v1.1.1 -m "Hotfix 1.1.1"
+$ git push -q origin v1.1.1
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git cherry-pick -x hotfix/1.1.1
+[main cce32b6] [FIX] vinc_course: nhãn mã khóa học đầy đủ
+ Date: Mon Oct 12 12:51:00 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push -q
+$ git branch -D hotfix/1.1.1
+Deleted branch hotfix/1.1.1 (was 2196638).
+$ git log --oneline --graph --decorate -n 8
+* cce32b6 (HEAD -&gt; main, origin/main, origin/HEAD) [FIX] vinc_course: nhãn mã khóa học đầy đủ
+*   e1ab15d (tag: v1.1.0) Merge branch '21-course-code' into 'main'
+|\  
+| * 57220b2 [IMP] vinc_course: thêm mã khóa học
+|/  
+* 23457e4 [ADD] vinc_course: README
+* 47905cb (tag: v1.0.0) [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>The fastest way to learn is to rebuild the scenario yourself on a scratch repo. Five suggested exercises:</p>
+                <ul>
+                    <li>Create a bare repo to act as “GitLab” (<code>git init --bare</code>) and clone it twice to play both An and Binh.</li>
+                    <li>Deliberately create a conflict in <code>__manifest__.py</code> and resolve it with both merge and rebase.</li>
+                    <li>Write your own <code>commit-msg</code> hook and try skipping it with <code>--no-verify</code>.</li>
+                    <li>Tag a release, branch a hotfix from it and cherry-pick it to the main branch.</li>
+                    <li>Plant a bug in the middle of history and let <code>git bisect run</code> find it by itself.</li>
+                </ul>
+
+                <h2 id="cheat-sheet">A cheat-sheet for the whole series</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Situation</th><th>Command</th><th>Part</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>First-time setup</td><td><code>git config --global user.name / user.email</code></td><td>1</td></tr>
+                            <tr><td>Status and changes</td><td><code>git status -s</code>, <code>git diff</code>, <code>git diff --staged</code></td><td>2</td></tr>
+                            <tr><td>Make a commit</td><td><code>git add</code>, <code>git commit -m "[TAG] module: ..."</code></td><td>2, 10</td></tr>
+                            <tr><td>Branching</td><td><code>git switch -c</code>, <code>git merge</code>, <code>git branch -d</code></td><td>3</td></tr>
+                            <tr><td>Syncing with GitLab</td><td><code>git clone</code>, <code>fetch</code>, <code>pull</code>, <code>push -u</code></td><td>4</td></tr>
+                            <tr><td>Joining work</td><td>a merge request; <code>git rebase main</code> when needed</td><td>5, 8</td></tr>
+                            <tr><td>A conflict</td><td><code>git add</code> + <code>git commit</code> / <code>git merge --abort</code></td><td>6</td></tr>
+                            <tr><td>Undoing a mistake</td><td><code>restore</code>, <code>commit --amend</code>, <code>reset</code>, <code>revert</code>, <code>reflog</code></td><td>7</td></tr>
+                            <tr><td>Urgent work mid-task</td><td><code>git stash push -m</code> / <code>pop</code></td><td>9</td></tr>
+                            <tr><td>Release and hotfix</td><td><code>git tag -a</code>, <code>cherry-pick -x</code></td><td>9</td></tr>
+                            <tr><td>Automatic checks</td><td><code>pre-commit</code> hook, <code>.gitlab-ci.yml</code></td><td>11</td></tr>
+                            <tr><td>Finding the bug-causing commit</td><td><code>blame</code>, <code>log -S</code>, <code>bisect run</code></td><td>12</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="khi-ket">When Git shows a strange error: four calm steps</h2>
+                <ul>
+                    <li><strong>Read the whole message, especially the <code>hint:</code> lines.</strong> Git often spells out the command to run, as you saw in earlier parts.</li>
+                    <li><strong><code>git status</code></strong> says where you are: which branch, whether a merge or rebase is in progress, which files await attention.</li>
+                    <li><strong><code>git log --oneline --graph --all</code></strong> gives the picture of history; add <code>--decorate</code> to see branches and tags.</li>
+                    <li><strong>Pause before any destructive command</strong> (<code>reset --hard</code>, <code>clean -f</code>, <code>push --force</code>). Create a backup branch, and if you slip use <code>git reflog</code>.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>The bisect script cannot run at some commits.</strong> Importing the whole <code>models</code> package, for instance, drags in <code>odoo</code> and fails at once. When the script ends with a generic error code Git counts that commit as “bad” and draws a wrong conclusion. Test the script on a known-good and a known-bad commit first, and return 125 when it cannot test.</li>
+                        <li><strong>Forgetting <code>git bisect reset</code>.</strong> You are still in a bisect session (a detached HEAD). Run <code>git bisect reset</code> before carrying on.</li>
+                        <li><strong>Using blame to assign guilt.</strong> The last commit to touch a line is not necessarily the cause; read its <code>git show</code> and ask the author rather than jumping to conclusions.</li>
+                        <li><strong>Switching versions during bisect with unfinished edits.</strong> Commit or stash (part 9) before <code>git bisect start</code> so nothing is lost.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary of the whole series</h2>
+                <ul>
+                    <li>Foundations: the three areas, small commits with good messages, <code>.gitignore</code> from the start.</li>
+                    <li>Collaboration: short-lived branches, GitLab, merge requests, conflicts and rebase within the rules.</li>
+                    <li>Safety: choose the right undo command, always keep the <code>reflog</code> and backup branches as a net.</li>
+                    <li>Releasing: tags, hotfixes from tags, cherry-pick; hooks and CI so machines do the checking.</li>
+                    <li>Tracing: <code>blame</code>, <code>log -S</code> and <code>bisect</code> to find causes instead of guessing.</li>
+                </ul>
+                <p>You have gone through all 12 parts, from the very first <code>git init</code> to a team workflow with merge requests, CI and releases. The natural next step is to apply it to a real project: create a GitLab repo for your module, turn on branch protection and add your first <code>.gitlab-ci.yml</code>. If you want to return to coding, read on with the <a href="../odoo/index.html">Odoo 20 Development series</a> and the <a href="../python/index.html">Practical Python series</a>, which share the <code>vinc_course</code> project with this one.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is git blame for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git blame prints every line of a file with the commit, author and time of its latest change, helping you see when and why the line appeared. Use -L to limit lines or a function, and -M and -C to trace lines relocated or duplicated.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does git bisect work?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">You mark one good and one bad commit; Git binary-searches the range between them, jumping to the halfway commit at each step for you to test, halving the range each time. With git bisect run script, Git runs your script at every step and reads the exit code as good or bad.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Which exit codes of a bisect script are special?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Per the Git documentation: 0 means good, 1 to 127 (except 125) means bad, 125 means skip a commit that cannot be tested, and any other code aborts the bisect.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I find the commit that added or removed a piece of text?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Use git log -S"text" (the pickaxe) to list the commits that changed how many times that text occurs; git log -G uses a regular expression. Then git show commit-id to read it.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-blame" target="_blank" rel="noopener">Git – git-blame</a></li>
+                    <li><a href="https://git-scm.com/docs/git-bisect" target="_blank" rel="noopener">Git – git-bisect</a></li>
+                    <li><a href="https://git-scm.com/docs/git-log" target="_blank" rel="noopener">Git – git-log (-S, --graph)</a></li>
+                    <li><a href="https://git-scm.com/docs/giteveryday" target="_blank" rel="noopener">Git – giteveryday (Everyday Git)</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-blame-bisect-troubleshooting-capstone.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-blame-bisect-troubleshooting-capstone.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-hooks-gitlab-ci-odoo-module-checks.html"><small>← Previous</small>Git hooks and GitLab CI</a>
+                    <a class="next" href="index.html"><small>Back to series →</small>Practical Git for Development Teams</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#blame">Tracing line by line: git blame and git log -S</a></li>
+                        <li><a href="#bisect">Binary-searching the culprit: git bisect</a></li>
+                        <li><a href="#tong-hop">Capstone: one complete working cycle</a></li>
+                        <li><a href="#cheat-sheet">A cheat-sheet for the whole series</a></li>
+                        <li><a href="#khi-ket">When Git shows a strange error: four calm steps</a></li>
+                        <li><a href="#tong-ket">Summary of the whole series</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

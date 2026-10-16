@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Stash, Cherry-pick and Tags: Hotfixes and Releases</title>
+    <meta name="description" content="Shelve unfinished work with git stash, carry one commit to another branch with cherry-pick -x, tag releases and run a hotfix from a tag for an Odoo module." />
+    <meta name="keywords" content="git stash, git cherry-pick, git tag, git hotfix, git release, semantic versioning, git describe, git stash pop" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-stash-cherry-pick-tag-hotfix-release.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Git Stash, Cherry-pick and Tags: Hotfixes and Releases" />
+    <meta property="og:description" content="Git stash, cherry-pick and tags through a real hotfix: shelve work, branch from a tag, cherry-pick -x to main and ship the patch release." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-stash-cherry-pick-tags-hotfix-release.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git Stash, Cherry-pick and Tags: Hotfixes and Releases",
+                "description": "Git stash, cherry-pick and tags through a real hotfix: shelve work, branch from a tag, cherry-pick -x to main and ship the patch release.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-stash-cherry-pick-tags-hotfix-release.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Stash, cherry-pick and tags"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "When is git stash the right tool?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When you are mid-task, do not want to commit yet but must switch branches now (an urgent fix, say). git stash push -m shelves uncommitted changes and git stash pop restores them. Add -u to include untracked files."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does cherry-pick differ from merge?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Merge brings a branch's whole history into the current branch. Cherry-pick applies the changes of one or a few chosen commits as new commits (different hashes). The -x flag records the original commit in the message."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between annotated and lightweight tags?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "An annotated tag (git tag -a) stores a date, the tagger and a message, and is meant for releases. A lightweight tag is just a name pointing at a commit, meant for temporary markers. Some commands, such as git describe, skip lightweight tags by default."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does my tag not appear on GitLab?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A plain git push usually does not send tags. Push explicitly with git push origin tag-name, or git push --tags for every tag. Check with git ls-remote --tags origin."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-stash-cherry-pick-tag-hotfix-release.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Stash, cherry-pick and tags</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 9 · Practical Git Series</span>
+            <h1>Git Stash, Cherry-pick and Tags: Hotfixes and Releases</h1>
+            <p class="post-lead">Part 9 runs a real hotfix scenario: shelve unfinished work with git stash, branch from the live tag, tag the patch release, cherry-pick -x back to main and retrieve your work, on the vinc_course module.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-stash-cherry-pick-tags-hotfix-release.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>Three tools for three “mid-task” situations: <code>stash</code> shelves unfinished work so you can switch jobs, <code>cherry-pick</code> carries exactly one commit to another branch, <code>tag</code> marks a release.</strong> This part runs a real hotfix scenario: you are halfway through the price branch when a bug appears in the running 1.0.0; you shelve the work, branch a hotfix from the tag, tag 1.0.1, cherry-pick the fix back to <code>main</code>, then retrieve your unfinished work.</p>
+                </div>
+
+                <h2 id="tinh-huong">The Friday-afternoon hotfix story</h2>
+                <p>Version 1.0.0 of <code>vinc_course</code> is live at the customer. You are halfway through the price field on your own branch when you are told the “Số giờ” label is misleading and needs an urgent fix. You cannot commit half-baked work, and you do not want an unfinished feature in the fix. This part's three tools handle each step:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Job</th><th>Tool</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Shelve unfinished work, come back later</td><td><code>git stash</code></td></tr>
+                            <tr><td>Know exactly which commit is running</td><td><code>git tag</code></td></tr>
+                            <tr><td>Fix starting from the released version</td><td>Branch from the tag</td></tr>
+                            <tr><td>Bring the fix to <code>main</code> without anything else</td><td><code>git cherry-pick</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-en-g09">
+                        <title id="dg-en-g09">A hotfix branched from a released tag, then cherry-picked to main</title>
+                        <path class="dg-arrow" d="M60 45 H400" /><path class="dg-arrow" d="M150 45 L240 125" />
+                        <circle class="dg-box" cx="60" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="60" y="50">C1</text>
+                        <circle class="dg-box" cx="150" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="150" y="50">C2</text>
+                        <circle class="dg-box" cx="260" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="260" y="50">C3</text>
+                        <circle class="dg-accent" cx="400" cy="45" r="16" /><text class="dg-title" text-anchor="middle" x="400" y="50">H'</text>
+                        <circle class="dg-accent" cx="240" cy="125" r="16" /><text class="dg-title" text-anchor="middle" x="240" y="130">H</text>
+                        <path class="dg-arrow" d="M256 118 Q400 115 400 63 m-5 8 l5 -8 l5 8" /><text class="dg-text" x="330" y="108">cherry-pick</text>
+                        <text class="dg-text" x="116" y="85">v1.0.0</text><text class="dg-text" x="266" y="140">hotfix, tagged v1.0.1</text>
+                        <text class="dg-title" x="440" y="50">main</text>
+                        <text class="dg-text" x="10" y="172">H' is a copy of H on main (different hash, same change).</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+
+                <h2 id="tag">Tags: marking a release</h2>
+                <p>A tag is a fixed name attached to a commit, usually for version numbers. Unlike a branch it does not move when you commit. Git's documentation describes two kinds: <strong>annotated</strong> tags (made with <code>-a</code>) store a date, the tagger and a message, meant for releases; <strong>lightweight</strong> tags are just a name, meant for temporary markers. Name them after the version the manifest declares (the Odoo documentation recommends semantic versioning for the <code>version</code> field). Note that a plain <code>git push</code> does <strong>not</strong> push tags; push them explicitly, and check the remote with <code>ls-remote</code>:</p>
+<pre><code>$ git tag -a v1.0.0 -m "Phát hành 1.0.0"
+$ git tag
+v1.0.0
+$ git show v1.0.0 --no-patch
+tag v1.0.0
+Tagger: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 10:17:00 2026 +0700
+
+Phát hành 1.0.0
+
+commit 47905cb280043ef4405171ee158d3e8967dd309a
+Author: Nguyễn Văn An &lt;an.nguyen@example.com&gt;
+Date:   Mon Oct 12 09:49:00 2026 +0700
+
+    [IMP] vinc_course: thêm trường số giờ
+$ git ls-remote --tags origin
+$ git push origin v1.0.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.0.0 -&gt; v1.0.0
+$ git ls-remote --tags origin
+5b6f223733af3ab0cae1c9c3d5de7d98aa06f970	refs/tags/v1.0.0
+47905cb280043ef4405171ee158d3e8967dd309a	refs/tags/v1.0.0^{}</code></pre>
+
+                <h2 id="stash">Stash: shelving unfinished work</h2>
+                <p><code>git stash</code> takes the uncommitted changes out of the working tree, stores them on a separate stack and returns the files to the latest commit. You can switch branches cleanly and come back to retrieve them. By default it shelves only <em>tracked</em> files: the newly created <code>NOTE.md</code> stays behind (add <code>-u</code> to include new files):</p>
+<pre><code>$ git switch -c feature/course-price
+Switched to a new branch 'feature/course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ echo "ghi chú" &gt; NOTE.md
+$ git status -s
+ M models/course.py
+?? NOTE.md
+$ git stash push -m "dở học phí"
+Saved working directory and index state On feature/course-price: dở học phí
+$ git status -s
+?? NOTE.md
+$ git stash list
+stash@{0}: On feature/course-price: dở học phí</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>What it does</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git stash push -m "mô tả"</code></td><td>Shelve with a recognisable name</td></tr>
+                            <tr><td><code>git stash push -u</code></td><td>Include untracked files</td></tr>
+                            <tr><td><code>git stash list</code></td><td>List shelved entries</td></tr>
+                            <tr><td><code>git stash show -p</code></td><td>Show the latest entry's changes</td></tr>
+                            <tr><td><code>git stash pop</code></td><td>Apply and drop from the stack</td></tr>
+                            <tr><td><code>git stash apply</code></td><td>Apply but keep the entry</td></tr>
+                            <tr><td><code>git stash drop</code></td><td>Delete an entry</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Stash suits short gaps: minutes to a few hours. If the unfinished work will last until tomorrow, make a temporary commit (<code>[WIP]</code>) on your own branch and fold it later with interactive rebase as in part 8; a commit has a name and lives in history, whereas a stash is easy to forget. When a stash conflicts with newer changes, <code>git stash branch &lt;name&gt;</code> creates a new branch from the very commit you stashed on and applies the entry there, a tidy way out.</p>
+
+                <h2 id="hotfix">Hotfix: branching from a tag</h2>
+                <p>Thanks to the tag, you branch exactly from the version that is running rather than from <code>main</code> (which has other commits by now). Fix, commit, tag 1.0.1 and push; whoever deploys just takes that tag:</p>
+<pre><code>$ git switch -c hotfix/1.0.1 v1.0.0
+Switched to a new branch 'hotfix/1.0.1'
+$ sed -i "s/Số giờ/Số giờ (giờ)/" models/course.py
+$ git commit -qam "[FIX] vinc_course: ghi rõ đơn vị số giờ"
+$ git tag -a v1.0.1 -m "Hotfix 1.0.1"
+$ git push origin v1.0.1
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.0.1 -&gt; v1.0.1
+$ git log --oneline -n 3 --decorate
+1f85d3e (HEAD -&gt; hotfix/1.0.1, tag: v1.0.1) [FIX] vinc_course: ghi rõ đơn vị số giờ
+47905cb (tag: v1.0.0) [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+
+                <h2 id="cherry-pick">Cherry-pick: carrying exactly one commit elsewhere</h2>
+                <p>The fix must also reach <code>main</code> so the next release does not repeat the bug. Merging the hotfix branch into <code>main</code> works too, but when the branch holds other things you want exactly one commit. <code>git cherry-pick &lt;commit&gt;</code> applies that commit's change to the current branch as a new commit. The <code>-x</code> flag appends a “(cherry picked from commit …)” line so later readers can trace the source; the documentation recommends it when picking between two public branches (for example porting a bug fix back to an older release line):</p>
+<pre><code>$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git cherry-pick -x hotfix/1.0.1
+[main 938fa6a] [FIX] vinc_course: ghi rõ đơn vị số giờ
+ Date: Mon Oct 12 12:09:00 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git log --oneline -n 3
+938fa6a [FIX] vinc_course: ghi rõ đơn vị số giờ
+6305374 [ADD] vinc_course: thêm extra
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git log -1 --format=%B
+[FIX] vinc_course: ghi rõ đơn vị số giờ
+
+(cherry picked from commit 1f85d3e6f42ba67551050559c96ab62364d8feed)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   6305374..938fa6a  main -&gt; main</code></pre>
+                <p>Cherry-pick makes a new commit (different hash), so the <code>-x</code> line is the only link to the original. If the changes collide you meet a conflict as in part 6 and finish with <code>git cherry-pick --continue</code>, or cancel with <code>--abort</code>. You can pick a range: <code>git cherry-pick A..B</code>.</p>
+                <p>Now back to the unfinished work. <code>git stash pop</code> restores the changes and removes the entry from the list, but according to the documentation, if applying runs into conflicts the entry is <em>not</em> removed so you lose nothing:</p>
+<pre><code>$ git switch feature/course-price
+Switched to branch 'feature/course-price'
+$ git stash pop
+On branch feature/course-price
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   models/course.py
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+	NOTE.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (8e6da6bf2eefeff625ca4a09a60da21474acd05b)
+$ git stash list</code></pre>
+
+                <h2 id="quan-ly-tag">Listing, visiting and deleting tags</h2>
+<pre><code>$ git tag -l "v1.*"
+v1.0.0
+v1.0.1
+$ git describe
+v1.0.0-2-g938fa6a
+$ git switch --detach v1.0.0
+HEAD is now at 47905cb [IMP] vinc_course: thêm trường số giờ
+$ git switch -
+Your branch is up to date with 'origin/main'.
+Previous HEAD position was 47905cb [IMP] vinc_course: thêm trường số giờ
+Switched to branch 'main'
+$ git tag -d v1.0.0
+Deleted tag 'v1.0.0' (was 5b6f223)
+$ git push origin --delete v1.0.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         v1.0.0
+$ git tag
+v1.0.1</code></pre>
+                <p><code>git describe</code> prints the nearest tag name (counting only annotated tags by default), handy for showing the running version. <code>git switch --detach v1.0.0</code> lets you view the code exactly at that release without creating a branch; <code>git switch -</code> returns. Deleting a tag takes two places: locally with <code>-d</code>, on the remote with <code>git push origin --delete</code>. Avoid deleting and re-creating a published tag since others already have the old one. On GitLab admins can protect tag name patterns (protected tags) so only some roles may create them.</p>
+
+                <h2 id="trong-odoo">Releasing an Odoo module with tags</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Step</th><th>How</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Set the version</td><td>Edit <code>version</code> in <code>__manifest__.py</code> following semantic versioning, commit, then tag the same number (<code>v1.1.0</code>)</td></tr>
+                            <tr><td>Deploy</td><td>On the server: <code>git fetch --tags</code>, switch to the tag, upgrade the module with <code>-u vinc_course</code></td></tr>
+                            <tr><td>Know what is running</td><td><code>git describe</code> on the server prints the version number</td></tr>
+                            <tr><td>Urgent fix</td><td>Branch <code>hotfix/x.y.z</code> from the tag, tag a new <code>vx.y.z</code>, cherry-pick to <code>main</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="phien-ban">Choosing version numbers for tags</h2>
+                <p>The Odoo manifest documentation asks that <code>version</code> follow <em>semantic versioning</em>: three numbers <code>MAJOR.MINOR.PATCH</code>. The convention lets customers and colleagues guess the size of a change from the number alone:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Change</th><th>New number</th><th>Example on vinc_course</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>PATCH</td><td>1.0.0 → 1.0.1</td><td>A label or small bug fix, no data structure change</td></tr>
+                            <tr><td>MINOR</td><td>1.0.1 → 1.1.0</td><td>Add the price field, backward compatible</td></tr>
+                            <tr><td>MAJOR</td><td>1.1.0 → 2.0.0</td><td>Rename a model or drop a field, data migration needed</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="checklist">A short release checklist</h2>
+                <ul>
+                    <li><code>git switch main</code> and <code>git pull</code>: make sure you are on the latest reviewed version.</li>
+                    <li>Update <code>version</code> in <code>__manifest__.py</code>, run the tests and a trial upgrade on a test database.</li>
+                    <li>Commit the version bump, then <code>git tag -a vX.Y.Z -m "..."</code> and <code>git push origin vX.Y.Z</code>.</li>
+                    <li>Deploy by switching to the exact tag, not to a branch that keeps moving.</li>
+                    <li>Record what changed for the customer (a changelog) together with the tag name.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>Assuming <code>git push</code> pushed the tag.</strong> The tag example shows <code>ls-remote</code> empty until you run <code>git push origin &lt;tag&gt;</code> (or <code>--tags</code> to push every tag).</li>
+                        <li><strong>Forgetting you stashed.</strong> The shelved work sits in <code>git stash list</code> for a week and gets forgotten. Always give it a <code>-m</code> description and clear it early with <code>pop</code> or <code>drop</code>.</li>
+                        <li><strong>New files are not stashed.</strong> As in the example, <code>NOTE.md</code> stayed out. To shelve untracked files too use <code>git stash push -u</code>.</li>
+                        <li><strong>Fixing on <code>main</code> only to find the running version lacks it.</strong> Always branch the hotfix from the running version's tag, then bring it to <code>main</code> by cherry-pick or merge.</li>
+                        <li><strong>Cherry-picking many commits casually.</strong> Each copy gets its own hash so merging the two branches later may show “duplicate” changes. Cherry-pick only when you truly need that one change alone.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li><code>stash push -m</code> / <code>pop</code>: shelve and retrieve unfinished work; add <code>-u</code> for new files.</li>
+                    <li>Annotated tags for releases; remember to push tags explicitly.</li>
+                    <li>Hotfix: branch from the running tag, tag again, then <code>cherry-pick -x</code> to <code>main</code>.</li>
+                    <li>Conflict during cherry-pick: fix, <code>add</code>, <code>--continue</code> (or <code>--abort</code>).</li>
+                </ul>
+                <p>You now have the technical tools. What a team still needs to move in step is <strong>conventions</strong>: naming branches, writing commit messages and choosing a branching strategy. That is the subject of part 10.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When is git stash the right tool?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When you are mid-task, do not want to commit yet but must switch branches now (an urgent fix, say). git stash push -m shelves uncommitted changes and git stash pop restores them. Add -u to include untracked files.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does cherry-pick differ from merge?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Merge brings a branch's whole history into the current branch. Cherry-pick applies the changes of one or a few chosen commits as new commits (different hashes). The -x flag records the original commit in the message.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between annotated and lightweight tags?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">An annotated tag (git tag -a) stores a date, the tagger and a message, and is meant for releases. A lightweight tag is just a name pointing at a commit, meant for temporary markers. Some commands, such as git describe, skip lightweight tags by default.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does my tag not appear on GitLab?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A plain git push usually does not send tags. Push explicitly with git push origin tag-name, or git push --tags for every tag. Check with git ls-remote --tags origin.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-stash" target="_blank" rel="noopener">Git – git-stash</a></li>
+                    <li><a href="https://git-scm.com/docs/git-cherry-pick" target="_blank" rel="noopener">Git – git-cherry-pick</a></li>
+                    <li><a href="https://git-scm.com/docs/git-tag" target="_blank" rel="noopener">Git – git-tag</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push (--tags)</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/repository/branches/protected/" target="_blank" rel="noopener">GitLab Docs – Protected branches (protected tags)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-stash-cherry-pick-tags-hotfix-release.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-stash-cherry-pick-tags-hotfix-release.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-rebase-tidy-history.html"><small>← Previous</small>Rebase and tidy history</a>
+                    <span class="next"><small>Next · Coming soon</small>Commit conventions and branching strategies</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#tinh-huong">The Friday-afternoon hotfix story</a></li>
+                        <li><a href="#tag">Tags: marking a release</a></li>
+                        <li><a href="#stash">Stash: shelving unfinished work</a></li>
+                        <li><a href="#hotfix">Hotfix: branching from a tag</a></li>
+                        <li><a href="#cherry-pick">Cherry-pick: carrying exactly one commit elsewhere</a></li>
+                        <li><a href="#quan-ly-tag">Listing, visiting and deleting tags</a></li>
+                        <li><a href="#trong-odoo">Releasing an Odoo module with tags</a></li>
+                        <li><a href="#phien-ban">Choosing version numbers for tags</a></li>
+                        <li><a href="#checklist">A short release checklist</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -749,6 +749,7 @@ function initPostFilter() {
         const kw = q.value.trim().toLowerCase();
         items.forEach(li => li.hidden = !!kw && !li.textContent.toLowerCase().includes(kw));
         document.getElementById('post-empty').hidden = items.some(li => !li.hidden);
+        document.querySelectorAll('.blog-group').forEach(g => g.hidden = ![...g.querySelectorAll('li')].some(li => !li.hidden));
     });
 }
 

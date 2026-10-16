@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git hoàn tác: restore, reset, revert, reflog khi lỡ sai</title>
+    <meta name="description" content="Chọn đúng lệnh hoàn tác Git: restore cho file, commit --amend, reset --soft/--mixed/--hard, revert cho commit đã push và reflog để cứu commit tưởng đã mất." />
+    <meta name="keywords" content="git restore, git reset, git revert, git reflog, git commit amend, hoàn tác git, git reset hard, git undo commit" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git hoàn tác: restore, reset, revert, reflog khi lỡ sai" />
+    <meta property="og:description" content="Hoàn tác trong Git an toàn: restore, commit --amend, reset --soft/--mixed/--hard, revert và reflog, chạy thật trên repo module Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-hoan-tac-restore-reset-revert-reflog.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git hoàn tác: restore, reset, revert, reflog khi lỡ sai",
+                "description": "Hoàn tác trong Git an toàn: restore, commit --amend, reset --soft/--mixed/--hard, revert và reflog, chạy thật trên repo module Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-hoan-tac-restore-reset-revert-reflog.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-hoan-tac-restore-reset-revert-reflog.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Hoàn tác an toàn"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa git reset và git revert là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git reset di chuyển nhánh về một commit cũ, nên viết lại lịch sử và chỉ nên dùng khi chưa push. git revert thêm một commit mới làm điều ngược lại, giữ nguyên lịch sử, nên dùng cho commit đã push."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "git reset --soft, --mixed và --hard khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cả ba đều lùi nhánh. --soft giữ nguyên staging và thư mục làm việc; --mixed (mặc định) cập nhật staging theo commit mới nhưng giữ file; --hard ghi đè cả thư mục làm việc nên mất thay đổi chưa commit."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Lỡ git reset --hard thì lấy lại commit bằng cách nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Chạy git reflog để tìm dòng HEAD@{n} trước khi reset rồi git reset --hard HEAD@{n} hoặc git switch -c tên-mới <mã>. Mục reflog được giữ mặc định 90 ngày, nhưng thay đổi chưa từng commit thì không cứu được."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào được dùng git commit --amend?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi commit mới nhất chưa được push. Amend tạo ra commit khác (mã băm đổi), nên nếu đã push thì người khác đã có commit cũ và bạn sẽ phải ép push; trường hợp đó hãy dùng git revert hoặc commit sửa bổ sung."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-undo-restore-reset-revert-reflog.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Hoàn tác an toàn</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 7 · Series Git thực chiến</span>
+            <h1>Git hoàn tác: restore, reset, revert, reflog khi lỡ sai</h1>
+            <p class="post-lead">Bài 7 chỉ cách chọn đúng lệnh hoàn tác Git: restore cho file, commit --amend, reset với ba cờ, revert cho commit đã push và reflog để cứu lại commit tưởng đã mất, chạy thật trên repo vinc_course.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-hoan-tac-restore-reset-revert-reflog.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Mỗi loại sai lầm có một lệnh hoàn tác riêng; chọn đúng lệnh quan trọng hơn là nhớ nhiều lệnh.</strong> Sửa nhầm file: <code>git restore</code>. Lỡ <code>git add</code>: <code>git restore --staged</code>. Commit chưa push: <code>git commit --amend</code> hoặc <code>git reset</code> (<code>--soft</code>, mặc định <code>--mixed</code>, <code>--hard</code>). Commit đã push: <code>git revert</code>. Lỡ mất commit: <code>git reflog</code>. Bài này chạy từng lệnh trên repo <code>vinc_course</code> để bạn thấy chính xác cái gì mất, cái gì còn.</p>
+                </div>
+
+                <h2 id="chon-lenh">Chọn đúng lệnh theo “mình đang ở đâu”</h2>
+                <p>Bí quyết là xác định sai lầm đang nằm ở vùng nào trong ba vùng của bài 1, rồi lùi từ vùng đó. Có thêm một câu hỏi quyết định: commit đã được <strong>push</strong> lên GitLab chưa? Commit chưa push chỉ nằm trên máy bạn nên sửa lịch sử thoải mái; commit đã push là của cả nhóm, và viết lại lịch sử sẽ gây rối cho người khác.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-vi-g07">
+                        <title id="dg-vi-g07">Mỗi lệnh hoàn tác lùi dữ liệu về vùng nào</title>
+                        <rect class="dg-box" x="10" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="24" y="70">Thư mục</text>
+                        <text class="dg-title" x="24" y="88">làm việc</text>
+                        <rect class="dg-accent" x="235" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="249" y="70">Staging</text>
+                        <rect class="dg-box" x="460" y="45" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="474" y="70">Commit</text>
+                        <text class="dg-title" x="474" y="88">(HEAD)</text>
+                        <path class="dg-arrow" d="M234 80 h-26 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="221" y="34">git restore</text>
+                        <path class="dg-arrow" d="M459 80 h-26 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="446" y="34">restore --staged</text>
+                        <text class="dg-text" x="10" y="145">reset --soft: chỉ lùi HEAD · --mixed: lùi cả staging · --hard: lùi cả thư mục làm việc</text>
+                        <text class="dg-text" x="10" y="168">revert: không lùi gì cả, thêm một commit mới có tác dụng ngược lại.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tình huống</th><th>Lệnh</th><th>Mất gì?</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sửa nhầm file, chưa add</td><td><code>git restore &lt;file&gt;</code></td><td>Thay đổi chưa commit của file đó (không cứu lại được)</td></tr>
+                            <tr><td>Lỡ <code>git add</code></td><td><code>git restore --staged &lt;file&gt;</code></td><td>Không mất gì, file vẫn giữ nguyên thay đổi</td></tr>
+                            <tr><td>Sai message hoặc thiếu file ở commit mới nhất</td><td><code>git commit --amend</code></td><td>Commit cũ bị thay bằng commit mới (chỉ khi chưa push)</td></tr>
+                            <tr><td>Muốn bỏ commit chưa push</td><td><code>git reset --soft / --mixed / --hard HEAD~N</code></td><td>Tùy cờ, xem bảng dưới</td></tr>
+                            <tr><td>Commit đã push, cần đảo ngược</td><td><code>git revert &lt;commit&gt;</code></td><td>Không mất gì, thêm một commit mới</td></tr>
+                            <tr><td>Lỡ reset/xóa nhánh, mất commit</td><td><code>git reflog</code></td><td>Là lệnh để cứu lại</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="restore">Hoàn tác thay đổi chưa commit: git restore</h2>
+                <p><code>git restore &lt;file&gt;</code> đưa file trong thư mục làm việc về đúng như trong staging (hoặc commit gần nhất nếu chưa staging). Hãy nhớ: thay đổi chưa commit mà bị restore thì <strong>không có cách nào cứu lại</strong>, vì Git chưa từng lưu nó. Còn <code>git restore --staged</code> chỉ rút file khỏi staging, thay đổi vẫn còn trong file nên hoàn toàn an toàn:</p>
+<pre><code>$ echo "# lỡ tay" &gt;&gt; models/course.py
+$ git status -s
+ M models/course.py
+$ git restore models/course.py
+$ git status -s</code></pre>
+<pre><code>$ echo "# lỡ tay" &gt;&gt; models/course.py
+$ git add models/course.py
+$ git status -s
+M  models/course.py
+$ git restore --staged models/course.py
+$ git status -s
+ M models/course.py
+$ git restore models/course.py</code></pre>
+                <p>Muốn lấy lại một file từ commit cũ, thêm <code>--source</code>: <code>git restore --source=HEAD~2 models/course.py</code> đưa file về phiên bản cách đây hai commit (vẫn là thay đổi chưa commit để bạn xem rồi quyết định).</p>
+
+                <h2 id="amend">Sửa commit mới nhất: git commit --amend</h2>
+                <p>Gõ sai message hay quên một file? Đừng tạo thêm commit “fix typo”. <code>--amend</code> thay commit mới nhất bằng một commit mới có nội dung đã chỉnh. Mã băm đổi (trong ví dụ <code>87e…</code> thành mã khác), nghĩa là đây là <strong>commit khác</strong>; vì vậy chỉ nên amend khi chưa push:</p>
+<pre><code>$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_corse: README"
+[main 87e323f] [ADD] vinc_corse: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git commit --amend -m "[ADD] vinc_course: README"
+[main f7f143d] [ADD] vinc_course: README
+ Date: Mon Oct 12 11:20:00 2026 +0700
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ echo "Module quản lý khóa học." &gt;&gt; README.md
+$ git commit -qa --amend --no-edit
+$ git log --oneline -n 2
+b7b55df [ADD] vinc_course: README
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git show --stat --oneline HEAD
+b7b55df [ADD] vinc_course: README
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)</code></pre>
+
+                <h2 id="reset">Bỏ commit chưa push: git reset</h2>
+                <p><code>git reset &lt;commit&gt;</code> di chuyển nhánh hiện tại về commit đó. Ba cờ quyết định phần còn lại (theo tài liệu): <code>--soft</code> giữ nguyên cả staging lẫn thư mục làm việc; <code>--mixed</code> (mặc định) cập nhật staging theo commit mới, giữ thư mục làm việc; <code>--hard</code> ghi đè cả thư mục làm việc. Thử với hai commit học phí và cấp độ:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cờ</th><th>HEAD / nhánh</th><th>Staging</th><th>Thư mục làm việc</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>--soft</code></td><td>lùi</td><td>giữ</td><td>giữ</td></tr>
+                            <tr><td><code>--mixed</code></td><td>lùi</td><td>theo commit mới</td><td>giữ</td></tr>
+                            <tr><td><code>--hard</code></td><td>lùi</td><td>theo commit mới</td><td><strong>bị ghi đè</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm học phí"
+$ echo "    level = fields.Char(string='Cấp độ')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ git reset --soft HEAD~1
+$ git status -s
+M  models/course.py
+$ git log --oneline -n 2
+907ebca [IMP] vinc_course: thêm học phí
+b7b55df [ADD] vinc_course: README</code></pre>
+                <p><code>--soft</code> đưa thay đổi của commit bị bỏ trở lại staging (<code>M </code> ở cột trái), tiện khi bạn muốn <em>gộp lại hoặc viết lại commit</em>. Commit lại rồi thử <code>--mixed</code>: thay đổi chuyển thành chưa staging:</p>
+<pre><code>$ git commit -qm "[IMP] vinc_course: thêm cấp độ"
+$ git reset HEAD~1
+Unstaged changes after reset:
+M	models/course.py
+$ git status -s
+ M models/course.py</code></pre>
+                <p>Cuối cùng là <code>--hard</code>: vừa lùi nhánh vừa xóa thay đổi khỏi thư mục làm việc (<code>grep</code> đếm 0 vì dòng <code>level</code> đã biến mất):</p>
+<pre><code>$ git commit -qam "[IMP] vinc_course: thêm cấp độ"
+$ git reset --hard HEAD~1
+HEAD is now at 907ebca [IMP] vinc_course: thêm học phí
+$ git status -sb
+## main
+$ grep -c level models/course.py
+0</code></pre>
+
+                <h2 id="reflog">Cứu commit “đã mất”: git reflog</h2>
+                <p>Commit vừa bị <code>reset --hard</code> thật ra chưa biến mất: Git ghi lại mọi lần HEAD di chuyển trong <em>reflog</em>. Chỉ cần tìm dòng <code>HEAD@{n}</code> trước khi sai và đưa nhánh về đó. Theo tài liệu <code>git config</code>, mục reflog được giữ mặc định 90 ngày (30 ngày cho mục không còn nối với nhánh nào), nên hãy cứu sớm:</p>
+<pre><code>$ git reflog -n 3
+907ebca HEAD@{0}: reset: moving to HEAD~1
+9f21257 HEAD@{1}: commit: [IMP] vinc_course: thêm cấp độ
+907ebca HEAD@{2}: reset: moving to HEAD~1
+$ git reset --hard HEAD@{1}
+HEAD is now at 9f21257 [IMP] vinc_course: thêm cấp độ
+$ grep -c level models/course.py
+1
+$ git log --oneline -n 2
+9f21257 [IMP] vinc_course: thêm cấp độ
+907ebca [IMP] vinc_course: thêm học phí</code></pre>
+                <p>Hai cách đếm này hay bị nhầm. <code>HEAD~1</code>, <code>HEAD~2</code> đếm lùi theo <em>lịch sử commit</em> của nhánh (cha, ông). <code>HEAD@{1}</code> đếm lùi theo <em>reflog</em>, tức là vị trí HEAD ở những lần di chuyển trước đó, kể cả những commit giờ không còn nằm trên nhánh. Vì vậy sau một lần <code>reset --hard</code>, <code>HEAD~1</code> đưa bạn lùi tiếp, còn <code>HEAD@{1}</code> đưa bạn quay về chỗ cũ.</p>
+
+                <h2 id="revert">Đảo ngược commit đã push: git revert</h2>
+                <p>Khi commit đã lên GitLab, đừng reset rồi ép push: người khác đã có commit đó. Hãy dùng <code>git revert</code>, lệnh tạo một commit <strong>mới</strong> làm điều ngược lại. Lịch sử giữ nguyên, ai kéo về cũng nhận được bản sửa:</p>
+<pre><code>$ git revert --no-edit HEAD
+[main ddec0fc] Revert "[IMP] vinc_course: thêm cấp độ"
+ Date: Mon Oct 12 14:08:00 2026 +0700
+ 1 file changed, 1 deletion(-)
+$ git log --oneline -n 3
+ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+9f21257 [IMP] vinc_course: thêm cấp độ
+907ebca [IMP] vinc_course: thêm học phí
+$ grep -c level models/course.py
+0</code></pre>
+                <p>Để revert một <em>merge commit</em> bạn phải chỉ rõ nhánh cha nào là “dòng chính” bằng <code>-m 1</code> (tham số <code>--mainline</code> trong tài liệu), thường là phía <code>main</code>. Revert merge là cách xử lý chuẩn khi một merge request đã vào <code>main</code> mà gây lỗi trên môi trường thử.</p>
+
+                <h2 id="khac">Hai tình huống thường gặp khác</h2>
+                <p><strong>Commit nhầm lên <code>main</code> (nhắc ở bài 3).</strong> Giữ công việc bằng cách tạo nhánh tại commit hiện tại, rồi đưa <code>main</code> lùi lại. Cả hai cùng trỏ đúng thứ tự an toàn, không mất commit nào:</p>
+<pre><code>$ echo "    code = fields.Char(string='Mã')" &gt;&gt; models/course.py
+$ git commit -qam "[IMP] vinc_course: thêm mã khóa (lẽ ra phải ở nhánh riêng)"
+$ git branch feature/course-code
+$ git reset --hard HEAD~1
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git log --oneline --graph --all --decorate -n 4
+* 7bfb9cd (feature/course-code) [IMP] vinc_course: thêm mã khóa (lẽ ra phải ở nhánh riêng)
+* ddec0fc (HEAD -&gt; main) Revert "[IMP] vinc_course: thêm cấp độ"
+* 9f21257 [IMP] vinc_course: thêm cấp độ
+* 907ebca [IMP] vinc_course: thêm học phí</code></pre>
+                <p><strong>Dọn file chưa theo dõi.</strong> <code>git clean</code> xóa file untracked; hãy luôn chạy <code>-n</code> (dry-run) trước để xem nó sẽ xóa gì, vì file đã xóa kiểu này không nằm trong reflog:</p>
+<pre><code>$ echo "x" &gt; tam.txt
+$ git clean -n
+Would remove tam.txt
+$ git clean -f
+Removing tam.txt
+$ git status -s</code></pre>
+
+                <h2 id="luoi-an-toan">Lưới an toàn trước khi làm điều mạo hiểm</h2>
+                <p>Reflog là lưới cuối cùng, nhưng có cách rẻ hơn để không phải dùng đến nó: trước khi chạy một lệnh bạn chưa chắc (<code>reset --hard</code>, <code>rebase</code>, <code>clean</code>), hãy <strong>tạo một nhánh sao lưu</strong> tại vị trí hiện tại. Nhánh chỉ là con trỏ nên tạo tức thì, và nếu mọi thứ ổn bạn xóa nó đi. Nếu hỏng, bạn đưa nhánh làm việc về lại đúng chỗ đã đánh dấu:</p>
+<pre><code>$ git branch backup/truoc-reset
+$ git reset --hard HEAD~1
+HEAD is now at 9f21257 [IMP] vinc_course: thêm cấp độ
+$ git log --oneline -n 1
+9f21257 [IMP] vinc_course: thêm cấp độ
+$ git reset --hard backup/truoc-reset
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git log --oneline -n 1
+ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ git branch -d backup/truoc-reset
+Deleted branch backup/truoc-reset (was ddec0fc).</code></pre>
+                <p>Thói quen này đặc biệt đáng giá trong tuần phát hành, khi áp lực cao và bạn dễ gõ nhầm. Cùng với việc luôn đọc <code>git status</code> và <code>git log --oneline</code> trước khi hoàn tác, nó biến những lệnh “đáng sợ” thành thao tác thường nhật.</p>
+
+                <h2 id="trong-odoo">Hoàn tác trong công việc Odoo</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tình huống</th><th>Cách xử lý</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Lỡ commit <code>odoo.conf</code> chứa mật khẩu</td><td>Chưa push: <code>reset --soft</code> hoặc <code>amend</code>. Đã push: đổi mật khẩu trước, rồi xử lý lịch sử cùng quản trị viên</td></tr>
+                            <tr><td>MR đã vào <code>main</code> làm hỏng bản thử</td><td><code>git revert -m 1 &lt;merge-commit&gt;</code> rồi push; sửa lỗi ở nhánh mới và merge lại</td></tr>
+                            <tr><td>Sửa nhầm file view XML đang làm dở</td><td><code>git restore views/course_views.xml</code> (chấp nhận mất phần chưa commit)</td></tr>
+                            <tr><td>Commit tên module sai ở tiêu đề</td><td><code>git commit --amend -m "[FIX] vinc_course: ..."</code> nếu chưa push</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong><code>git reset --hard</code> khi còn việc dang dở.</strong> Lệnh này xóa thay đổi chưa commit và reflog không cứu được vì Git chưa từng lưu chúng. Trong ví dụ dưới, dòng dang dở biến mất hoàn toàn, reflog chỉ ghi lần di chuyển HEAD, không có nội dung file:</li>
+                    </ul>
+<pre><code>$ echo "# việc dang dở" &gt;&gt; models/course.py
+$ git reset --hard HEAD
+HEAD is now at ddec0fc Revert "[IMP] vinc_course: thêm cấp độ"
+$ grep -c dang models/course.py
+0
+$ git reflog -n 2
+ddec0fc HEAD@{0}: reset: moving to HEAD
+ddec0fc HEAD@{1}: reset: moving to HEAD~1</code></pre>
+
+                    <ul>
+                        <li><strong>Amend hoặc reset commit đã push rồi ép push.</strong> Người khác đã kéo commit cũ nên lịch sử của họ lệch với remote và rất dễ mất công việc. Với commit đã push, hãy <code>revert</code>.</li>
+                        <li><strong>Nhầm <code>restore</code> với <code>reset</code>.</strong> <code>restore</code> thao tác trên file, <code>reset</code> di chuyển nhánh. Khi chỉ muốn hủy một file, đừng dùng <code>reset --hard</code> vì nó đụng tới mọi file.</li>
+                        <li><strong>Hoảng khi thấy “mất” commit.</strong> Hãy dừng lại, chạy <code>git reflog</code> và tìm mã băm; chừng nào còn trong reflog, bạn vẫn lấy lại được bằng <code>git reset --hard &lt;mã&gt;</code> hoặc <code>git switch -c cứu &lt;mã&gt;</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Chưa commit: <code>restore</code> (file) và <code>restore --staged</code> (staging).</li>
+                    <li>Commit chưa push: <code>--amend</code> hoặc <code>reset</code> (<code>--soft</code> giữ staging, <code>--mixed</code> giữ file, <code>--hard</code> xóa hết).</li>
+                    <li>Commit đã push: <code>revert</code>, đừng viết lại lịch sử chung.</li>
+                    <li>Mất commit: <code>git reflog</code> (còn 90 ngày mặc định), nhưng không cứu được thay đổi chưa từng commit.</li>
+                </ul>
+                <p>Bạn đã biết sửa sai an toàn. Bài tiếp theo là thao tác mà nhiều người e ngại nhưng nhóm nào cũng dùng: <strong>rebase</strong> để làm gọn lịch sử trước khi mở merge request, và quy tắc vàng để không bao giờ gây họa với nó.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa git reset và git revert là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git reset di chuyển nhánh về một commit cũ, nên viết lại lịch sử và chỉ nên dùng khi chưa push. git revert thêm một commit mới làm điều ngược lại, giữ nguyên lịch sử, nên dùng cho commit đã push.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git reset --soft, --mixed và --hard khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cả ba đều lùi nhánh. --soft giữ nguyên staging và thư mục làm việc; --mixed (mặc định) cập nhật staging theo commit mới nhưng giữ file; --hard ghi đè cả thư mục làm việc nên mất thay đổi chưa commit.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Lỡ git reset --hard thì lấy lại commit bằng cách nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Chạy git reflog để tìm dòng HEAD@{n} trước khi reset rồi git reset --hard HEAD@{n} hoặc git switch -c tên-mới &lt;mã&gt;. Mục reflog được giữ mặc định 90 ngày, nhưng thay đổi chưa từng commit thì không cứu được.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào được dùng git commit --amend?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi commit mới nhất chưa được push. Amend tạo ra commit khác (mã băm đổi), nên nếu đã push thì người khác đã có commit cũ và bạn sẽ phải ép push; trường hợp đó hãy dùng git revert hoặc commit sửa bổ sung.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-restore" target="_blank" rel="noopener">Git – git-restore</a></li>
+                    <li><a href="https://git-scm.com/docs/git-reset" target="_blank" rel="noopener">Git – git-reset</a></li>
+                    <li><a href="https://git-scm.com/docs/git-revert" target="_blank" rel="noopener">Git – git-revert</a></li>
+                    <li><a href="https://git-scm.com/docs/git-reflog" target="_blank" rel="noopener">Git – git-reflog</a></li>
+                    <li><a href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener">Git – git-commit (--amend)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-clean" target="_blank" rel="noopener">Git – git-clean</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config (gc.reflogExpire)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-hoan-tac-restore-reset-revert-reflog.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-hoan-tac-restore-reset-revert-reflog.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-giai-quyet-xung-dot-conflict.html"><small>← Bài trước</small>Giải quyết xung đột</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Rebase và làm gọn lịch sử</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#chon-lenh">Chọn đúng lệnh theo “mình đang ở đâu”</a></li>
+                        <li><a href="#restore">Hoàn tác thay đổi chưa commit: git restore</a></li>
+                        <li><a href="#amend">Sửa commit mới nhất: git commit --amend</a></li>
+                        <li><a href="#reset">Bỏ commit chưa push: git reset</a></li>
+                        <li><a href="#reflog">Cứu commit “đã mất”: git reflog</a></li>
+                        <li><a href="#revert">Đảo ngược commit đã push: git revert</a></li>
+                        <li><a href="#khac">Hai tình huống thường gặp khác</a></li>
+                        <li><a href="#luoi-an-toan">Lưới an toàn trước khi làm điều mạo hiểm</a></li>
+                        <li><a href="#trong-odoo">Hoàn tác trong công việc Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

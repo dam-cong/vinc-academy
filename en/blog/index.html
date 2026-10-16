@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programming Knowledge Blog: Python, Git, SQL, Odoo, AI | Vinc Academy</title>
-    <meta name="description" content="Vinc Academy's blog on programming and technology: Python, Git, SQL, Odoo, AI. Free, hands-on articles for developers." />
+    <title>Programming Knowledge Blog: Python, Git, Linux, SQL, Odoo, AI | Vinc Academy</title>
+    <meta name="description" content="Vinc Academy's blog on programming and technology: Python, Git, Linux, SQL, Odoo, AI. Free, hands-on articles for developers." />
     <meta name="author" content="Vinc Academy" />
     <meta name="copyright" content="Vinc Academy" />
     <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/" />
@@ -17,7 +17,7 @@
     <meta property="og:site_name" content="Vinc Academy" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="Programming & technology knowledge blog" />
-    <meta property="og:description" content="Vinc Academy's blog on programming and technology: Python, Git, SQL, Odoo, AI. Free, hands-on articles for developers." />
+    <meta property="og:description" content="Vinc Academy's blog on programming and technology: Python, Git, Linux, SQL, Odoo, AI. Free, hands-on articles for developers." />
     <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/" />
     <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/blog-hub.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -33,13 +33,15 @@
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "name": "Programming & technology knowledge blog",
-        "description": "Vinc Academy's blog on programming and technology: Python, Git, SQL, Odoo, AI. Free, hands-on articles for developers.",
+        "description": "Vinc Academy's blog on programming and technology: Python, Git, Linux, SQL, Odoo, AI. Free, hands-on articles for developers.",
         "url": "https://vinc-academy.vercel.app/en/blog/",
         "inLanguage": "en",
         "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
         "hasPart": [
             { "@type": "CollectionPage", "name": "Odoo", "url": "https://vinc-academy.vercel.app/en/blog/odoo/" },
-            { "@type": "CollectionPage", "name": "Python", "url": "https://vinc-academy.vercel.app/en/blog/python/" }
+            { "@type": "CollectionPage", "name": "Python", "url": "https://vinc-academy.vercel.app/en/blog/python/" },
+            { "@type": "CollectionPage", "name": "Git", "url": "https://vinc-academy.vercel.app/en/blog/git/" },
+            { "@type": "CollectionPage", "name": "Linux & Shell", "url": "https://vinc-academy.vercel.app/en/blog/linux/" }
         ]
     }
     </script>
@@ -90,18 +92,50 @@
         <header class="hub-hero">
             <span class="section-tag">Knowledge · Free</span>
             <h1>Programming knowledge blog</h1>
-            <p class="post-lead">Where Vinc Academy shares hands-on knowledge about programming and technology: Python, Git, SQL, Odoo, AI. Pick a topic to get started.</p>
+            <p class="post-lead">Where Vinc Academy shares hands-on knowledge about programming and technology. Follow the path from top to bottom, or jump straight to the topic you need.</p>
         </header>
 
         <input type="search" id="post-search" class="post-search" placeholder="Search topics: Python, Git, SQL..." aria-label="Search topics">
         <p class="prog-empty" id="post-empty" hidden>No matching topic found.</p>
+        <section class="blog-group">
+            <h2 class="series-title">1. Orientation for students and newcomers</h2>
+            <p class="series-desc">Understand the IT profession, choose a direction and prepare the soft skills for your first day at work.</p>
         <ol class="post-grid">
-            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Topic</span><h2>Odoo</h2><p>Odoo 20 Development A–Z: modules, ORM, views, security, OWL, API, deployment.</p><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python/index.html"><span class="post-num">Topic</span><h2>Python</h2><p>Python fundamentals and practical techniques for developers.</p><span class="post-status">Published</span></a></li>
-            <li><div class="post-card soon"><span class="post-num">Topic</span><h2>Git</h2><p>Source control, branching, reviews and teamwork with Git/GitLab.</p><span class="post-status">Coming soon</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Topic</span><h2>SQL &amp; PostgreSQL</h2><p>Queries, data design and performance tuning with PostgreSQL.</p><span class="post-status">Coming soon</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Topic</span><h2>AI for coding</h2><p>Use AI to write, review and debug code effectively.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Beginner</span><h2>Roadmap &amp; IT careers</h2><p>A learning roadmap, choosing a path (backend, ERP, DevOps), CV, a GitHub portfolio and preparing for internship and junior interviews.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Beginner</span><h2>First-job skills</h2><p>Onboarding, reading tickets, asking good questions, code review, estimating, progress reports and working in Agile/Scrum.</p><span class="post-status">Coming soon</span></div></li>
         </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">2. Technical foundations</h2>
+            <p class="series-desc">The base skills every developer needs; learn them roughly in this order.</p>
+        <ol class="post-grid">
+            <li><a class="post-card" href="python/index.html"><span class="post-num">Beginner</span><h2>Python</h2><p>Python fundamentals and practical techniques for developers.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="linux/index.html"><span class="post-num">Beginner</span><h2>Linux &amp; Shell</h2><p>Practical Linux and Bash command line: files, permissions, processes, pipes and scripts for developers.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git/index.html"><span class="post-num">Beginner</span><h2>Git</h2><p>Practical Git for teams: commits, branches, merge requests, undoing, rebase and CI.</p><span class="post-status">Published</span></a></li>
+            <li><div class="post-card soon"><span class="post-num">Beginner</span><h2>SQL &amp; PostgreSQL</h2><p>Queries, data design and performance tuning with PostgreSQL.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Beginner</span><h2>Web &amp; API basics</h2><p>The internet, HTTP, client–server, REST and JSON; trying APIs with curl and Postman.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Intermediate</span><h2>Algorithms &amp; data structures</h2><p>Complexity, searching, sorting, stacks and queues in Python; for exams and interviews.</p><span class="post-status">Coming soon</span></div></li>
+        </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">3. Advanced techniques</h2>
+            <p class="series-desc">For people who already write code and work in a team.</p>
+        <ol class="post-grid">
+            <li><div class="post-card soon"><span class="post-num">Intermediate</span><h2>Clean Code &amp; SOLID</h2><p>Write code that is easy to read and change: naming, small functions, DRY and the SOLID principles.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Intermediate</span><h2>AI for coding</h2><p>Use AI to write, review and debug code effectively.</p><span class="post-status">Coming soon</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Intermediate</span><h2>DevOps</h2><p>Docker, CI/CD, Linux and deploying apps (Odoo) to servers.</p><span class="post-status">Coming soon</span></div></li>
+        </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">4. Odoo: ERP development</h2>
+            <p class="series-desc">Put all of the foundations to work on a popular ERP platform.</p>
+        <ol class="post-grid">
+            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Intermediate</span><h2>Odoo</h2><p>Odoo 20 Development A–Z: modules, ORM, views, security, OWL, API, deployment.</p><span class="post-status">Published</span></a></li>
+        </ol>
+        </section>
 
         <div class="prose" style="max-width:none">
             <div class="cta-box">

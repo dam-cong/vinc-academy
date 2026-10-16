@@ -27,7 +27,6 @@ vinc-academy/
     ├── vinc-academy.png   # Logo
     ├── python.png         # Icon khóa Python
     ├── postgresql.jpg     # Icon khóa PostgreSQL
-    ├── git.png            # Icon khóa Git + GitLab
     ├── odoo.png           # Icon khóa Odoo
     └── devops.jpg         # Icon khóa DevOps
 ```

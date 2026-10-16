@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitLab Merge Request: a Code Review Workflow for Teams</title>
+    <meta name="description" content="Walk the full GitLab merge request workflow: issue-based branch, push, MR description, review fixes, approval, merge, cleanup and protected main branch." />
+    <meta name="keywords" content="gitlab merge request, code review workflow, protected branch, git push branch, closes issue, approve merge request, gitlab for beginners" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-merge-request-gitlab-quy-trinh-review.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="GitLab Merge Request: a Code Review Workflow for Teams" />
+    <meta property="og:description" content="The GitLab merge request workflow for an Odoo project: issue-based branch, push, MR description, review, approval, merge and a protected main branch." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-gitlab-merge-request-review-workflow.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "GitLab Merge Request: a Code Review Workflow for Teams",
+                "description": "The GitLab merge request workflow for an Odoo project: issue-based branch, push, MR description, review, approval, merge and a protected main branch.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-gitlab-merge-request-review-workflow.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Merge requests on GitLab"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Are merge requests and pull requests different?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "They are the same idea: a request to merge one branch into another with review. GitLab calls it a merge request, GitHub a pull request. The Git commands on your side are identical; only the web interface differs."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do I open a new merge request to address reviewer feedback?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "No. Commit more and push to the same branch; the merge request updates itself and keeps the whole discussion. When done you mark the threads as resolved."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I make an issue close itself as the merge request is merged?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Put a keyword with an issue reference in the MR description or a commit, for example Closes #12. According to GitLab's documentation, words such as Close, Fix, Resolve and Implement (and their variants) before the reference close the issue as the MR is merged."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why can't I push straight to main?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The default branch of a GitLab repository is protected out of the box: only roles granted permission may merge or push into it. Push your own branch and open a merge request; Maintainers adjust the rules under Settings > Repository > Branch rules."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-merge-request-gitlab-quy-trinh-review.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Merge requests on GitLab</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 5 · Practical Git Series</span>
+            <h1>GitLab Merge Request: a Code Review Workflow for Teams</h1>
+            <p class="post-lead">Part 5 walks a full merge request cycle on GitLab with the vinc_course module: an issue-based branch, push, the MR description, fixing feedback with new commits, merge, cleanup and why main is protected.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/git-gitlab-merge-request-review-workflow.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>A merge request (MR) is where the team looks at, discusses and approves a change before it reaches the main branch.</strong> This part walks a full cycle on GitLab with the <code>vinc_course</code> module: a branch named after an issue, push, an MR with a good description and <code>Closes #12</code>, fixing reviewer feedback by pushing more commits, merge, cleanup, and why <code>main</code> is usually protected against direct pushes. The commands run for real on a simulated repo; the interface steps follow GitLab's documentation.</p>
+                </div>
+
+                <h2 id="mr-la-gi">What a merge request is and why companies insist on it</h2>
+                <p>In part 3 you ran <code>git merge</code> yourself on your own machine. In a team that is risky: code nobody has seen lands in the main branch and, if it breaks, everyone pays. A merge request adds a gate in the middle. According to GitLab's documentation, an MR is a central place for the team to review code, discuss and track changes; inside one you see the description, the code changes with comments on the exact lines, CI/CD pipeline information, mergeability reports, comments and the list of commits.</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-en-g05">
+                        <title id="dg-en-g05">A feature's path from your machine to main</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">Your machine</text>
+                        <text class="dg-text" x="18" y="115">branch + commits</text>
+                        <rect class="dg-accent" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">Merge request</text>
+                        <text class="dg-text" x="184" y="115">text, reviewers</text>
+                        <rect class="dg-box" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Review and CI</text>
+                        <text class="dg-text" x="350" y="115">threads, approvals</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">main branch</text>
+                        <text class="dg-text" x="516" y="115">protected</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">git push</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">reviewer</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">merge</text>
+                        <text class="dg-text" x="4" y="150">The main branch is protected: changes only get in through a reviewed merge request.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>An MR has two roles: the <strong>assignee</strong> (the owner, usually the author, responsible for progress) and the <strong>reviewer</strong> (who reads the code, comments and, if eligible, approves). GitLab calls it a <em>merge request</em>; GitHub calls it a <em>pull request</em>, but the workflow is practically the same.</p>
+
+                <h2 id="quy-trinh">A full cycle: from issue to main</h2>
+                <p>Suppose issue #12 in GitLab asks to “add a price to courses”. First make sure you start from the latest <code>main</code>, then create the branch. GitLab's documentation notes that a branch prefixed with the issue number (such as <code>12-course-price</code>) lets GitLab prefill the title and link the issue when you open the MR. The second message paragraph (a second <code>-m</code>) says <code>Closes #12</code> so the issue closes itself once the MR lands:</p>
+<pre><code>$ git switch main
+Your branch is up to date with 'origin/main'.
+Already on 'main'
+$ git pull
+Already up to date.
+$ git switch -c 12-course-price
+Switched to a new branch '12-course-price'
+$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí" -m "Closes #12"
+[12-course-price 25ea246] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)
+$ git push -u origin 12-course-price
+branch '12-course-price' set up to track 'origin/12-course-price'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      12-course-price -&gt; 12-course-price
+$ git log -1 --format=%B
+[IMP] vinc_course: thêm trường học phí
+
+Closes #12</code></pre>
+                <p>After pushing, open GitLab, go to <em>Code → Merge requests</em> and create a new MR for the branch you just pushed (many GitLab versions also show a suggestion button on the project page). Fill in the title and description, set yourself as assignee and pick one or two reviewers; tick <em>Delete source branch when merge request accepted</em> so the source branch removes itself after the merge. The description is the part worth investing in, for example:</p>
+<pre><code>## Purpose
+Add a price field to courses so sales can quote.
+
+## Changes
+- models/course.py: add the price field (Float)
+- views/course_views.xml: show price on the form and list views
+
+## How to test
+1. Upgrade the module: odoo-bin -u vinc_course -d vinc_test
+2. Open Courses, enter a price, save
+
+Closes #12</code></pre>
+                <p>The reviewer leaves comments on individual lines. According to the documentation, <em>threads</em> that are still open hold up the merge, single comments do not. To act on feedback you do <strong>not</strong> create a new MR: commit and push more to the same branch and the MR updates itself. The command <code>git log origin/main..HEAD</code> lists exactly the commits the MR contains:</p>
+<pre><code>$ sed -i "s/Học phí/Học phí (VND)/" models/course.py
+$ git commit -am "[IMP] vinc_course: ghi rõ đơn vị học phí theo review"
+[12-course-price b190c76] [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   25ea246..b190c76  12-course-price -&gt; 12-course-price
+$ git log --oneline origin/main..HEAD
+b190c76 [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+25ea246 [IMP] vinc_course: thêm trường học phí</code></pre>
+                <p>Once the reviewer is happy and the pipeline is green, someone with permission clicks <strong>Merge</strong>. Default rules according to the documentation: the default branch (usually <code>main</code>) is protected and only Maintainers and above can merge into it; Developers can merge MRs that target unprotected branches. Below Binh plays GitLab so you can see the result in history, then An cleans up locally:</p>
+<pre><code># GitLab thực hiện bước này khi bấm Merge; ở đây Bình giả lập bằng lệnh
+$ cd ../vinc_course_binh
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+ * [new branch]      12-course-price -&gt; origin/12-course-price
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Already on 'main'
+$ git merge --no-ff origin/12-course-price -m "Merge branch '12-course-price' into 'main'"
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   47905cb..828392e  main -&gt; main
+$ git push origin --delete 12-course-price
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         12-course-price</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git pull
+Updating 47905cb..828392e
+Fast-forward
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..828392e  main       -&gt; origin/main
+$ git log --oneline --graph -n 4
+*   828392e Merge branch '12-course-price' into 'main'
+|\  
+| * b190c76 [IMP] vinc_course: ghi rõ đơn vị học phí theo review
+| * 25ea246 [IMP] vinc_course: thêm trường học phí
+|/  
+* 47905cb [IMP] vinc_course: thêm trường số giờ
+$ git branch -d 12-course-price
+Deleted branch 12-course-price (was b190c76).
+$ git fetch --prune
+From git@gitlab.example.com:vinc/vinc_course
+ - [deleted]         (none)     -&gt; origin/12-course-price</code></pre>
+                <p>The graph shows a merge commit joining <code>12-course-price</code> into <code>main</code>, together with the MR's two commits. In a real setup GitLab also offers <em>squash</em> (combining the MR's commits into one) at merge time; part 8 explains squashing.</p>
+                <p>A small habit with real value: right after your MR is merged, switch to <code>main</code>, run <code>git pull</code>, and only then create the next branch. If you skip it, the new branch starts from an old <code>main</code> and the next MR is likely to conflict or drag in already-merged commits. Likewise do not leave merged branches lying around: delete both the local and the GitLab copy as in part 4.</p>
+
+                <h2 id="approve">Approvals, auto-merge and what each GitLab tier gives you</h2>
+                <p>How review works depends on your GitLab tier. According to the documentation, on the Free tier anyone with the Developer role or higher can approve an MR but approvals are optional and do not prevent merging. Premium and Ultimate add <em>required rules</em>: a minimum number of approvers, kinds of reviewer (backend, frontend, QA...) or a <code>CODEOWNERS</code> file that names reviewers per folder; without enough approvals the MR cannot be merged. Once a reviewer is happy but the pipeline is still running, they can put the MR on <em>auto-merge</em>: once all checks pass GitLab merges it for you.</p>
+
+                <h2 id="bao-ve">Why you cannot push straight to main</h2>
+                <p>Per GitLab's documentation, a repository's default branch comes protected. A protected branch controls who may merge and push, prevents accidental deletion and can require review. Maintainers configure it under <em>Settings → Repository → Branch rules</em>. To show the effect, this example uses a hook on the simulated “GitLab” that refuses pushes to <code>main</code>; the <em>remote:</em> line is our own text, and real GitLab prints its own wording, but the final <em>remote rejected</em> line looks the same:</p>
+<pre><code>$ echo "# thử đẩy thẳng" &gt;&gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main a5b2c69] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git push
+remote: Nhánh main được bảo vệ: hãy push nhánh riêng và mở merge request.        
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [remote rejected] main -&gt; main (pre-receive hook declined)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'</code></pre>
+                <p>The commit is already on your local <code>main</code>. The standard fix: keep the commit by creating a branch from here and pushing that, then move local <code>main</code> back to exactly <code>origin/main</code> (the <code>git reset --hard</code> command is explained in part 7; make sure the commit is safe on the new branch before running it):</p>
+<pre><code>$ git switch -c fix/readme
+Switched to a new branch 'fix/readme'
+$ git push -u origin fix/readme
+branch 'fix/readme' set up to track 'origin/fix/readme'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      fix/readme -&gt; fix/readme
+$ git switch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+Switched to branch 'main'
+$ git reset --hard origin/main
+HEAD is now at 828392e Merge branch '12-course-price' into 'main'
+$ git status -sb
+## main...origin/main</code></pre>
+
+                <h2 id="mr-tot">Writing a merge request that is easy to review</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Do</th><th>Why</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Small MRs with one purpose</td><td>Reviewers read quickly and catch more; easy to undo if needed</td></tr>
+                            <tr><td>Describe the reason, changes and how to test</td><td>Reviewers do not have to guess your intent</td></tr>
+                            <tr><td>Link the issue with <code>Closes #12</code></td><td>According to the documentation, words such as Close/Closes, Fix/Fixes, Resolve/Resolves and Implement/Implements before an issue reference close it automatically on merge</td></tr>
+                            <tr><td>Open the MR early</td><td>The documentation recommends opening early giving the team room to spot bugs early; if unfinished, say so in the title or body</td></tr>
+                            <tr><td>Re-read your own diff first</td><td>Catches forgotten <code>print</code> calls, stray files and committed passwords</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="trong-odoo">What a reviewer looks for in an Odoo module MR</h2>
+                <ul>
+                    <li><strong>Access rights:</strong> does a new model have a row in <code>ir.model.access.csv</code> (the access-rights part of the Odoo series).</li>
+                    <li><strong>Manifest:</strong> is the new XML file listed under <code>data</code> in <code>__manifest__.py</code>, in dependency order.</li>
+                    <li><strong>Module upgrade:</strong> was <code>-u vinc_course</code> run on a test database without errors.</li>
+                    <li><strong>Scope:</strong> does the MR touch another module or unrelated files; Odoo's guidelines also advise against one commit changing several modules at once.</li>
+                    <li><strong>Secrets:</strong> no passwords, API keys or real <code>odoo.conf</code> in the diff.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>A direct push to <code>main</code> is blocked.</strong> Do not try to force it. Create a branch from the current commit, push it and open an MR as above.</li>
+                        <li><strong>Opening a new MR for every round of fixes.</strong> Just push more commits to the same branch; the existing MR updates itself and keeps the whole discussion.</li>
+                        <li><strong>The MR reports conflicts with the target branch.</strong> Someone changed the same lines on <code>main</code> while you worked. Bring the fresh <code>main</code> into your branch and resolve the conflicts locally (part 6), then push again.</li>
+                        <li><strong>An MR as big as a project.</strong> Dozens of files and several purposes make reviewers skim. Split it into chained MRs; GitLab even retargets a dependent MR when the previous one is merged.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>An MR is the review gate: code reaches the main branch only after someone reads it and the pipeline passes.</li>
+                    <li>The flow: issue-based branch → commits → push → open MR → fix feedback with new commits → merge → clean up.</li>
+                    <li><code>Closes #12</code> in a commit or description closes the issue on merge.</li>
+                    <li>The default branch is protected: direct pushes are refused, so go through an MR.</li>
+                </ul>
+                <p>When two MRs change the same place you meet a <strong>conflict</strong>. It is the scariest part for newcomers, and easier than you think. Part 6 shows how to read the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> markers, fix by hand and finish the merge.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Are merge requests and pull requests different?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">They are the same idea: a request to merge one branch into another with review. GitLab calls it a merge request, GitHub a pull request. The Git commands on your side are identical; only the web interface differs.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Do I open a new merge request to address reviewer feedback?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">No. Commit more and push to the same branch; the merge request updates itself and keeps the whole discussion. When done you mark the threads as resolved.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I make an issue close itself as the merge request is merged?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Put a keyword with an issue reference in the MR description or a commit, for example Closes #12. According to GitLab's documentation, words such as Close, Fix, Resolve and Implement (and their variants) before the reference close the issue as the MR is merged.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why can't I push straight to main?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The default branch of a GitLab repository is protected out of the box: only roles granted permission may merge or push into it. Push your own branch and open a merge request; Maintainers adjust the rules under Settings &gt; Repository &gt; Branch rules.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/repository/branches/protected/" target="_blank" rel="noopener">GitLab Docs – Protected branches</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/approvals/" target="_blank" rel="noopener">GitLab Docs – Merge request approvals</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/issues/managing_issues/" target="_blank" rel="noopener">GitLab Docs – Managing issues (closing patterns)</a></li>
+                    <li><a href="https://git-scm.com/docs/gitworkflows" target="_blank" rel="noopener">Git – gitworkflows</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-gitlab-merge-request-review-workflow.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fgit-gitlab-merge-request-review-workflow.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="git-remotes-clone-fetch-pull-push-ssh.html"><small>← Previous</small>Remotes and SSH</a>
+                    <span class="next"><small>Next · Coming soon</small>Resolving merge conflicts</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#mr-la-gi">What a merge request is and why companies insist on it</a></li>
+                        <li><a href="#quy-trinh">A full cycle: from issue to main</a></li>
+                        <li><a href="#approve">Approvals, auto-merge and what each GitLab tier gives you</a></li>
+                        <li><a href="#bao-ve">Why you cannot push straight to main</a></li>
+                        <li><a href="#mr-tot">Writing a merge request that is easy to review</a></li>
+                        <li><a href="#trong-odoo">What a reviewer looks for in an Odoo module MR</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

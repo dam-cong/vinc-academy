@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog kiến thức lập trình: Python, Git, SQL, Odoo, AI | Vinc Academy</title>
-    <meta name="description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
+    <title>Blog kiến thức lập trình: Python, Git, Linux, SQL, Odoo, AI | Vinc Academy</title>
+    <meta name="description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, Linux, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
     <meta name="author" content="Vinc Academy" />
     <meta name="copyright" content="Vinc Academy" />
     <link rel="canonical" href="https://vinc-academy.vercel.app/blog/" />
@@ -17,7 +17,7 @@
     <meta property="og:site_name" content="Vinc Academy" />
     <meta property="og:locale" content="vi_VN" />
     <meta property="og:title" content="Blog kiến thức lập trình & công nghệ" />
-    <meta property="og:description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
+    <meta property="og:description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, Linux, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
     <meta property="og:url" content="https://vinc-academy.vercel.app/blog/" />
     <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/blog-hub.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -33,13 +33,15 @@
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "name": "Blog kiến thức lập trình & công nghệ",
-        "description": "Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer.",
+        "description": "Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, Linux, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer.",
         "url": "https://vinc-academy.vercel.app/blog/",
         "inLanguage": "vi",
         "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
         "hasPart": [
             { "@type": "CollectionPage", "name": "Odoo", "url": "https://vinc-academy.vercel.app/blog/odoo/" },
-            { "@type": "CollectionPage", "name": "Python", "url": "https://vinc-academy.vercel.app/blog/python/" }
+            { "@type": "CollectionPage", "name": "Python", "url": "https://vinc-academy.vercel.app/blog/python/" },
+            { "@type": "CollectionPage", "name": "Git", "url": "https://vinc-academy.vercel.app/blog/git/" },
+            { "@type": "CollectionPage", "name": "Linux & Shell", "url": "https://vinc-academy.vercel.app/blog/linux/" }
         ]
     }
     </script>
@@ -90,18 +92,50 @@
         <header class="hub-hero">
             <span class="section-tag">Kiến thức · Miễn phí</span>
             <h1>Blog kiến thức lập trình</h1>
-            <p class="post-lead">Nơi Vinc Academy chia sẻ kiến thức thực hành về lập trình và công nghệ: Python, Git, SQL, Odoo, AI. Chọn một chủ đề để bắt đầu.</p>
+            <p class="post-lead">Nơi Vinc Academy chia sẻ kiến thức thực hành về lập trình và công nghệ. Bạn có thể đi theo lộ trình từ trên xuống, hoặc chọn thẳng chủ đề cần.</p>
         </header>
 
         <input type="search" id="post-search" class="post-search" placeholder="Tìm chủ đề: Python, Git, SQL..." aria-label="Tìm chủ đề">
         <p class="prog-empty" id="post-empty" hidden>Không tìm thấy chủ đề phù hợp.</p>
+        <section class="blog-group">
+            <h2 class="series-title">1. Định hướng cho sinh viên và người mới</h2>
+            <p class="series-desc">Hiểu nghề IT, chọn hướng đi và chuẩn bị những kỹ năng mềm cho ngày đầu đi làm.</p>
         <ol class="post-grid">
-            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Chủ đề</span><h2>Odoo</h2><p>Lập trình Odoo 20 từ A–Z: module, ORM, view, bảo mật, OWL, API, triển khai.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="python/index.html"><span class="post-num">Chủ đề</span><h2>Python</h2><p>Nền tảng Python và kỹ thuật thực chiến cho developer.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>Git</h2><p>Quản lý mã nguồn, nhánh, review và làm việc nhóm với Git/GitLab.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>SQL &amp; PostgreSQL</h2><p>Truy vấn, thiết kế dữ liệu và tối ưu hiệu năng với PostgreSQL.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>AI cho lập trình</h2><p>Dùng AI để viết, review và debug code hiệu quả.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>Lộ trình &amp; nghề IT</h2><p>Roadmap học lập trình, chọn hướng (backend, ERP, DevOps), CV, portfolio GitHub và chuẩn bị phỏng vấn thực tập, fresher.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>Kỹ năng đi làm đầu tiên</h2><p>Onboarding, đọc ticket, hỏi đúng cách, code review, ước lượng, báo cáo tiến độ và làm việc Agile/Scrum.</p><span class="post-status">Sắp ra mắt</span></div></li>
         </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">2. Nền tảng kỹ thuật</h2>
+            <p class="series-desc">Bộ kỹ năng nền mà developer nào cũng cần; nên học lần lượt từ trên xuống.</p>
+        <ol class="post-grid">
+            <li><a class="post-card" href="python/index.html"><span class="post-num">Người mới</span><h2>Python</h2><p>Nền tảng Python và kỹ thuật thực chiến cho developer.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="linux/index.html"><span class="post-num">Người mới</span><h2>Linux &amp; Shell</h2><p>Dòng lệnh Linux và Bash thực chiến: file, quyền, tiến trình, pipe và script cho developer.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="git/index.html"><span class="post-num">Người mới</span><h2>Git</h2><p>Git thực chiến cho nhóm: commit, nhánh, merge request, hoàn tác, rebase và CI.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>SQL &amp; PostgreSQL</h2><p>Truy vấn, thiết kế dữ liệu và tối ưu hiệu năng với PostgreSQL.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>Web &amp; API cơ bản</h2><p>Internet, HTTP, client–server, REST và JSON; dùng curl, Postman để gọi thử API.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>Giải thuật &amp; cấu trúc dữ liệu</h2><p>Độ phức tạp, tìm kiếm, sắp xếp, ngăn xếp, hàng đợi bằng Python; phục vụ ôn thi và phỏng vấn.</p><span class="post-status">Sắp ra mắt</span></div></li>
+        </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">3. Kỹ thuật nâng cao</h2>
+            <p class="series-desc">Dành cho người đã quen viết code và làm việc nhóm.</p>
+        <ol class="post-grid">
+            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>Clean Code &amp; SOLID</h2><p>Viết code dễ đọc, dễ thay đổi: đặt tên, hàm ngắn, DRY và các nguyên lý SOLID.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>AI cho lập trình</h2><p>Dùng AI để viết, review và debug code hiệu quả.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>DevOps</h2><p>Docker, CI/CD, Linux và triển khai ứng dụng (Odoo) lên server.</p><span class="post-status">Sắp ra mắt</span></div></li>
+        </ol>
+        </section>
+
+        <section class="blog-group">
+            <h2 class="series-title">4. Odoo: lập trình ERP</h2>
+            <p class="series-desc">Vận dụng toàn bộ nền tảng trên vào một nền tảng ERP phổ biến.</p>
+        <ol class="post-grid">
+            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Trung cấp</span><h2>Odoo</h2><p>Lập trình Odoo 20 từ A–Z: module, ORM, view, bảo mật, OWL, API, triển khai.</p><span class="post-status">Đã xuất bản</span></a></li>
+        </ol>
+        </section>
 
         <div class="prose" style="max-width:none">
             <div class="cta-box">

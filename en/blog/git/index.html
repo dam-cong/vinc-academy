@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practical Git for Development Teams | Vinc Academy</title>
+    <meta name="description" content="Learn core Git through real company workflows: commits, branches, merge requests, conflicts, undoing, rebase, tags and CI. Free from Vinc Academy." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Practical Git for Development Teams" />
+    <meta property="og:description" content="Learn core Git through real company workflows: commits, branches, merge requests, conflicts, undoing, rebase, tags and CI. Free from Vinc Academy." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-hub-en.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Practical Git for Development Teams",
+        "description": "Learn core Git through real company workflows: commits, branches, merge requests, conflicts, undoing, rebase, tags and CI. Free from Vinc Academy.",
+        "url": "https://vinc-academy.vercel.app/en/blog/git/",
+        "inLanguage": "en",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "TechArticle", "headline": "What Is Git? Install and First-Time Setup for Devs", "url": "https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html" },
+            { "@type": "TechArticle", "headline": "Git First Commits: status, add, diff, log, .gitignore", "url": "https://vinc-academy.vercel.app/en/blog/git/git-first-commits-status-add-log-gitignore.html" },
+            { "@type": "TechArticle", "headline": "Git Branch and Merge: Work in Parallel Without Clashes", "url": "https://vinc-academy.vercel.app/en/blog/git/git-branches-and-merging.html" },
+            { "@type": "TechArticle", "headline": "Git Remotes: clone, fetch, pull, push and GitLab SSH Keys", "url": "https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html" },
+            { "@type": "TechArticle", "headline": "GitLab Merge Request: a Code Review Workflow for Teams", "url": "https://vinc-academy.vercel.app/en/blog/git/git-gitlab-merge-request-review-workflow.html" },
+            { "@type": "TechArticle", "headline": "Git Conflicts: How to Resolve Merge Conflicts", "url": "https://vinc-academy.vercel.app/en/blog/git/git-resolving-merge-conflicts.html" },
+            { "@type": "TechArticle", "headline": "Git Undo: restore, reset, revert and reflog Explained", "url": "https://vinc-academy.vercel.app/en/blog/git/git-undo-restore-reset-revert-reflog.html" },
+            { "@type": "TechArticle", "headline": "Git Rebase: Tidy History and the Golden Rule for Teams", "url": "https://vinc-academy.vercel.app/en/blog/git/git-rebase-tidy-history.html" },
+            { "@type": "TechArticle", "headline": "Git Stash, Cherry-pick and Tags: Hotfixes and Releases", "url": "https://vinc-academy.vercel.app/en/blog/git/git-stash-cherry-pick-tags-hotfix-release.html" },
+            { "@type": "TechArticle", "headline": "Git Commit Conventions and Branching Strategies for Odoo Teams", "url": "https://vinc-academy.vercel.app/en/blog/git/git-commit-conventions-branching-strategies.html" },
+            { "@type": "TechArticle", "headline": "Git Hooks and GitLab CI: Auto-Checks for Odoo Modules", "url": "https://vinc-academy.vercel.app/en/blog/git/git-hooks-gitlab-ci-odoo-module-checks.html" },
+            { "@type": "TechArticle", "headline": "Git Blame, Bisect and a Capstone Project for Odoo Teams", "url": "https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/index.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li aria-current="page">Git</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Topic · Free</span>
+            <h1>Git</h1>
+            <p class="post-lead">Learn just enough Git to start work: every part uses the vinc_course course management repository on GitLab and follows a real team workflow from commit to merge request and release. Little theory, every command really run.</p>
+        </header>
+
+        <h2 class="series-title">Series: Practical Git for Development Teams</h2>
+        <p class="series-desc">12 parts from installing and committing to branches, remotes, merge requests, conflicts, undoing, rebase, hooks, CI and a capstone project.</p>
+
+        <ol class="post-grid">
+            <li><a class="post-card" href="what-is-git-install-first-time-setup.html"><span class="post-num">Part 01</span><h2>What Git is, installing and first-time setup</h2><p>Install Git, set your name and email, pick an editor and understand Git's three areas.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-first-commits-status-add-log-gitignore.html"><span class="post-num">Part 02</span><h2>Your first commits: status, add, log and .gitignore</h2><p>The daily loop on the vinc_course repo and how to keep unwanted files out.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-branches-and-merging.html"><span class="post-num">Part 03</span><h2>Branches and merging</h2><p>Create a branch per feature, merge it back and tell fast-forward from merge commits.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-remotes-clone-fetch-pull-push-ssh.html"><span class="post-num">Part 04</span><h2>Remotes: clone, fetch, pull, push and SSH</h2><p>Work with GitLab: SSH keys, upstream branches and why to fetch before you pull.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-gitlab-merge-request-review-workflow.html"><span class="post-num">Part 05</span><h2>The merge request workflow on GitLab</h2><p>From feature branch to review, approval and merging into a protected branch.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-resolving-merge-conflicts.html"><span class="post-num">Part 06</span><h2>Resolving merge conflicts</h2><p>Read the <<<<<<< markers, fix by hand, verify, then finish the merge or abort.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-undo-restore-reset-revert-reflog.html"><span class="post-num">Part 07</span><h2>Undoing safely: restore, reset, revert, reflog</h2><p>Pick the right command after a bad edit, commit or push, and rescue commits you thought were lost.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-rebase-tidy-history.html"><span class="post-num">Part 08</span><h2>Rebase and tidy history</h2><p>Rebase onto fresh work, squash small commits interactively and follow the golden rule.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-stash-cherry-pick-tags-hotfix-release.html"><span class="post-num">Part 09</span><h2>Stash, cherry-pick and tags</h2><p>Shelve unfinished work for a hotfix, pick one commit onto another branch and tag a release.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-commit-conventions-branching-strategies.html"><span class="post-num">Part 10</span><h2>Commit conventions and branching strategies</h2><p>Name branches, write commit messages and choose between GitLab Flow and trunk-based work.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-hooks-gitlab-ci-odoo-module-checks.html"><span class="post-num">Part 11</span><h2>Git hooks and GitLab CI for Odoo modules</h2><p>Catch mistakes before commit with hooks and run automatic checks in a pipeline.</p><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="git-blame-bisect-troubleshooting-capstone.html"><span class="post-num">Part 12</span><h2>Blame, bisect and a capstone project</h2><p>Find who and which commit caused a bug, then run a full hotfix and release cycle.</p><span class="post-status">Published</span></a></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Want to learn teamwork with Git alongside a mentor?</h3>
+                <p>The Developer Foundation course covers Git and team workflow with real exercises and code review.</p>
+                <div class="cta-actions">
+                    <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                    <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">This content is copyrighted by Vinc Academy. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

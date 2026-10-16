@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git blame, bisect và dự án tổng hợp cho nhóm Odoo</title>
+    <meta name="description" content="Dùng git blame, git log -S và git bisect run để tìm commit gây lỗi, rồi chạy trọn chu kỳ issue, merge request, tag, hotfix, cherry-pick; có bảng tra." />
+    <meta name="keywords" content="git blame, git bisect, git bisect run, git log -S, truy vết lỗi git, quy trình git nhóm, hotfix git, cheat sheet git, git gitlab odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-blame-bisect-troubleshooting-capstone.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git blame, bisect và dự án tổng hợp cho nhóm Odoo" />
+    <meta property="og:description" content="Tìm commit gây lỗi bằng git blame, log -S và bisect run, rồi ghép cả series Git thành một chu kỳ làm việc trọn vẹn cho module Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git blame, bisect và dự án tổng hợp cho nhóm Odoo",
+                "description": "Tìm commit gây lỗi bằng git blame, log -S và bisect run, rồi ghép cả series Git thành một chu kỳ làm việc trọn vẹn cho module Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Blame, bisect và tổng hợp"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "git blame dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git blame in từng dòng của file kèm commit, tác giả và thời gian của lần sửa gần nhất, giúp bạn hiểu dòng đó xuất hiện khi nào và vì sao. Dùng -L để giới hạn dòng hoặc hàm, -M và -C để theo dõi dòng được di chuyển hay sao chép."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "git bisect hoạt động thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Bạn đánh dấu một commit tốt và một commit xấu; Git tìm nhị phân trong khoảng giữa, mỗi bước chuyển tới commit ở giữa để bạn kiểm tra rồi thu hẹp một nửa. Với git bisect run script, Git tự chạy script ở mỗi bước và dùng mã thoát để biết tốt hay xấu."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Mã thoát nào của script bisect có ý nghĩa đặc biệt?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo tài liệu Git: 0 là commit tốt, 1 đến 127 (trừ 125) là commit xấu, 125 nghĩa là bỏ qua commit không kiểm tra được, các mã khác hủy quá trình bisect."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao tìm commit đã thêm hay xóa một đoạn chữ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng git log -S\"chuỗi\" (pickaxe) để liệt kê các commit làm thay đổi số lần xuất hiện của chuỗi đó; git log -G dùng biểu thức chính quy. Sau đó git show mã-commit để xem nội dung."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-blame-bisect-troubleshooting-capstone.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Blame, bisect và tổng hợp</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 12 · Series Git thực chiến</span>
+            <h1>Git blame, bisect và dự án tổng hợp cho nhóm Odoo</h1>
+            <p class="post-lead">Bài cuối của series Git: dùng git blame, git log -S và git bisect run để tìm commit gây lỗi, rồi chạy trọn chu kỳ từ issue, merge request, tag đến hotfix và cherry-pick, kèm bảng tra cứu cả 12 bài.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-blame-bisect-xu-ly-su-co-du-an-tong-hop.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Bài cuối giúp bạn tìm ra “ai và commit nào làm hỏng”, rồi ghép toàn bộ series thành một chu kỳ làm việc trọn vẹn.</strong> <code>git blame</code> cho biết mỗi dòng do commit nào sửa lần cuối, <code>git log -S</code> tìm commit đã thêm hay bớt một đoạn chữ, <code>git bisect run</code> tự dò nhị phân commit gây lỗi. Phần tổng hợp chạy thật quy trình: nhận issue, nhánh, commit, rebase, push, merge request, tag, hotfix và cherry-pick về <code>main</code>, kèm bảng tra cứu 12 bài.</p>
+                </div>
+
+                <h2 id="blame">Truy dấu từng dòng: git blame và git log -S</h2>
+                <p>Khi một hàm trả kết quả sai, câu hỏi đầu tiên là “dòng này thêm vào từ khi nào, vì lý do gì?”. <code>git blame</code> in từng dòng kèm mã commit, tác giả và thời gian của lần sửa gần nhất; <code>-L</code> giới hạn phạm vi dòng hoặc theo tên hàm. Ở repo mẫu này hàm <code>price_per_hour</code> ban đầu chia giá cho số giờ, nhưng đồng nghiệp đã “tối ưu” nó. Blame chỉ ra thủ phạm ngay: dòng <code>return</code> thuộc commit của Bình, còn dòng <code>def</code> vẫn của An.</p>
+                <p>Nếu chưa biết dòng nằm ở đâu, hãy tìm theo nội dung. <code>git log -S"chuỗi"</code> (kiểu “pickaxe”) liệt kê các commit làm số lần xuất hiện của chuỗi đó thay đổi, tức là thêm hoặc xóa nó:</p>
+<pre><code>$ git log --oneline
+6dbb5c3 [IMP] vinc_course: thêm nhãn số giờ
+4acd6a9 [ADD] vinc_course: changelog
+fa33586 [IMP] vinc_course: thêm tổng số giờ
+8cff483 [IMP] vinc_course: tối ưu price_per_hour
+c7d5e2b [IMP] vinc_course: thêm kiểm tra khóa miễn phí
+8c373a3 [ADD] vinc_course: README
+e5d613b [IMP] vinc_course: thêm định dạng giá
+661615e [ADD] vinc_course: hàm giá theo giờ
+47905cb [IMP] vinc_course: thêm trường số giờ
+847d6e3 [ADD] vinc_course: khung module và model vinc.course
+$ git blame -L 1,3 models/utils.py
+661615e6 (Nguyễn Văn An 2026-10-12 10:03:00 +0700 1) def price_per_hour(price, hours):
+8cff4837 (Trần Thị Bình 2026-10-12 10:38:00 +0700 2)     return price * hours
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 3) 
+$ git blame -L :price_per_hour models/utils.py
+661615e6 (Nguyễn Văn An 2026-10-12 10:03:00 +0700 1) def price_per_hour(price, hours):
+8cff4837 (Trần Thị Bình 2026-10-12 10:38:00 +0700 2)     return price * hours
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 3) 
+e5d613b5 (Nguyễn Văn An 2026-10-12 10:17:00 +0700 4) 
+$ git log -S"price * hours" --oneline
+8cff483 [IMP] vinc_course: tối ưu price_per_hour</code></pre>
+                <p>Blame cho biết commit <em>cuối cùng</em> đụng vào dòng, không phải lúc nào cũng là gốc của vấn đề: nếu ai đó chỉ sửa định dạng thì blame trỏ tới họ. Các cờ <code>-M</code> và <code>-C</code> theo dõi dòng được di chuyển hoặc sao chép giữa các file, còn <code>--ignore-rev</code> cho phép bỏ qua một commit định dạng hàng loạt. Dùng blame để <strong>hiểu bối cảnh và hỏi đúng người</strong>, không phải để đổ lỗi.</p>
+
+                <h2 id="bisect">Dò nhị phân commit gây lỗi: git bisect</h2>
+                <p>Khi bạn biết bản cũ chạy đúng (tag <code>v1.0.0</code>) và bản hiện tại sai, nhưng giữa chúng có hàng chục commit, <code>git bisect</code> giúp tìm ra commit đầu tiên gây lỗi bằng tìm kiếm nhị phân: mỗi bước nó chuyển bạn tới commit ở giữa khoảng còn nghi ngờ, bạn báo “tốt” hay “xấu”, và khoảng thu hẹp một nửa. Với 1.000 commit chỉ cần khoảng 10 bước. Bạn có thể tự bấm <code>good</code>/<code>bad</code>, hoặc giao cho một script: theo tài liệu, <code>git bisect run</code> gọi script ở mỗi bước và hiểu mã thoát 0 là tốt, 1–127 (trừ 125) là xấu, 125 là bỏ qua commit không kiểm tra được, còn mã khác sẽ hủy quá trình.</p>
+                <p>Script kiểm tra của chúng ta chỉ kiểm tra đúng một điều: giá 4.500.000 chia 24 giờ phải bằng 187.500. Nó nằm ngoài repo (để bisect đổi commit mà không làm mất nó):</p>
+<pre><code>python3 -c "import sys;sys.path.insert(0,'models');from utils import price_per_hour;sys.exit(0 if price_per_hour(4500000, 24) == 187500 else 1)"</code></pre>
+<pre><code>$ git bisect start
+status: waiting for both good and bad commits
+$ git bisect bad
+status: waiting for good commit(s), bad commit known
+$ git bisect good v1.0.0
+Bisecting: 3 revisions left to test after this (roughly 2 steps)
+[c7d5e2b0dbab2a4db579d1efc11cb7a69e32b386] [IMP] vinc_course: thêm kiểm tra khóa miễn phí
+$ git bisect run sh $HOME/check.sh
+running 'sh' '~/check.sh'
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[fa33586cc06db6844f1b37aecbeb46bfd77662f2] [IMP] vinc_course: thêm tổng số giờ
+running 'sh' '~/check.sh'
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[8cff483750110e61a69409ab211f99136dc1f400] [IMP] vinc_course: tối ưu price_per_hour
+running 'sh' '~/check.sh'
+8cff483750110e61a69409ab211f99136dc1f400 is the first bad commit
+commit 8cff483750110e61a69409ab211f99136dc1f400
+Author: Trần Thị Bình &lt;binh.tran@example.com&gt;
+Date:   Mon Oct 12 10:38:00 2026 +0700
+
+    [IMP] vinc_course: tối ưu price_per_hour
+
+ models/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bisect found first bad commit
+$ git bisect reset
+Previous HEAD position was 8cff483 [IMP] vinc_course: tối ưu price_per_hour
+Switched to branch 'main'</code></pre>
+                <p>Chỉ ba bước kiểm tra trên bảy commit, Git kết luận <code>8cff483</code> là commit đầu tiên gây lỗi, và ta xem nội dung của nó bằng <code>git show</code>. Nhớ chạy <code>git bisect reset</code> để quay về nhánh đang làm việc:</p>
+<pre><code>$ git show --stat --oneline 8cff483
+8cff483 [IMP] vinc_course: tối ưu price_per_hour
+ models/utils.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
+                <p>Điều kiện để bisect hiệu quả là <strong>mỗi commit đều chạy được độc lập</strong>, đúng lời khuyên “chia thành các bước nhỏ, nhất quán” của tài liệu <code>gitworkflows</code> ở bài 10. Một lịch sử đầy commit hỏng giữa chừng sẽ làm bisect phải bỏ qua nhiều bước.</p>
+
+                <h2 id="tong-hop">Dự án tổng hợp: một chu kỳ làm việc trọn vẹn</h2>
+                <p>Giờ ghép các bài thành một ngày làm việc. An nhận issue #21 “thêm mã khóa học”, làm trên nhánh riêng, đẩy lên GitLab, MR được duyệt và merge, nhóm gắn tag 1.1.0; sau đó phát hiện nhãn chưa đẹp ở bản đang chạy nên làm hotfix 1.1.1 và đưa về <code>main</code>. Mỗi bước tương ứng một bài của series:</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 190" role="img" aria-labelledby="dg-vi-g12">
+                        <title id="dg-vi-g12">Một chu kỳ làm việc trọn vẹn với Git và GitLab</title>
+                        <rect class="dg-box" x="4" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="18" y="41">Nhận issue</text><text class="dg-text" x="18" y="61">Bài 3</text>
+                        <path class="dg-arrow" d="M141 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="170" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="184" y="41">Commit</text><text class="dg-text" x="184" y="61">Bài 2, 10</text>
+                        <path class="dg-arrow" d="M307 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="336" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="350" y="41">Push + MR</text><text class="dg-text" x="350" y="61">Bài 4, 5</text>
+                        <path class="dg-arrow" d="M473 45 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="502" y="15" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="516" y="41">Review + CI</text><text class="dg-text" x="516" y="61">Bài 5, 11</text>
+                        <rect class="dg-box" x="4" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="18" y="141">Merge, dọn</text><text class="dg-text" x="18" y="161">Bài 5</text>
+                        <path class="dg-arrow" d="M141 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="170" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="184" y="141">Tag</text><text class="dg-text" x="184" y="161">Bài 9</text>
+                        <path class="dg-arrow" d="M307 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="336" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="350" y="141">Hotfix</text><text class="dg-text" x="350" y="161">Bài 9</text>
+                        <path class="dg-arrow" d="M473 145 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="502" y="115" width="134" height="60" rx="12" />
+                        <text class="dg-title" x="516" y="141">Truy vết</text><text class="dg-text" x="516" y="161">Bài 12</text>
+                        <path class="dg-arrow" d="M569 75 V95 H71 V113 m-6 -8 l6 8 l6 -8" />
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p><strong>Bước 1–2. Lấy repo, tạo nhánh theo issue, commit đúng quy ước</strong> (bài 2, 3, 4, 10):</p>
+<pre><code>$ cd ..
+$ git clone git@gitlab.example.com:vinc/vinc_course.git vinc_course_an
+Cloning into 'vinc_course_an'...
+done.
+$ cd vinc_course_an</code></pre>
+<pre><code>$ git switch -c 21-course-code
+Switched to a new branch '21-course-code'
+$ echo "    code = fields.Char(string='Mã khóa')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm mã khóa học" -m "Closes #21"
+[21-course-code 6802e7d] [IMP] vinc_course: thêm mã khóa học
+ 1 file changed, 1 insertion(+)</code></pre>
+                <p><strong>Bước 3. Cập nhật nhánh theo <code>main</code> rồi push</strong> (bài 4, 8). Trong lúc An làm, Bình đã đẩy README lên <code>main</code>, nên An fetch và rebase nhánh của mình lên đó trước khi đẩy:</p>
+<pre><code>$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..23457e4  main       -&gt; origin/main
+$ git rebase origin/main
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/21-course-code.
+$ git push -u origin 21-course-code
+branch '21-course-code' set up to track 'origin/21-course-code'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      21-course-code -&gt; 21-course-code</code></pre>
+                <p><strong>Bước 4. Merge request được duyệt, merge, dọn nhánh</strong> (bài 5). Bình đóng vai GitLab, rồi An cập nhật <code>main</code> và xóa nhánh đã xong:</p>
+<pre><code># GitLab merge MR #21 (giả lập)
+$ cd ../vinc_course_binh
+$ git pull -q
+$ git merge --no-ff origin/21-course-code -m "Merge branch '21-course-code' into 'main'"
+Merge made by the 'ort' strategy.
+ models/course.py | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push -q
+$ cd ../vinc_course_an
+$ git switch main
+Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+Switched to branch 'main'
+$ git pull -q
+$ git branch -d 21-course-code
+Deleted branch 21-course-code (was 57220b2).
+$ git push -q origin --delete 21-course-code
+$ git fetch --prune</code></pre>
+                <p><strong>Bước 5. Phát hành và hotfix</strong> (bài 9). Gắn tag, đẩy tag, tách hotfix từ tag, gắn tag bản vá và cherry-pick về <code>main</code>. Đồ thị cuối cùng kể lại cả câu chuyện:</p>
+<pre><code>$ git tag -a v1.1.0 -m "Phát hành 1.1.0"
+$ git push origin v1.1.0
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new tag]         v1.1.0 -&gt; v1.1.0
+$ git switch -c hotfix/1.1.1 v1.1.0
+Switched to a new branch 'hotfix/1.1.1'
+$ sed -i "s/Mã khóa/Mã khóa học/" models/course.py
+$ git commit -am "[FIX] vinc_course: nhãn mã khóa học đầy đủ"
+[hotfix/1.1.1 2196638] [FIX] vinc_course: nhãn mã khóa học đầy đủ
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git tag -a v1.1.1 -m "Hotfix 1.1.1"
+$ git push -q origin v1.1.1
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ git cherry-pick -x hotfix/1.1.1
+[main cce32b6] [FIX] vinc_course: nhãn mã khóa học đầy đủ
+ Date: Mon Oct 12 12:51:00 2026 +0700
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push -q
+$ git branch -D hotfix/1.1.1
+Deleted branch hotfix/1.1.1 (was 2196638).
+$ git log --oneline --graph --decorate -n 8
+* cce32b6 (HEAD -&gt; main, origin/main, origin/HEAD) [FIX] vinc_course: nhãn mã khóa học đầy đủ
+*   e1ab15d (tag: v1.1.0) Merge branch '21-course-code' into 'main'
+|\  
+| * 57220b2 [IMP] vinc_course: thêm mã khóa học
+|/  
+* 23457e4 [ADD] vinc_course: README
+* 47905cb (tag: v1.0.0) [IMP] vinc_course: thêm trường số giờ
+* 847d6e3 [ADD] vinc_course: khung module và model vinc.course</code></pre>
+                <p>Cách học nhanh nhất là tự dựng lại kịch bản trên một repo thử. Năm bài tập gợi ý:</p>
+                <ul>
+                    <li>Tạo một repo bare làm “GitLab” (<code>git init --bare</code>) và clone hai bản để tự đóng vai An và Bình.</li>
+                    <li>Cố tình tạo một xung đột trong <code>__manifest__.py</code> rồi giải quyết bằng cả merge lẫn rebase.</li>
+                    <li>Viết hook <code>commit-msg</code> của riêng bạn và thử bỏ qua nó bằng <code>--no-verify</code>.</li>
+                    <li>Gắn tag, tách hotfix từ tag và cherry-pick về nhánh chính.</li>
+                    <li>Gài một lỗi vào giữa lịch sử rồi dùng <code>git bisect run</code> tự tìm ra nó.</li>
+                </ul>
+
+                <h2 id="cheat-sheet">Bảng tra cứu nhanh cả series</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tình huống</th><th>Lệnh</th><th>Bài</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Cấu hình lần đầu</td><td><code>git config --global user.name / user.email</code></td><td>1</td></tr>
+                            <tr><td>Xem trạng thái, thay đổi</td><td><code>git status -s</code>, <code>git diff</code>, <code>git diff --staged</code></td><td>2</td></tr>
+                            <tr><td>Lưu một commit</td><td><code>git add</code>, <code>git commit -m "[TAG] module: ..."</code></td><td>2, 10</td></tr>
+                            <tr><td>Làm việc trên nhánh</td><td><code>git switch -c</code>, <code>git merge</code>, <code>git branch -d</code></td><td>3</td></tr>
+                            <tr><td>Đồng bộ với GitLab</td><td><code>git clone</code>, <code>fetch</code>, <code>pull</code>, <code>push -u</code></td><td>4</td></tr>
+                            <tr><td>Gộp công việc</td><td>merge request; <code>git rebase main</code> khi cần</td><td>5, 8</td></tr>
+                            <tr><td>Có xung đột</td><td><code>git add</code> + <code>git commit</code> / <code>git merge --abort</code></td><td>6</td></tr>
+                            <tr><td>Lỡ tay</td><td><code>restore</code>, <code>commit --amend</code>, <code>reset</code>, <code>revert</code>, <code>reflog</code></td><td>7</td></tr>
+                            <tr><td>Đang dở mà có việc gấp</td><td><code>git stash push -m</code> / <code>pop</code></td><td>9</td></tr>
+                            <tr><td>Phát hành, sửa nóng</td><td><code>git tag -a</code>, <code>cherry-pick -x</code></td><td>9</td></tr>
+                            <tr><td>Tự động kiểm tra</td><td>hook <code>pre-commit</code>, <code>.gitlab-ci.yml</code></td><td>11</td></tr>
+                            <tr><td>Tìm commit gây lỗi</td><td><code>blame</code>, <code>log -S</code>, <code>bisect run</code></td><td>12</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="khi-ket">Khi Git báo lỗi lạ: bình tĩnh theo bốn bước</h2>
+                <ul>
+                    <li><strong>Đọc hết thông báo, nhất là các dòng <code>hint:</code>.</strong> Git thường ghi sẵn lệnh nên chạy, như bạn đã thấy ở các bài trước.</li>
+                    <li><strong><code>git status</code></strong> cho biết bạn đang ở đâu: nhánh nào, có đang merge/rebase dở không, file nào chờ xử lý.</li>
+                    <li><strong><code>git log --oneline --graph --all</code></strong> cho bức tranh lịch sử; kết hợp <code>--decorate</code> để thấy nhánh và tag.</li>
+                    <li><strong>Dừng lại trước khi dùng lệnh hủy diệt</strong> (<code>reset --hard</code>, <code>clean -f</code>, <code>push --force</code>). Tạo nhánh sao lưu, rồi nếu lỡ tay hãy nhờ <code>git reflog</code>.</li>
+                </ul>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Script bisect không chạy được ở một số commit.</strong> Ví dụ import cả package <code>models</code> sẽ kéo theo <code>odoo</code> và lỗi ngay. Nếu script thoát với mã lỗi chung, Git coi commit đó là “xấu” và cho kết luận sai. Hãy kiểm tra script trên một commit tốt và một commit xấu trước, và trả mã 125 khi không thể kiểm tra.</li>
+                        <li><strong>Quên <code>git bisect reset</code>.</strong> Bạn vẫn đang ở trạng thái bisect (HEAD tách rời). Chạy <code>git bisect reset</code> trước khi làm việc tiếp.</li>
+                        <li><strong>Dùng blame để đổ lỗi.</strong> Commit cuối cùng đụng vào dòng chưa chắc là nguyên nhân; hãy đọc <code>git show</code> của nó và hỏi người viết thay vì kết luận vội.</li>
+                        <li><strong>Đổi bản trong lúc bisect mà còn sửa dở.</strong> Hãy commit hoặc stash (bài 9) trước khi <code>git bisect start</code> để không mất việc.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết cả series</h2>
+                <ul>
+                    <li>Nền tảng: ba vùng làm việc, commit nhỏ có lời nhắn tốt, <code>.gitignore</code> ngay từ đầu.</li>
+                    <li>Cộng tác: nhánh ngắn hạn, GitLab, merge request, xung đột và rebase đúng quy tắc.</li>
+                    <li>An toàn: biết chọn lệnh hoàn tác, luôn có lưới <code>reflog</code> và nhánh sao lưu.</li>
+                    <li>Phát hành: tag, hotfix từ tag, cherry-pick; hook và CI để máy kiểm tra thay con người.</li>
+                    <li>Truy vết: <code>blame</code>, <code>log -S</code>, <code>bisect</code> để tìm nguyên nhân thay vì đoán.</li>
+                </ul>
+                <p>Bạn đã đi hết 12 bài, từ lệnh <code>git init</code> đầu tiên tới một quy trình nhóm có merge request, CI và phát hành. Bước tiếp theo tự nhiên là áp dụng ngay vào dự án thật: tạo repo GitLab cho module của bạn, bật nhánh bảo vệ và thêm file <code>.gitlab-ci.yml</code> đầu tiên. Nếu muốn cùng quay lại phần lập trình, hãy đọc tiếp <a href="../odoo/index.html">series Lập trình Odoo 20</a> và <a href="../python/index.html">series Python thực chiến</a>, hai series dùng chung dự án <code>vinc_course</code> với bài này.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git blame dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git blame in từng dòng của file kèm commit, tác giả và thời gian của lần sửa gần nhất, giúp bạn hiểu dòng đó xuất hiện khi nào và vì sao. Dùng -L để giới hạn dòng hoặc hàm, -M và -C để theo dõi dòng được di chuyển hay sao chép.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git bisect hoạt động thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Bạn đánh dấu một commit tốt và một commit xấu; Git tìm nhị phân trong khoảng giữa, mỗi bước chuyển tới commit ở giữa để bạn kiểm tra rồi thu hẹp một nửa. Với git bisect run script, Git tự chạy script ở mỗi bước và dùng mã thoát để biết tốt hay xấu.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Mã thoát nào của script bisect có ý nghĩa đặc biệt?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo tài liệu Git: 0 là commit tốt, 1 đến 127 (trừ 125) là commit xấu, 125 nghĩa là bỏ qua commit không kiểm tra được, các mã khác hủy quá trình bisect.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao tìm commit đã thêm hay xóa một đoạn chữ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng git log -S"chuỗi" (pickaxe) để liệt kê các commit làm thay đổi số lần xuất hiện của chuỗi đó; git log -G dùng biểu thức chính quy. Sau đó git show mã-commit để xem nội dung.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-blame" target="_blank" rel="noopener">Git – git-blame</a></li>
+                    <li><a href="https://git-scm.com/docs/git-bisect" target="_blank" rel="noopener">Git – git-bisect</a></li>
+                    <li><a href="https://git-scm.com/docs/git-log" target="_blank" rel="noopener">Git – git-log (-S, --graph)</a></li>
+                    <li><a href="https://git-scm.com/docs/giteveryday" target="_blank" rel="noopener">Git – giteveryday (Everyday Git)</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial</a></li>
+                    <li><a href="https://docs.gitlab.com/user/project/merge_requests/" target="_blank" rel="noopener">GitLab Docs – Merge requests</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-blame-bisect-xu-ly-su-co-du-an-tong-hop.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-hook-gitlab-ci-kiem-tra-module-odoo.html"><small>← Bài trước</small>Git hook và GitLab CI</a>
+                    <a class="next" href="index.html"><small>Về series →</small>Git thực chiến cho nhóm phát triển</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#blame">Truy dấu từng dòng: git blame và git log -S</a></li>
+                        <li><a href="#bisect">Dò nhị phân commit gây lỗi: git bisect</a></li>
+                        <li><a href="#tong-hop">Dự án tổng hợp: một chu kỳ làm việc trọn vẹn</a></li>
+                        <li><a href="#cheat-sheet">Bảng tra cứu nhanh cả series</a></li>
+                        <li><a href="#khi-ket">Khi Git báo lỗi lạ: bình tĩnh theo bốn bước</a></li>
+                        <li><a href="#tong-ket">Tổng kết cả series</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

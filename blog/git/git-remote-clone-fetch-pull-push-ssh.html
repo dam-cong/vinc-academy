@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git remote: clone, fetch, pull, push và SSH key GitLab</title>
+    <meta name="description" content="Nối repo với GitLab: tạo SSH key, clone, push nhánh, fetch để xem trước, pull để gộp và xử lý lỗi rejected, divergent branches khi làm việc nhóm." />
+    <meta name="keywords" content="git remote, git clone, git fetch, git pull, git push, ssh key gitlab, git rejected, divergent branches, origin main" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/git-remotes-clone-fetch-pull-push-ssh.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Git remote: clone, fetch, pull, push và SSH key GitLab" />
+    <meta property="og:description" content="Git remote cho người mới: SSH key GitLab, clone, push -u, fetch và pull khác nhau thế nào, xử lý push bị rejected và divergent branches." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/git-remote-clone-fetch-pull-push-ssh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Git remote: clone, fetch, pull, push và SSH key GitLab",
+                "description": "Git remote cho người mới: SSH key GitLab, clone, push -u, fetch và pull khác nhau thế nào, xử lý push bị rejected và divergent branches.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/git-remote-clone-fetch-pull-push-ssh.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/git/git-remote-clone-fetch-pull-push-ssh.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Remote và SSH"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "git fetch và git pull khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "git fetch chỉ tải commit mới từ remote về và cập nhật các nhánh origin/..., không đổi nhánh bạn đang làm. git pull là git fetch cộng với git merge (hoặc rebase) vào nhánh hiện tại. Fetch trước để xem sẽ có gì, rồi gộp."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao push bị rejected (fetch first)?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Vì remote đã có commit mà máy bạn chưa có, thường do đồng nghiệp vừa push lên cùng nhánh. Hãy git pull (hoặc fetch rồi merge), xử lý nếu có xung đột, rồi push lại. Không dùng --force để vượt qua."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên dùng SSH hay HTTPS với GitLab?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cả hai đều dùng được. SSH dùng cặp khóa nên không phải nhập tài khoản mỗi lần push hay pull; HTTPS hỏi thông tin đăng nhập khi kết nối. Phần lớn nhóm chọn SSH với khóa ED25519 cho máy làm việc cố định."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Tham số -u trong git push -u origin main có tác dụng gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "-u (--set-upstream) ghi nhớ rằng nhánh cục bộ theo dõi nhánh trên origin. Sau đó bạn chỉ cần gõ git push và git pull trơn, và git status cho biết bạn đi trước hay đi sau remote bao nhiêu commit."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/git/"git-remotes-clone-fetch-pull-push-ssh.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">Remote và SSH</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 4 · Series Git thực chiến</span>
+            <h1>Git remote: clone, fetch, pull, push và SSH key GitLab</h1>
+            <p class="post-lead">Bài 4 nối repo vinc_course với GitLab: tạo SSH key, clone, push nhánh, fetch để xem trước, pull để gộp, và xử lý lỗi push bị rejected hay pull báo divergent branches mà ai làm nhóm cũng gặp.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/git-remote-clone-fetch-pull-push-ssh.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Remote là bản repo đặt trên máy chủ (thường là GitLab) để cả nhóm cùng đẩy và lấy commit.</strong> Bài này nối repo <code>vinc_course</code> với GitLab: tạo SSH key và đăng ký lên GitLab, <code>clone</code> repo về, <code>push</code> nhánh lên, <code>fetch</code> để xem công việc của đồng nghiệp mà chưa gộp, <code>pull</code> để lấy và gộp, và xử lý lỗi <em>rejected</em> cùng <em>divergent branches</em> mà ai cũng gặp. Để chạy thật, ví dụ dùng một repo bare cục bộ đóng vai GitLab; các lệnh y hệt khi dùng GitLab thật.</p>
+                </div>
+
+                <h2 id="remote-la-gi">Remote, origin và nhánh theo dõi</h2>
+                <p>Đến giờ mọi commit chỉ nằm trên máy bạn. Để cộng tác, nhóm đặt một repo trung tâm trên GitLab; mỗi người có repo riêng trên máy và đồng bộ qua repo trung tâm đó. Git gọi repo ở xa là <strong>remote</strong>, và tên mặc định của remote bạn clone về là <code>origin</code>. Một repo có thể có nhiều remote (ví dụ <code>origin</code> của công ty và <code>upstream</code> của dự án gốc).</p>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-vi-g04">
+                        <title id="dg-vi-g04">Đẩy và lấy commit giữa máy bạn và GitLab</title>
+                        <rect class="dg-box" x="10" y="15" width="200" height="110" rx="12" />
+                        <text class="dg-title" x="26" y="43">Repo trên máy bạn</text>
+                        <text class="dg-text" x="26" y="74">main</text><text class="dg-text" x="26" y="96">origin/main (bản ghi nhớ)</text>
+                        <rect class="dg-accent" x="430" y="15" width="200" height="110" rx="12" />
+                        <text class="dg-title" x="446" y="43">GitLab (origin)</text>
+                        <text class="dg-text" x="446" y="74">main</text><text class="dg-text" x="446" y="96">feature/...</text>
+                        <path class="dg-arrow" d="M214 60 h212 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="320" y="50">git push</text>
+                        <path class="dg-arrow" d="M426 100 h-212 m8 -6 l-8 6 l8 6" /><text class="dg-text" text-anchor="middle" x="320" y="90">git fetch</text>
+                        <text class="dg-text" x="10" y="150">git pull = git fetch rồi merge origin/main vào nhánh hiện tại.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+                <p>Điểm hay gây hiểu nhầm là <code>origin/main</code>: đó <em>không</em> phải nhánh bạn làm việc, mà là <strong>bản ghi nhớ</strong> trên máy bạn về nơi <code>main</code> của GitLab đã đứng ở lần liên lạc gần nhất. Nó chỉ được cập nhật khi bạn <code>fetch</code>, <code>pull</code> hoặc <code>push</code>. Vì vậy “remote đã có commit mới chưa?” là câu hỏi mà Git chỉ trả lời đúng sau khi bạn fetch.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git remote -v</code></td><td>Liệt kê remote và URL</td></tr>
+                            <tr><td><code>git remote add origin &lt;url&gt;</code></td><td>Gắn repo cục bộ có sẵn với một remote</td></tr>
+                            <tr><td><code>git clone &lt;url&gt;</code></td><td>Sao chép repo về máy, tự đặt <code>origin</code></td></tr>
+                            <tr><td><code>git fetch</code></td><td>Tải commit mới về, <em>không</em> sửa nhánh của bạn</td></tr>
+                            <tr><td><code>git pull</code></td><td><code>fetch</code> rồi gộp vào nhánh hiện tại</td></tr>
+                            <tr><td><code>git push</code></td><td>Đẩy commit của nhánh hiện tại lên remote</td></tr>
+                            <tr><td><code>git push -u origin &lt;nhánh&gt;</code></td><td>Đẩy lần đầu và ghi nhớ nhánh theo dõi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="ssh">Kết nối GitLab bằng SSH key</h2>
+                <p>Có hai cách xác thực khi clone: HTTPS (hỏi tài khoản) hoặc SSH. Theo tài liệu GitLab, SSH dùng một cặp khóa gồm <strong>khóa công khai</strong> (đưa cho GitLab) và <strong>khóa riêng</strong> (giữ kín trên máy bạn), nhờ đó bạn không phải nhập tên đăng nhập và mật khẩu mỗi lần push hay pull. Một khóa dùng được cho mọi dự án mà tài khoản có quyền, bạn không cần khóa riêng cho từng dự án. Loại khóa được ưu tiên là <strong>ED25519</strong>. Làm một lần trên mỗi máy:</p>
+<pre><code># 1. Tạo cặp khóa (comment là email để nhận diện khóa)
+ssh-keygen -t ed25519 -C "an.nguyen@example.com"
+# Nhấn Enter để nhận tên file mặc định ~/.ssh/id_ed25519, nên đặt passphrase
+
+# 2. Nạp khóa riêng vào ssh-agent
+ssh-add ~/.ssh/id_ed25519
+
+# 3. In khóa CÔNG KHAI để copy (file .pub, không phải file không đuôi)
+cat ~/.ssh/id_ed25519.pub
+
+# 4. Sau khi dán khóa vào GitLab, kiểm tra kết nối
+ssh -T git@gitlab.example.com
+# Welcome to GitLab, @tên-bạn!</code></pre>
+                <ul>
+                    <li>Trong GitLab: bấm avatar → <em>Edit profile</em> → <em>Access</em> → <em>SSH keys</em> → <em>Add new key</em>, dán khóa công khai, đặt tiêu đề như “Laptop công ty” rồi <em>Add key</em>.</li>
+                    <li>Thay <code>gitlab.example.com</code> bằng địa chỉ GitLab của công ty (với GitLab.com là <code>gitlab.com</code>). Lần kết nối đầu ssh hỏi xác nhận máy chủ; hãy đối chiếu dấu vân tay với trang tài liệu của GitLab trước khi gõ <code>yes</code>.</li>
+                    <li><strong>Không bao giờ dán hay gửi khóa riêng</strong> (file <code>id_ed25519</code>). Chỉ file <code>.pub</code> mới được chia sẻ.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Kiểu</th><th>URL ví dụ</th><th>Xác thực</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SSH</td><td><code>git@gitlab.example.com:vinc/vinc_course.git</code></td><td>Cặp khóa SSH, không hỏi mật khẩu mỗi lần</td></tr>
+                            <tr><td>HTTPS</td><td><code>https://gitlab.example.com/vinc/vinc_course.git</code></td><td>Hỏi thông tin đăng nhập khi kết nối</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Cả hai URL trỏ cùng một repo; khác nhau chỉ ở cách chứng minh bạn là ai. Đã clone bằng URL nào mà muốn đổi, dùng <code>git remote set-url origin &lt;url-mới&gt;</code>. Trang dự án trên GitLab có sẵn nút <em>Code</em> để sao chép cả hai dạng URL.</p>
+
+                <h2 id="clone-push">Nối repo với GitLab: push lần đầu và clone</h2>
+                <p>Nếu repo đã có sẵn trên máy (như <code>vinc_course</code> của chúng ta), hãy tạo một dự án trống trên GitLab, thêm remote rồi đẩy lên. Cờ <code>-u</code> (<code>--set-upstream</code>) ghi nhớ rằng <code>main</code> theo dõi <code>origin/main</code>, nhờ đó từ nay chỉ cần gõ <code>git push</code> và <code>git pull</code> trơn.</p>
+<pre><code>$ git remote add origin git@gitlab.example.com:vinc/vinc_course.git
+$ git remote -v
+origin	git@gitlab.example.com:vinc/vinc_course.git (fetch)
+origin	git@gitlab.example.com:vinc/vinc_course.git (push)
+$ git push -u origin main
+branch 'main' set up to track 'origin/main'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      main -&gt; main
+$ git branch -vv
+* main 47905cb [origin/main] [IMP] vinc_course: thêm trường số giờ
+$ git status -sb
+## main...origin/main</code></pre>
+                <p><code>git status -sb</code> giờ in <code>## main...origin/main</code>: nhánh của bạn và bản ghi nhớ đang khớp nhau. Đồng nghiệp là Bình, ở máy khác, lấy repo về bằng <code>git clone</code>; lệnh này tạo thư mục, trỏ <code>origin</code> và checkout nhánh mặc định:</p>
+<pre><code>$ cd ..
+$ git clone git@gitlab.example.com:vinc/vinc_course.git vinc_course_binh
+Cloning into 'vinc_course_binh'...
+done.
+$ cd vinc_course_binh</code></pre>
+
+                <h2 id="push-fetch">Làm việc song song: push nhánh, fetch để xem</h2>
+                <p>Bình tạo nhánh cấp độ, commit và đẩy lên GitLab. Đây là nhánh mới nên remote chưa biết, và cờ <code>-u</code> lại hữu ích:</p>
+<pre><code>$ git switch -c feature/course-level
+Switched to a new branch 'feature/course-level'
+$ echo "    level = fields.Selection([('basic', 'Cơ bản'), ('adv', 'Nâng cao')])" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường cấp độ"
+[feature/course-level 6c73d41] [IMP] vinc_course: thêm trường cấp độ
+ 1 file changed, 1 insertion(+)
+$ git push -u origin feature/course-level
+branch 'feature/course-level' set up to track 'origin/feature/course-level'.
+To git@gitlab.example.com:vinc/vinc_course.git
+ * [new branch]      feature/course-level -&gt; feature/course-level</code></pre>
+                <p>Trên máy An chưa có gì thay đổi cho tới khi An <code>fetch</code>. Sau fetch, nhánh của Bình xuất hiện dưới dạng <code>origin/feature/course-level</code> để An xem hoặc review mà chưa đụng vào nhánh nào của mình. Chuyển sang tên nhánh đó, Git tự tạo nhánh cục bộ cùng tên và nối theo dõi:</p>
+<pre><code>$ cd ../vinc_course
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+ * [new branch]      feature/course-level -&gt; origin/feature/course-level
+$ git branch -a
+* main
+  remotes/origin/feature/course-level
+  remotes/origin/main
+$ git switch feature/course-level
+branch 'feature/course-level' set up to track 'origin/feature/course-level'.
+Switched to a new branch 'feature/course-level'
+$ git log --oneline -n 2
+6c73d41 [IMP] vinc_course: thêm trường cấp độ
+47905cb [IMP] vinc_course: thêm trường số giờ
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'</code></pre>
+
+                <h2 id="pull">fetch và pull: khác nhau ở chỗ nào</h2>
+                <p><code>git pull</code> thực chất là <code>git fetch</code> cộng thêm <code>git merge</code> vào nhánh hiện tại. Thói quen an toàn là <strong>fetch trước, xem rồi mới gộp</strong>: bạn thấy được commit nào sắp về. Ví dụ Bình đẩy một commit README lên <code>main</code>; An fetch, thấy mình đang <em>behind 1</em>, rồi pull và Git chỉ việc fast-forward:</p>
+<pre><code>$ cd ../vinc_course_binh
+$ git switch main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'
+$ echo "# vinc_course" &gt; README.md
+$ git add README.md
+$ git commit -m "[ADD] vinc_course: README"
+[main 518a39d] [ADD] vinc_course: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   47905cb..518a39d  main -&gt; main</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git fetch
+From git@gitlab.example.com:vinc/vinc_course
+   47905cb..518a39d  main       -&gt; origin/main
+$ git status -sb
+## main...origin/main [behind 1]
+$ git pull
+Updating 47905cb..518a39d
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git log --oneline -n 2
+518a39d [ADD] vinc_course: README
+47905cb [IMP] vinc_course: thêm trường số giờ</code></pre>
+
+                <h2 id="bi-tu-choi">Khi push bị từ chối và pull báo “divergent”</h2>
+                <p>Tình huống kinh điển trong nhóm: An commit trên máy mình, trong lúc đó Bình đã đẩy commit khác lên cùng nhánh. Lịch sử của hai người đã rẽ, nên GitLab không cho An đẩy đè lên. Hãy tái hiện:</p>
+<pre><code>$ echo "    price = fields.Float(string='Học phí')" &gt;&gt; models/course.py
+$ git commit -am "[IMP] vinc_course: thêm trường học phí"
+[main 7b05493] [IMP] vinc_course: thêm trường học phí
+ 1 file changed, 1 insertion(+)</code></pre>
+<pre><code>$ cd ../vinc_course_binh
+$ echo "Module quản lý khóa học." &gt;&gt; README.md
+$ git commit -am "[IMP] vinc_course: mô tả README"
+[main b6a59e9] [IMP] vinc_course: mô tả README
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   518a39d..b6a59e9  main -&gt; main</code></pre>
+<pre><code>$ cd ../vinc_course
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'git@gitlab.example.com:vinc/vinc_course.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.</code></pre>
+                <p>Thông báo <em>rejected … (fetch first)</em> nghĩa là remote có commit mà máy bạn chưa có. Hãy lấy chúng về trước. Nhưng lần này <code>git pull</code> không chịu chạy vì Git không biết nên gộp bằng merge hay rebase:</p>
+<pre><code>$ git pull
+From git@gitlab.example.com:vinc/vinc_course
+   518a39d..b6a59e9  main       -&gt; origin/main
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.</code></pre>
+                <p>Git liệt kê ba lựa chọn cấu hình. Tạm thời hãy chọn merge bằng cờ <code>--no-rebase</code>; bài 8 sẽ so sánh với rebase. Vì hai commit sửa file khác nhau nên Git tự gộp được, rồi bạn đẩy lên:</p>
+<pre><code>$ git pull --no-rebase
+Merge made by the 'ort' strategy.
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+$ git push
+To git@gitlab.example.com:vinc/vinc_course.git
+   b6a59e9..bfdc341  main -&gt; main
+$ git log --oneline --graph -n 4
+*   bfdc341 Merge branch 'main' of git@gitlab.example.com:vinc/vinc_course
+|\  
+| * b6a59e9 [IMP] vinc_course: mô tả README
+* | 7b05493 [IMP] vinc_course: thêm trường học phí
+|/  
+* 518a39d [ADD] vinc_course: README</code></pre>
+                <p>Để khỏi bị hỏi mỗi lần, bạn có thể đặt mặc định: <code>git config --global pull.rebase false</code> (merge), <code>pull.rebase true</code> (rebase) hoặc <code>pull.ff only</code> (chỉ chấp nhận fast-forward, thận trọng nhất). Hãy thống nhất với nhóm.</p>
+
+                <h2 id="don-nhanh">Dọn nhánh remote</h2>
+                <p>Sau khi nhánh được merge, xóa luôn cả bản trên GitLab. <code>git push origin --delete &lt;nhánh&gt;</code> xóa nhánh trên remote; máy của đồng nghiệp vẫn còn bản ghi nhớ cũ nên họ chạy <code>git fetch --prune</code> để dọn. Nhánh cục bộ cùng tên vẫn còn và phải xóa riêng bằng <code>git branch -d</code>.</p>
+<pre><code>$ cd ../vinc_course_binh
+$ git push origin --delete feature/course-level
+To git@gitlab.example.com:vinc/vinc_course.git
+ - [deleted]         feature/course-level
+$ cd ../vinc_course
+$ git fetch --prune
+From git@gitlab.example.com:vinc/vinc_course
+ - [deleted]         (none)     -&gt; origin/feature/course-level
+$ git branch -a
+  feature/course-level
+* main
+  remotes/origin/main</code></pre>
+
+                <h2 id="trong-odoo">Remote trong công việc Odoo</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tình huống</th><th>Cách làm</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Lấy mã nguồn Odoo</td><td><code>git clone --branch 20.0 --single-branch https://github.com/odoo/odoo.git</code>: chỉ lấy nhánh 20.0 cho nhẹ</td></tr>
+                            <tr><td>Module riêng của công ty</td><td>Một repo GitLab cho <code>vinc_course</code>, cả nhóm clone và đẩy nhánh tính năng</td></tr>
+                            <tr><td>Cập nhật server thử nghiệm</td><td>Nhiều nhóm <code>git fetch</code> rồi chuyển sang đúng nhánh hoặc tag cần triển khai thay vì chép file</td></tr>
+                            <tr><td>Hai remote</td><td><code>git remote add upstream &lt;url&gt;</code> để theo dõi dự án gốc song song với <code>origin</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Push bị <em>rejected</em>.</strong> Đừng vội ép. Hãy <code>git pull</code> (hoặc <code>fetch</code> rồi xem), xử lý rồi push lại như ở trên.</li>
+                        <li><strong>Dùng <code>git push --force</code> cho nhanh.</strong> Ép đẩy sẽ ghi đè commit của đồng nghiệp trên remote. Nếu thật sự phải ép (ví dụ sau khi rebase nhánh riêng), hãy dùng <code>--force-with-lease</code>: nó từ chối khi remote có commit mà bạn chưa thấy. Không bao giờ ép lên nhánh chung như <code>main</code>.</li>
+                        <li><strong>Dán nhầm khóa riêng lên GitLab.</strong> Chỉ dán nội dung file <code>.pub</code> (bắt đầu bằng <code>ssh-ed25519</code>). Nếu lỡ lộ khóa riêng, hãy tạo cặp khóa mới và xóa khóa cũ khỏi GitLab.</li>
+                        <li><strong>Tưởng <code>origin/main</code> luôn mới nhất.</strong> Nó chỉ mới tới lần <code>fetch</code> gần nhất; hãy fetch trước khi so sánh hay quyết định gộp.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Remote (<code>origin</code>) là repo trung tâm; <code>origin/main</code> là bản ghi nhớ trên máy bạn, chỉ mới sau <code>fetch</code>.</li>
+                    <li>SSH key ED25519: khóa công khai cho GitLab, khóa riêng ở lại máy bạn.</li>
+                    <li><code>clone</code> lấy repo về; <code>push -u</code> đẩy nhánh lần đầu; <code>fetch</code> xem trước; <code>pull</code> = fetch + merge.</li>
+                    <li><em>Rejected</em> và <em>divergent</em> nghĩa là lịch sử đã rẽ: lấy commit về, gộp, rồi đẩy; tránh <code>--force</code>.</li>
+                </ul>
+                <p>Giờ bạn đã có nhánh trên GitLab. Nhưng trong doanh nghiệp, hiếm khi ai merge thẳng bằng lệnh: họ mở một <strong>merge request</strong> để đồng nghiệp xem code trước khi vào nhánh chính. Đó là chủ đề của bài 5.</p>
+                <div class="cta-box">
+                    <h3>Muốn làm việc nhóm với Git như ở doanh nghiệp?</h3>
+                    <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm: bài tập nhánh, merge request và review code từ mentor.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>git fetch và git pull khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">git fetch chỉ tải commit mới từ remote về và cập nhật các nhánh origin/..., không đổi nhánh bạn đang làm. git pull là git fetch cộng với git merge (hoặc rebase) vào nhánh hiện tại. Fetch trước để xem sẽ có gì, rồi gộp.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao push bị rejected (fetch first)?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Vì remote đã có commit mà máy bạn chưa có, thường do đồng nghiệp vừa push lên cùng nhánh. Hãy git pull (hoặc fetch rồi merge), xử lý nếu có xung đột, rồi push lại. Không dùng --force để vượt qua.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên dùng SSH hay HTTPS với GitLab?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cả hai đều dùng được. SSH dùng cặp khóa nên không phải nhập tài khoản mỗi lần push hay pull; HTTPS hỏi thông tin đăng nhập khi kết nối. Phần lớn nhóm chọn SSH với khóa ED25519 cho máy làm việc cố định.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tham số -u trong git push -u origin main có tác dụng gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">-u (--set-upstream) ghi nhớ rằng nhánh cục bộ theo dõi nhánh trên origin. Sau đó bạn chỉ cần gõ git push và git pull trơn, và git status cho biết bạn đi trước hay đi sau remote bao nhiêu commit.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/git-remote" target="_blank" rel="noopener">Git – git-remote</a></li>
+                    <li><a href="https://git-scm.com/docs/git-clone" target="_blank" rel="noopener">Git – git-clone</a></li>
+                    <li><a href="https://git-scm.com/docs/git-fetch" target="_blank" rel="noopener">Git – git-fetch</a></li>
+                    <li><a href="https://git-scm.com/docs/git-pull" target="_blank" rel="noopener">Git – git-pull</a></li>
+                    <li><a href="https://git-scm.com/docs/git-push" target="_blank" rel="noopener">Git – git-push</a></li>
+                    <li><a href="https://git-scm.com/docs/gittutorial-2" target="_blank" rel="noopener">Git – gittutorial-2</a></li>
+                    <li><a href="https://docs.gitlab.com/user/ssh/" target="_blank" rel="noopener">GitLab Docs – Use SSH keys with GitLab</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-remote-clone-fetch-pull-push-ssh.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fgit%2Fgit-remote-clone-fetch-pull-push-ssh.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="git-nhanh-branch-merge.html"><small>← Bài trước</small>Nhánh và merge</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Quy trình Merge Request trên GitLab</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#remote-la-gi">Remote, origin và nhánh theo dõi</a></li>
+                        <li><a href="#ssh">Kết nối GitLab bằng SSH key</a></li>
+                        <li><a href="#clone-push">Nối repo với GitLab: push lần đầu và clone</a></li>
+                        <li><a href="#push-fetch">Làm việc song song: push nhánh, fetch để xem</a></li>
+                        <li><a href="#pull">fetch và pull: khác nhau ở chỗ nào</a></li>
+                        <li><a href="#bi-tu-choi">Khi push bị từ chối và pull báo “divergent”</a></li>
+                        <li><a href="#don-nhanh">Dọn nhánh remote</a></li>
+                        <li><a href="#trong-odoo">Remote trong công việc Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

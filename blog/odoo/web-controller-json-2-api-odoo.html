@@ -192,6 +192,8 @@
                 <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
             </div>
         </header>
+        <figure class="post-cover"><img src="../../image/cover/web-controller-json-2-api-odoo.webp" alt="" width="960" height="504" decoding="async"></figure>
+
 
         <div class="post-layout">
             <article class="prose">
@@ -275,19 +277,19 @@ class VincCourseController(http.Controller):
                 <figure class="diagram">
                     <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-vi-12">
                         <title id="dg-vi-12">Luồng một lệnh gọi API JSON-2</title>
-                        <rect class="dg-box" x="10" y="15" width="180" height="96" rx="12" />
+                        <rect class="dg-box" x="10" y="15" width="198" height="96" rx="12" />
                         <text class="dg-title" x="26" y="43">Phần mềm bên ngoài</text>
                         <text class="dg-text" x="26" y="95">POST /json/2/model/method</text>
-                        <path class="dg-arrow" d="M192 63 h26 m-8 -6 l8 6 l-8 6" />
-                        <rect class="dg-accent" x="220" y="15" width="200" height="96" rx="12" />
-                        <text class="dg-title" x="236" y="43">Odoo</text>
-                        <text class="dg-text" x="236" y="76">1. Xác thực API key (bearer)</text><text class="dg-text" x="236" y="96">2. Kiểm tra quyền của chủ key</text>
-                        <path class="dg-arrow" d="M422 63 h26 m-8 -6 l8 6 l-8 6" />
-                        <rect class="dg-box" x="450" y="15" width="180" height="96" rx="12" />
-                        <text class="dg-title" x="466" y="43">Model + method</text>
-                        <text class="dg-text" x="466" y="95">1 transaction cho mỗi lệnh</text>
-                        <path class="dg-arrow" d="M540 113 v22 m-6 -8 l6 8 l6 -8" />
-                        <text class="dg-text" x="220" y="152">Thành công: HTTP 200 + JSON. Lỗi: 4xx/5xx + đối tượng lỗi JSON (rollback)</text>
+                        <path class="dg-arrow" d="M210 63 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="236" y="15" width="198" height="96" rx="12" />
+                        <text class="dg-title" x="252" y="43">Odoo</text>
+                        <text class="dg-text" x="252" y="76">1. Xác thực API key (bearer)</text><text class="dg-text" x="252" y="96">2. Kiểm tra quyền của chủ key</text>
+                        <path class="dg-arrow" d="M436 63 h18 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="458" y="15" width="172" height="96" rx="12" />
+                        <text class="dg-title" x="474" y="43">Model + method</text>
+                        <text class="dg-text" x="474" y="95">1 transaction / lệnh</text>
+                        <path class="dg-arrow" d="M541 113 v22 m-6 -8 l6 8 l6 -8" />
+                        <text class="dg-text" x="10" y="152">Thành công: HTTP 200 + JSON. Lỗi: 4xx/5xx + đối tượng lỗi JSON (rollback)</text>
                     </svg>
                     <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu Odoo 20.</figcaption>
                 </figure>

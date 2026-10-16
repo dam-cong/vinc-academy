@@ -109,8 +109,13 @@ for k in ('vi','en'):
             </aside>
         </div>
     </main>'''%('../../index.html' if k=='vi' else '../../../index.html',names[0],names[1],names[2],names[3],st['tagp']%n,html.escape(c['h1'],quote=False),c['lead'],st['upd'],D,st['date'],st['mins']%c['mins'],st['by'],body,st['share'],enc,enc,st['sn'],pv[0],st['prevl'],pv[1],nx,disc,st['tocname'],toc)
+    main=main.replace('        </header>\n','        </header>\n\n        <figure class="post-cover"><img src="%simage/cover/%s.webp" alt="" width="960" height="504" decoding="async"></figure>\n'%('../../../' if k=='en' else '../../',ogimg[:-4]),1)
     t=re.sub(r'<main class="blog-wrap">.*?</main>',lambda m:main,t,count=1,flags=re.S)
     open(out,'w',encoding='utf-8').write(t)
+    try:
+        import covers
+        if os.path.exists('image/og/'+ogimg): covers.cover(ogimg[:-4])
+    except ImportError: print('Thiếu Pillow: pip install pillow (cần để tạo ảnh bìa image/cover/)')
     if REB: continue
     # wiring: hub card, hub JSON-LD, previous article next link
     hub=DIR[k]+'index.html'
@@ -123,10 +128,12 @@ for k in ('vi','en'):
     rw(hub,hp)
     if S.get('prev'): rw(DIR[k]+S['prev'][k][0],lambda s:re.sub(r'<span class="next"><small>[^<]*</small>(.*?)</span>',lambda m:'<a class="next" href="%s"><small>%s</small>%s</a>'%(slug,st['nxtl'],m.group(1)),s,count=1))
     # OG
-    og='t=%s&h=%s&p=%s&b=Vinc Academy · Odoo'%(st['og']%NN,c['og_h'],c['og_p'])
+    og='t=%s&h=%s&p=%s&b=Vinc Academy · %s'%(st['og']%NN,c['og_h'],c['og_p'],TP[k]['name'])
     U=urllib.parse.quote(og,safe='=&')
     tmp='/tmp/vinc-og.html';open(tmp,'w',encoding='utf-8').write(open(HERE+'/og.html',encoding='utf-8').read().replace('__REPO__',os.getcwd()))
     subprocess.run(['google-chrome','--headless=new','--no-sandbox','--disable-gpu','--allow-file-access-from-files','--hide-scrollbars','--window-size=1200,630','--virtual-time-budget=4000','--screenshot=%s/image/og/%s'%(os.getcwd(),ogimg),'file://%s?%s'%(tmp,U)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    try: import covers; covers.cover(ogimg[:-4])
+    except ImportError: pass
 if REB: print('rebuilt',n); sys.exit()
 # sitemap
 viu=B+'/blog/%s/'%TD+S['vi']['slug'];enu=B+'/en/blog/%s/'%TD+S['en']['slug']
@@ -137,7 +144,7 @@ def hrow(s):
     s=re.sub(r'\| %s \|[^\n]*\n'%NN,'| %s | `%s` – %s | `%s` | ✅ Đã xuất bản |\n'%(NN,S['vi']['slug'],S['vi']['crumb'],S['en']['slug']),s,count=1)
     nn='%02d'%(n+1)
     s=re.sub(r'(\| %s \|[^\n]*?)\| \| ⏳ \|'%nn,r'\1| | ⏳ Tiếp theo |',s,count=1)
-    s=re.sub(r'bài 1–\d+ / 14','bài 1–%d / 14'%n,s)
+    s=re.sub(r'bài 1–\d+ / \d+','bài 1–%d / %d'%(n,TP['total']),s)
     return s
 if os.path.exists(TP['handoff']): rw(TP['handoff'],hrow)
 print('published',n)

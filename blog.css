@@ -44,6 +44,19 @@
     margin: 8px 0 12px;
 }
 
+.post-cover {
+    margin: 0 0 1.75rem;
+}
+
+.post-cover img {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+}
+
 .post-lead {
     font-size: 17px;
     color: var(--text-secondary);
@@ -274,12 +287,12 @@
 
 .dg-title {
     fill: var(--text-primary);
-    font: 700 15px 'Be Vietnam Pro', sans-serif;
+    font: 700 13.5px 'Be Vietnam Pro', sans-serif;
 }
 
 .dg-text {
     fill: var(--text-secondary);
-    font: 400 12.5px 'Be Vietnam Pro', sans-serif;
+    font: 400 12px 'Be Vietnam Pro', sans-serif;
 }
 
 .dg-arrow {
@@ -573,6 +586,10 @@ a.post-card:hover {
     color: var(--text-secondary);
     margin: 0 0 1.2rem;
     max-width: 760px;
+}
+
+.blog-group {
+    margin-bottom: 2.25rem;
 }
 
 /* ── MÀN LỚN: bài viết rộng hơn, đọc thoải mái ── */

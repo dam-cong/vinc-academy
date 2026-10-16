@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What Is Git? Install and First-Time Setup for Devs</title>
+    <meta name="description" content="Learn how Git differs from GitLab, install Git, set your name and email, grasp the three areas, then create a repo and a first commit for vinc_course." />
+    <meta name="keywords" content="what is git, install git, git config user.name, git init, git for beginners, staging area, git gitlab, learn git basics" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/git/git-la-gi-cai-dat-cau-hinh-lan-dau.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="What Is Git? Install and First-Time Setup for Devs" />
+    <meta property="og:description" content="What Git is, how to install and configure it: user.name, user.email, the three areas, git init and the first commit for an Odoo project." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/what-is-git-install-first-time-setup.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "What Is Git? Install and First-Time Setup for Devs",
+                "description": "What Git is, how to install and configure it: user.name, user.email, the three areas, git init and the first commit for an Odoo project.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/what-is-git-install-first-time-setup.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/git/what-is-git-install-first-time-setup.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Git 2.30+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Git",
+                        "item": "https://vinc-academy.vercel.app/en/blog/git/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "What is Git and setup"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How is Git different from GitLab?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Git is a program installed on your machine that records the history of your source code. GitLab is a hosting service for team repositories that adds merge requests, permissions and CI. You can use Git fully without GitLab; GitHub is a similar service to GitLab."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do I have to set user.name and user.email?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Every commit records the author name and email, so set them right away. If you have not, many machines still commit because Git guesses from the system account and prints a warning; if user.useConfigOnly is on or Git cannot guess, the commit is refused with an Author identity unknown message."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should the default branch be main or master?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Both work; Git lets you choose with init.defaultBranch. Many teams use main and GitLab also names new projects main, so run git config --global init.defaultBranch main to match your team."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the staging area for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Staging (the index) is where you pick the changes that go into the next commit with git add. It lets you edit many files yet commit only the related ones, keeping every commit about one thing."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/git/"git-la-gi-cai-dat-cau-hinh-lan-dau.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Git</a></li>
+            <li aria-current="page">What is Git and setup</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 1 · Practical Git Series</span>
+            <h1>What Is Git? Install and First-Time Setup for Devs</h1>
+            <p class="post-lead">The first part of the Git series: tell Git from GitLab, install it, set your name and email, understand the three areas, then create a repo and the first commit for the vinc_course module.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 9 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/what-is-git-install-first-time-setup.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">In short</p>
+                    <p><strong>Git records the history of your source code on your own machine; GitLab and GitHub are where a whole team shares and reviews it.</strong> This part takes you from an empty machine to the first commit of the <code>vinc_course</code> repository: installing Git, setting your name and email, creating a repo with <code>git init</code>, understanding the three areas (working tree, staging, repository) and looking things up with <code>git help</code>. Every command here was really run on Git 2.47.</p>
+                </div>
+
+                <h2 id="git-la-gi">What Git is and why every team uses it</h2>
+                <p>Picture your <code>vinc_course</code> module with twenty Python and XML files. Today you change a model, tomorrow a view, next week a colleague adds a report. With plain folders you end up with <code>vinc_course_final</code>, <code>vinc_course_final_2</code> and <code>vinc_course_really_final</code>, and when a bug appears nobody knows who changed which line. Git solves exactly that: each time you <em>commit</em> it snapshots the whole project together with the author, the time and a message that explains the change.</p>
+                <p>Git is a <strong>distributed</strong> version control system: every machine keeps a full copy of the history, so you can read the log, compare changes or create branches even offline. You only need the network to sync with colleagues. In a company this comes with a familiar routine: everyone works on their own branch, pushes it to GitLab, opens a merge request for review, and only then merges into the main branch. The 12 parts of this series unfold that whole routine; this one lays the foundation.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Name</th><th>What it is</th><th>You use it to</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Git</strong></td><td>A command-line program installed on your machine</td><td>Commit, branch, read history, merge changes</td></tr>
+                            <tr><td><strong>GitLab</strong></td><td>A hosting service for team repositories with merge requests, permissions and CI</td><td>Share code, review it, run automatic checks</td></tr>
+                            <tr><td><strong>GitHub</strong></td><td>A service similar to GitLab (it calls them pull requests)</td><td>Same purpose; the Git commands on your side are identical</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Remember that <strong>Git does not depend on GitLab</strong>. You can use Git entirely on your machine and connect it to GitLab or GitHub later. This series uses GitLab because many companies run an internal GitLab for client code; every Git command works unchanged with GitHub.</p>
+
+                <h2 id="cai-dat">Installing Git</h2>
+                <p>Install it once and use it forever. Following Git's official download page, each operating system has a familiar route:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>System</th><th>How to install</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Windows</td><td>Download <em>Git for Windows</em> from git-scm.com, keep the default options, then use Git Bash or the VS Code terminal</td></tr>
+                            <tr><td>Ubuntu / Debian</td><td><code>sudo apt install git</code></td></tr>
+                            <tr><td>macOS</td><td><code>brew install git</code>, or run <code>git</code> once and let the system offer the Xcode Command Line Tools</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>After installing, open a terminal and run <code>git --version</code>. This series was tested on Git 2.47; the modern commands <code>git switch</code> and <code>git restore</code> arrived in 2.23, so any version from 2.30 up is fine.</p>
+
+                <h2 id="cau-hinh">First-time setup: name, email, default branch</h2>
+                <p>Every commit records its author, so the first job is to tell Git who you are. Use the same email you registered on GitLab so your commits are linked to your account. Two other settings are worth doing now: the default branch of new repos (<code>main</code>) and the editor Git opens when it needs a longer message.</p>
+<pre><code>$ git --version
+git version 2.47.3
+$ git config --global user.name "Nguyễn Văn An"
+$ git config --global user.email "an.nguyen@example.com"
+$ git config --global init.defaultBranch main
+$ git config --global core.editor "code --wait"
+$ git config --global --list --show-origin
+file:~/.gitconfig	user.name=Nguyễn Văn An
+file:~/.gitconfig	user.email=an.nguyen@example.com
+file:~/.gitconfig	init.defaultbranch=main
+file:~/.gitconfig	core.editor=code --wait</code></pre>
+                <p>The <code>--global</code> flag stores the value in the <code>.gitconfig</code> file in your home folder (the output above shows the source thanks to <code>--show-origin</code>). Git has two more levels, and the later one overrides the earlier:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Level</th><th>Flag</th><th>Stored in</th><th>Applies to</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>system</td><td><code>--system</code></td><td>The system config file</td><td>Every user on the machine</td></tr>
+                            <tr><td>global</td><td><code>--global</code></td><td><code>~/.gitconfig</code></td><td>All your repos</td></tr>
+                            <tr><td>local</td><td><code>--local</code> (default)</td><td><code>.git/config</code></td><td>Only the current repo</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The <em>local</em> level is handy when one laptop serves both company and personal projects: keep the company email globally, then in a personal repo run <code>git config user.email "you@example.com"</code> (no flag) so only that repo uses another address. </p>
+
+                <h2 id="ba-vung">Three areas: understand them once, use them forever</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 162" role="img" aria-labelledby="dg-en-g01">
+                        <title id="dg-en-g01">Git's three areas and the remote</title>
+                        <rect class="dg-box" x="4" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="18" y="68">Working</text>
+                        <text class="dg-title" x="18" y="86">tree</text>
+                        <text class="dg-text" x="18" y="115">the files you edit</text>
+                        <rect class="dg-accent" x="170" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="184" y="68">Staging</text>
+                        <text class="dg-title" x="184" y="86">(index)</text>
+                        <text class="dg-text" x="184" y="115">what you commit</text>
+                        <rect class="dg-box" x="336" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="350" y="68">Local repo</text>
+                        <text class="dg-text" x="350" y="115">history in .git</text>
+                        <rect class="dg-box" x="502" y="45" width="134" height="80" rx="12" />
+                        <text class="dg-title" x="516" y="68">Remote</text>
+                        <text class="dg-text" x="516" y="115">your team's GitLab</text>
+                        <path class="dg-arrow" d="M138 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="152" y="34">git add</text>
+                        <path class="dg-arrow" d="M304 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="318" y="34">git commit</text>
+                        <path class="dg-arrow" d="M470 85 h22 m-8 -6 l8 6 l-8 6" /><text class="dg-text" text-anchor="middle" x="484" y="34">git push</text>
+                        <text class="dg-text" x="4" y="150">The other way: git restore refreshes the working tree; git fetch/pull bring commits from the remote.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+                <p>Most beginner confusion comes from not telling apart the three places a file can live:</p>
+                <ul>
+                    <li>The <strong>working tree</strong> is the files you see and edit every day.</li>
+                    <li>The <strong>staging area</strong> (also called the <em>index</em>) is a shopping basket of the changes you picked for the next commit with <code>git add</code>.</li>
+                    <li>The <strong>local repository</strong> is the commit history, stored in the hidden <code>.git</code> folder. Delete <code>.git</code> and the whole history is gone, so do not tinker inside it.</li>
+                </ul>
+                <p>Separating staging from committing sounds redundant, yet it is a big advantage: you can edit five files and commit only the two that belong together, keeping each commit about one thing. The fourth place, the <strong>remote</strong>, appears when you connect the repo to GitLab in part 4.</p>
+
+                <h2 id="repo-dau-tien">Creating the first repo for vinc_course</h2>
+                <p><code>git init</code> turns a folder into a repo by creating a <code>.git</code> folder inside. <code>git status</code> is the command you will type most: it always tells you which branch you are on and what is waiting for attention.</p>
+<pre><code>$ mkdir vinc_course
+$ cd vinc_course
+$ git init
+Initialized empty Git repository in ~/work/vinc_course/.git/
+$ git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+$ ls -A
+.git
+$ cat .git/HEAD
+ref: refs/heads/main</code></pre>
+                <p>The <code>.git/HEAD</code> file says the current branch is <code>main</code>, just as we set in <code>init.defaultBranch</code>. Now the smallest possible life cycle: create a file, stage it, commit it.</p>
+<pre><code>$ echo "# vinc_course" &gt; README.md
+$ git status -s
+?? README.md
+$ git add README.md
+$ git status -s
+A  README.md
+$ git commit -m "Thêm README cho vinc_course"
+[main (root-commit) dce25f0] Thêm README cho vinc_course
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+$ git log --oneline
+dce25f0 Thêm README cho vinc_course
+$ git status
+On branch main
+nothing to commit, working tree clean</code></pre>
+                <p>Read the two <code>git status -s</code> outputs closely: <code>??</code> means the file is untracked, and <code>A</code> in the first column means it is already in staging. A value such as <code>dce25f0</code> is the short identifier of the commit; on your machine it will differ because it depends on time and author.</p>
+
+                <h2 id="tro-giup">Looking things up when you forget</h2>
+                <p>Nobody remembers every Git option, veterans included. Two habits save you: <code>git help &lt;command&gt;</code> (or <code>git &lt;command&gt; --help</code>) opens the full manual page, while <code>git &lt;command&gt; -h</code> prints the usage right in the terminal. If you mistype a command, Git suggests similar ones with an <em>“is not a git command”</em> message.</p>
+                <p>To type less, set an <em>alias</em> for commands you use often. The example below makes <code>git st</code> a short form of <code>git status</code>, then uses <code>git config --get</code> and <code>--show-origin</code> to see where a value comes from:</p>
+<pre><code>$ git config --global alias.st "status -sb"
+$ git st
+## main
+$ git config --get user.name
+Nguyễn Văn An
+$ git config --show-origin user.email
+file:~/.gitconfig	an.nguyen@example.com</code></pre>
+
+                <h2 id="trong-odoo">Where you meet Git in Odoo work</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Situation</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Getting the Odoo source</td><td><code>git clone --branch 20.0 --single-branch https://github.com/odoo/odoo.git</code></td></tr>
+                            <tr><td>Managing your own module</td><td>A <code>vinc_course</code> repo holding the module folder, added to <code>--addons-path</code></td></tr>
+                            <tr><td>Odoo's commit standard</td><td>Odoo's guidelines ask you to define <code>user.email</code> and <code>user.name</code> before committing, and a <code>[TAG] module: description</code> title convention (see part 10)</td></tr>
+                            <tr><td>Separating environments</td><td>Branches per customer or per Odoo version</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout">
+                    <p class="callout-title">Common beginner mistakes</p>
+                    <ul>
+                        <li><strong>Committing with the wrong identity.</strong> If you have not configured it, many machines still commit because Git guesses a name and email from the system account, but it prints <em>“Your name and email address were configured automatically based on your username and hostname. Please check that they are accurate.”</em> Do not ignore that line. To fix the commit you just made, run <code>git commit --amend --reset-author</code> after setting the right <code>user.name</code> and <code>user.email</code>.</li>
+                        <li><strong>Seeing “Author identity unknown”.</strong> When Git cannot guess (or you turned on <code>user.useConfigOnly</code> to forbid guessing), the commit is refused with the message below. Simply run the two <code>git config</code> commands it suggests.</li>
+</ul>
+<pre><code>$ git commit -m "Thêm README"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: no email was given and auto-detection is disabled</code></pre>
+<ul>
+<li><strong>A repo inside a repo.</strong> Running <code>git init</code> inside a folder that already belongs to another repo creates a nested repo and makes <code>git status</code> confusing. Check with <code>git status</code> before you <code>init</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>Git keeps history on your own machine; GitLab and GitHub are only where you share and review.</li>
+                    <li>Configure once: <code>user.name</code>, <code>user.email</code>, <code>init.defaultBranch</code>; local overrides global.</li>
+                    <li>Three areas: working tree → staging (<code>git add</code>) → repository (<code>git commit</code>); add the remote when you push to GitLab.</li>
+                    <li><code>git status</code> always tells you the next step; <code>git help</code> and <code>-h</code> let you look things up yourself.</li>
+                </ul>
+                <p>You now have a repo and a first commit. The next part covers the daily loop: edit files, see differences with <code>git diff</code>, pick what to commit, read <code>git log</code> and keep files that should never enter the repo out with <code>.gitignore</code>.</p>
+                <div class="cta-box">
+                    <h3>Want to work with Git the way companies do?</h3>
+                    <p>The Developer Foundation course includes Git and teamwork: branch, merge request and mentor code-review exercises.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How is Git different from GitLab?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Git is a program installed on your machine that records the history of your source code. GitLab is a hosting service for team repositories that adds merge requests, permissions and CI. You can use Git fully without GitLab; GitHub is a similar service to GitLab.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Do I have to set user.name and user.email?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Every commit records the author name and email, so set them right away. If you have not, many machines still commit because Git guesses from the system account and prints a warning; if user.useConfigOnly is on or Git cannot guess, the commit is refused with an Author identity unknown message.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should the default branch be main or master?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Both work; Git lets you choose with init.defaultBranch. Many teams use main and GitLab also names new projects main, so run git config --global init.defaultBranch main to match your team.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the staging area for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Staging (the index) is where you pick the changes that go into the next commit with git add. It lets you edit many files yet commit only the related ones, keeping every commit about one thing.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener">Git – gittutorial (A Tutorial Introduction to Git)</a></li>
+                    <li><a href="https://git-scm.com/docs/git-config" target="_blank" rel="noopener">Git – git-config</a></li>
+                    <li><a href="https://git-scm.com/docs/git-init" target="_blank" rel="noopener">Git – git-init</a></li>
+                    <li><a href="https://git-scm.com/docs/giteveryday" target="_blank" rel="noopener">Git – giteveryday (Everyday Git)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/contributing/development/git_guidelines.html" target="_blank" rel="noopener">Odoo 20 – Git guidelines</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fwhat-is-git-install-first-time-setup.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fgit%2Fwhat-is-git-install-first-time-setup.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="index.html"><small>← Previous</small>← Back to series</a>
+                    <span class="next"><small>Next · Coming soon</small>Your first commits: status, add, log and .gitignore</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#git-la-gi">What Git is and why every team uses it</a></li>
+                        <li><a href="#cai-dat">Installing Git</a></li>
+                        <li><a href="#cau-hinh">First-time setup: name, email, default branch</a></li>
+                        <li><a href="#ba-vung">Three areas: understand them once, use them forever</a></li>
+                        <li><a href="#repo-dau-tien">Creating the first repo for vinc_course</a></li>
+                        <li><a href="#tro-giup">Looking things up when you forget</a></li>
+                        <li><a href="#trong-odoo">Where you meet Git in Odoo work</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">Frequently asked questions</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -8,7 +8,7 @@ Site tĩnh deploy Vercel, **không build step**: mọi trang là HTML viết tay
 /blog/<chủ-đề>/              Hub chủ đề (series + bài lẻ)     en/blog/<chủ-đề>/
 /blog/<chủ-đề>/<slug>.html   Bài viết                         en/blog/<chủ-đề>/<slug>.html
 ```
-Chủ đề > Series (tùy chọn) > Bài. Series chỉ là nhóm trong hub chủ đề + `series-nav` trong bài, không nằm trong URL. Slug chủ đề: `odoo`, `python`, `git`, `sql`, `ai`.
+Chủ đề > Series (tùy chọn) > Bài. Series chỉ là nhóm trong hub chủ đề + `series-nav` trong bài, không nằm trong URL. Slug chủ đề: `odoo`, `python`, `git`, `linux`, `sql`, `ai`.
 
 ## Thêm chủ đề mới
 1. Copy `blog/odoo/index.html` → `blog/<chủ-đề>/index.html` (và bản `en/`), đổi tiêu đề, mô tả, breadcrumb, canonical/hreflang, JSON-LD, thẻ bài.
@@ -21,9 +21,21 @@ Mỗi bài cần 1–2 ví dụ "lỗi hay gặp" (khung `.callout`, có căn c�
 ## Vai trò (agent)
 Xem `.claude/agents/`: `blog-writer`, `translator`, `seo-reviewer`, `frontend-qa`.
 
+## Thứ tự và nhóm trên hub `/blog/`
+Hub chia 4 nhóm theo lộ trình học (thẻ nằm trong `<section class="blog-group">`; bộ lọc `initPostFilter` tự ẩn nhóm rỗng). Nhãn cấp độ ghi ở `post-num` (Người mới / Trung cấp).
+1. **Định hướng cho sinh viên và người mới**: `career` (Lộ trình & nghề IT), `first-job` (Kỹ năng đi làm đầu tiên): sắp ra mắt.
+2. **Nền tảng kỹ thuật**: `python`, `linux`, `git` (đã xuất bản); `sql`, `web-api` (Web & API cơ bản), `algorithms` (Giải thuật & cấu trúc dữ liệu): sắp ra mắt.
+3. **Kỹ thuật nâng cao**: `clean-code`, `ai-coding`, `devops`: sắp ra mắt.
+4. **Odoo: lập trình ERP**: `odoo` (đã xuất bản).
+Khi xuất bản một chủ đề mới, đổi thẻ `post-card soon` thành link `<slug>/index.html` ở **cả hai** hub (VI và EN) và thêm vào JSON-LD `hasPart`.
+
 ## Chủ đề đã có
 - `odoo`: series "Lập trình Odoo 20 từ A–Z" (14 bài) — xem `docs/odoo-series-handoff.md`.
-- `python`: series "Python thực chiến cho lập trình viên Odoo" (14 bài, đang viết) — xem `docs/python-series-handoff.md`.
+- `python`: series "Python thực chiến cho lập trình viên Odoo" (14 bài) — xem `docs/python-series-handoff.md`.
+- `git`: series "Git thực chiến cho nhóm phát triển" (12 bài) — xem `docs/git-series-handoff.md`.
+- `linux`: hub "Linux & Shell" (chưa có bài; tạo bằng `docs/tools/blog/make_hub_linux.py`).
+- Sơ đồ SVG: kiểm bằng `python3 -I docs/tools/blog/svgcheck.py` (chữ không được cắt khung / tràn viewBox).
+- Ảnh bìa bài: `publish.py` tự tạo `image/cover/<slug>.webp` (960×504, ~17 KB) từ ảnh OG và chèn `<figure class="post-cover">` sau tiêu đề bài (cần `pip install pillow`). Với bài cũ chạy `python3 -I docs/tools/blog/covers.py`. Ảnh OG PNG vẫn giữ nguyên cho mạng xã hội.
 - Công cụ dựng bài dùng chung: `docs/tools/blog/` (mô tả trong handoff của từng series).
 
 ## Quy tắc link (chạy được cả `file://` và Vercel)
