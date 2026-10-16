@@ -538,6 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPostFilter();
     initViews();
     initBackToTop();
+    initSeriesNav();
 });
 
 // ── ABOUT BADGE (mobile tap to show text) ──
@@ -797,4 +798,54 @@ function initBackToTop() {
     };
     addEventListener('scroll', toggle, { passive: true });
     toggle();
+}
+
+// ── MENU SERIES BÊN TRÁI (bài blog) ── [vi file, vi title, en file, en title]; thêm bài mới: thêm 1 dòng
+const SERIES_ODOO = [
+    ["odoo-la-gi.html", "Odoo là gì? Kiến thức nền tảng cho lập trình viên", "what-is-odoo.html", "What is Odoo? Fundamentals for developers"],
+    ["cai-dat-odoo-20.html", "Cài đặt môi trường Odoo 20", "install-odoo-20.html", "Setting up an Odoo 20 environment"],
+    ["tao-module-odoo-dau-tien.html", "Tạo module đầu tiên & manifest", "first-odoo-module.html", "Your first module & manifest"],
+    ["model-field-orm-odoo.html", "Model, fields & ORM", "models-fields-orm.html", "Models, fields & the ORM"],
+    ["phan-quyen-odoo-access-rights-record-rules.html", "Security: access rights & record rules", "odoo-access-rights-record-rules.html", "Security: access rights & record rules"],
+    ["view-action-menu-odoo.html", "Views & actions", "odoo-views-actions-menus.html", "Views & actions"],
+    ["many2one-one2many-many2many-odoo.html", "Quan hệ giữa các model", "odoo-many2one-one2many-many2many.html", "Relations between models"],
+    ["computed-field-onchange-constraint-odoo.html", "Computed fields, onchange & constraints", "odoo-computed-field-onchange-constraints.html", "Computed fields, onchange & constraints"],
+    ["ke-thua-model-view-odoo.html", "Kế thừa trong Odoo", "odoo-inheritance-model-view.html", "Inheritance in Odoo"],
+    ["bao-cao-pdf-qweb-odoo.html", "Báo cáo PDF với QWeb", "odoo-qweb-pdf-reports.html", "PDF reports with QWeb"],
+    ["owl-framework-odoo-co-ban.html", "OWL framework cơ bản", "odoo-owl-framework-basics.html", "OWL framework basics"],
+    ["web-controller-json-2-api-odoo.html", "Web controllers & JSON-2 API", "odoo-web-controllers-json-2-api.html", "Web controllers & JSON-2 API"],
+    ["unit-test-odoo-transactioncase.html", "Unit test trong Odoo", "odoo-unit-tests-transactioncase.html", "Unit testing in Odoo"],
+    ["trien-khai-odoo-production-nginx-workers.html", "Triển khai Odoo production", "odoo-production-deployment-nginx-workers.html", "Deploying Odoo to production"]
+];
+function initSeriesNav() {
+    const layout = document.querySelector('.post-layout');
+    const file = location.pathname.split('/').pop();
+    const cur = SERIES_ODOO.findIndex(r => r[0] === file || r[2] === file);
+    if (!layout || cur < 0) return;
+    const en = SERIES_ODOO[cur][2] === file, n = SERIES_ODOO.length;
+    const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    let read = [];
+    try { read = JSON.parse(localStorage.getItem('va-read-odoo')) || []; } catch {}
+    const done = new Set([...read, cur]);
+    try { localStorage.setItem('va-read-odoo', JSON.stringify([...done])); } catch {}
+    const name = en ? 'Odoo 20 Development A–Z' : 'Lập trình Odoo 20 từ A–Z';
+    const side = document.createElement('details');
+    side.className = 'series-side';
+    side.innerHTML = `<summary><span class="ss-label">SERIES</span><b class="ss-name">${name}</b>
+        <span class="ss-count">${en ? 'Part' : 'Bài'} ${cur + 1}/${n}</span>
+        <span class="ss-bar"><i style="width:${(cur + 1) / n * 100}%"></i></span></summary>
+        <ol>${SERIES_ODOO.map((r, i) => `<li><a href="${r[en ? 2 : 0]}"${i === cur ? ' aria-current="page"' : ''}>
+            <span class="ss-n">${String(i + 1).padStart(2, '0')}</span><span class="ss-t">${esc(r[en ? 3 : 1])}</span>${i !== cur && done.has(i) ? '<span class="ss-ok" aria-label="' + (en ? 'read' : 'đã đọc') + '">✓</span>' : ''}</a></li>`).join('')}</ol>
+        <a class="ss-all" href="index.html">${en ? 'All posts in this series' : 'Tất cả bài trong series'} →</a>`;
+    layout.prepend(side);
+    layout.classList.add('has-series');
+    const toc = layout.querySelector('.toc'), wide = matchMedia('(min-width: 1000px)'), huge = matchMedia('(min-width: 1600px)');
+    const sync = () => {
+        side.open = wide.matches;
+        if (toc) toc.open = huge.matches;
+        side.scrollTop = side.querySelector('[aria-current]').offsetTop - side.clientHeight / 3;
+    };
+    sync();
+    wide.addEventListener('change', sync);
+    huge.addEventListener('change', sync);
 }

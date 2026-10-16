@@ -35,3 +35,9 @@ Xem `.claude/agents/`: `blog-writer`, `translator`, `seo-reviewer`, `frontend-qa
 - Cần Upstash Redis nối vào project Vercel (env `UPSTASH_REDIS_REST_URL/TOKEN` hoặc `KV_REST_API_URL/TOKEN`). Thiếu env hoặc `file://` → số lượt xem tự ẩn.
 - Mỗi bài thêm vào `.post-meta`: `<b data-views="<slug>" data-view-hit>–</b>`; thẻ ở trang danh sách dùng `<b data-views="<slug>">` (không có `data-view-hit`).
 - `<slug>` **dùng chung VI/EN** (lấy theo tên file bản VI, vd `odoo-la-gi` cho cả `what-is-odoo.html`). Logic ở `initViews()` trong `script.js`.
+
+## Menu series bên trái (bài viết)
+- Dựng bằng JS: `initSeriesNav()` và mảng `SERIES_ODOO` ở cuối `script.js` (không cần sửa HTML từng bài). Mỗi dòng: `[file VI, tiêu đề VI, file EN, tiêu đề EN]`, đúng thứ tự bài.
+- **Thêm bài mới vào series = thêm 1 dòng vào `SERIES_ODOO`** (và thêm thẻ ở `blog/odoo/index.html`, `en/blog/odoo/index.html`).
+- Bố cục (`blog.css`): ≥1600px 3 cột (menu · nội dung · mục lục), 1000–1599px 2 cột (mục lục gập), <1000px menu thành thanh gập có thanh tiến độ. Trạng thái "đã đọc" lưu ở `localStorage` (`va-read-odoo`), dùng chung VI/EN.
+- Bài phải có `.post-layout` (article + aside mục lục) như các bài hiện có thì menu mới hiện.

@@ -577,9 +577,44 @@ a.post-card:hover {
 
 /* ── MÀN LỚN: bài viết rộng hơn, đọc thoải mái ── */
 @media (min-width: 1400px) {
-    .post-layout { grid-template-columns: minmax(0, 1fr) 300px; gap: 4rem; }
-    .post-layout .prose { max-width: 900px; font-size: 17px; }
+    .post-layout:not(.has-series) { grid-template-columns: minmax(0, 1fr) 300px; gap: 4rem; }
+    .post-layout:not(.has-series) .prose { max-width: 900px; font-size: 17px; }
 }
+
+/* ── MENU SERIES BÊN TRÁI ── */
+.series-side { order: -2; border: 1px solid var(--border-light); border-radius: 12px; background: var(--bg-card); font-size: 13.5px; }
+.series-side summary { position: relative; display: grid; gap: 2px; padding: 14px 16px 12px; cursor: pointer; list-style: none; }
+.series-side summary::-webkit-details-marker { display: none; }
+.ss-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--blue-500); }
+.ss-name { font-size: 15px; line-height: 1.35; }
+.ss-count { font-size: 12.5px; color: var(--text-muted); }
+.ss-bar { display: block; height: 4px; margin-top: 8px; border-radius: 4px; background: var(--border-light); overflow: hidden; }
+.ss-bar i { display: block; height: 100%; background: var(--blue-500); border-radius: 4px; }
+.series-side ol { list-style: none; padding: 0 8px 4px; margin: 0; max-height: 60vh; overflow: auto; }
+.series-side li a { display: flex; gap: 10px; align-items: baseline; padding: 7px 8px; border-radius: 8px; border-left: 3px solid transparent; color: var(--text-secondary); text-decoration: none; line-height: 1.4; }
+.series-side li a:hover { background: var(--gray-50); color: var(--text-primary); }
+.series-side li a[aria-current] { background: var(--blue-50); border-left-color: var(--blue-500); color: var(--text-primary); font-weight: 700; }
+.ss-n { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-muted); }
+.ss-t { flex: 1; }
+.ss-ok { color: var(--green-600, #3B6D11); font-weight: 700; }
+.ss-all { display: block; padding: 8px 16px 14px; font-size: 13px; font-weight: 600; color: var(--blue-500); text-decoration: none; }
+.ss-all:hover { text-decoration: underline; }
+
+@media (min-width: 1000px) {
+    .post-layout.has-series > article { grid-area: main; }
+    .post-layout.has-series > aside { grid-area: toc; order: 0; }
+    .post-layout.has-series > .series-side { grid-area: side; }
+    .post-layout.has-series { grid-template-columns: 260px minmax(0, 1fr); grid-template-areas: "side toc" "side main"; gap: 1.5rem 2.5rem; }
+    .post-layout.has-series > .toc, .post-layout.has-series > aside .toc { position: static; }
+    .series-side { position: sticky; top: 84px; max-height: calc(100vh - 104px); overflow: auto; }
+    .series-side summary { pointer-events: none; }
+    .series-side ol { max-height: none; overflow: visible; }
+}
+@media (min-width: 1600px) {
+    .post-layout.has-series { grid-template-columns: 260px minmax(0, 740px) 280px; grid-template-areas: "side main toc"; gap: 2.5rem; }
+    .post-layout.has-series > aside .toc { position: sticky; }
+}
+
 
 .post-search { font: inherit; font-size: 15px; width: min(100%, 380px); margin-bottom: 1.25rem; padding: 10px 14px; color: var(--text-primary); background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; }
 .post-search:focus { outline: 2px solid var(--blue-100); border-color: var(--blue-500); }
@@ -596,3 +631,7 @@ a.post-card:hover {
 .code-title {
     overflow-wrap: anywhere;
 }
+
+.series-side summary::after { content: '▾'; position: absolute; right: 16px; top: 14px; color: var(--text-muted); transition: transform .2s; }
+.series-side[open] summary::after { transform: rotate(180deg); }
+@media (min-width: 1000px) { .series-side summary::after { display: none; } }
