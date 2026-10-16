@@ -7,14 +7,8 @@
 - Tham khảo **danh mục chủ đề** của W3Schools (`/python/`) và LearnPython.org; **không chép/dịch** câu chữ của hai site đó. Nguồn kiểm chứng: tài liệu Python 3.12 (docs.python.org/3.12) và Odoo 20 docs.
 
 ## 2. Công cụ dựng bài
-Thư mục `docs/tools/blog/` (không được deploy nhờ `.vercelignore`): `publish.py`, `check.py`, `wc.py`, `prose.py`, `lib.py`, `topics.py`, `og.html`, `make_hub.py`. Mỗi bài cần thư mục chứa `vi_body.html`, `en_body.html` (có chỗ `{FAQ}`) và `spec.py` (`SPEC` với `n`, `topic='python'`, `prev`, `next`, `vi`, `en`). Chạy từ gốc repo:
+Bài được dựng thủ công theo checklist chung trong `docs/odoo-series-handoff.md` §5. Bộ script sinh bài trước đây (`docs/tools/blog/`) đã được gỡ khỏi repo ngày 16/10/2026.
 
-```
-python3 -I docs/tools/blog/publish.py <thư-mục>/spec.py            # dựng + nối hub + sitemap + OG + bảng này
-python3 -I docs/tools/blog/publish.py <thư-mục>/spec.py rebuild    # chỉ dựng lại file bài
-TOPIC=python python3 -I docs/tools/blog/check.py <slug-vi> <slug-en> <file-nguồn.txt>...
-TOPIC=python python3 -I docs/tools/blog/wc.py                      # đếm số từ (không tính code)
-```
 
 ## 3. Tiến độ (14 bài)
 | # | VI (slug) | EN (slug) | Trạng thái |
@@ -37,4 +31,4 @@ TOPIC=python python3 -I docs/tools/blog/wc.py                      # đếm số
 ## 4. Quy tắc
 - Chuẩn nội dung như series Odoo: bản VI ≥ ~1.500 từ (không tính code), có bảng "trong Odoo bạn gặp ở đâu", ví dụ **chạy thật** kèm kết quả, khung "Lỗi hay gặp" (thông báo lỗi lấy từ chạy thật hoặc tài liệu), "Tổng kết", FAQ, nguồn.
 - Mọi đoạn code Python trong bài phải chạy được trên Python 3.12+ và in đúng kết quả ghi trong bài (kiểm tra bằng `python3` trong thư mục tạm).
-- Không dùng logo Python/Odoo làm ảnh; cuối bài có dòng miễn trừ nhãn hiệu (tự thêm bởi `publish.py`).
+- Không dùng logo Python/Odoo làm ảnh; cuối bài có dòng miễn trừ nhãn hiệu.

@@ -16,7 +16,7 @@ Biến môi trường chỉ có hiệu lực ở bản deploy mới: Deployments
 
 ## 4. Kiểm tra sau deploy
 1. Mở `https://vinc-academy.vercel.app/api/views?slug=odoo-la-gi` → phải ra JSON dạng `{"odoo-la-gi":0}`. Ra `{}` nghĩa là thiếu biến môi trường (quay lại bước 2–3).
-2. Mở bài `/blog/odoo/odoo-la-gi.html` → dòng meta hiện "1 lượt xem"; tải lại trong 1 giờ không tăng thêm.
+2. Mở bài `/blog/odoo/odoo-la-gi.html` → dòng meta hiện số lượt xem đã tăng 1. Tải lại hoặc mở thêm tab trong 30 phút **không** tăng (cùng trình duyệt); mở bằng tab ẩn danh hoặc trình duyệt khác thì tăng thêm 1.
 3. Mở bản EN `/en/blog/odoo/what-is-odoo.html` → cùng bộ đếm (VI và EN cộng chung).
 4. Mở `/blog/odoo/` → thẻ bài hiện số; bấm **Đọc nhiều nhất** để kiểm tra sắp xếp.
 

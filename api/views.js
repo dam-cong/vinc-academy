@@ -1,8 +1,9 @@
-// Đếm lượt xem bài blog: GET ?slug=a,b (đọc) · POST ?slug=a (tăng 1, chống trùng 1 giờ/IP)
+// Đếm lượt xem bài blog: GET ?slug=a,b (đọc) · POST ?slug=a&v=<visitor id> (tăng 1, chống trùng 30 phút/trình duyệt, không có v thì theo IP)
 const crypto = require('crypto');
 const URL_ = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
 const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 const SLUG = /^[a-z0-9-]{1,80}$/;
+const VID = /^[a-z0-9]{8,40}$/;
 
 const redis = async cmds => {
     const r = await fetch(`${URL_}/pipeline`, {
@@ -23,9 +24,10 @@ module.exports = async (req, res) => {
         const keys = slugs.map(s => `views:${s}`);
         let counts;
         if (req.method === 'POST') {
-            const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-            const seen = `seen:${crypto.createHash('sha256').update(ip + slugs[0]).digest('hex').slice(0, 24)}`;
-            const [ok] = await redis([['SET', seen, '1', 'NX', 'EX', '3600']]);
+            const v = String(req.query.v || '');
+            const who = VID.test(v) ? v : String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+            const seen = `seen:${crypto.createHash('sha256').update(who + slugs[0]).digest('hex').slice(0, 24)}`;
+            const [ok] = await redis([['SET', seen, '1', 'NX', 'EX', '1800']]);
             counts = await redis([[ok === 'OK' ? 'INCR' : 'GET', keys[0]]]);
         } else {
             res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');

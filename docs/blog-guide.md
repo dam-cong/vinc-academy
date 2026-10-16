@@ -33,10 +33,10 @@ Khi xuất bản một chủ đề mới, đổi thẻ `post-card soon` thành l
 - `odoo`: series "Lập trình Odoo 20 từ A–Z" (14 bài) — xem `docs/odoo-series-handoff.md`.
 - `python`: series "Python thực chiến cho lập trình viên Odoo" (14 bài) — xem `docs/python-series-handoff.md`.
 - `git`: series "Git thực chiến cho nhóm phát triển" (12 bài) — xem `docs/git-series-handoff.md`.
-- `linux`: hub "Linux & Shell" (chưa có bài; tạo bằng `docs/tools/blog/make_hub_linux.py`).
-- Sơ đồ SVG: kiểm bằng `python3 -I docs/tools/blog/svgcheck.py` (chữ không được cắt khung / tràn viewBox).
-- Ảnh bìa bài: `publish.py` tự tạo `image/cover/<slug>.webp` (960×504, ~17 KB) từ ảnh OG và chèn `<figure class="post-cover">` sau tiêu đề bài (cần `pip install pillow`). Với bài cũ chạy `python3 -I docs/tools/blog/covers.py`. Ảnh OG PNG vẫn giữ nguyên cho mạng xã hội.
-- Công cụ dựng bài dùng chung: `docs/tools/blog/` (mô tả trong handoff của từng series).
+- `linux`: hub "Linux & Shell" (chưa có bài).
+- Sơ đồ SVG: chữ không được cắt khung / tràn viewBox; kiểm tra bằng mắt ở 1366px và 390px.
+- Ảnh bìa bài: `image/cover/<slug>.webp` (960×504, ~17 KB, thu nhỏ từ ảnh OG) chèn bằng `<figure class="post-cover">` ngay sau `</header>` của bài. Ảnh OG PNG vẫn giữ cho mạng xã hội.
+- Bài mới dựng thủ công theo checklist trong `docs/odoo-series-handoff.md` §5.
 
 ## Quy tắc link (chạy được cả `file://` và Vercel)
 - Link nội bộ luôn **tương đối** và **ghi rõ `index.html`** (VD `odoo/index.html`, `../index.html`), không dùng `/` đầu dòng hay link thư mục `odoo/` — `file://` không tự mở `index.html`.
@@ -48,7 +48,7 @@ Khi xuất bản một chủ đề mới, đổi thẻ `post-card soon` thành l
 - Giữ URL `.html`; không bật `cleanUrls` (khớp canonical/sitemap).
 
 ## Lượt xem bài
-- `api/views.js` (Vercel Function, không phụ thuộc gói) đếm bằng Upstash Redis: `GET /api/views?slug=a,b` đọc, `POST ?slug=a` tăng 1 (trùng IP+slug trong 1 giờ không tăng).
+- `api/views.js` (Vercel Function, không phụ thuộc gói) đếm bằng Upstash Redis: `GET /api/views?slug=a,b` đọc, `POST ?slug=a&v=<id>` tăng 1, **mỗi trình duyệt 1 lượt / bài / 30 phút**. `<id>` là mã ẩn danh tạo ngẫu nhiên, lưu ở `localStorage` (`va-vid`), nên nhiều người chung mạng vẫn được đếm riêng; trình duyệt chặn `localStorage` thì server chống trùng theo IP.
 - Cần Upstash Redis nối vào project Vercel (env `UPSTASH_REDIS_REST_URL/TOKEN` hoặc `KV_REST_API_URL/TOKEN`). Thiếu env hoặc `file://` → số lượt xem tự ẩn.
 - Mỗi bài thêm vào `.post-meta`: `<b data-views="<slug>" data-view-hit>–</b>`; thẻ ở trang danh sách dùng `<b data-views="<slug>">` (không có `data-view-hit`).
 - `<slug>` **dùng chung VI/EN** (lấy theo tên file bản VI, vd `odoo-la-gi` cho cả `what-is-odoo.html`). Logic ở `initViews()` trong `script.js`.

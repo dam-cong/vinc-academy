@@ -759,12 +759,17 @@ async function initViews() {
     if (!els.length || !/^https?:$/.test(location.protocol)) return els.forEach(e => e.parentElement.hidden = true);
     const hit = document.querySelector('[data-view-hit]')?.dataset.views;
     const key = 'va-viewed-' + hit;
-    let post = false;
-    try { post = hit && Date.now() - (+localStorage.getItem(key) || 0) > 864e5; } catch {}
+    // 1 lượt / trình duyệt / bài / 30 phút; mã trình duyệt ẩn danh để người chung mạng được đếm riêng
+    let post = !!hit, vid = '';
+    try {
+        post = hit && Date.now() - (+localStorage.getItem(key) || 0) > 18e5;
+        vid = localStorage.getItem('va-vid') || '';
+        if (!vid) localStorage.setItem('va-vid', vid = (crypto.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)).replace(/-/g, ''));
+    } catch {}
     const slugs = [...new Set(els.map(e => e.dataset.views))].join(',');
     let data = {};
     try {
-        const r = await fetch('/api/views?slug=' + (post ? hit : slugs), { method: post ? 'POST' : 'GET' });
+        const r = await fetch('/api/views?slug=' + (post ? hit + (vid ? '&v=' + vid : '') : slugs), { method: post ? 'POST' : 'GET' });
         data = await r.json();
         if (post) try { localStorage.setItem(key, Date.now()); } catch {}
     } catch {}
