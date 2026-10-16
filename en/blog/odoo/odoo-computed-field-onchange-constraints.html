@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Computed Fields, Onchange and Constraints</title>
+    <meta name="description" content="Odoo 20 guide: computed fields with @api.depends, inverse, store=True, onchange, SQL constraints with models.Constraint and @api.constrains." />
+    <meta name="keywords" content="odoo computed field, api.depends, odoo onchange, odoo constrains, odoo sql constraint, odoo inverse" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Computed Fields, Onchange and Constraints" />
+    <meta property="og:description" content="Compute values automatically, assist data entry and protect data with computed fields, onchange and constraints in Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-computed-field-onchange-constraints.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Computed Fields, Onchange and Constraints",
+                "description": "Compute values automatically, assist data entry and protect data with computed fields, onchange and constraints in Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-computed-field-onchange-constraints.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Computed fields, onchange & constraints"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How does a computed field differ from a normal field?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A normal field is saved in and loaded from its table directly. A computed field gets its value from a method when needed, and by default is not stored, so you cannot search on it unless you set store=True or define search."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I set store=True on a computed field?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When you need to search or group by it. But whenever a dependency changes the value is recalculated for every affected record, which can be heavy with large data, so weigh the cost."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why should business logic not live in an onchange?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "An onchange fires only in the form view. Records created from code, imports or the API never trigger it, so business rules belong in computed fields or constraints."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I use SQL or Python constraints?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "SQL constraints are more efficient and preferred whenever the rule can be expressed in SQL. Use Python constraints with @api.constrains when the check is more complex."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"computed-field-onchange-constraint-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Computed fields, onchange & constraints</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 8 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Computed Fields, Onchange and Constraints</h1>
+            <p class="post-lead">The first business logic in a module is usually automatic calculation and blocking bad data. This guide explains computed fields, onchange and constraints, when to use each, and why business rules do not belong in an onchange.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A computed field derives its value from other fields through the method named in <code>compute=</code>, with dependencies declared by <code>@api.depends</code>. An onchange only assists data entry on a form, while constraints guarantee that data stays valid.</strong> Prefer computed fields over onchanges, and reach for SQL constraints (<code>models.Constraint</code>) first, Python constraints (<code>@api.constrains</code>) when the check is more complex.</p>
+                </div>
+
+                <h2 id="computed-field">Computed fields: values derived from other fields</h2>
+                <p>Until now each field was written directly to its table and fetched directly from it. A <strong>computed field</strong> works differently: nothing is read from the database; the value is produced on demand by a function defined on the model. To make one, set the <code>compute</code> attribute to a method name; that method must set a value on <strong>each record contained in <code>self</code></strong>. By convention the method is private, with a name starting with <code>_</code>.</p>
+                <p>For example: the number of sessions and the average price per hour of a course (added to <code>models/course.py</code>):</p>
+<pre><code>session_count = fields.Integer(compute='_compute_session_count')
+price_per_hour = fields.Float(compute='_compute_price_per_hour')
+
+@api.depends('session_ids')
+def _compute_session_count(self):
+    for course in self:
+        course.session_count = len(course.session_ids)
+
+@api.depends('price', 'duration_hours')
+def _compute_price_per_hour(self):
+    for course in self:
+        course.price_per_hour = (
+            course.price / course.duration_hours if course.duration_hours else 0.0)</code></pre>
+                <p>Place these lines in the <code>VincCourse</code> class, and import <code>api</code> next to <code>fields</code> and <code>models</code> in the file header.</p>
+                <ul>
+                    <li><code>@api.depends(...)</code> lists the fields the result relies on. The ORM uses that list to recompute the field whenever one of them changes.</li>
+                    <li><code>self</code> is a recordset, so always loop with <code>for record in self</code>.</li>
+                    <li>A path through a relational field works as a dependency too, e.g. <code>@api.depends('session_ids.session_date')</code>, for Many2one, One2many and Many2many alike.</li>
+                    <li>For multi-record sets, <code>mapped()</code> collects values neatly, e.g. <code>max(course.session_ids.mapped('session_date'))</code>.</li>
+                </ul>
+
+                <h3 id="inverse">The inverse method: making a computed field editable</h3>
+                <p>A computed field is read-only by default, since users are not expected to set it. If you want to type into it as well, add an <code>inverse</code> parameter. The compute method fills the computed field; the inverse method does the opposite and writes back to the fields it depends on. Mind the timing: the inverse runs when the record is <em>saved</em>, whereas compute runs each time a dependency changes.</p>
+<pre><code>duration_days = fields.Float(compute='_compute_duration_days',
+                             inverse='_inverse_duration_days')
+
+@api.depends('duration_hours')
+def _compute_duration_days(self):
+    for course in self:
+        course.duration_days = course.duration_hours / 8.0
+
+def _inverse_duration_days(self):
+    for course in self:
+        course.duration_hours = int(course.duration_days * 8)</code></pre>
+
+                <h3 id="store-compute">Should a computed field be stored?</h3>
+                <p>By default a computed field is <strong>not stored</strong>, so you cannot search on it unless you also provide a <code>search</code> method. Setting <code>store=True</code> persists it in the table, which enables searching and grouping. The price is computing load: whenever a dependency changes, every affected record is recalculated, which can become heavy with millions of rows. Computed fields can also be chained, one relying on another; the ORM keeps the order right but sometimes at a performance cost. Estimate that cost before deciding.</p>
+
+                <h3 id="related-field">Related fields: values taken from a field on another model</h3>
+                <p>A <strong>related field</strong> is a special computed field: it reaches a nested field by following a path of relational fields and taking a field from the final model, using the <code>related</code> parameter:</p>
+<pre><code>instructor_name = fields.Char(related='instructor_id.partner_id.name')
+instructor_email = fields.Char(related='instructor_id.email', store=True,
+                               depends=['instructor_id'])</code></pre>
+                <ul>
+                    <li>By default a related field is <strong>not stored</strong>, not copied on duplicate, read-only and evaluated in superuser mode. Add <code>store=True</code> to persist it like a computed field; it then recomputes itself when its dependencies change.</li>
+                    <li>Many attributes are inherited from the source field unless you redeclare them: <code>string</code>, <code>help</code>, <code>groups</code>, <code>digits</code>, <code>size</code>, <code>translate</code>, <code>selection</code>, <code>comodel_name</code>, <code>domain</code>, <code>context</code>; <code>required</code> carries over only if every field in the chain is required.</li>
+                    <li>To control exactly when it recomputes, use <code>depends=['instructor_id']</code>: the field refreshes only when <code>instructor_id</code> changes, not when the name on the other side changes.</li>
+                    <li>Many2many and One2many fields cannot be strung together in a related field's path. Another model's One2many or Many2many is reachable only via a Many2one defined on the current model.</li>
+                </ul>
+
+                <h3 id="advanced-compute">Advanced features of computed fields</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Feature</th><th>Usage</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>compute_sudo</code></td><td>Set on the field</td><td><code>True</code> by default: the field is recomputed with superuser rights</td></tr>
+                            <tr><td><code>search</code></td><td><code>search='_search_xxx'</code></td><td>Names a method returning a domain, which makes an unstored computed field searchable without <code>store=True</code></td></tr>
+                            <tr><td><code>@api.depends_context</code></td><td><code>@api.depends_context('company')</code></td><td>Declares dependence on context keys for an unstored compute method. Values must be hashable; <code>company</code>, <code>uid</code> and <code>active_test</code> get special support</td></tr>
+                            <tr><td>Several fields, one method</td><td>Same <code>compute='_apply_discount'</code></td><td>One method assigns many fields; sharing one <code>inverse</code> is discouraged because fields using it are "protected" while the inverse runs</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="onchange">Onchange: helping with data entry on forms</h2>
+                <p>The onchange mechanism lets the interface refresh a form as soon as the user fills in a field, <em>while nothing is persisted yet</em>. You write a method decorated with <code>@api.onchange('field_name')</code>; inside it, <code>self</code> stands for the record on the form, and whatever you assign to <code>self</code> shows up on screen. No loop is needed, because onchange only runs in a form, so <code>self</code> is always one record.</p>
+<pre><code>@api.onchange('is_published')
+def _onchange_is_published(self):
+    if self.is_published and not self.start_date:
+        self.start_date = fields.Date.today()</code></pre>
+                <p>The user stays free to edit the value afterwards. An onchange can also return a warning that does not stop the user, shaped like <code>{'warning': {'title': ..., 'message': ...}}</code>. Two limits to remember: <code>@onchange</code> accepts plain field names only, not dotted paths such as <code>partner_id.tz</code>; and you should not call <code>create</code>, <code>write</code> or <code>unlink</code> on the temporary record an onchange receives, since the outcome is undefined. Just assign field values.</p>
+
+                <h3 id="onchange-limits">Onchange limits to know about</h3>
+                <ul>
+                    <li>An onchange method runs on a temporary record holding the values currently in the form; anything you assign to its fields is pushed to the browser for you.</li>
+                    <li>An onchange cannot rewrite the very <strong>One2many or Many2many field</strong> it is attached to; this restriction comes from the web client.</li>
+                    <li>To set several values at once you can call <code>self.update({...})</code> instead of assigning field by field.</li>
+                    <li>A warning can be returned as a small notification with <code>'type': 'notification'</code>; otherwise it appears in a dialog.</li>
+                </ul>
+
+                <h3 id="compute-vs-onchange">Computed field or onchange?</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>Computed field</th><th>Onchange</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>When it runs</td><td>Always, including when records are created from code</td><td>Only inside the form view</td></tr>
+                            <tr><td>Business logic</td><td>Suitable</td><td><strong>Not suitable</strong>: creating a record from code never triggers it</td></tr>
+                            <tr><td>Debugging</td><td>Easy: one method sets the field</td><td>Hard: several onchanges may set the same field</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Odoo's guidance: when both would work, pick the computed field. And resist making forms "too clever": too much automation leaves users confused.</p>
+
+                <h2 id="constraints">Constraints: keeping data valid</h2>
+                <p>How do you stop users from entering bad data, such as a negative price? Odoo offers two ways to check invariants automatically: SQL constraints and Python constraints.</p>
+
+                <h3 id="sql-constraint">SQL constraints</h3>
+                <p>Declare them with a <code>models.Constraint</code> attribute holding an SQL expression and an error message. This is the efficient way to keep data consistent:</p>
+<pre><code>_check_price = models.Constraint(
+    'CHECK(price &gt;= 0)',
+    "The course price cannot be negative.",
+)
+_name_uniq = models.Constraint(
+    'UNIQUE(name)',
+    "This course name already exists.",
+)</code></pre>
+
+                <h3 id="python-constraint">Python constraints</h3>
+                <p>For more elaborate checks, use a method decorated with <code>@api.constrains</code>, naming the fields involved. It runs automatically when any of them is edited, and must raise <code>ValidationError</code> if the condition fails:</p>
+<pre><code>from odoo.exceptions import ValidationError
+
+@api.constrains('duration_hours')
+def _check_duration(self):
+    for course in self:
+        if course.duration_hours &lt;= 0:
+            raise ValidationError("Teaching hours must be greater than 0.")</code></pre>
+                <p>When comparing floats, always use <code>float_compare()</code> and <code>float_is_zero()</code> from <code>odoo.tools.float_utils</code> instead of comparing directly. If performance matters, choose SQL constraints over Python ones.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when learning</p>
+                    <ul>
+                        <li><strong>Putting a business rule in an onchange.</strong> You try it on the form and it works, yet records created from code, imports or the API skip the rule entirely. An onchange fires only in the form view; business rules belong in computed fields or constraints.</li>
+                        <li><strong>Adding an SQL constraint and the module upgrade fails.</strong> If existing data already breaks the rule (say a course priced 0 when you add <code>CHECK(price &gt; 0)</code>), the constraint cannot be applied and the log reports it could not add the constraint. Fix or delete the offending rows, then upgrade again.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Computed field: <code>compute</code> + <code>@api.depends</code>; set a value on every record in <code>self</code>.</li>
+                    <li><code>inverse</code> makes a computed field editable; <code>store=True</code> enables searching at the price of computation.</li>
+                    <li>A related field is a computed field walking a relation chain; unstored and read-only by default.</li>
+                    <li>An onchange merely assists data entry on forms; business rules belong in computed fields and constraints.</li>
+                    <li>Prefer SQL constraints; use Python for more complex checks.</li>
+                </ul>
+                <p>The next part shows how to extend another module's models and views: inheritance.</p>
+
+                <div class="cta-box">
+                    <h3>Want to write clean, correct Odoo business logic?</h3>
+                    <p>The Odoo Developer Foundation course practices computed fields, onchanges and constraints on realistic problems, with code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does a computed field differ from a normal field?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A normal field is saved in and loaded from its table directly. A computed field gets its value from a method when needed, and by default is not stored, so you cannot search on it unless you set store=True or define search.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I set store=True on a computed field?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When you need to search or group by it. But whenever a dependency changes the value is recalculated for every affected record, which can be heavy with large data, so weigh the cost.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why should business logic not live in an onchange?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">An onchange fires only in the form view. Records created from code, imports or the API never trigger it, so business rules belong in computed fields or constraints.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I use SQL or Python constraints?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">SQL constraints are more efficient and preferred whenever the rule can be expressed in SQL. Use Python constraints with @api.constrains when the check is more complex.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/08_compute_onchange.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Computed fields and onchanges</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/10_constraints.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Constraints</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-computed-field-onchange-constraints.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-computed-field-onchange-constraints.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-many2one-one2many-many2many.html"><small>← Previous</small>Odoo 20 Many2one, One2many, Many2many</a>
+                    <span class="next"><small>Next · Coming soon</small>Inheritance in Odoo</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#computed-field">Computed fields: values derived from other fields</a></li>
+                        <li><a href="#onchange">Onchange: helping with data entry on forms</a></li>
+                        <li><a href="#constraints">Constraints: keeping data valid</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

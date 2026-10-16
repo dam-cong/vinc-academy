@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Security: Access Rights and Record Rules</title>
+    <meta name="description" content="Odoo 20 security guide: write ir.model.access.csv, understand access rights, record rules, global vs group rules and field-level access." />
+    <meta name="keywords" content="odoo access rights, odoo record rules, ir.model.access.csv, odoo 20 security, ir.rule" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Security: Access Rights and Record Rules" />
+    <meta property="og:description" content="Grant model-level permissions with ir.model.access.csv and restrict records with record rules in Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-access-rights-record-rules.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Security: Access Rights and Record Rules",
+                "description": "Grant model-level permissions with ir.model.access.csv and restrict records with record rules in Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-access-rights-record-rules.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Security: access rights & record rules"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Why do users see no data in my new model?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When a model has no access right, Odoo treats it as closed to everyone and logs a no access rules warning. Create ir.model.access.csv, declare it in the manifest data list and upgrade the module."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between access rights and record rules?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Access rights grant a group permissions on the whole model. Record rules add per-record conditions, for example only showing published records. Rules are checked after access rights."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do global rules differ from group rules?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Global rules intersect, so all must be satisfied and they always narrow access. Group rules unify, so satisfying any one is enough; they can widen access but never beyond global rules."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I write the model_id:id column in ir.model.access.csv?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Write model_ followed by the model _name with dots replaced by underscores. For example the model vinc.course becomes model_vinc_course."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"phan-quyen-odoo-access-rights-record-rules.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Security: access rights & record rules</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 5 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Security: Access Rights and Record Rules</h1>
+            <p class="post-lead">Security decides who can see and edit which data. This guide shows how to declare access rights for a model, write per-record rules and avoid the security mistakes that the Odoo documentation warns about.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo uses two data-driven security mechanisms, both tied to user groups: access rights (permissions per model) and record rules (conditions per record).</strong> A model without access rights is closed to everyone. You declare rights in <code>security/ir.model.access.csv</code> and must list that file in the manifest's <code>data</code>; record rules are written in XML with a <code>domain_force</code>.</p>
+                </div>
+
+                <h2 id="csv-data">CSV data files: the foundation of security</h2>
+                <p>Odoo leans heavily on data: next to the Python code, a module also ships records that get loaded when you install it. A CSV file is one carrier for such records, and security settings are delivered the same way. Three conventions to remember:</p>
+                <ul>
+                    <li>By convention, security-related data files live in the <code>security/</code> folder, while views and actions go in <code>views/</code>.</li>
+                    <li>Each file has to be listed under <code>data</code> in <code>__manifest__.py</code>, and its content is read only during an install or upgrade of the module.</li>
+                    <li>The manifest order is the loading order, so a file that points to records from another file must be listed after it.</li>
+                </ul>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 354" role="img" aria-labelledby="dg-en-05">
+                        <title id="dg-en-05">Layers of access checking in Odoo</title>
+                        <rect class="dg-box" x="20" y="8" width="600" height="56" rx="12" />
+                        <text class="dg-title" x="36" y="36">A user belongs to one or more groups (res.groups)</text>
+                        <path class="dg-arrow" d="M320 66 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="88" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="116">1. Access rights (ir.model.access)</text>
+                        <text class="dg-text" x="36" y="142">Per model; additive across groups; no right = blocked</text>
+                        <path class="dg-arrow" d="M320 160 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="182" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="210">2. Record rules (ir.rule)</text>
+                        <text class="dg-text" x="36" y="236">Per record; allow by default; global rules intersect, group rules unify</text>
+                        <path class="dg-arrow" d="M320 254 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="276" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="304">3. Field access (the groups attribute)</text>
+                        <text class="dg-text" x="36" y="330">Field dropped from views; direct read/write raises an access error</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the Odoo 20 security documentation.</figcaption>
+                </figure>
+
+                <h2 id="user-groups">User groups (res.groups)</h2>
+                <p>Both mechanisms reach people through groups: someone may sit in as many groups as needed, and every security rule is attached to a group, never to an individual. The <code>res.groups</code> model has these main attributes:</p>
+                <ul>
+                    <li><code>name</code>: a readable label spelling out the group's role or purpose.</li>
+                    <li><code>category_id</code>: the module category, which ties a group to an application (a family of related business models) and presents its groups as a one-of-many choice on the user form.</li>
+                    <li><code>implied_ids</code>: other groups assigned together with this one. This is a handy pseudo-inheritance: an implied group can still be taken away from one user while the implying group stays.</li>
+                    <li><code>comment</code>: extra notes about the group.</li>
+                </ul>
+
+                <h2 id="access-rights">Access rights: permissions per model</h2>
+                <p>An access right lets a group of users perform operations on a whole model. If no access right matches a user's operation (through their groups), the user has no access. That is why the model from part 4, which had no rights yet, made Odoo log a <em>no access rules</em> warning and block all access.</p>
+                <p>An access right is a row in the table behind <code>ir.model.access</code>, and its main attributes are: <code>model_id</code> (the model it governs), <code>group_id</code> (the group receiving the rights; empty means every user, including portal and public users) and four permissions <code>perm_read</code>, <code>perm_write</code>, <code>perm_create</code>, <code>perm_unlink</code>. All four are off by default. Rights stack up: what a user may do is everything granted by any group they belong to.</p>
+                <p>Create <code>security/ir.model.access.csv</code> for the <code>vinc.course</code> model:</p>
+                <p class="code-title">custom-addons/vinc_course/security/ir.model.access.csv</p>
+<pre><code>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vinc_course_user,vinc.course user,model_vinc_course,base.group_user,1,1,1,1</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Column</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>id</code></td><td>External identifier of the access right, should be unique in the module</td></tr>
+                            <tr><td><code>name</code></td><td>Descriptive name</td></tr>
+                            <tr><td><code>model_id:id</code></td><td>The model, written as <code>model_</code> + the <code>_name</code> with dots turned into underscores: <code>vinc.course</code> becomes <code>model_vinc_course</code></td></tr>
+                            <tr><td><code>group_id:id</code></td><td>Group receiving the rights; <code>base.group_user</code> is the internal-user group</td></tr>
+                            <tr><td><code>perm_*</code></td><td>1 grants, 0 denies. <code>unlink</code> means "delete"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>To make the group read-only, change the last four numbers to <code>1,0,0,0</code>. Then declare the file in the manifest, before any view files:</p>
+<pre><code>'data': [
+    'security/ir.model.access.csv',
+],</code></pre>
+                <p>Run <code>-u vinc_course</code> again: the <em>no access rules</em> warning disappears.</p>
+
+                <h2 id="record-rules">Record rules: conditions per record</h2>
+                <p>An access right answers "may I act on this model at all?". A <strong>record rule</strong> then asks "on which records?". Rules are checked record by record, after access rights, and are records of the <code>ir.rule</code> model. One important difference: rules <em>allow by default</em>. When the model-level right is granted and no rule targets the user, nothing stops them.</p>
+                <p>Main attributes of <code>ir.rule</code>:</p>
+                <ul>
+                    <li><code>model_id</code>: the model affected.</li>
+                    <li><code>groups</code>: the groups the rule applies to; empty makes it a global rule.</li>
+                    <li><code>domain_force</code>: the condition, written as a domain. A record matching the domain is allowed, otherwise forbidden. You can use <code>user</code>, <code>time</code>, <code>company_id</code> and <code>company_ids</code> in it.</li>
+                    <li><code>perm_*</code>: which operations the rule applies to. For rules, an unselected operation is simply not checked; all are selected by default (the opposite of access rights).</li>
+                </ul>
+                <p>Example: internal users see only published courses.</p>
+                <p class="code-title">custom-addons/vinc_course/security/vinc_course_rules.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="vinc_course_rule_published" model="ir.rule"&gt;
+        &lt;field name="name"&gt;Vinc Course: only published for users&lt;/field&gt;
+        &lt;field name="model_id" ref="model_vinc_course"/&gt;
+        &lt;field name="groups" eval="[(4, ref('base.group_user'))]"/&gt;
+        &lt;field name="domain_force"&gt;[('is_published', '=', True)]&lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <p>Add <code>'security/vinc_course_rules.xml'</code> to <code>data</code> right after the CSV file, then upgrade the module.</p>
+
+                <h3 id="global-group">Global and group rules compared</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>Global rule (no group)</th><th>Group rule</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>When several rules apply</td><td>They intersect: all must be satisfied</td><td>They unify: satisfying any one is enough</td></tr>
+                            <tr><td>Adding a new rule</td><td>Always narrows access further</td><td>Can widen access, but never beyond global rules</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="field-access">Restricting access per field</h2>
+                <p>A field can carry a <code>groups</code> attribute (external ids joined by commas in one string). Users outside every listed group do not see the field in views, and reading or writing it directly raises an access error. Example: <code>price = fields.Float(groups='base.group_system')</code>.</p>
+
+                <h2 id="security-pitfalls">Security mistakes to avoid</h2>
+                <p>Odoo's documentation highlights a few developer mistakes worth learning about from day one:</p>
+                <ul>
+                    <li><strong>Trusting the arguments of public methods.</strong> Any method not starting with <code>_</code> can be called over RPC with arbitrary parameters, while access rights are only checked during CRUD operations. A method doing something sensitive must verify conditions itself, and internal work belongs in a method starting with <code>_</code>.</li>
+                    <li><strong>Bypassing the ORM with raw SQL.</strong> That also bypasses translations, the active flag and access rights. Prefer <code>search</code>; if SQL is unavoidable, always pass parameters separately and never concatenate strings.</li>
+                    <li><strong>Using <code>t-raw</code> to display user-entered content</strong> in templates, a common route to XSS.</li>
+                </ul>
+
+                <h3 id="security-details">Three safe patterns to memorize</h3>
+                <ul>
+                    <li><strong>Never splice strings into SQL.</strong> Do not use string addition or <code>%</code> formatting to put variables into a query. Pass parameters separately so the database library (psycopg2) decides how to format them; Odoo also has an <code>SQL</code> class that builds queries from templates and handles inputs. From worst to best: concatenation, separate parameters, the <code>SQL</code> class, and ideally the ORM with <code>search([...])</code>.</li>
+                    <li><strong>Use the <code>Domain</code> class rather than gluing domain lists together.</strong> A domain is a serializable list, so if a user controls part of unnormalized input they can inject extra conditions (such as <code>['|', ('id', '&gt;', 0)]</code> to see every record). Use <code>Domain(...)</code> and the <code>&amp;=</code> operator to combine safely.</li>
+                    <li><strong>Do not use <code>t-raw</code> with user-entered content.</strong> Data integrity is hard to guarantee between computation and the browser DOM, and a <code>t-raw</code> judged harmless now may become dangerous after a later fix or refactoring. Prefer <code>t-out</code>, which escapes HTML automatically.</li>
+                </ul>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when learning security</p>
+                    <ul>
+                        <li><strong>The model exists, but regular users see nothing.</strong> Check the startup log for a <em>no access rules</em> warning. According to the documentation, a model without access rights is treated as closed to everyone. Create <code>ir.model.access.csv</code>, add it to <code>data</code> in the manifest and upgrade with <code>-u</code>.</li>
+                        <li><strong>Creating several global rules on one model.</strong> Global rules intersect, so two non-overlapping rules leave no record that satisfies both, and every user loses access. The documentation calls this risky; prefer group rules where possible.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Access order: groups, access rights (per model), record rules (per record), field-level access.</li>
+                    <li>A model without access rights is closed to everyone; declare them in <code>ir.model.access.csv</code> and list the file in <code>data</code>.</li>
+                    <li>Record rules allow by default; avoid stacking several global rules.</li>
+                    <li>Public methods, raw SQL and <code>t-raw</code> are three common sources of security bugs.</li>
+                </ul>
+                <p>The next part builds your first interface: menus, actions and views.</p>
+
+                <div class="cta-box">
+                    <h3>Want to build modules with proper access control?</h3>
+                    <p>The Odoo Developer Foundation course includes hands-on security practice and code review, so you avoid common security mistakes from the start.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why do users see no data in my new model?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When a model has no access right, Odoo treats it as closed to everyone and logs a no access rules warning. Create ir.model.access.csv, declare it in the manifest data list and upgrade the module.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between access rights and record rules?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Access rights grant a group permissions on the whole model. Record rules add per-record conditions, for example only showing published records. Rules are checked after access rights.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do global rules differ from group rules?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Global rules intersect, so all must be satisfied and they always narrow access. Group rules unify, so satisfying any one is enough; they can widen access but never beyond global rules.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I write the model_id:id column in ir.model.access.csv?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Write model_ followed by the model _name with dots replaced by underscores. For example the model vinc.course becomes model_vinc_course.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/04_securityintro.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Security, a brief introduction</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/security.html" target="_blank" rel="noopener">Odoo 20 – Security in Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/data.html" target="_blank" rel="noopener">Odoo 20 – Data files</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-access-rights-record-rules.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-access-rights-record-rules.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="models-fields-orm.html"><small>← Previous</small>Odoo 20 Models, Fields and ORM</a>
+                    <span class="next"><small>Next · Coming soon</small>Views &amp; actions</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#csv-data">CSV data files: the foundation of security</a></li>
+                        <li><a href="#user-groups">User groups (res.groups)</a></li>
+                        <li><a href="#access-rights">Access rights: permissions per model</a></li>
+                        <li><a href="#record-rules">Record rules: conditions per record</a></li>
+                        <li><a href="#field-access">Restricting access per field</a></li>
+                        <li><a href="#security-pitfalls">Security mistakes to avoid</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kế thừa trong Odoo 20: _inherit, xpath, ghi đè method</title>
+    <meta name="description" content="Hướng dẫn kế thừa Odoo 20: ghi đè create với super, @api.ondelete, _inherit mở rộng model, _inherits, view inheritance với inherit_id và xpath." />
+    <meta name="keywords" content="odoo _inherit, odoo kế thừa model, odoo xpath, odoo inherit_id, odoo view inheritance, odoo api.ondelete" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Kế thừa trong Odoo 20: _inherit, xpath, ghi đè method" />
+    <meta property="og:description" content="Mở rộng model và view của module khác trong Odoo 20 bằng _inherit, xpath và ghi đè method đúng cách." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/ke-thua-model-view-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Kế thừa trong Odoo 20: _inherit, xpath, ghi đè method",
+                "description": "Mở rộng model và view của module khác trong Odoo 20 bằng _inherit, xpath và ghi đè method đúng cách.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/ke-thua-model-view-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Kế thừa trong Odoo"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "_inherit khác _inherits thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "_inherit kế thừa theo kiểu Python để mở rộng model có sẵn hoặc tạo model mới có cùng cấu trúc. _inherits là ủy quyền: model mới hiện các field của model cha nhưng giá trị vẫn được lưu ở bản ghi cha được liên kết."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi ghi đè create hoặc write có bắt buộc gọi super không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Gần như luôn luôn. Không gọi super làm gãy luồng xử lý của Odoo, và giá trị trả về phải nhất quán với method gốc, ví dụ method gốc trả về dict thì bản ghi đè cũng phải trả về dict."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao nên dùng @api.ondelete thay vì ghi đè unlink?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Method gắn @api.ondelete được gọi trong lúc xóa nhưng tương thích với việc gỡ cài đặt module. Ghi đè unlink mà ném lỗi có thể khiến việc gỡ module để lại bảng hoặc bản ghi mồ côi."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "xpath trong view kế thừa chọn phần tử như thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Thuộc tính expr là biểu thức XPath phải chọn đúng một phần tử của view cha, nếu không khớp hoặc khớp nhiều hơn một sẽ báo lỗi. Thuộc tính position (inside, before, after, replace, attributes) cho biết thao tác thực hiện."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-inheritance-model-view.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Kế thừa trong Odoo</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 9 · Series Lập trình Odoo 20</span>
+            <h1>Kế thừa trong Odoo 20: _inherit, xpath và ghi đè method</h1>
+            <p class="post-lead">Odoo được thiết kế để mở rộng mà không sửa mã gốc. Bài này hướng dẫn ba tầng kế thừa: ghi đè method CRUD, mở rộng model bằng _inherit và chỉnh view có sẵn bằng xpath, kèm các lỗi thường gặp.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo cho phép mở rộng model và view của module khác mà không sửa mã gốc.</strong> Với model, dùng <code>_inherit</code> để thêm field, method hoặc ghi đè method; với view, tạo view con trỏ tới view gốc qua <code>inherit_id</code> và dùng <code>xpath</code> để thêm, thay hoặc xóa phần tử. Khi ghi đè method, luôn gọi <code>super()</code>.</p>
+                </div>
+
+                <h2 id="vi-sao-ke-thua">Vì sao kế thừa quan trọng trong Odoo?</h2>
+                <p>Sức mạnh của Odoo nằm ở tính module hóa: mỗi module phục vụ một nhu cầu nghiệp vụ, nhưng các module có thể tương tác và mở rộng nhau. Cách làm đúng là <em>thêm lớp lên trên</em> thay vì sửa trực tiếp file của module gốc, vì sửa trực tiếp sẽ mất khi nâng cấp phiên bản. Bài này có ba tầng kế thừa, từ đơn giản tới đặc thù Odoo: kế thừa Python (ghi đè method), kế thừa model và kế thừa view.</p>
+
+                <h2 id="python-inheritance">Kế thừa Python: ghi đè các method CRUD</h2>
+                <p>Model của bạn kế thừa <code>models.Model</code> theo kiểu kế thừa class thông thường của Python, nên có sẵn <code>create()</code>, <code>read()</code>, <code>write()</code> và <code>unlink()</code>. Các method này (và mọi method của <code>Model</code>) có thể được ghi đè để thêm logic nghiệp vụ. Khung ghi đè <code>create()</code> thường như sau:</p>
+<pre><code>@api.model
+def create(self, vals_list):
+    # xử lý logic, chỉnh vals_list nếu cần ...
+    courses = super().create(vals_list)
+    # ... rồi trả về kết quả của method gốc
+    return courses</code></pre>
+                <ul>
+                    <li><code>@api.model</code> cần cho <code>create()</code> vì nội dung của <code>self</code> không có ý nghĩa lúc tạo mới; các method CRUD khác không cần.</li>
+                    <li><strong>Luôn gọi <code>super()</code></strong> để không làm gãy luồng xử lý. Chỉ một vài trường hợp rất đặc biệt mới không gọi.</li>
+                    <li>Giá trị trả về phải nhất quán với method gốc: nếu method gốc trả về <code>dict</code>, bản ghi đè cũng phải trả về <code>dict</code>.</li>
+                </ul>
+                <h3 id="ondelete">Chặn xóa bằng @api.ondelete</h3>
+                <p>Với <code>unlink()</code>, hiếm khi bạn nên ghi đè trực tiếp. Hãy viết method riêng gắn <code>@api.ondelete(at_uninstall=False)</code>: method được gọi trong lúc xóa, và tránh được rắc rối khi gỡ cài đặt module (nếu ghi đè <code>unlink</code> mà ném lỗi, việc gỡ module có thể để lại bảng hoặc bản ghi mồ côi). Ví dụ không cho xóa khóa học đã xuất bản:</p>
+<pre><code>from odoo.exceptions import UserError
+
+@api.ondelete(at_uninstall=False)
+def _unlink_except_published(self):
+    if any(course.is_published for course in self):
+        raise UserError("Không thể xóa khóa học đã xuất bản.")</code></pre>
+                <p>Lưu ý <code>self</code> có thể là recordset nhiều bản ghi nên cần kiểm tra bằng <code>any(...)</code> hoặc vòng lặp.</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 250" role="img" aria-labelledby="dg-vi-09">
+                        <title id="dg-vi-09">Sơ đồ ba cách kế thừa model và chuỗi kế thừa view</title>
+                        <rect class="dg-box" x="20" y="10" width="290" height="230" rx="12" />
+                        <text class="dg-title" x="36" y="38">Kế thừa model</text>
+                        <text class="dg-text" x="36" y="64">_inherit = 'res.users'</text><text class="dg-text" x="36" y="84">→ mở rộng tại chỗ</text>
+                        <text class="dg-text" x="36" y="120">_name = 'x' + _inherit = 'y'</text><text class="dg-text" x="36" y="140">→ model mới sao chép cấu trúc</text>
+                        <text class="dg-text" x="36" y="176">_inherits = {'a.model': 'a_id'}</text><text class="dg-text" x="36" y="196">→ ủy quyền: hiện field của cha,</text><text class="dg-text" x="36" y="216">giá trị lưu ở bản ghi cha</text>
+                        <rect class="dg-box" x="340" y="10" width="280" height="70" rx="12" />
+                        <text class="dg-title" x="356" y="38">View gốc</text>
+                        <text class="dg-text" x="356" y="64">base.view_users_form</text>
+                        <path class="dg-arrow" d="M480 130 v-44 m-6 8 l6 -8 l6 8" /><text class="dg-text" x="494" y="112">inherit_id</text>
+                        <rect class="dg-accent" x="340" y="130" width="280" height="110" rx="12" />
+                        <text class="dg-title" x="356" y="158">View con</text>
+                        <text class="dg-text" x="356" y="186">xpath expr="//notebook"</text><text class="dg-text" x="356" y="206">position="inside"</text><text class="dg-text" x="356" y="226">thêm tab "Khóa học"</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu Odoo 20.</figcaption>
+                </figure>
+
+                <h2 id="model-inheritance">Kế thừa model: thêm vào model có sẵn</h2>
+                <p>Odoo có hai cơ chế kế thừa model. Cơ chế thứ nhất, phổ biến nhất, cho phép một module thay đổi model do module khác định nghĩa bằng cách: thêm field, ghi đè định nghĩa field, thêm ràng buộc, thêm method hoặc ghi đè method sẵn có. Cơ chế thứ hai là <em>ủy quyền</em> (delegation), mỗi bản ghi liên kết với một bản ghi của model cha và truy cập trong suốt các field của nó.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cách khai báo</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_inherit = 'res.users'</code> (không có <code>_name</code>)</td><td>Mở rộng trực tiếp model sẵn có (in-place)</td></tr>
+                            <tr><td><code>_name = 'x'</code> kèm <code>_inherit = 'y'</code></td><td>Tạo model mới <code>x</code> kế thừa cấu trúc từ <code>y</code></td></tr>
+                            <tr><td><code>_inherits = {'a.model': 'a_id'}</code></td><td>Ủy quyền: model mới hiện mọi field của model cha nhưng giá trị vẫn lưu ở bản ghi được liên kết</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Ví dụ: hiển thị danh sách khóa học đã xuất bản mà một người dùng đang phụ trách ngay trong form người dùng. Ta thêm một field vào <code>res.users</code>. Theo quy ước, mỗi model được kế thừa nằm trong file riêng:</p>
+                <p class="code-title">custom-addons/vinc_course/models/res_users.py</p>
+<pre><code>from odoo import fields, models
+
+
+class ResUsers(models.Model):
+    _inherit = 'res.users'
+
+    course_ids = fields.One2many(
+        'vinc.course', 'instructor_id', string="Khóa học phụ trách",
+        domain=[('is_published', '=', True)])</code></pre>
+                <p>Nhớ import file trong <code>models/__init__.py</code>. Field <code>domain</code> ở đây giới hạn danh sách chỉ gồm các khóa học đã xuất bản.</p>
+
+                <h2 id="view-inheritance">Kế thừa view với inherit_id và xpath</h2>
+                <p>Thay vì sửa view gốc tại chỗ, Odoo cho phép các view "mở rộng" chồng lên view gốc. View con tham chiếu cha qua <code>inherit_id</code>; thay vì một cấu trúc hoàn chỉnh, <code>arch</code> chứa các phần tử <code>xpath</code> chọn và thay đổi nội dung của view cha. Ví dụ thêm một tab vào form người dùng (<code>base.view_users_form</code>):</p>
+                <p class="code-title">custom-addons/vinc_course/views/res_users_views.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="res_users_view_form_inherit_vinc_course" model="ir.ui.view"&gt;
+        &lt;field name="name"&gt;res.users.form.inherit.vinc_course&lt;/field&gt;
+        &lt;field name="model"&gt;res.users&lt;/field&gt;
+        &lt;field name="inherit_id" ref="base.view_users_form"/&gt;
+        &lt;field name="arch" type="xml"&gt;
+            &lt;xpath expr="//notebook" position="inside"&gt;
+                &lt;page string="Khóa học"&gt;
+                    &lt;field name="course_ids"/&gt;
+                &lt;/page&gt;
+            &lt;/xpath&gt;
+        &lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <p>Thuộc tính <code>expr</code> là biểu thức XPath chọn đúng <strong>một</strong> phần tử trong view cha; <code>position</code> cho biết thao tác:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th><code>position</code></th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>inside</code></td><td>Thêm nội dung vào cuối phần tử được chọn</td></tr>
+                            <tr><td><code>before</code> / <code>after</code></td><td>Chèn nội dung như phần tử anh em ngay trước / sau phần tử được chọn</td></tr>
+                            <tr><td><code>replace</code></td><td>Thay phần tử được chọn bằng nội dung mới</td></tr>
+                            <tr><td><code>attributes</code></td><td>Sửa thuộc tính của phần tử được chọn</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Khi chỉ chọn một phần tử, bạn có thể viết gọn bằng cách đặt <code>position</code> ngay trên phần tử cần tìm, ví dụ <code>&lt;field name="description" position="after"&gt;...&lt;/field&gt;</code>; kết quả như dùng <code>xpath</code>. Cuối cùng, vì view này kế thừa view của module <code>base</code>, hãy chắc rằng module của bạn có <code>base</code> trong <code>depends</code> và file được khai báo trong <code>data</code>.</p>
+
+                <h2 id="vi-du-position">Ví dụ cho từng giá trị position</h2>
+<pre><code>&lt;!-- thêm field sau field name --&gt;
+&lt;xpath expr="//field[@name='name']" position="after"&gt;
+    &lt;field name="level"/&gt;
+&lt;/xpath&gt;
+
+&lt;!-- chèn trước một phần tử --&gt;
+&lt;xpath expr="//field[@name='price']" position="before"&gt;
+    &lt;field name="duration_hours"/&gt;
+&lt;/xpath&gt;
+
+&lt;!-- đổi thuộc tính của phần tử --&gt;
+&lt;xpath expr="//field[@name='name']" position="attributes"&gt;
+    &lt;attribute name="string"&gt;Tên khóa&lt;/attribute&gt;
+&lt;/xpath&gt;
+
+&lt;!-- thay phần tử bằng nội dung mới --&gt;
+&lt;xpath expr="//field[@name='description']" position="replace"&gt;
+    &lt;field name="description" placeholder="Mô tả ngắn..."/&gt;
+&lt;/xpath&gt;</code></pre>
+                <p>Với <code>replace</code>, nếu trong nội dung mới có nút <code>$0</code> thì nó được thay bằng chính phần tử gốc, giúp bạn "bọc" phần tử cũ thay vì bỏ hẳn. Với <code>attributes</code>, các phần tử <code>&lt;attribute name="..."&gt;</code> trong thân <code>xpath</code> quy định thuộc tính cần đổi.</p>
+
+                <h2 id="luu-y-ke-thua">Một số lưu ý khi kế thừa model</h2>
+                <ul>
+                    <li><code>_inherit</code> nhận một tên model hoặc một danh sách. Nếu <strong>có</strong> <code>_name</code>, các giá trị trong <code>_inherit</code> là các model cha để kế thừa; nếu <strong>không có</strong> <code>_name</code>, đó là tên của <em>một</em> model được mở rộng tại chỗ.</li>
+                    <li>Kế thừa kiểu ủy quyền với <code>_inherits</code> mang tính "thành phần": model mới hiện mọi field của model cha nhưng không lưu field nào, giá trị vẫn nằm ở bản ghi liên kết. Nếu nhiều model cha có field trùng tên, field kế thừa sẽ ứng với model đứng sau cùng trong danh sách.</li>
+                    <li>Trong <code>@api.ondelete</code>, tham số <code>at_uninstall</code> hầu như luôn phải là <code>False</code> để việc gỡ module không kích hoạt các lỗi nghiệp vụ.</li>
+                    <li>Mỗi model được kế thừa nên nằm trong file riêng, đặt tên theo model (ví dụ <code>models/res_users.py</code>).</li>
+                </ul>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi kế thừa</p>
+                    <ul>
+                        <li><strong>Ghi đè <code>create</code>, <code>write</code>... mà quên <code>super()</code> hoặc trả giá trị sai kiểu.</strong> Không gọi <code>super()</code> làm gãy luồng xử lý của Odoo (field không được lưu, module khác không chạy được logic của chúng). Hãy luôn gọi <code>super()</code> và trả về dữ liệu cùng kiểu với method gốc.</li>
+                        <li><strong><code>xpath</code> không khớp phần tử nào hoặc khớp nhiều hơn một.</strong> Theo tài liệu, cả hai trường hợp đều gây lỗi khi nạp view. Hãy chọn biểu thức đủ cụ thể (ví dụ dùng <code>@name</code>) và kiểm tra lại với view gốc trong developer mode.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Ghi đè method CRUD: luôn gọi <code>super()</code> và trả giá trị cùng kiểu; dùng <code>@api.ondelete</code> thay cho ghi đè <code>unlink</code>.</li>
+                    <li><code>_inherit</code> mở rộng model, <code>_inherits</code> ủy quyền sang model cha.</li>
+                    <li>View con trỏ tới view gốc bằng <code>inherit_id</code> và chọn đúng một phần tử bằng <code>xpath</code>.</li>
+                    <li>Module của bạn phải có module gốc trong <code>depends</code>.</li>
+                </ul>
+                <p>Bài tiếp theo chuyển sang đầu ra: báo cáo PDF với QWeb.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn mở rộng module Odoo có sẵn mà không phá vỡ nâng cấp?</h3>
+                    <p>Khóa Odoo Advanced Developer đi sâu vào kế thừa model, view và các mẫu mở rộng an toàn, có review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-A">Xem khóa Odoo Advanced Developer</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>_inherit khác _inherits thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">_inherit kế thừa theo kiểu Python để mở rộng model có sẵn hoặc tạo model mới có cùng cấu trúc. _inherits là ủy quyền: model mới hiện các field của model cha nhưng giá trị vẫn được lưu ở bản ghi cha được liên kết.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi ghi đè create hoặc write có bắt buộc gọi super không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Gần như luôn luôn. Không gọi super làm gãy luồng xử lý của Odoo, và giá trị trả về phải nhất quán với method gốc, ví dụ method gốc trả về dict thì bản ghi đè cũng phải trả về dict.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao nên dùng @api.ondelete thay vì ghi đè unlink?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Method gắn @api.ondelete được gọi trong lúc xóa nhưng tương thích với việc gỡ cài đặt module. Ghi đè unlink mà ném lỗi có thể khiến việc gỡ module để lại bảng hoặc bản ghi mồ côi.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>xpath trong view kế thừa chọn phần tử như thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Thuộc tính expr là biểu thức XPath phải chọn đúng một phần tử của view cha, nếu không khớp hoặc khớp nhiều hơn một sẽ báo lỗi. Thuộc tính position (inside, before, after, replace, attributes) cho biết thao tác thực hiện.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/12_inheritance.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Inheritance</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (_inherit, _inherits, ondelete)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fke-thua-model-view-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fke-thua-model-view-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="computed-field-onchange-constraint-odoo.html"><small>← Bài trước</small>Computed field, onchange và constraint trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Báo cáo PDF với QWeb</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#vi-sao-ke-thua">Vì sao kế thừa quan trọng trong Odoo?</a></li>
+                        <li><a href="#python-inheritance">Kế thừa Python: ghi đè các method CRUD</a></li>
+                        <li><a href="#model-inheritance">Kế thừa model: thêm vào model có sẵn</a></li>
+                        <li><a href="#view-inheritance">Kế thừa view với inherit_id và xpath</a></li>
+                        <li><a href="#vi-du-position">Ví dụ cho từng giá trị position</a></li>
+                        <li><a href="#luu-y-ke-thua">Một số lưu ý khi kế thừa model</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

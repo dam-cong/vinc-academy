@@ -1,7 +1,7 @@
 /* ── BLOG / KIẾN THỨC ODOO ── dùng biến màu của styles.css */
 
 .blog-wrap {
-    max-width: 1100px;
+    max-width: var(--container);
     margin: 0 auto;
     padding: 2.5rem 2.5rem 4rem;
 }
@@ -228,7 +228,8 @@
     margin: 0 0 1.5rem;
 }
 
-.callout p:last-child {
+.callout p:last-child,
+.callout ul:last-child {
     margin-bottom: 0;
 }
 
@@ -435,7 +436,7 @@
 .post-grid {
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 14px;
     list-style: none;
 }
@@ -560,4 +561,38 @@ a.post-card:hover {
     .cta-box {
         padding: 1.25rem;
     }
+}
+
+.series-title {
+    font-size: 22px;
+    letter-spacing: -0.4px;
+    margin: 0 0 6px;
+}
+
+.series-desc {
+    color: var(--text-secondary);
+    margin: 0 0 1.2rem;
+    max-width: 760px;
+}
+
+/* ── MÀN LỚN: bài viết rộng hơn, đọc thoải mái ── */
+@media (min-width: 1400px) {
+    .post-layout { grid-template-columns: minmax(0, 1fr) 300px; gap: 4rem; }
+    .post-layout .prose { max-width: 900px; font-size: 17px; }
+}
+
+.post-search { font: inherit; font-size: 15px; width: min(100%, 380px); margin-bottom: 1.25rem; padding: 10px 14px; color: var(--text-primary); background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; }
+.post-search:focus { outline: 2px solid var(--blue-100); border-color: var(--blue-500); }
+.post-grid > li[hidden] { display: none; }
+
+.post-views { margin-top: auto; font-size: 12.5px; color: var(--text-muted); }
+.post-views[hidden] { display: none; }
+.post-sort { margin-bottom: 1.25rem; }
+
+.prose :not(pre) > code {
+    overflow-wrap: anywhere;
+}
+
+.code-title {
+    overflow-wrap: anywhere;
 }

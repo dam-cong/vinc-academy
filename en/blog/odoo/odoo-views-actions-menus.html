@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Views, Actions and Menus: List, Form, Search</title>
+    <meta name="description" content="Build the Odoo 20 interface: act_window actions, three-level menuitems, list, form and search views, filters, domains and --dev=xml." />
+    <meta name="keywords" content="odoo view, odoo action, odoo menuitem, odoo list view, odoo form view, odoo search view, odoo domain" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Views, Actions and Menus: List, Form, Search" />
+    <meta property="og:description" content="Build your Odoo 20 module interface with actions, menus and list, form, search views, plus domains and the --dev=xml tip." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-views-actions-menus.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Views, Actions and Menus: List, Form, Search",
+                "description": "Build your Odoo 20 module interface with actions, menus and list, form, search views, plus domains and the --dev=xml tip.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-views-actions-menus.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Views & actions"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How does the Menu, Action, View chain work?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A user clicks a menu, the menu opens an action, the action names a model and view modes such as list and form, and each mode is a view. The action is the bridge between menu and model."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does editing an XML file not change the screen?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Data files load only on install or upgrade, so re-run with -u. The browser also caches menus and views, so reload the page. You can use --dev=xml to avoid upgrading."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is a domain in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A domain expresses conditions for choosing certain records. Each condition is a (field, operator, value) triple, conditions are ANDed by default, and &, | and ! let you combine them explicitly."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does a search view differ from a list view?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A list view shows records as a table, while a search view displays no data and is used to filter and group the content of other views."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"view-action-menu-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Views & actions</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 6 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Views, Actions and Menus: List, Form, Search</h1>
+            <p class="post-lead">The Odoo interface is built from XML records. This guide shows how to connect menus, actions and views, design list, form and search views for the course model, and understand domains for filtering data.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo builds its interface from XML records in a Menu → Action → View chain.</strong> A menu opens an action (<code>ir.actions.act_window</code>), the action names a model and the available modes (<code>list,form</code>), and each mode is a view (<code>ir.ui.view</code>) whose root is <code>&lt;list&gt;</code>, <code>&lt;form&gt;</code> or <code>&lt;search&gt;</code>. The XML file must be listed in the manifest's <code>data</code>, and is reloaded only by upgrading with <code>-u</code>.</p>
+                </div>
+
+                <h2 id="menu-action-view">How menu, action and view chain together</h2>
+                <p>In part 5 we loaded data from CSV. When the data has a richer structure, such as the layout of a view, Odoo uses <strong>XML</strong> files. They sit next to the CSV files (interface-related ones go in <code>views/</code>), are declared in <code>data</code> the same way, and are also loaded one after another in manifest order.</p>
+                <p>Most of the Odoo interface comes from combining XML records in a familiar pattern:</p>
+                <ol>
+                    <li><strong>Menu</strong>: the entry users click.</li>
+                    <li><strong>Action</strong>: the bridge between a menu and a model, deciding which model opens and with which views.</li>
+                    <li><strong>View</strong>: how records are displayed (list, form, search…).</li>
+                </ol>
+                <div class="callout tip">
+                    <p class="callout-title">Practical tip</p>
+                    <p>For plain data that must load fast, prefer CSV because it loads quicker than XML. For interface definitions, XML is practically the only choice.</p>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 150" role="img" aria-labelledby="dg-en-06">
+                        <title id="dg-en-06">The Menu, Action, View and Model chain</title>
+                        <rect class="dg-box" x="10" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="26" y="48">Menu</text>
+                        <text class="dg-text" x="26" y="86">ir.ui.menu</text>
+                        <path class="dg-arrow" d="M142 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="170" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="186" y="48">Action</text>
+                        <text class="dg-text" x="186" y="86">ir.actions.act_window</text>
+                        <path class="dg-arrow" d="M302 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="330" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="346" y="48">View</text>
+                        <text class="dg-text" x="346" y="86">ir.ui.view</text>
+                        <path class="dg-arrow" d="M462 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="490" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="506" y="48">Model</text>
+                        <text class="dg-text" x="506" y="86">vinc.course</text>
+                        <text class="dg-text" x="20" y="136">The user clicks a menu → the action picks the model and view modes → a view displays the records</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the Odoo 20 documentation.</figcaption>
+                </figure>
+
+                <h2 id="action">Action: connecting a menu to a model</h2>
+                <p>An action can be triggered three ways: clicking a menu item, clicking a button inside a view (if the button is wired to an action), or as a contextual action on a record. This part uses only the first. Here is an action that opens <code>vinc.course</code> in list mode and in form mode:</p>
+                <p class="code-title">custom-addons/vinc_course/views/vinc_course_views.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="vinc_course_action" model="ir.actions.act_window"&gt;
+        &lt;field name="name"&gt;Courses&lt;/field&gt;
+        &lt;field name="res_model"&gt;vinc.course&lt;/field&gt;
+        &lt;field name="view_mode"&gt;list,form&lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <ul>
+                    <li><code>id</code>: an external id, a stable name other records can use instead of the numeric database id.</li>
+                    <li><code>model="ir.actions.act_window"</code>: the kind of action that opens a window showing records.</li>
+                    <li><code>res_model</code>: the model the action works on.</li>
+                    <li><code>view_mode</code>: the permitted view modes, comma-separated; the default is <code>list,form</code>.</li>
+                </ul>
+
+                <h3 id="action-kinds">Kinds of actions</h3>
+                <p>Every action has two mandatory attributes: <code>type</code> (the action category, deciding which fields apply and how it is interpreted) and <code>name</code> (a short description for users). Actions arrive in several forms, for instance as database records or as dictionaries returned by a button method.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Kind</th><th>Used to</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Window (<code>ir.actions.act_window</code>)</td><td>The most common kind: present a model through views</td></tr>
+                            <tr><td>URL (<code>ir.actions.act_url</code>)</td><td>Open a web address; <code>target</code> is <code>new</code> (default, a new window), <code>self</code> (replace current content) or <code>download</code></td></tr>
+                            <tr><td>Server (<code>ir.actions.server</code>)</td><td>Run automatically (for example through action rules) or manually from the contextual menu</td></tr>
+                            <tr><td>Report (<code>ir.actions.report</code>)</td><td>Print a report; see part 10</td></tr>
+                            <tr><td>Client (<code>ir.actions.client</code>)</td><td>An action handled entirely on the client, identified by a <code>tag</code></td></tr>
+                            <tr><td>Scheduled (<code>ir.cron</code>)</td><td>Runs by itself at a set frequency</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>An action can also be attached to a model's contextual menus with <code>binding_model_id</code>: <code>binding_type</code> is <code>action</code> (the default, the <em>Action</em> menu) or <code>report</code> (the <em>Print</em> menu), and <code>binding_view_types</code> defaults to <code>list,form</code>.</p>
+                <h3 id="act-window-view">Pinning specific views to an action</h3>
+                <p>For a window action, <code>view_mode</code> is a string of view types separated by commas, <strong>with no spaces</strong>. To use one particular view instead of the default, set <code>view_id</code>. When a model has several views and you want to control their order, prefer <code>ir.actions.act_window.view</code> records over <code>view_ids</code>:</p>
+<pre><code>&lt;record id="vinc_course_action_list" model="ir.actions.act_window.view"&gt;
+    &lt;field name="sequence" eval="1"/&gt;
+    &lt;field name="view_mode"&gt;list&lt;/field&gt;
+    &lt;field name="view_id" ref="vinc_course_view_list"/&gt;
+    &lt;field name="act_window_id" ref="vinc_course_action"/&gt;
+&lt;/record&gt;</code></pre>
+                <p>The server assembles the views list in this order: take each (id, type) pair from <code>view_ids</code> by <code>sequence</code>; add <code>view_id</code> if its type is not yet covered; then for every type still missing from <code>view_mode</code> add an entry with no id, letting the client fetch the default view. The first type in the list is the one opened first.</p>
+
+                <h2 id="menu">Menus: three levels</h2>
+                <p>A menu is a record of the <code>ir.ui.menu</code> model, but we use the short <code>&lt;menuitem&gt;</code> tag. A real menu tree has three tiers: the root entry (listed in the application switcher), a first-level entry (in the top bar) and the action entry that opens the records. The easiest approach is nesting them in XML:</p>
+                <p class="code-title">custom-addons/vinc_course/views/vinc_course_menus.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;menuitem id="vinc_course_menu_root" name="Vinc Course"&gt;
+        &lt;menuitem id="vinc_course_menu_main" name="Courses"&gt;
+            &lt;menuitem id="vinc_course_menu_action" action="vinc_course_action"/&gt;
+        &lt;/menuitem&gt;
+    &lt;/menuitem&gt;
+&lt;/odoo&gt;</code></pre>
+                <p>The third-level menu takes its label from the action's name. Declare both new files in the manifest, <strong>listing the view file that holds the action before the menu file</strong>, because the menu refers to the action:</p>
+<pre><code>'data': [
+    'security/ir.model.access.csv',
+    'views/vinc_course_views.xml',
+    'views/vinc_course_menus.xml',
+],</code></pre>
+                <p>Run <code>-u vinc_course</code>, reload the browser (the web client caches menus and views), and open the new menu. You can already create courses through the default view Odoo generates.</p>
+
+                <h2 id="views">Designing views: list, form, search</h2>
+                <p>Every view is stored as a row of <code>ir.ui.view</code>, usually kept in the same XML file as the action and menus. Each has a <code>name</code>, a <code>model</code> and an <code>arch</code> (the view's XML structure). Add the following records inside the <code>&lt;odoo&gt;</code> tag of <code>vinc_course_views.xml</code>:</p>
+
+                <h3 id="view-list">List view</h3>
+                <p>Shows records as a table. The root is <code>&lt;list&gt;</code> and every <code>field</code> becomes a column:</p>
+<pre><code>&lt;record id="vinc_course_view_list" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.list&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;list&gt;
+            &lt;field name="name"/&gt;
+            &lt;field name="level"/&gt;
+            &lt;field name="start_date"/&gt;
+            &lt;field name="duration_hours"/&gt;
+            &lt;field name="price"/&gt;
+            &lt;field name="is_published"/&gt;
+        &lt;/list&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="view-form">Form view</h3>
+                <p>This is where one record is created or edited. The root is <code>&lt;form&gt;</code>, laid out with <code>group</code> and <code>notebook</code>; plain HTML like <code>div</code> and <code>h1</code>, together with <code>class</code>, can refine the look:</p>
+<pre><code>&lt;record id="vinc_course_view_form" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.form&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;form&gt;
+            &lt;sheet&gt;
+                &lt;h1&gt;&lt;field name="name"/&gt;&lt;/h1&gt;
+                &lt;group&gt;
+                    &lt;group&gt;
+                        &lt;field name="level"/&gt;
+                        &lt;field name="start_date"/&gt;
+                    &lt;/group&gt;
+                    &lt;group&gt;
+                        &lt;field name="duration_hours"/&gt;
+                        &lt;field name="price"/&gt;
+                        &lt;field name="is_published"/&gt;
+                    &lt;/group&gt;
+                &lt;/group&gt;
+                &lt;notebook&gt;
+                    &lt;page string="Description"&gt;
+                        &lt;field name="description"/&gt;
+                    &lt;/page&gt;
+                &lt;/notebook&gt;
+            &lt;/sheet&gt;
+        &lt;/form&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="view-search">Search view</h3>
+                <p>Unlike list and form, a search view displays no data; it filters what other views show. The root is <code>&lt;search&gt;</code>. Each <code>field</code> adds a quick search box, while a <code>filter</code> is a switch for a predefined search and needs either a <code>domain</code> (adds a condition) or a <code>context</code> (with the <code>group_by</code> key to group the results):</p>
+<pre><code>&lt;record id="vinc_course_view_search" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.search&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;search&gt;
+            &lt;field name="name"/&gt;
+            &lt;field name="level"/&gt;
+            &lt;filter name="published" string="Published"
+                    domain="[('is_published', '=', True)]"/&gt;
+            &lt;filter name="group_level" string="By level"
+                    context="{'group_by': 'level'}"/&gt;
+        &lt;/search&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="domain">Domains: the language of filtering</h3>
+                <p>A domain chooses which rows of a model you want, using conditions. Every condition is written as (field name, operator, value). Conditions are combined with AND unless you say otherwise; to be explicit, use <code>&amp;</code> (and), <code>|</code> (or) and <code>!</code> (not), placed <strong>before</strong> the operands they combine:</p>
+<pre><code>[('level', '=', 'beginner'), ('price', '&gt;', 0)]
+
+['|', ('level', '=', 'beginner'), ('is_published', '=', True)]</code></pre>
+                <p>Inside XML you cannot type <code>&lt;</code> or <code>&amp;</code> directly. Write <code>&amp;lt;</code> and <code>&amp;amp;</code> instead, e.g. <code>domain="[('price', '&amp;lt;', 1000)]"</code>.</p>
+
+                <h3 id="kanban">What about kanban?</h3>
+                <p>Kanban is a board of cards: each record is a card, optionally grouped into columns to follow work progress. The root is <code>&lt;kanban&gt;</code>, and Odoo opens only the first ten columns, folding the rest until a user expands them. Building the card needs QWeb knowledge, so we leave it for later parts; to use it, add <code>kanban</code> to the action's <code>view_mode</code> once the matching view exists.</p>
+
+                <h2 id="dev-xml">Faster view editing with --dev=xml</h2>
+                <p>Restarting the server after every view tweak wastes time. Launch with <code>--dev=xml</code> and, after editing an XML file, simply reload the page to see the change.</p>
+<pre><code>python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -u vinc_course --dev=xml</code></pre>
+
+                <h2 id="active-field">A special field: active</h2>
+                <p>Odoo gives special meaning to certain field names. The best known is <code>active</code>: a record with <code>active=False</code> is automatically left out of every search, and to see it again you must search for inactive records explicitly. If you add this field, give it <code>default=True</code> so new records do not vanish.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when writing views</p>
+                    <ul>
+                        <li><strong>Copying a view and forgetting to change its <code>id</code>.</strong> Every view needs its own external id; when you copy and paste, always change the <code>id</code> (and preferably the <code>name</code>) so you do not overwrite the original.</li>
+                        <li><strong>Typing <code>&lt;</code> or <code>&amp;</code> straight into a <code>domain</code> in an XML file.</strong> XML forbids both characters in element content and attributes; replace them with <code>&amp;lt;</code> and <code>&amp;amp;</code>.</li>
+                        <li><strong>Editing the XML but the screen looks the same.</strong> Re-run with <code>-u</code> (or use <code>--dev=xml</code>) and reload the browser, because the web client caches menus and views.</li>
+                        <li><strong>The Create button is missing.</strong> If a user has read permission only, the button is not shown. Review <code>ir.model.access.csv</code> from part 5.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>The Odoo interface: a Menu opens an Action, the Action picks the Model and <code>view_mode</code>, each mode is a View.</li>
+                    <li>XML files must be declared in <code>data</code> in order (action before menu) and upgraded with <code>-u</code>.</li>
+                    <li>List, form and search are the three basic views; search uses <code>filter</code> with <code>domain</code> or <code>group_by</code>.</li>
+                    <li>A domain is a list of conditions; in XML remember to escape <code>&amp;lt;</code> and <code>&amp;amp;</code>.</li>
+                </ul>
+                <p>The next part connects models to each other with relational fields.</p>
+
+                <div class="cta-box">
+                    <h3>Want to design Odoo interfaces quickly and cleanly?</h3>
+                    <p>The Odoo Developer Foundation course teaches views, menus and actions on a complete module, with mentor review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does the Menu, Action, View chain work?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A user clicks a menu, the menu opens an action, the action names a model and view modes such as list and form, and each mode is a view. The action is the bridge between menu and model.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does editing an XML file not change the screen?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Data files load only on install or upgrade, so re-run with -u. The browser also caches menus and views, so reload the page. You can use --dev=xml to avoid upgrading.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is a domain in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A domain expresses conditions for choosing certain records. Each condition is a (field, operator, value) triple, conditions are ANDed by default, and &amp;, | and ! let you combine them explicitly.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does a search view differ from a list view?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A list view shows records as a table, while a search view displays no data and is used to filter and group the content of other views.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/05_firstui.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Finally, some UI to play with</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/06_basicviews.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Basic views</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/actions.html" target="_blank" rel="noopener">Odoo 20 – Actions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/user_interface/view_architectures.html" target="_blank" rel="noopener">Odoo 20 – View architectures</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-views-actions-menus.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-views-actions-menus.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-access-rights-record-rules.html"><small>← Previous</small>Odoo 20 Security: Access Rights and Record Rules</a>
+                    <span class="next"><small>Next · Coming soon</small>Relations between models</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#menu-action-view">How menu, action and view chain together</a></li>
+                        <li><a href="#action">Action: connecting a menu to a model</a></li>
+                        <li><a href="#menu">Menus: three levels</a></li>
+                        <li><a href="#views">Designing views: list, form, search</a></li>
+                        <li><a href="#dev-xml">Faster view editing with --dev=xml</a></li>
+                        <li><a href="#active-field">A special field: active</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

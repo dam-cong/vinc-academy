@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web controller và JSON-2 API trong Odoo 20 từ A–Z</title>
+    <meta name="description" content="Tạo endpoint bằng controller @route trong Odoo 20 và tích hợp bằng API JSON-2: auth, type, API key, bearer, transaction và lỗi thường gặp." />
+    <meta name="keywords" content="odoo controller, odoo http.route, odoo json-2 api, odoo api key, odoo bearer, odoo external api, odoo jsonrpc" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Web controller và JSON-2 API trong Odoo 20 từ A–Z" />
+    <meta property="og:description" content="Viết controller với @route, hiểu auth và type, rồi gọi model từ bên ngoài qua API JSON-2 an toàn trong Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/web-controller-json-2-api-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Web controller và JSON-2 API trong Odoo 20 từ A–Z",
+                "description": "Viết controller với @route, hiểu auth và type, rồi gọi model từ bên ngoài qua API JSON-2 an toàn trong Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/web-controller-json-2-api-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Web controllers & JSON-2 API"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa type http và jsonrpc trong @route?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Type quy định nơi đọc tham số yêu cầu và cách serialize phản hồi. Route type http mặc định bật bảo vệ CSRF, còn type jsonrpc (tên cũ là json đến Odoo 18) mặc định tắt."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "auth public, user, bearer và none khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "user bắt buộc đăng nhập; bearer xác thực bằng API key trong header Authorization; public cho phép chưa đăng nhập và chạy bằng user Public dùng chung; none luôn hoạt động kể cả khi chưa có database và chủ yếu dùng cho framework."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "API JSON-2 gọi như thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Gửi POST tới /json/2/<model>/<method> với header Authorization bearer kèm API key, Content-Type application/json và body JSON gồm ids, context cùng các tham số của method."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "API key tạo ở đâu và dùng được bao lâu?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Tạo trong phần tùy chọn người dùng, mục bảo mật tài khoản, bằng nút tạo key mới. Key chỉ hiện một lần và thời hạn tối đa là ba tháng, nên key dùng lâu phải được thay mới định kỳ."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-web-controllers-json-2-api.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Web controllers & JSON-2 API</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 12 · Series Lập trình Odoo 20</span>
+            <h1>Web controller và JSON-2 API trong Odoo 20</h1>
+            <p class="post-lead">Muốn Odoo nói chuyện với website, ứng dụng di động hay phần mềm khác thì cần endpoint. Bài này hướng dẫn viết controller với @route, và dùng API JSON-2 có sẵn với API key, quyền truy cập và transaction.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo có hai cách mở dữ liệu ra bên ngoài: tự viết controller với <code>@route</code>, hoặc dùng API JSON-2 có sẵn.</strong> Controller kế thừa <code>http.Controller</code>, mỗi route khai báo <code>auth</code> (<code>public</code>, <code>user</code>, <code>bearer</code>, <code>none</code>) và <code>type</code> (<code>http</code> hoặc <code>jsonrpc</code>). API JSON-2 nhận <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code> kèm API key trong header <code>Authorization: bearer</code>, và luôn tuân theo quyền truy cập của người dùng sở hữu key.</p>
+                </div>
+
+                <h2 id="controller">Web controller: tạo endpoint cho module</h2>
+                <p>Model có sự kế thừa riêng, còn controller có cơ chế mở rộng riêng vì lúc request tới, database và các module có thể chưa sẵn sàng (chưa tạo hay chưa chọn database). Controller được tạo bằng cách kế thừa <code>Controller</code>, và các route được khai báo bằng method gắn decorator <code>route()</code>.</p>
+                <p>Khung scaffold của bài 3 đã có thư mục <code>controllers/</code>. Tạo file <code>controllers/main.py</code> với endpoint trả về danh sách khóa học đã xuất bản dạng JSON:</p>
+                <p class="code-title">custom-addons/vinc_course/controllers/main.py</p>
+<pre><code>from odoo import http
+from odoo.http import request
+
+
+class VincCourseController(http.Controller):
+
+    @http.route('/vinc_course/courses', auth='public', type='http', methods=['GET'])
+    def courses(self, **kw):
+        courses = request.env['vinc.course'].sudo().search([('is_published', '=', True)])
+        data = [{'id': c.id, 'name': c.name, 'level': c.level} for c in courses]
+        return request.make_json_response(data)</code></pre>
+                <p>Thay dòng import trong <code>controllers/__init__.py</code> bằng <code>from . import main</code>, nâng cấp module rồi mở <code>http://localhost:8069/vinc_course/courses</code>. Một vài điểm cần hiểu:</p>
+                <ul>
+                    <li><code>request</code> là đối tượng yêu cầu hiện tại; <code>request.env</code> cho bạn môi trường ORM, <code>request.make_json_response()</code> serialize dữ liệu thành JSON và đặt <code>Content-Type</code> phù hợp, <code>request.render()</code> render một template QWeb.</li>
+                    <li>Với người dùng <code>public</code>, request chạy bằng user Public dùng chung. Ở bài 5 ta chỉ cấp quyền cho nhóm nội bộ, nên ví dụ dùng <code>sudo()</code> một cách có chủ đích, chỉ lọc bản ghi đã xuất bản và chỉ trả các field an toàn. Đừng dùng <code>sudo()</code> tràn lan.</li>
+                </ul>
+
+                <h3 id="route-options">Các tùy chọn của @route</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tham số</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>route</code></td><td>Đường dẫn mà method phục vụ; theo định dạng route của werkzeug</td></tr>
+                            <tr><td><code>type</code></td><td><code>'http'</code> hoặc <code>'jsonrpc'</code> (tên cũ <code>'json'</code> tới Odoo 18); quy định nơi đọc tham số và cách serialize phản hồi</td></tr>
+                            <tr><td><code>auth</code></td><td><code>'user'</code>: bắt buộc đăng nhập; <code>'bearer'</code>: xác thực bằng API key trong header <code>Authorization</code>; <code>'public'</code>: có thể chưa đăng nhập (dùng user Public); <code>'none'</code>: luôn hoạt động kể cả khi không có database, chủ yếu cho framework</td></tr>
+                            <tr><td><code>bearer_scope</code></td><td>Phạm vi của token; bắt buộc đặt khi <code>auth='bearer'</code> và không được đặt với các kiểu xác thực khác</td></tr>
+                            <tr><td><code>methods</code></td><td>Danh sách HTTP method được phép; không khai báo thì cho phép tất cả</td></tr>
+                            <tr><td><code>csrf</code></td><td>Bảo vệ CSRF; mặc định bật với <code>type='http'</code>, tắt với <code>type='jsonrpc'</code></td></tr>
+                            <tr><td><code>cors</code></td><td>Giá trị header <code>Access-Control-Allow-Origin</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="request-helpers">Đối tượng request và các hàm tiện ích</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hàm</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>request.get_http_params()</code></td><td>Gộp các cặp khóa-giá trị từ query string và form trong body (cả <code>application/x-www-form-urlencoded</code> lẫn <code>multipart/form-data</code>)</td></tr>
+                            <tr><td><code>request.make_response(data, headers, cookies, status)</code></td><td>Tạo phản hồi không phải HTML, hoặc HTML với header/cookie riêng. Nếu trả dữ liệu không phải HTML mà không dùng đối tượng phản hồi hoàn chỉnh, client sẽ không diễn giải đúng</td></tr>
+                            <tr><td><code>request.make_json_response(data, ...)</code></td><td>Serialize dữ liệu thành JSON và đặt <code>Content-Type</code> nếu bạn chưa đặt</td></tr>
+                            <tr><td><code>request.not_found()</code></td><td>Lối tắt cho phản hồi HTTP 404</td></tr>
+                            <tr><td><code>request.render(template, qcontext)</code></td><td>Render template QWeb một cách lười: việc render xảy ra ở cuối quá trình xử lý, nên có thể thay đổi template hoặc <code>qcontext</code> trước đó</td></tr>
+                            <tr><td><code>request.reroute(path)</code></td><td>Viết lại URL hiện tại, giống chuyển hướng nhẹ nhưng không trả mã 3xx cho trình duyệt</td></tr>
+                            <tr><td><code>request.update_env(user, context, su)</code></td><td>Đổi người dùng, context hoặc chế độ superuser của môi trường request</td></tr>
+                            <tr><td><code>request.csrf_token()</code> / <code>validate_csrf()</code></td><td>Sinh và kiểm tra token CSRF; mặc định token có hiệu lực 48 giờ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 id="jsonrpc-route">Route kiểu jsonrpc</h3>
+                <p>Route <code>type='jsonrpc'</code> nói JSON-RPC 2 qua HTTP, với hai khác biệt so với đặc tả: thành viên <code>method</code> trong payload bị bỏ qua (đường dẫn HTTP đã đủ để chọn controller) và <code>params</code> bắt buộc là một đối tượng JSON theo tên chứ không phải mảng. Ngoài ra có thể truyền <code>context</code> thay thế context của session; tham số này bị bỏ trước khi gọi endpoint:</p>
+<pre><code>--&gt; {"jsonrpc": "2.0", "method": "call", "params": {"arg1": "val1"}, "id": null}
+&lt;-- {"jsonrpc": "2.0", "result": {"res1": "val1"}, "id": null}</code></pre>
+
+                <h3 id="override-controller">Mở rộng controller của module khác</h3>
+                <p>Để ghi đè, kế thừa class controller gốc và định nghĩa lại method. Bắt buộc phải gắn lại <code>@route()</code> (có thể bỏ trống tham số), nếu không method sẽ bị "gỡ" khỏi danh sách route. Tham số của decorator mới được cộng dồn và ghi đè lên cái cũ:</p>
+<pre><code>class Restrict(VincCourseController):
+
+    @http.route(auth='user')
+    def courses(self, **kw):
+        return super().courses(**kw)</code></pre>
+                <p>Đoạn trên đổi route từ <code>public</code> sang <code>user</code>, tức yêu cầu đăng nhập.</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-vi-12">
+                        <title id="dg-vi-12">Luồng một lệnh gọi API JSON-2</title>
+                        <rect class="dg-box" x="10" y="15" width="180" height="96" rx="12" />
+                        <text class="dg-title" x="26" y="43">Phần mềm bên ngoài</text>
+                        <text class="dg-text" x="26" y="95">POST /json/2/model/method</text>
+                        <path class="dg-arrow" d="M192 63 h26 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="220" y="15" width="200" height="96" rx="12" />
+                        <text class="dg-title" x="236" y="43">Odoo</text>
+                        <text class="dg-text" x="236" y="76">1. Xác thực API key (bearer)</text><text class="dg-text" x="236" y="96">2. Kiểm tra quyền của chủ key</text>
+                        <path class="dg-arrow" d="M422 63 h26 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="450" y="15" width="180" height="96" rx="12" />
+                        <text class="dg-title" x="466" y="43">Model + method</text>
+                        <text class="dg-text" x="466" y="95">1 transaction cho mỗi lệnh</text>
+                        <path class="dg-arrow" d="M540 113 v22 m-6 -8 l6 8 l6 -8" />
+                        <text class="dg-text" x="220" y="152">Thành công: HTTP 200 + JSON. Lỗi: 4xx/5xx + đối tượng lỗi JSON (rollback)</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu Odoo 20.</figcaption>
+                </figure>
+
+                <h2 id="json2-api">API JSON-2: gọi model từ phần mềm bên ngoài</h2>
+                <p>Ngoài controller tự viết, Odoo cung cấp sẵn một phần Models API qua HTTP với endpoint <code>/json/2</code> (có từ Odoo 19). Bạn không cần viết thêm code trong module: chỉ cần gửi yêu cầu POST tới <code>/json/2/&lt;model&gt;/&lt;method&gt;</code>.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Điều kiện sử dụng</p>
+                    <p>Theo tài liệu, quyền truy cập dữ liệu qua API ngoài chỉ có ở gói Custom của Odoo (Online); gói One App Free và Standard không hỗ trợ. Hãy kiểm tra gói của bạn trước khi thiết kế tích hợp.</p>
+                </div>
+                <h3 id="json2-request">Cấu trúc yêu cầu</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Phần</th><th>Nội dung</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Header <code>Authorization</code></td><td>Bắt buộc, <code>bearer</code> kèm API key</td></tr>
+                            <tr><td>Header <code>Content-Type</code></td><td>Bắt buộc, <code>application/json</code> (nên kèm charset)</td></tr>
+                            <tr><td>Header <code>X-Odoo-Database</code></td><td>Tùy chọn, tên database; cần khi một server chứa nhiều database mà <code>dbfilter</code> không dựa vào <code>Host</code></td></tr>
+                            <tr><td>Đường dẫn</td><td><code>model</code> là tên kỹ thuật của model, <code>method</code> là method cần chạy</td></tr>
+                            <tr><td>Body JSON</td><td><code>ids</code> (danh sách id; để trống nếu gọi method <code>@api.model</code>), <code>context</code> (tùy chọn) và các tham số của method</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Ví dụ đọc các khóa học đã xuất bản bằng Python:</p>
+<pre><code>import requests
+
+BASE_URL = "https://mycompany.example.com/json/2"
+headers = {
+    "Authorization": "bearer " + API_KEY,   # lấy key từ nơi lưu an toàn
+    "X-Odoo-Database": "mycompany",
+}
+res = requests.post(
+    f"{BASE_URL}/vinc.course/search_read",
+    headers=headers,
+    json={"domain": [["is_published", "=", True]], "fields": ["name", "level"]},
+)
+res.raise_for_status()
+print(res.json())</code></pre>
+                <p>Thành công trả về HTTP 200 và giá trị trả về của method dưới dạng JSON. Khi lỗi, server trả mã 4xx/5xx kèm đối tượng JSON gồm <code>name</code>, <code>message</code>, <code>arguments</code>, <code>context</code> và <code>debug</code>.</p>
+
+                <h3 id="api-key">Tạo và quản lý API key</h3>
+                <ul>
+                    <li>Tạo key trong tùy chọn người dùng, mục bảo mật tài khoản, bằng nút tạo key mới. Cần mô tả và thời hạn; key chỉ hiển thị <strong>một lần</strong>, hãy sao chép và lưu an toàn.</li>
+                    <li>Thời hạn tối đa của key là ba tháng, nên key dùng lâu phải được thay mới ít nhất mỗi ba tháng. Với dùng tương tác nên đặt thời hạn ngắn, thường một ngày.</li>
+                    <li>Khi xoay vòng key, tạo key mới trước, kiểm tra các dịch vụ đã dùng key mới rồi mới thu hồi key cũ.</li>
+                </ul>
+                <h3 id="api-key-rpc">Quản lý API key bằng lập trình</h3>
+                <p>Odoo cung cấp phương thức RPC để sinh và thu hồi key. Mặc định chỉ người dùng có quyền quản trị Settings được làm việc này; muốn cho người khác, đặt tham số hệ thống <code>base.enable_programmatic_api_keys</code> là <code>True</code> (trong <em>Settings → Technical → System Parameters</em>).</p>
+                <ul>
+                    <li><code>res.users.apikeys.generate()</code> nhận <code>key</code> (một key hợp lệ đang dùng), <code>scope</code> (chuỗi hoặc <code>null</code>), <code>name</code> (nhãn dễ đọc) và <code>expiration_date</code> (định dạng ISO 8601). Phương thức trả về key mới dưới dạng chuỗi và không thể lấy lại.</li>
+                    <li>Phạm vi (<code>scope</code>) giới hạn nơi key được dùng. Phạm vi <code>rpc</code> là phạm vi chung cho RPC qua controller có <code>auth='bearer'</code>. Key không có phạm vi dùng <code>null</code>.</li>
+                    <li>Mặc định một người dùng sinh tối đa 10 key bằng lập trình (đổi bằng <code>base.programmatic_api_keys_limit</code>); vượt giới hạn sẽ lỗi HTTP 422. Ngày hết hạn được kiểm tra theo thời hạn tối đa mà các vai trò của người dùng cho phép.</li>
+                    <li><code>res.users.apikeys.revoke()</code> thu hồi key ngay lập tức; sai key trả HTTP 403. Key bị thu hồi không nhất thiết phải trùng key trong header <code>Authorization</code>, nên khi xoay vòng, hãy xác thực bằng key mới để thu hồi key cũ.</li>
+                </ul>
+
+                <h3 id="json2-security">Bảo mật và giao dịch</h3>
+                <ul>
+                    <li>API tuân theo cơ chế bảo mật chuẩn: mọi thao tác được kiểm tra theo access rights, record rules và quyền theo field của người dùng sở hữu key (nội dung bài 5).</li>
+                    <li>Khi tích hợp tự động lâu dài, nên tạo <strong>bot user</strong> riêng với quyền tối thiểu và để trống mật khẩu để tắt đăng nhập bằng mật khẩu.</li>
+                    <li>Mỗi lệnh gọi chạy trong một transaction SQL riêng: thành công thì commit, lỗi thì hủy. Không thể gom nhiều lệnh gọi vào một transaction, nên các thao tác liên quan tới nhau cần được gói trong <strong>một method duy nhất</strong> trên server (thường đặt tên bắt đầu bằng <code>action_</code>).</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Chuyển từ XML-RPC / JSON-RPC</p>
+                    <p>Các endpoint <code>/xmlrpc</code>, <code>/xmlrpc/2</code> và <code>/jsonrpc</code> đã bị đánh dấu lỗi thời. Dịch vụ <code>db</code> đã bị gỡ từ Odoo 20; các dịch vụ <code>common</code> và <code>object</code> dự kiến gỡ ở Odoo 22. Các controller <code>@route(type='jsonrpc')</code> tự viết không bị ảnh hưởng.</p>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi làm API</p>
+                    <ul>
+                        <li><strong>Gọi JSON-2 nhận 401 "Invalid apikey".</strong> Kiểm tra header phải có dạng <code>Authorization: bearer &lt;key&gt;</code>, key chưa hết hạn và chưa bị thu hồi. Nhớ rằng key chỉ hiện đúng một lần lúc tạo.</li>
+                        <li><strong>Ghi đè method của controller mà route biến mất.</strong> Bạn quên gắn lại <code>@route()</code>; không có decorator thì method bị "gỡ" khỏi danh sách route.</li>
+                        <li><strong>Gọi nhiều lệnh JSON-2 liên tiếp rồi dữ liệu không nhất quán.</strong> Mỗi lệnh là một transaction riêng nên có thể xen kẽ với người khác. Hãy gom các bước thành một method duy nhất trên model.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Controller kế thừa <code>http.Controller</code>; <code>@route</code> khai báo <code>auth</code>, <code>type</code>, <code>methods</code>.</li>
+                    <li>Khi ghi đè controller phải gắn lại <code>@route()</code>.</li>
+                    <li>JSON-2: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code>, API key bearer, quyền của chủ key, mỗi lệnh một transaction.</li>
+                    <li>Gói các thao tác liên quan vào một method duy nhất để giữ tính nhất quán.</li>
+                </ul>
+                <p>Bài tiếp theo là test tự động để bảo vệ tất cả những gì bạn vừa viết.</p>
+
+                <div class="cta-box">
+                    <h3>Cần tích hợp Odoo với hệ thống khác?</h3>
+                    <p>Khóa Odoo Advanced Developer đi qua controller, xác thực API và các mẫu tích hợp an toàn với review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-A">Xem khóa Odoo Advanced Developer</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa type http và jsonrpc trong @route?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Type quy định nơi đọc tham số yêu cầu và cách serialize phản hồi. Route type http mặc định bật bảo vệ CSRF, còn type jsonrpc (tên cũ là json đến Odoo 18) mặc định tắt.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>auth public, user, bearer và none khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">user bắt buộc đăng nhập; bearer xác thực bằng API key trong header Authorization; public cho phép chưa đăng nhập và chạy bằng user Public dùng chung; none luôn hoạt động kể cả khi chưa có database và chủ yếu dùng cho framework.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>API JSON-2 gọi như thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Gửi POST tới /json/2/&lt;model&gt;/&lt;method&gt; với header Authorization bearer kèm API key, Content-Type application/json và body JSON gồm ids, context cùng các tham số của method.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>API key tạo ở đâu và dùng được bao lâu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Tạo trong phần tùy chọn người dùng, mục bảo mật tài khoản, bằng nút tạo key mới. Key chỉ hiện một lần và thời hạn tối đa là ba tháng, nên key dùng lâu phải được thay mới định kỳ.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/http.html" target="_blank" rel="noopener">Odoo 20 – Web controllers</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/security.html" target="_blank" rel="noopener">Odoo 20 – Security in Odoo</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fweb-controller-json-2-api-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fweb-controller-json-2-api-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="owl-framework-odoo-co-ban.html"><small>← Bài trước</small>OWL trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Unit test trong Odoo</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#controller">Web controller: tạo endpoint cho module</a></li>
+                        <li><a href="#json2-api">API JSON-2: gọi model từ phần mềm bên ngoài</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -10,14 +10,18 @@ Landing page giới thiệu và đăng ký khóa học của **Vinc Academy**, x
 - Form đăng ký có validation + toast notification
 - FAQ accordion hoạt động
 - Scroll mượt qua các section
+- Blog "Kiến thức" song ngữ VI/EN tại `/blog/` (chủ đề: Odoo đã có; Python, Git, SQL, AI sắp ra mắt) — xem `docs/blog-guide.md`
+- Deploy Vercel (`vercel.json` redirect, `.vercelignore`), không build step
 
 ## Cấu trúc thư mục
 
 ```
 vinc-academy/
-├── index.html          # 519 dòng — File HTML chính
-├── styles.css          # 1220 dòng — Toàn bộ style + dark/light theme
-├── script.js           # 41 dòng  — JS (theme, FAQ, form, scroll)
+├── index.html          # Trang chủ
+├── program-detail.html # Chi tiết khóa học (dữ liệu: program-data.js)
+├── styles.css, blog.css, script.js
+├── blog/, en/blog/     # Blog Kiến thức (VI / EN)
+├── certificate/        # Tra cứu chứng chỉ
 ├── README.md           # File này
 └── image/
     ├── vinc-academy.png   # Logo

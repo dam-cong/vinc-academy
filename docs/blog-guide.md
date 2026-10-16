@@ -1,0 +1,37 @@
+# Blog "Kiến thức" — hướng dẫn chung
+
+Site tĩnh deploy Vercel, **không build step**: mọi trang là HTML viết tay.
+
+## Mô hình
+```
+/blog/                       Hub tổng (lưới chủ đề)          en/blog/
+/blog/<chủ-đề>/              Hub chủ đề (series + bài lẻ)     en/blog/<chủ-đề>/
+/blog/<chủ-đề>/<slug>.html   Bài viết                         en/blog/<chủ-đề>/<slug>.html
+```
+Chủ đề > Series (tùy chọn) > Bài. Series chỉ là nhóm trong hub chủ đề + `series-nav` trong bài, không nằm trong URL. Slug chủ đề: `odoo`, `python`, `git`, `sql`, `ai`.
+
+## Thêm chủ đề mới
+1. Copy `blog/odoo/index.html` → `blog/<chủ-đề>/index.html` (và bản `en/`), đổi tiêu đề, mô tả, breadcrumb, canonical/hreflang, JSON-LD, thẻ bài.
+2. Ở `blog/index.html` + `en/blog/index.html`: đổi thẻ `.post-card.soon` của chủ đề thành `<a class="post-card" href="<chủ-đề>/index.html">` + nhãn "Đã xuất bản"; thêm vào `hasPart` JSON-LD.
+3. `sitemap.xml`: thêm cặp URL hub chủ đề (VI 0.8 / EN 0.6).
+
+## Thêm bài
+Mỗi bài cần 1–2 ví dụ "lỗi hay gặp" (khung `.callout`, có căn cứ từ tài liệu). Theo checklist `docs/odoo-series-handoff.md` §5 (đường dẫn thay `odoo/` bằng `blog/<chủ-đề>/`), kiểm tra §7. Mỗi bài chạm: file VI + EN, hub chủ đề, sitemap, bài trước (nếu có series-nav).
+
+## Vai trò (agent)
+Xem `.claude/agents/`: `blog-writer`, `translator`, `seo-reviewer`, `frontend-qa`.
+
+## Quy tắc link (chạy được cả `file://` và Vercel)
+- Link nội bộ luôn **tương đối** và **ghi rõ `index.html`** (VD `odoo/index.html`, `../index.html`), không dùng `/` đầu dòng hay link thư mục `odoo/` — `file://` không tự mở `index.html`.
+- Chỉ `canonical`, `hreflang`, `og:url`, JSON-LD và `sitemap.xml` dùng URL tuyệt đối dạng thư mục (`/blog/odoo/`) cho gọn.
+
+## Vercel
+- `vercel.json`: redirect 301 `/odoo/*` → `/blog/odoo/*`, `/en/odoo/*` → `/en/blog/odoo/*`.
+- `.vercelignore`: loại `.claude`, `docs`, `README.md` khỏi bản deploy (không để lộ tài liệu nội bộ).
+- Giữ URL `.html`; không bật `cleanUrls` (khớp canonical/sitemap).
+
+## Lượt xem bài
+- `api/views.js` (Vercel Function, không phụ thuộc gói) đếm bằng Upstash Redis: `GET /api/views?slug=a,b` đọc, `POST ?slug=a` tăng 1 (trùng IP+slug trong 1 giờ không tăng).
+- Cần Upstash Redis nối vào project Vercel (env `UPSTASH_REDIS_REST_URL/TOKEN` hoặc `KV_REST_API_URL/TOKEN`). Thiếu env hoặc `file://` → số lượt xem tự ẩn.
+- Mỗi bài thêm vào `.post-meta`: `<b data-views="<slug>" data-view-hit>–</b>`; thẻ ở trang danh sách dùng `<b data-views="<slug>">` (không có `data-view-hit`).
+- `<slug>` **dùng chung VI/EN** (lấy theo tên file bản VI, vd `odoo-la-gi` cho cả `what-is-odoo.html`). Logic ở `initViews()` trong `script.js`.

@@ -6,51 +6,259 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/odoo/</loc>
+    <loc>https://vinc-academy.vercel.app/blog/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/"/>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/en/odoo/</loc>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/"/>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/odoo/odoo-la-gi.html</loc>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/what-is-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html"/>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html</loc>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/what-is-odoo.html</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/what-is-odoo.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/what-is-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html"/>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html</loc>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/install-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html"/>
   </url>
   <url>
-    <loc>https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html</loc>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/install-odoo-20.html</loc>
     <lastmod>2026-10-16</lastmod>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/install-odoo-20.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html"/>
   </url>
 </urlset>

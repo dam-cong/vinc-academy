@@ -32,18 +32,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     });
 });
 
-function togglePrograms(btn) {
-    const hidden = document.querySelectorAll('.program-hidden');
-    const isExpanded = btn.dataset.expanded === 'true';
-    hidden.forEach(el => {
-        if (isExpanded) el.classList.remove('show');
-        else el.classList.add('show');
-    });
-    btn.dataset.expanded = isExpanded ? 'false' : 'true';
-    const key = isExpanded ? 'programs.expand' : 'programs.collapse';
-    btn.textContent = i18n[currentLang][key];
-}
-
 // ── I18N ──
 const i18n = {
     vi: {
@@ -52,7 +40,7 @@ const i18n = {
         'nav.pricing': 'Học phí',
         'nav.faq': 'FAQ',
         'nav.certificate': 'Chứng chỉ',
-        'nav.blog': 'Lập trình Odoo',
+        'nav.blog': 'Kiến thức',
 
         'verify.subtitle': 'Vinc Academy Verification System',
         'verify.title': 'XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC',
@@ -71,10 +59,20 @@ const i18n = {
         'verify.certLink': 'Liên kết chứng chỉ:',
 
         'hero.badge': 'Đào tạo thực chiến · 100% dự án thật',
-        'hero.title': 'Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer',
+        'hero.title': 'Từ sinh viên<br><span class="accent">đến Odoo Developer</span><br>sẵn sàng đi làm',
         'hero.desc': 'Từ Developer Foundation đến AI & Vibe Coding — 6 chương trình Odoo thực chiến, lộ trình rõ ràng, bài tập thực tế, giảng viên kinh nghiệm doanh nghiệp.',
         'hero.btn1': 'Nhận tư vấn miễn phí',
-        'hero.btn2': 'Xem chương trình',
+        'hero.btn2': 'Xem lộ trình học',
+        'hero.who': 'Bạn đang là ai?',
+        'faq.qn': 'Mới ra trường / mới đi làm thì nên bắt đầu từ đâu?',
+        'faq.an': 'Chưa biết code: bắt đầu từ L1 Developer Foundation. Đã có nền tảng lập trình: vào thẳng L2 Odoo Developer Foundation. Chọn bộ lọc “Bạn đang là ai?” ở mục Chương trình để xem đúng lộ trình, hoặc nhận tư vấn miễn phí.',
+        'f.all': 'Tất cả',
+        'f.new': '🎓 Chưa biết code',
+        'f.dev': '💻 Biết code, muốn vào Odoo',
+        'f.pro': '🚀 Đã làm Odoo',
+        'f.search': 'Tìm chương trình...',
+        'f.empty': 'Chưa có chương trình phù hợp — thử bỏ bộ lọc hoặc nhận tư vấn miễn phí.',
+        'road.start': 'Bắt đầu',
         'hero.stat1': 'Chương trình đào tạo',
         'hero.stat2': 'Thực hành dự án thật',
         'hero.stat3': 'Sẵn sàng đi làm ngay',
@@ -270,7 +268,7 @@ const i18n = {
         'nav.pricing': 'Tuition',
         'nav.faq': 'FAQ',
         'nav.certificate': 'Certificate',
-        'nav.blog': 'Odoo Dev Guide',
+        'nav.blog': 'Knowledge',
         'nav.register': 'Free Consultation',
 
         'verify.subtitle': 'Vinc Academy Verification System',
@@ -290,10 +288,20 @@ const i18n = {
         'verify.certLink': 'Certificate link:',
 
         'hero.badge': 'Hands-on Training · 100% Real Projects',
-        'hero.title': 'Odoo<br><span class="accent">Hands-on</span><br>Training for Developers',
+        'hero.title': 'From student<br><span class="accent">to Odoo Developer</span><br>job-ready',
         'hero.desc': 'From Developer Foundation to AI & Vibe Coding — 6 hands-on Odoo programs, clear roadmap, real projects, industry-experienced instructors.',
         'hero.btn1': 'Get Free Consultation',
-        'hero.btn2': 'View Programs',
+        'hero.btn2': 'View Learning Path',
+        'hero.who': 'Who are you?',
+        'faq.qn': 'Just graduated / new at work — where should I start?',
+        'faq.an': 'No coding yet: start with L1 Developer Foundation. Already coding: go straight to L2 Odoo Developer Foundation. Use the “Who are you?” filter in Programs to see your path, or get a free consultation.',
+        'f.all': 'All',
+        'f.new': '🎓 New to coding',
+        'f.dev': '💻 Can code, new to Odoo',
+        'f.pro': '🚀 Already on Odoo',
+        'f.search': 'Search programs...',
+        'f.empty': 'No matching program — clear the filter or get a free consultation.',
+        'road.start': 'Start here',
         'hero.stat1': 'Training Programs',
         'hero.stat2': 'Real Project Practice',
         'hero.stat3': 'Job-Ready Skills',
@@ -511,13 +519,6 @@ function applyLang() {
     const btn = document.querySelector('.lang-toggle');
     if (btn) btn.textContent = currentLang === 'vi' ? 'EN' : 'VI';
 
-    // Update expand button text
-    const expandBtn = document.querySelector('.expand-btn');
-    if (expandBtn) {
-        const isExpanded = expandBtn.dataset.expanded === 'true';
-        const key = isExpanded ? 'programs.collapse' : 'programs.expand';
-        expandBtn.textContent = i18n[currentLang][key];
-    }
 }
 
 function toggleLang() {
@@ -533,6 +534,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initCertificateSearch();
     initMobileNav();
     initAboutBadge();
+    initProgramFilter();
+    initPostFilter();
+    initViews();
+    initBackToTop();
 });
 
 // ── ABOUT BADGE (mobile tap to show text) ──
@@ -703,3 +708,93 @@ const spyObserver = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.3 });
 spySections.forEach(s => spyObserver.observe(s));
+// ── LỌC / TÌM CHƯƠNG TRÌNH ──
+function initProgramFilter() {
+    const cards = [...document.querySelectorAll('.course-card[data-level]')];
+    const chips = document.querySelectorAll('.prog-filter .chip');
+    const levels = document.querySelectorAll('.level-card[data-level]');
+    const q = document.getElementById('prog-search');
+    if (!q) return;
+    let aud = 'all', lv = '';
+    const render = () => {
+        const kw = q.value.trim().toLowerCase();
+        let n = 0;
+        cards.forEach(c => {
+            const ok = (aud === 'all' || c.dataset.aud.split(' ').includes(aud))
+                && (!lv || c.dataset.level === lv)
+                && (!kw || c.textContent.toLowerCase().includes(kw));
+            c.hidden = !ok;
+            n += ok;
+        });
+        document.getElementById('prog-empty').hidden = n > 0;
+        chips.forEach(c => c.classList.toggle('active', c.dataset.aud === aud));
+        levels.forEach(l => l.classList.toggle('active', l.dataset.level === lv));
+    };
+    chips.forEach(c => c.addEventListener('click', () => { aud = c.dataset.aud; lv = ''; render(); }));
+    levels.forEach(l => l.addEventListener('click', () => { lv = lv === l.dataset.level ? '' : l.dataset.level; render(); }));
+    q.addEventListener('input', render);
+    document.querySelectorAll('.hero-pick [data-pick]').forEach(b => b.addEventListener('click', () => {
+        aud = b.dataset.pick; lv = ''; q.value = ''; render();
+        document.getElementById('programs').scrollIntoView({ behavior: 'smooth' });
+    }));
+}
+
+// ── LỌC CHỦ ĐỀ BLOG ──
+function initPostFilter() {
+    const q = document.getElementById('post-search');
+    if (!q) return;
+    const items = [...document.querySelectorAll('.post-grid > li')];
+    q.addEventListener('input', () => {
+        const kw = q.value.trim().toLowerCase();
+        items.forEach(li => li.hidden = !!kw && !li.textContent.toLowerCase().includes(kw));
+        document.getElementById('post-empty').hidden = items.some(li => !li.hidden);
+    });
+}
+
+// ── LƯỢT XEM BÀI BLOG (api/views.js) ──
+async function initViews() {
+    const els = [...document.querySelectorAll('[data-views]')];
+    if (!els.length || !/^https?:$/.test(location.protocol)) return els.forEach(e => e.parentElement.hidden = true);
+    const hit = document.querySelector('[data-view-hit]')?.dataset.views;
+    const key = 'va-viewed-' + hit;
+    let post = false;
+    try { post = hit && Date.now() - (+localStorage.getItem(key) || 0) > 864e5; } catch {}
+    const slugs = [...new Set(els.map(e => e.dataset.views))].join(',');
+    let data = {};
+    try {
+        const r = await fetch('/api/views?slug=' + (post ? hit : slugs), { method: post ? 'POST' : 'GET' });
+        data = await r.json();
+        if (post) try { localStorage.setItem(key, Date.now()); } catch {}
+    } catch {}
+    const fmt = new Intl.NumberFormat(document.documentElement.lang);
+    els.forEach(e => {
+        const n = data[e.dataset.views];
+        if (n == null) e.parentElement.hidden = true;
+        else e.textContent = fmt.format(n);
+    });
+    const grid = document.querySelector('.post-grid');
+    document.querySelectorAll('.post-sort .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('.post-sort .chip').forEach(x => x.classList.toggle('active', x === c));
+        const lis = [...grid.children], n = li => +(li.querySelector('[data-views]')?.textContent.replace(/\D/g, '')) || 0;
+        const idx = new Map(lis.map((li, i) => [li, i]));
+        lis.sort((a, b) => c.dataset.sort === 'top' ? n(b) - n(a) || idx.get(a) - idx.get(b) : idx.get(a) - idx.get(b))
+            .forEach(li => grid.appendChild(li));
+    }));
+}
+
+// ── NÚT LÊN ĐẦU TRANG ──
+function initBackToTop() {
+    const box = document.querySelector('.chat-bubbles');
+    if (!box) return;
+    const vi = document.documentElement.lang !== 'en';
+    const btn = Object.assign(document.createElement('button'), { type: 'button', hidden: true, className: 'chat-bubble to-top', innerHTML: '<svg class="ring" viewBox="0 0 44 44"><circle class="trk" cx="22" cy="22" r="20"/><circle class="bar" cx="22" cy="22" r="20" pathLength="100"/></svg><svg class="arw" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>' });
+    btn.dataset.tip = btn.ariaLabel = vi ? 'Lên đầu trang' : 'Back to top';
+    btn.onclick = () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    box.prepend(btn);
+    const toggle = () => {
+        btn.hidden = scrollY < 600;
+        btn.style.setProperty('--p', Math.min(100, scrollY / (document.documentElement.scrollHeight - innerHeight) * 100));
+    };
+    addEventListener('scroll', toggle, { passive: true });
+    toggle();
+}

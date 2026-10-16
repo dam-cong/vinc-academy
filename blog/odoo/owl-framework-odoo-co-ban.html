@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OWL trong Odoo 20: component, hook và assets cơ bản</title>
+    <meta name="description" content="Làm quen OWL trong Odoo 20: component, useState, setup(), template XML, khai báo assets, registry, service và hook cho giao diện web." />
+    <meta name="keywords" content="odoo owl, owl component odoo, odoo useState, odoo assets_backend, odoo javascript, odoo owl tutorial" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="OWL trong Odoo 20: component, hook và assets cơ bản" />
+    <meta property="og:description" content="Hiểu OWL, viết component đầu tiên, khai báo bundle assets và nắm registry, service, hook trong Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/owl-framework-odoo-co-ban.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "OWL trong Odoo 20: component, hook và assets cơ bản",
+                "description": "Hiểu OWL, viết component đầu tiên, khai báo bundle assets và nắm registry, service, hook trong Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/owl-framework-odoo-co-ban.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "OWL framework cơ bản"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "OWL là gì trong Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "OWL là framework component khai báo, lấy cảm hứng từ Vue và React, dùng để xây giao diện web client của Odoo. Component được định nghĩa bằng template QWeb có thêm một số chỉ thị riêng của OWL."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao dùng setup() thay vì constructor?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Constructor trong JavaScript không thể ghi đè theo cách Odoo cần, nên tài liệu quy định mọi khởi tạo phải đặt trong method setup() và không component nào được dùng trực tiếp constructor."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "File JavaScript và template của component được nạp bằng cách nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Bạn khai báo chúng trong khóa assets của manifest, thường vào bundle web.assets_backend cho web client. Framework sẽ nạp file JavaScript, CSS và các template vào OWL."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Registry, service và hook khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Registry là ánh xạ khóa-giá trị lưu các đối tượng mở rộng được. Service là mã chạy lâu dài cung cấp một tính năng như thông báo hay gọi server. Hook là hàm tái sử dụng logic gắn với vòng đời component."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-owl-framework-basics.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">OWL framework cơ bản</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 11 · Series Lập trình Odoo 20</span>
+            <h1>OWL trong Odoo 20: component, hook và assets cơ bản</h1>
+            <p class="post-lead">OWL là nền tảng của giao diện web Odoo. Bài này giúp bạn hiểu component OWL, viết component đầu tiên, đưa file vào bundle assets và nắm các khối xây dựng của web client: registry, service và hook.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Giao diện web của Odoo được xây bằng OWL, một framework component khai báo, template viết bằng QWeb.</strong> Mỗi component thường gồm một file JavaScript và một file template XML, được thêm vào bundle <code>web.assets_backend</code> qua khóa <code>assets</code> trong manifest. Trong component, khởi tạo trạng thái ở <code>setup()</code> (không dùng constructor) bằng hook như <code>useState</code>.</p>
+                </div>
+
+                <h2 id="owl-la-gi">OWL là gì và nằm ở đâu trong Odoo?</h2>
+                <p>Odoo web client là một ứng dụng một trang (single-page): mỗi lần người dùng thao tác, nó chỉ xin server phần dữ liệu cần thiết rồi cập nhật màn hình, và giữ URL đồng bộ với trạng thái hiện tại. Phần giao diện này dùng <strong>OWL</strong>, hệ thống component khai báo, lấy cảm hứng từ Vue và React. Component được định nghĩa bằng template QWeb có thêm vài chỉ thị riêng của OWL. Tài liệu Odoo nhấn mạnh: <em>mọi phát triển mới nên viết bằng OWL nếu có thể</em>. Mã nguồn OWL được duy trì ở một kho GitHub riêng, và mọi phiên bản Odoo từ 14 dùng chung phiên bản OWL.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Hai cách hiểu từ "frontend"</p>
+                    <p>Trong hệ sinh thái Odoo, <em>frontend</em> thường chỉ website công khai còn <em>backend</em> chỉ web client, khác với cách dùng thông thường (trình duyệt và server). Trong tài liệu, "component" luôn là component OWL, còn "widget" là cách viết cũ.</p>
+                </div>
+
+                <h2 id="component-dau-tien">Component OWL đầu tiên</h2>
+                <p>Theo khuyến nghị, một component nên gồm 2-3 file đặt cạnh nhau: file JavaScript, file template XML và tùy chọn file SCSS/CSS. Dưới đây là component đếm đơn giản cho module <code>vinc_course</code>:</p>
+                <p class="code-title">vinc_course/static/src/components/course_counter/course_counter.js</p>
+<pre><code>import { Component, useState } from "@odoo/owl";
+
+export class CourseCounter extends Component {
+    static template = "vinc_course.CourseCounter";
+
+    setup() {
+        this.state = useState({ value: 0 });
+    }
+
+    increment() {
+        this.state.value++;
+    }
+}</code></pre>
+                <p class="code-title">vinc_course/static/src/components/course_counter/course_counter.xml</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;templates xml:space="preserve"&gt;
+    &lt;t t-name="vinc_course.CourseCounter"&gt;
+        &lt;button class="btn btn-primary" t-on-click="increment"&gt;
+            Đã xem: &lt;t t-out="state.value"/&gt;
+        &lt;/button&gt;
+    &lt;/t&gt;
+&lt;/templates&gt;</code></pre>
+                <ul>
+                    <li><code>useState</code> tạo trạng thái phản ứng (reactive): khi <code>state.value</code> đổi, giao diện tự cập nhật.</li>
+                    <li><code>t-on-click="increment"</code> là chỉ thị của OWL gắn sự kiện vào method của component.</li>
+                    <li>Template nên nằm trong file XML để được dịch thuật, và component chỉ khai báo tên template. Template định nghĩa ngay trong JavaScript bằng helper <code>xml</code> chỉ phù hợp lúc mới làm quen.</li>
+                    <li>Quy ước đặt tên template là <code>tên_addon.TênComponent</code>, giúp tránh trùng tên giữa các module.</li>
+                </ul>
+
+                <h3 id="setup-constructor">Dùng setup(), đừng dùng constructor</h3>
+                <p>Component là class nên có constructor, nhưng constructor trong JavaScript không thể ghi đè theo cách Odoo cần. Vì vậy, khởi tạo mọi thứ trong method <code>setup()</code>. Không component nào trong Odoo được dùng trực tiếp <code>constructor(parent, props)</code>.</p>
+
+                <h2 id="assets">Thêm file vào bundle assets</h2>
+                <p>JavaScript, CSS và template không tự được nạp. Bạn khai báo chúng trong khóa <code>assets</code> của manifest: một từ điển ánh xạ tên bundle tới danh sách file, hỗ trợ glob để gom nhiều file bằng một dòng:</p>
+<pre><code>'assets': {
+    'web.assets_backend': [
+        'vinc_course/static/src/components/**/*',
+    ],
+},</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Bundle</th><th>Chứa gì</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>web.assets_backend</code></td><td>Mã dành riêng cho web client (action, view, template XML tĩnh)</td></tr>
+                            <tr><td><code>web.assets_frontend</code></td><td>Mã dành riêng cho website công khai: thương mại điện tử, portal, diễn đàn, blog</td></tr>
+                            <tr><td><code>web.assets_common</code></td><td>Mã chung cho web client, website và Point of Sale; nền tảng của framework</td></tr>
+                            <tr><td><code>web.assets_unit_tests</code></td><td>Toàn bộ mã test JavaScript</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Mặc định, file trong <code>/static/src</code> và <code>/static/tests</code> được Odoo chuyển (transpile) từ module JavaScript chuẩn sang module của Odoo. Các file được gộp, minify (trừ khi bật <code>debug=assets</code>) rồi gửi cho trình duyệt; khi cần debug, dùng <code>?debug=assets</code> để tải bản chưa nén.</p>
+
+                <h2 id="khoi-xay-dung">Các khối xây dựng của web client</h2>
+                <p>Web client chủ yếu được tạo từ bốn loại đối tượng: registries, services, components và hooks.</p>
+                <ul>
+                    <li><strong>Registry:</strong> ánh xạ khóa-giá trị lưu một loại đối tượng. Khi đã đăng ký, phần còn lại của web client dùng được; ví dụ registry <code>fields</code> chứa các component field dùng trong view. Đây là điểm mở rộng quan trọng của giao diện.</li>
+                    <li><strong>Service:</strong> đoạn mã chạy lâu dài cung cấp một tính năng, như một hệ thống dependency injection. Ví dụ service <code>notification</code> hiển thị thông báo, service <code>rpc</code> là cách đúng để gọi server. Component lấy service bằng hook <code>useService</code>.</li>
+                    <li><strong>Component:</strong> các component OWL thuộc web client.</li>
+                    <li><strong>Hook:</strong> hàm tái sử dụng logic gắn với vòng đời component, như một kiểu mixin theo phong cách hàm. <code>useState</code> là hook, và bạn tự viết được hook của mình bằng <code>onWillStart</code>, <code>onWillUnmount</code>…</li>
+                </ul>
+                <p>Một component truy cập môi trường (<code>this.env</code>) để lấy các service, cờ <code>debug</code>, hàm dịch và cờ <code>isSmall</code> (đúng khi màn hình rộng từ 767px trở xuống).</p>
+
+                <h2 id="buoc-tiep">Gắn component vào giao diện</h2>
+                <p>Cách gắn component vào Odoo phụ thuộc điểm mở rộng bạn chọn: làm field, view, màn hình client action hay thành phần chính của web client (qua registry <code>main_components</code>). Mỗi điểm có API riêng nên bạn nên đọc tiếp tutorial chính thức <em>Discover the web framework</em> (chương <em>Owl components</em> và <em>Build a dashboard</em>), có kèm kho mã mẫu cho Odoo 20. Tutorial này yêu cầu bạn đã quen model, controller và QWeb, đúng với những gì series đã đi qua.</p>
+
+                <h2 id="cau-truc-ma">Mã JavaScript của web client nằm ở đâu?</h2>
+                <p>Toàn bộ JavaScript (kèm CSS và template) của module <code>web</code> nằm trong <code>web/static/src</code>. Bạn có thể import mọi thứ trong thư mục này bằng tiền tố <code>@web</code>, ví dụ <code>import { memoize } from "@web/core/utils/functions"</code>. Các thư mục chính:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thư mục</th><th>Chứa gì</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>core/</code></td><td>Phần lớn tính năng mức thấp</td></tr>
+                            <tr><td><code>fields/</code></td><td>Tất cả component field</td></tr>
+                            <tr><td><code>views/</code></td><td>Các component view bằng JavaScript (form, list…)</td></tr>
+                            <tr><td><code>search/</code></td><td>Control panel, thanh tìm kiếm, search panel</td></tr>
+                            <tr><td><code>webclient/</code></td><td>Mã riêng của web client: navbar, menu người dùng, action service…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Bản thân web client là một ứng dụng OWL. Template của nó (rút gọn) gồm <code>NavBar</code>, <code>ActionContainer</code> (hiển thị controller của action hiện tại, tức client action hoặc một view của action <code>act_window</code>) và <code>MainComponentsContainer</code> (hiển thị mọi component đã đăng ký trong registry <code>main_components</code>, đây là cách các phần khác mở rộng web client). Action service giữ trong bộ nhớ một ngăn xếp các action đang hoạt động, chính là các mục trên breadcrumb.</p>
+
+                <h2 id="env">Môi trường this.env</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Khóa</th><th>Giá trị</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>qweb</code></td><td>OWL yêu cầu; chứa mọi template</td></tr>
+                            <tr><td><code>bus</code></td><td>Bus chính, điều phối một số sự kiện chung</td></tr>
+                            <tr><td><code>services</code></td><td>Tất cả service đã triển khai (nên truy cập qua hook <code>useService</code>)</td></tr>
+                            <tr><td><code>debug</code></td><td>Chuỗi; khác rỗng nghĩa là web client đang ở chế độ debug</td></tr>
+                            <tr><td><code>_t</code></td><td>Hàm dịch chuỗi</td></tr>
+                            <tr><td><code>isSmall</code></td><td>Boolean; đúng khi đang ở chế độ di động (màn hình rộng từ 767px trở xuống)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Template được dịch tự động, nên chỉ cần hàm <code>_t</code> khi dịch chuỗi trong mã JavaScript.</p>
+
+                <h2 id="thao-tac-assets">Các thao tác với assets</h2>
+                <p>Thông thường chỉ cần thêm file vào một bundle phổ biến. Với nhu cầu đặc thù, manifest còn hỗ trợ các thao tác sau (thao tác nhắm vào một file cụ thể như <code>before</code>, <code>after</code>, <code>replace</code>, <code>remove</code> yêu cầu file đó đã được khai báo trước, ở manifest cấp trên trong chuỗi phụ thuộc hoặc ở bản ghi <code>ir.asset</code> có sequence thấp hơn):</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thao tác</th><th>Cú pháp</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>append</td><td><code>'path'</code></td><td>Thêm file vào cuối bundle (mặc định)</td></tr>
+                            <tr><td>prepend</td><td><code>('prepend', path)</code></td><td>Thêm file vào đầu bundle</td></tr>
+                            <tr><td>before</td><td><code>('before', target, path)</code></td><td>Thêm file ngay trước file đích</td></tr>
+                            <tr><td>after</td><td><code>('after', target, path)</code></td><td>Thêm file ngay sau file đích</td></tr>
+                            <tr><td>include</td><td><code>('include', bundle)</code></td><td>Dùng lồng một bundle khác (bundle con thường bắt đầu bằng dấu gạch dưới)</td></tr>
+                            <tr><td>remove</td><td><code>('remove', target)</code></td><td>Bỏ file khỏi bundle</td></tr>
+                            <tr><td>replace</td><td><code>('replace', target, path)</code></td><td>Thay file bằng phiên bản của bạn, ở đúng vị trí cũ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Thứ tự nạp rất quan trọng với CSS và script khởi tạo. Quy trình của Odoo: bắt đầu từ danh sách rỗng; áp dụng các bản ghi <code>ir.asset</code> có sequence nhỏ hơn 16; sau đó áp dụng thao tác khai báo trong manifest của từng module theo thứ tự phụ thuộc (module <code>web</code> trước <code>website</code>); cuối cùng áp dụng các bản ghi <code>ir.asset</code> còn lại. Một file đã có trong danh sách thì không được thêm lần nữa, nên chỉ lần xuất hiện đầu tiên được giữ.</p>
+
+                <h2 id="loai-file-js">Ba loại file JavaScript</h2>
+                <ul>
+                    <li><strong>Module JavaScript chuẩn (native):</strong> dùng cho mọi file mới. Odoo tự chuyển file dưới <code>/static/src</code> và <code>/static/tests</code> thành module của Odoo; ở thư mục khác, file chỉ được chuyển nếu dòng đầu chứa chú thích <code>@odoo-module</code>.</li>
+                    <li><strong>Module Odoo (hệ thống module riêng):</strong> chỉ còn hữu ích cho các file cũ chưa được chuyển đổi.</li>
+                    <li><strong>File JavaScript thuần:</strong> chỉ dành cho thư viện ngoài và một vài việc mức rất thấp, nên viết dạng IIFE để không làm rò biến ra phạm vi toàn cục. Mọi thư viện ngoài đều nạp dạng này. Muốn Odoo bỏ qua một file, đặt dòng đầu là <code>/** @odoo-module ignore **/</code>.</li>
+                </ul>
+
+                <h2 id="component-dung-san">Component dựng sẵn</h2>
+                <p>Web client cung cấp bộ component tổng quát để dùng lại: <code>ActionSwiper</code> (hành động khi vuốt ngang), <code>CheckBox</code>, <code>ColorList</code>, <code>Dropdown</code>, <code>Notebook</code> (chuyển trang bằng tab), <code>Pager</code> (phân trang), <code>SelectMenu</code> (dropdown chọn một mục) và <code>TagsList</code> (danh sách thẻ dạng viên thuốc). Mỗi component có vị trí import riêng, ví dụ <code>@web/core/action_swiper/action_swiper</code>; hãy tra trang Owl components của tài liệu trước khi tự viết lại những thứ này.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học OWL</p>
+                    <ul>
+                        <li><strong>Viết khởi tạo trong <code>constructor</code>.</strong> Hãy dùng <code>setup()</code>; tài liệu Odoo khẳng định không component nào được dùng trực tiếp constructor.</li>
+                        <li><strong>Tạo xong file JS và XML nhưng giao diện không thay đổi.</strong> Thường là file chưa nằm trong bundle: kiểm tra khóa <code>assets</code> trong manifest và glob đường dẫn, nâng cấp module bằng <code>-u</code>, rồi mở <code>?debug=assets</code> để xem file có được tải không.</li>
+                        <li><strong>Đặt tên template quá chung chung như <code>MyComponent</code>.</strong> Hãy theo quy ước <code>tên_addon.TênComponent</code> để không trùng với module khác.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Giao diện web Odoo là ứng dụng một trang xây bằng OWL; phát triển mới nên dùng OWL.</li>
+                    <li>Component = class JavaScript + template XML (<code>tên_addon.TênComponent</code>), khởi tạo trong <code>setup()</code>.</li>
+                    <li>File phải nằm trong bundle ở khóa <code>assets</code>; <code>?debug=assets</code> giúp kiểm tra.</li>
+                    <li>Registry, service, hook và <code>this.env</code> là bốn khái niệm cần nắm.</li>
+                </ul>
+                <p>Bài sau quay lại phía server: viết controller và dùng API JSON-2 để tích hợp Odoo với hệ thống khác.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn làm giao diện Odoo hiện đại với OWL?</h3>
+                    <p>Khóa Odoo Advanced Developer có phần thực hành OWL, service và asset bundle trên module thật, kèm review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-A">Xem khóa Odoo Advanced Developer</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>OWL là gì trong Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">OWL là framework component khai báo, lấy cảm hứng từ Vue và React, dùng để xây giao diện web client của Odoo. Component được định nghĩa bằng template QWeb có thêm một số chỉ thị riêng của OWL.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao dùng setup() thay vì constructor?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Constructor trong JavaScript không thể ghi đè theo cách Odoo cần, nên tài liệu quy định mọi khởi tạo phải đặt trong method setup() và không component nào được dùng trực tiếp constructor.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>File JavaScript và template của component được nạp bằng cách nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Bạn khai báo chúng trong khóa assets của manifest, thường vào bundle web.assets_backend cho web client. Framework sẽ nạp file JavaScript, CSS và các template vào OWL.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Registry, service và hook khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Registry là ánh xạ khóa-giá trị lưu các đối tượng mở rộng được. Service là mã chạy lâu dài cung cấp một tính năng như thông báo hay gọi server. Hook là hàm tái sử dụng logic gắn với vòng đời component.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/owl_components.html" target="_blank" rel="noopener">Odoo 20 – Owl components</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/framework_overview.html" target="_blank" rel="noopener">Odoo 20 – Framework overview</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/assets.html" target="_blank" rel="noopener">Odoo 20 – Assets</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/javascript_modules.html" target="_blank" rel="noopener">Odoo 20 – Javascript modules</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/discover_js_framework.html" target="_blank" rel="noopener">Odoo 20 – Discover the web framework</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fowl-framework-odoo-co-ban.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fowl-framework-odoo-co-ban.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="bao-cao-pdf-qweb-odoo.html"><small>← Bài trước</small>Báo cáo PDF trong Odoo 20 với QWeb</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Web controllers &amp; JSON-2 API</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#owl-la-gi">OWL là gì và nằm ở đâu trong Odoo?</a></li>
+                        <li><a href="#component-dau-tien">Component OWL đầu tiên</a></li>
+                        <li><a href="#assets">Thêm file vào bundle assets</a></li>
+                        <li><a href="#khoi-xay-dung">Các khối xây dựng của web client</a></li>
+                        <li><a href="#buoc-tiep">Gắn component vào giao diện</a></li>
+                        <li><a href="#cau-truc-ma">Mã JavaScript của web client nằm ở đâu?</a></li>
+                        <li><a href="#env">Môi trường this.env</a></li>
+                        <li><a href="#thao-tac-assets">Các thao tác với assets</a></li>
+                        <li><a href="#loai-file-js">Ba loại file JavaScript</a></li>
+                        <li><a href="#component-dung-san">Component dựng sẵn</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triển khai Odoo 20 production: Nginx, HTTPS, workers</title>
+    <meta name="description" content="Hướng dẫn đưa Odoo 20 lên production: odoo.conf, dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode, live chat và checklist bảo mật." />
+    <meta name="keywords" content="triển khai odoo production, odoo nginx https, odoo workers, odoo dbfilter, odoo proxy_mode, odoo.conf, bảo mật odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Triển khai Odoo 20 production: Nginx, HTTPS, workers" />
+    <meta property="og:description" content="Cấu hình Odoo 20 cho production: dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode và checklist bảo mật." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/trien-khai-odoo-production-nginx-workers.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Triển khai Odoo 20 production: Nginx, HTTPS, workers",
+                "description": "Cấu hình Odoo 20 cho production: dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode và checklist bảo mật.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/trien-khai-odoo-production-nginx-workers.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html",
+                "proficiencyLevel": "Advanced",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Triển khai Odoo production"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Odoo production nên chạy multi-thread hay multi-process?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nên chạy multi-process bằng cách đặt workers là một số nguyên khác 0. Chế độ multi-thread là mặc định, đơn giản và phù hợp phát triển hoặc demo nhưng không tận dụng tốt phần cứng do giới hạn GIL của Python."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Công thức ước lượng số worker như thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Số worker tối đa theo quy tắc tham khảo là số CPU nhân 2 cộng 1, và khoảng 1 worker phục vụ 6 người dùng đồng thời. Worker cron cũng tốn CPU nên cần tính thêm."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "proxy_mode dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi Odoo chạy sau reverse proxy như Nginx, bật proxy_mode để Odoo dùng các header thật của người dùng như hostname, scheme và IP thay vì của proxy. Chỉ bật khi Odoo thực sự đứng sau proxy."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao phải đặt dbfilter và list_db?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "dbfilter cho Odoo biết database nào phục vụ cho tên miền nào, bắt buộc khi một server chứa nhiều database. Khi mỗi tên miền chỉ khớp một database, đặt list_db bằng False để không liệt kê database và chặn các màn hình quản lý database."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-production-deployment-nginx-workers.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Triển khai Odoo production</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 14 · Series Lập trình Odoo 20</span>
+            <h1>Triển khai Odoo 20 production: Nginx, HTTPS, workers</h1>
+            <p class="post-lead">Từ máy phát triển sang server thật cần nhiều hơn là chạy odoo-bin. Bài này tổng hợp cấu hình production: odoo.conf, dbfilter, PostgreSQL, workers, Nginx với HTTPS và checklist bảo mật trước khi mở ra Internet.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 17 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Để triển khai Odoo 20 lên production, hãy chuyển từ chế độ multi-thread sang multi-process (<code>workers</code>), đặt Odoo sau reverse proxy như Nginx có HTTPS và bật <code>proxy_mode</code>, giới hạn database bằng <code>dbfilter</code>, đặt <code>admin_passwd</code> mạnh, tắt danh sách database và không cài dữ liệu demo.</strong> PostgreSQL dùng user riêng không phải superuser.</p>
+                </div>
+
+                <h2 id="dev-vs-prod">Production khác môi trường phát triển ở đâu?</h2>
+                <p>Máy phát triển chỉ cần chạy được. Server hướng ra Internet thì cần thêm cấu hình hệ thống: chọn database nào được phục vụ, kết nối PostgreSQL ra sao, bao nhiêu tiến trình xử lý request, mã hóa đường truyền bằng HTTPS và những thiết lập bảo mật cơ bản. Tài liệu Odoo mô tả các bước này ở trang cấu hình hệ thống, áp dụng <em>sau</em> khi bạn đã cài xong như ở bài 2. Phần dưới đây tóm tắt trình tự nên làm.</p>
+
+                <h2 id="cach-cai">Chọn cách cài đặt</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cách</th><th>Ghi chú</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Gói cài sẵn (deb, rpm)</td><td>Cài Odoo thành service và tạo user PostgreSQL. Gói deb của Odoo 20 hỗ trợ Ubuntu Noble (24.04 LTS), gói rpm hỗ trợ Fedora 42. Cập nhật bằng <code>apt-get upgrade</code></td></tr>
+                            <tr><td>Từ source (Git)</td><td>Linh hoạt khi cần nhiều phiên bản hoặc module tùy biến; xem bài 2</td></tr>
+                            <tr><td>Docker</td><td>Image chính thức <code>odoo:20.0</code>; mặc định chạy chế độ multi-thread nếu không cấu hình <code>workers</code></td></tr>
+                            <tr><td>Windows</td><td>Chỉ để thử hoặc chạy cục bộ một người dùng; tài liệu không khuyến khích dùng cho production</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Với bản cài từ gói, vẫn cần cài <strong>wkhtmltopdf 0.12.6</strong> thủ công (không qua pip) để PDF có header và footer, như đã nêu ở bài báo cáo.</p>
+
+                <h2 id="file-cau-hinh">File cấu hình odoo.conf</h2>
+                <p>Thay vì gõ nhiều tham số dòng lệnh, đặt cấu hình trong file. Đây là mẫu cho một server có kết nối PostgreSQL riêng:</p>
+<pre><code>[options]
+admin_passwd = &lt;chuỗi ngẫu nhiên, dài&gt;
+db_host = 127.0.0.1
+db_port = 5432
+db_user = odoo
+db_password = &lt;mật khẩu&gt;
+dbfilter = ^mycompany$
+list_db = False
+proxy_mode = True
+workers = 5
+max_cron_threads = 1
+limit_memory_soft = 629145600
+limit_memory_hard = 1677721600
+limit_time_cpu = 600
+limit_time_real = 1200</code></pre>
+                <p>Các mục quan trọng sẽ được giải thích bên dưới.</p>
+
+                <h2 id="dbfilter">dbfilter: chọn database theo tên miền</h2>
+                <p>Odoo là hệ thống đa khách thuê (multi-tenant): một server có thể phục vụ nhiều database. Với người dùng đã đăng nhập backend thì chọn database lúc đăng nhập, nhưng với khách chưa đăng nhập (website, portal) Odoo cần quy tắc để biết dùng database nào. <code>dbfilter</code> là một biểu thức chính quy quyết định điều đó dựa trên tên miền được yêu cầu, có thể chứa <code>%h</code> (hostname) hoặc <code>%d</code> (subdomain đầu tiên). Với server có nhiều database, đặc biệt khi dùng website, bắt buộc phải đặt <code>dbfilter</code>.</p>
+                <p>Khi mỗi tên miền chỉ khớp một database, hãy đặt thêm <code>list_db = False</code> (tương đương tham số <code>--no-database-list</code>) để không liệt kê database và chặn các màn hình quản lý database.</p>
+
+                <h2 id="postgresql">PostgreSQL cho production</h2>
+                <ul>
+                    <li>Mặc định PostgreSQL chỉ cho kết nối qua UNIX socket và loopback. Nếu Odoo và PostgreSQL chạy khác máy, PostgreSQL phải lắng nghe qua mạng (hoặc dùng SSH tunnel), và bạn cấu hình <code>db_host</code>, <code>db_port</code>, <code>db_user</code>, <code>db_password</code> trong Odoo.</li>
+                    <li>User PostgreSQL của Odoo <strong>không được là superuser</strong>. Nên để database thuộc một user khác user mà Odoo dùng để kết nối.</li>
+                    <li>Có thể bắt buộc kết nối SSL giữa Odoo và PostgreSQL bằng <code>db_sslmode</code> (các giá trị: <code>disable</code>, <code>allow</code>, <code>prefer</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code>).</li>
+                    <li>Màn hình quản lý database được bảo vệ bằng <code>admin_passwd</code>, chỉ đặt được trong file cấu hình. Hãy đặt giá trị ngẫu nhiên, dài.</li>
+                </ul>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-vi-14">
+                        <title id="dg-vi-14">Kiến trúc triển khai Odoo production với Nginx</title>
+                        <rect class="dg-box" x="10" y="15" width="130" height="90" rx="12" />
+                        <text class="dg-title" x="26" y="43">Trình duyệt</text>
+                        <text class="dg-text" x="26" y="89">HTTPS :443</text>
+                        <path class="dg-arrow" d="M142 60 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="166" y="15" width="150" height="90" rx="12" />
+                        <text class="dg-title" x="182" y="43">Nginx</text>
+                        <text class="dg-text" x="182" y="89">SSL, proxy, file tĩnh</text>
+                        <path class="dg-arrow" d="M318 42 h22 m-8 -6 l8 6 l-8 6" /><path class="dg-arrow" d="M318 80 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="342" y="5" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="33">Workers HTTP :8069</text>
+                        <rect class="dg-box" x="342" y="65" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="93">Live chat :8072 (/websocket)</text>
+                        <rect class="dg-box" x="342" y="125" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="153">Worker cron</text>
+                        <path class="dg-arrow" d="M504 90 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="528" y="35" width="102" height="110" rx="12" />
+                        <text class="dg-title" x="544" y="63">PostgreSQL</text>
+                        <text class="dg-text" x="544" y="129">user riêng</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu Odoo 20.</figcaption>
+                </figure>
+
+                <h2 id="workers">Workers: multi-process thay cho multi-thread</h2>
+                <p>Odoo có hai kiểu server tích hợp. <strong>Multi-thread</strong> đơn giản, dùng cho phát triển và demo, chạy được trên cả Windows, nhưng không tận dụng tốt phần cứng do giới hạn GIL của Python; đây là chế độ mặc định (khi bỏ <code>--workers</code> hoặc đặt bằng 0). <strong>Multi-process</strong> dành cho production: tạo một nhóm worker lúc khởi động, request mới xếp hàng chờ worker rảnh, có worker cron riêng và một bộ giám sát tài nguyên có thể kill/khởi động lại worker lỗi. Chế độ này bật bằng cách đặt <code>workers</code> là một số nguyên khác 0 và không chạy được trên Windows.</p>
+                <h3 id="tinh-workers">Ước lượng số worker và RAM</h3>
+                <ul>
+                    <li>Quy tắc tham khảo: số worker tối đa = <code>(số CPU × 2) + 1</code>; worker cron cũng tốn CPU.</li>
+                    <li>Khoảng 1 worker phục vụ ~6 người dùng đồng thời.</li>
+                    <li>Giả định 20% request nặng và 80% nhẹ; worker nặng dùng khoảng 1GB RAM, worker nhẹ khoảng 150MB (khi computed field và truy vấn SQL được thiết kế tốt). RAM cần = số worker × (0,8 × 150MB + 0,2 × 1GB).</li>
+                </ul>
+                <p>Ví dụ trong tài liệu: server 4 CPU, 60 người dùng đồng thời. Lý thuyết cần 10 worker (60/6), tối đa 9 theo quy tắc CPU; chọn 8 worker + 1 cho cron, cần khoảng 3GB RAM cho Odoo, và dùng hệ thống giám sát để theo dõi tải CPU.</p>
+
+                <h3 id="gioi-han-worker">Giới hạn và tái chế worker</h3>
+                <p>Bộ giám sát tiến trình của chế độ multi-process dựa trên các giới hạn sau (đơn vị bộ nhớ là byte, mẫu cấu hình ở trên dùng giá trị khác mặc định để phù hợp một server nhỏ):</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tham số</th><th>Mặc định</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>limit_memory_soft</code></td><td>2048 MiB</td><td>Bộ nhớ ảo tối đa mỗi worker; vượt thì worker bị kill và tái chế vào cuối request hiện tại</td></tr>
+                            <tr><td><code>limit_memory_hard</code></td><td>2560 MiB</td><td>Giới hạn cứng; worker vượt sẽ bị kill ngay, không chờ hết request</td></tr>
+                            <tr><td><code>limit_time_cpu</code></td><td>60</td><td>Số giây CPU tối đa cho mỗi request; vượt thì worker bị kill</td></tr>
+                            <tr><td><code>limit_time_real</code></td><td>120</td><td>Giới hạn "thời gian thực" (kể cả chờ truy vấn SQL) cho mỗi request; vượt thì worker bị kill</td></tr>
+                            <tr><td><code>limit_request</code></td><td>8196</td><td>Số request một worker xử lý trước khi được tái chế và khởi động lại</td></tr>
+                            <tr><td><code>max_cron_threads</code></td><td>2</td><td>Số worker dành cho cron; ở multi-process là thêm vào các worker HTTP</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Cổng live chat <code>--gevent-port</code> mặc định là 8072 và chỉ dùng ở chế độ multi-process hoặc gevent.</p>
+
+                <h2 id="https-nginx">HTTPS với Nginx và proxy_mode</h2>
+                <p>Odoo truyền thông tin đăng nhập dạng bản rõ, vì vậy triển khai an toàn bắt buộc dùng HTTPS. Cách phổ biến là đặt Odoo sau một reverse proxy kết thúc SSL như Nginx, kèm ba việc: bật <code>proxy_mode</code> (chỉ khi Odoo thật sự đứng sau proxy), cấu hình proxy kết thúc SSL, cấu hình chuyển tiếp request, và tự chuyển hướng HTTP sang HTTPS. Mẫu rút gọn:</p>
+<pre><code>upstream odoo     { server 127.0.0.1:8069; }
+upstream odoochat { server 127.0.0.1:8072; }
+
+map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+
+server {
+    listen 80;
+    server_name odoo.example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name odoo.example.com;
+    ssl_certificate     /etc/ssl/nginx/server.crt;
+    ssl_certificate_key /etc/ssl/nginx/server.key;
+    proxy_read_timeout 720s;
+
+    location /websocket {
+        proxy_pass http://odoochat;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        proxy_pass http://odoo;
+        proxy_redirect off;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+    }
+}</code></pre>
+                <ul>
+                    <li>Ở chế độ multi-process có một worker live chat riêng lắng nghe cổng <code>--gevent-port</code> (mẫu trên là 8072). Proxy phải chuyển các request có đường dẫn bắt đầu bằng <code>/websocket/</code> tới worker này.</li>
+                    <li>Header <code>Strict-Transport-Security</code> ép trình duyệt luôn dùng HTTPS; từ đó bạn phải duy trì HTTPS hợp lệ liên tục, nếu không người dùng sẽ gặp cảnh báo hoặc không truy cập được.</li>
+                    <li>Có thể phục vụ file tĩnh (đường dẫn <code>/&lt;module&gt;/static/...</code>) trực tiếp bằng Nginx để giảm tải cho Odoo; <code>root</code> và <code>try_files</code> phụ thuộc vào <code>--addons-path</code> của bạn.</li>
+                </ul>
+
+                <h3 id="proxy-mode-chi-tiet">proxy_mode hoạt động thế nào?</h3>
+                <p><code>proxy_mode</code> cho phép dùng các header <code>X-Forwarded-*</code> qua hỗ trợ proxy của Werkzeug. Có hai điểm dễ bỏ sót: Odoo <strong>bỏ qua mọi header <code>X-Forwarded-*</code> nếu request thiếu <code>X-Forwarded-Host</code></strong>, và IP thật luôn lấy từ phần tử cuối của chuỗi <code>X-Forwarded-For</code>. Vì vậy cấu hình web server phải gửi đủ các header như mẫu Nginx ở trên. Nếu bạn vô tình truy cập Odoo trực tiếp (không qua Nginx) khi đã bật <code>proxy_mode</code>, Odoo ghi cảnh báo kèm cấu hình cần thiết.</p>
+
+                <h2 id="wsgi-cron">Chạy Odoo như ứng dụng WSGI</h2>
+                <p>Có thể gắn Odoo như một ứng dụng WSGI chuẩn. Odoo cung cấp script mẫu <code>odoo-wsgi.example.py</code> để bạn tùy chỉnh, và cấu hình đặt trực tiếp trong <code>odoo.tools.config</code> thay vì dòng lệnh hoặc file cấu hình. Lưu ý máy chủ WSGI chỉ phục vụ endpoint HTTP chính (web client, website, web service); vì Odoo không còn kiểm soát việc tạo worker nên không tự dựng được worker cron hay live chat:</p>
+                <ul>
+                    <li><strong>Cron:</strong> phải chạy thêm một server tích hợp của Odoo cạnh server WSGI, cấu hình chỉ xử lý cron bằng <code>--no-http</code> (hoặc <code>http_enable = False</code>). Trên Linux nên dùng multi-process, ví dụ <code>--workers=-1</code> cùng <code>--max-cron-threads=n</code>.</li>
+                    <li><strong>Live chat:</strong> cần một server WSGI tương thích gevent, xử lý được nhiều kết nối dài đồng thời nhưng không cần nhiều sức mạnh tính toán. Mọi request có đường dẫn bắt đầu bằng <code>/websocket/</code> phải chuyển tới server này, còn request khác đi vào server WSGI thông thường. Cũng có thể dùng chính server cron cho live chat bằng cách bỏ <code>--no-http</code>.</li>
+                </ul>
+
+                <h2 id="bao-mat">Checklist bảo mật khi mở ra Internet</h2>
+                <ul>
+                    <li>Đặt <code>admin_passwd</code> mạnh và khóa các trang quản lý database ngay sau khi dựng hệ thống.</li>
+                    <li>Không dùng <code>admin</code> làm tên đăng nhập, và không dùng tài khoản quản trị cho công việc hằng ngày. Không bao giờ dùng mật khẩu mặc định như admin/admin, kể cả database test hoặc staging.</li>
+                    <li><strong>Không cài dữ liệu demo</strong> trên server công khai: database demo chứa tài khoản và mật khẩu mặc định có thể bị lợi dụng.</li>
+                    <li>Dùng <code>dbfilter</code>, đặt <code>list_db = False</code>; user PostgreSQL không phải superuser.</li>
+                    <li>Cập nhật bản build mới thường xuyên; chạy chế độ multi-process với giới hạn phù hợp (bộ nhớ, CPU, thời gian).</li>
+                    <li>Chạy sau web server có HTTPS với chứng chỉ hợp lệ, giới hạn kích thước request, đặt timeout rồi bật proxy mode.</li>
+                    <li>SSH chỉ dùng khóa công khai, cân nhắc VPN, firewall chỉ cho IP tin cậy và công cụ chống brute-force như fail2ban; đặt giới hạn tần suất ở proxy hoặc firewall.</li>
+                    <li>Đặt server demo, test, staging ở máy khác production và áp dụng cùng biện pháp bảo mật.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Về sao lưu</p>
+                    <p>Dữ liệu Odoo gồm database PostgreSQL và filestore (với image Docker chính thức là thư mục <code>/var/lib/odoo</code>, như volume ở bài 2). Bài này chưa đi sâu phương án sao lưu và giám sát vì chúng phụ thuộc hạ tầng của bạn; hãy lập kế hoạch cho cả hai thành phần trước khi go-live và thử khôi phục định kỳ.</p>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi triển khai</p>
+                    <ul>
+                        <li><strong>Đặt Nginx phía trước nhưng quên bật <code>proxy_mode</code>.</strong> Khi đó Odoo dùng thông tin của proxy thay vì của người dùng thật (hostname, scheme, IP). Cần khởi động Odoo với proxy mode để nó đọc các header <code>X-Forwarded-*</code> mà proxy gửi. Chỉ bật khi Odoo thật sự nằm sau reverse proxy.</li>
+                        <li><strong>Đưa server lên Internet với database có dữ liệu demo hoặc mật khẩu admin/admin.</strong> Tài liệu cảnh báo đây là mật khẩu mặc định có thể bị khai thác ngay cả trên staging. Tạo database mới không có demo, đổi tên đăng nhập và mật khẩu quản trị.</li>
+                        <li><strong>Quên chuyển request <code>/websocket/</code> tới worker live chat.</strong> Ở chế độ multi-process, theo mặc định các request vẫn đi vào worker HTTP thông thường. Bạn phải cấu hình proxy chuyển đường dẫn bắt đầu bằng <code>/websocket/</code> sang cổng <code>--gevent-port</code> và chạy Odoo với proxy mode.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Production: multi-process (<code>workers</code>), Nginx + HTTPS, <code>proxy_mode</code>, <code>dbfilter</code>, <code>list_db = False</code>.</li>
+                    <li>PostgreSQL dùng user riêng không phải superuser; không cài dữ liệu demo; không dùng mật khẩu mặc định.</li>
+                    <li>Ước lượng worker bằng (CPU × 2) + 1 và ~6 người dùng mỗi worker; đặt giới hạn bộ nhớ và thời gian.</li>
+                    <li>Chuyển <code>/websocket/</code> tới worker live chat; thử khôi phục sao lưu trước khi go-live.</li>
+                </ul>
+                <p>Đến đây bạn đã đi qua toàn bộ vòng đời của một module Odoo 20, từ khái niệm, cài đặt, viết code, giao diện, tích hợp, kiểm thử cho tới triển khai thật. Hãy chọn khóa học phù hợp để tiếp tục thực hành cùng mentor.</p>
+
+                <div class="cta-box">
+                    <h3>Cần đội ngũ hỗ trợ triển khai Odoo production?</h3>
+                    <p>Khóa DevOps for Odoo hướng dẫn dựng server, Nginx, SSL, tối ưu workers và quy trình triển khai, có mentor review cấu hình.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-D">Xem khóa DevOps for Odoo</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo production nên chạy multi-thread hay multi-process?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nên chạy multi-process bằng cách đặt workers là một số nguyên khác 0. Chế độ multi-thread là mặc định, đơn giản và phù hợp phát triển hoặc demo nhưng không tận dụng tốt phần cứng do giới hạn GIL của Python.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Công thức ước lượng số worker như thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Số worker tối đa theo quy tắc tham khảo là số CPU nhân 2 cộng 1, và khoảng 1 worker phục vụ 6 người dùng đồng thời. Worker cron cũng tốn CPU nên cần tính thêm.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>proxy_mode dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi Odoo chạy sau reverse proxy như Nginx, bật proxy_mode để Odoo dùng các header thật của người dùng như hostname, scheme và IP thay vì của proxy. Chỉ bật khi Odoo thực sự đứng sau proxy.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao phải đặt dbfilter và list_db?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">dbfilter cho Odoo biết database nào phục vụ cho tên miền nào, bắt buộc khi một server chứa nhiều database. Khi mỗi tên miền chỉ khớp một database, đặt list_db bằng False để không liệt kê database và chặn các màn hình quản lý database.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/deploy.html" target="_blank" rel="noopener">Odoo 20 – Deploying Odoo (system configuration)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/packages.html" target="_blank" rel="noopener">Odoo 20 – Packaged installers</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Ftrien-khai-odoo-production-nginx-workers.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Ftrien-khai-odoo-production-nginx-workers.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="unit-test-odoo-transactioncase.html"><small>← Bài trước</small>Unit test trong Odoo 20</a>
+                    <a class="next" href="index.html"><small>Về series →</small>Lập trình Odoo 20 từ A–Z</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#dev-vs-prod">Production khác môi trường phát triển ở đâu?</a></li>
+                        <li><a href="#cach-cai">Chọn cách cài đặt</a></li>
+                        <li><a href="#file-cau-hinh">File cấu hình odoo.conf</a></li>
+                        <li><a href="#dbfilter">dbfilter: chọn database theo tên miền</a></li>
+                        <li><a href="#postgresql">PostgreSQL cho production</a></li>
+                        <li><a href="#workers">Workers: multi-process thay cho multi-thread</a></li>
+                        <li><a href="#https-nginx">HTTPS với Nginx và proxy_mode</a></li>
+                        <li><a href="#wsgi-cron">Chạy Odoo như ứng dụng WSGI</a></li>
+                        <li><a href="#bao-mat">Checklist bảo mật khi mở ra Internet</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

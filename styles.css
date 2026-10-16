@@ -7,6 +7,7 @@
  }
 
  :root {
+     --container: 1200px;
      --blue-50: #E6F1FB;
      --blue-100: #B5D4F4;
      --blue-500: #185FA5;
@@ -80,7 +81,7 @@
      background: var(--nav-bg);
      backdrop-filter: blur(12px);
      border-bottom: 1px solid var(--border-light);
-     padding: 0 2.5rem;
+     padding: 0 max(2.5rem, calc((100% - var(--container)) / 2 + 2.5rem));
      height: 64px;
      display: flex;
      align-items: center;
@@ -285,11 +286,11 @@
 
   /* ── HERO ── */
  .hero {
-     max-width: 1000px;
+     max-width: var(--container);
      margin: 0 auto;
      padding: 6rem 2.5rem 5rem;
      display: grid;
-     grid-template-columns: 1fr 300px;
+     grid-template-columns: 1fr minmax(300px, 420px);
      gap: 4rem;
      align-items: center;
  }
@@ -467,13 +468,13 @@
  .divider {
      height: 1px;
      background: var(--border-light);
-     max-width: 1000px;
+     max-width: var(--container);
      margin: 0 auto;
  }
 
  /* ── SECTIONS ── */
  .section {
-     max-width: 1000px;
+     max-width: var(--container);
      margin: 0 auto;
      padding: 4rem 2.5rem;
  }
@@ -1359,7 +1360,7 @@
      justify-content: space-between;
      flex-wrap: wrap;
      gap: 12px;
-     max-width: 1000px;
+     max-width: var(--container);
      margin: 0 auto;
  }
 
@@ -1462,6 +1463,7 @@
   letter-spacing: -0.1px;
   transition: background 0.15s, transform 0.1s;
 }
+.program-detail-link::before { content: ''; position: absolute; inset: 0; }
 .program-detail-link::after {
   content: '→';
   font-size: 14px;
@@ -1500,12 +1502,9 @@
 }
 
 .program-hidden {
-    display: none;
+    display: contents;
 }
-
-.program-hidden.show {
-    display: block;
-}
+.course-card[hidden] { display: none; }
 
 @keyframes fadeSlideDown {
     from {
@@ -2229,3 +2228,45 @@
         padding-bottom: 90px;
     }
 }
+
+/* ── MÀN LỚN: nới container + phóng chữ ── */
+@media (min-width: 1600px) { :root { --container: 1440px; } }
+@media (min-width: 1900px) { :root { --container: 1520px; } body { zoom: 1.1; } }
+@media (min-width: 2400px) { :root { --container: 1680px; } body { zoom: 1.25; } }
+
+/* ── LỌC CHƯƠNG TRÌNH ── */
+.prog-filter { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip, .hero-pick button {
+    font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--text-secondary);
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px;
+    transition: border-color .15s, color .15s, background .15s;
+}
+.chip:hover, .hero-pick button:hover { border-color: var(--blue-500); color: var(--blue-500); }
+.chip.active { background: var(--blue-500); border-color: var(--blue-500); color: #fff; }
+#prog-search {
+    font: inherit; font-size: 14px; width: min(100%, 280px); padding: 9px 14px; color: var(--text-primary);
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+}
+#prog-search:focus { outline: 2px solid var(--blue-100); border-color: var(--blue-500); }
+.prog-empty { text-align: center; color: var(--text-muted); padding: 2rem 0; }
+.hero-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 1.5rem; font-size: 13.5px; color: var(--text-muted); }
+.hero-pick > span { font-weight: 600; margin-right: 4px; }
+.level-card { font: inherit; cursor: pointer; position: relative; color: inherit; transition: border-color .15s, background .15s, transform .15s; }
+.level-card:hover { border-color: var(--blue-500); transform: translateY(-2px); }
+.level-card.active { border-color: var(--blue-500); background: var(--blue-50); }
+.level-start { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: #DC3545; color: #fff; font-size: 11px; font-weight: 700; padding: 1px 10px; border-radius: 999px; white-space: nowrap; }
+@media (min-width: 901px) { .program-levels .level-card:not(:last-child)::after { content: '›'; position: absolute; right: -9px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; } }
+@media (max-width: 520px) { .chip { font-size: 13px; padding: 6px 12px; } }
+
+/* ── NÚT LÊN ĐẦU TRANG (vòng tiến độ cuộn) ── */
+.chat-bubble.to-top { width: 46px; height: 46px; align-self: center; padding: 0; cursor: pointer; border: 0; background: var(--bg-card); color: var(--blue-500); transition: background .2s, color .2s, transform .2s; }
+.chat-bubble.to-top[hidden] { display: none; }
+.to-top .ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); fill: none; stroke-width: 3; }
+.to-top .trk { stroke: var(--border); transition: stroke .2s; }
+.to-top .bar { stroke: var(--blue-500); stroke-linecap: round; stroke-dasharray: var(--p, 0) 100; transition: stroke .2s; }
+.to-top .arw { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.chat-bubble.to-top:hover { background: var(--blue-500); color: #fff; }
+.to-top:hover .trk { stroke: rgba(255, 255, 255, .35); }
+.to-top:hover .bar { stroke: #fff; }
+.to-top:hover .arw { transform: translateY(-2px); }

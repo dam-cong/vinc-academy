@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 PDF Reports with QWeb: A Complete Guide</title>
+    <meta name="description" content="Build Odoo 20 PDF reports with QWeb: ir.actions.report, templates, web.external_layout, paper format, wkhtmltopdf and custom reports." />
+    <meta name="keywords" content="odoo qweb report, odoo pdf report, ir.actions.report, wkhtmltopdf odoo, odoo external_layout, odoo paperformat" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 PDF Reports with QWeb: A Complete Guide" />
+    <meta property="og:description" content="Create and print PDF reports in Odoo 20 with QWeb: actions, templates, paper formats and custom reports." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-qweb-pdf-reports.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 PDF Reports with QWeb: A Complete Guide",
+                "description": "Create and print PDF reports in Odoo 20 with QWeb: actions, templates, paper formats and custom reports.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-qweb-pdf-reports.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "PDF reports with QWeb"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What tool produces the PDF file in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Report layouts are authored with HTML and QWeb, and wkhtmltopdf performs the conversion to PDF. Odoo 20 recommends version 0.12.6 so PDFs get headers and footers, installed manually rather than through pip."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does the report template connect to the report action?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The action's report_name must equal the module name joined with the template id, for example vinc_course.report_course."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I make the print button appear in a form's Print menu?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Declare the report action as an ir.actions.report record and set binding_model_id to the report's model."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When do I need a custom report with _get_report_values?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When the template needs data from models other than the report's own. You must then return docs, doc_ids and doc_model yourself because the default variables are not added automatically."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"bao-cao-pdf-qweb-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">PDF reports with QWeb</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 10 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 PDF Reports with QWeb: A Complete Guide</h1>
+            <p class="post-lead">Invoices, slips and quotations are all PDF reports. This guide shows how to write QWeb templates, declare a report action, choose a paper format and handle the common wkhtmltopdf problems.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>In Odoo 20 a PDF report is authored with HTML and QWeb, then converted to PDF by wkhtmltopdf.</strong> You need two things: a <em>report action</em> (<code>ir.actions.report</code>) and a <em>QWeb template</em> whose <code>id</code> matches the action's <code>report_name</code>. Inside the template, <code>t-foreach</code>, <code>t-if</code>, <code>t-out</code>, <code>t-field</code> and <code>t-call</code> are the directives you will use most.</p>
+                </div>
+
+                <h2 id="qweb-basics">QWeb: Odoo's template language</h2>
+                <p>QWeb is Odoo's main XML templating engine, mostly producing HTML snippets and pages: kanban cards, website pages and PDF reports. Directives are XML attributes starting with <code>t-</code>; the <code>&lt;t&gt;</code> element is a placeholder that runs its directive without emitting any markup of its own.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Directive</th><th>Purpose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>t-if</code>, <code>t-elif</code>, <code>t-else</code></td><td>Conditional rendering; when the condition is false the element disappears from the output</td></tr>
+                            <tr><td><code>t-foreach</code> + <code>t-as</code></td><td>Loop over a collection; <code>t-as</code> names the current item</td></tr>
+                            <tr><td><code>t-out</code></td><td>Prints the value of an expression, HTML-escaping it automatically to limit XSS risk</td></tr>
+                            <tr><td><code>t-set</code> + <code>t-value</code></td><td>Assigns a variable</td></tr>
+                            <tr><td><code>t-call</code></td><td>Includes another template</td></tr>
+                            <tr><td><code>t-field</code></td><td>Prints a record field and formats it according to the field type; works only on field access (<code>a.b</code>) of a record returned by the ORM</td></tr>
+                            <tr><td><code>t-att-*</code>, <code>t-attf-*</code></td><td>Sets HTML attributes dynamically</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="report-parts">What makes up a report?</h2>
+                <p>Each PDF report needs:</p>
+                <ol>
+                    <li>A <strong>report action</strong> (a <code>ir.actions.report</code> record): states which model the report covers, its type and which template to use.</li>
+                    <li>A <strong>QWeb template</strong>: the report's HTML content.</li>
+                    <li>(Optional) A <strong>paper format</strong>: page size, margins, orientation.</li>
+                </ol>
+                <p>Key attributes of the report action: <code>name</code> (required), <code>model</code> (required, the model the report is about), <code>report_type</code> (<code>qweb-pdf</code> unless you pick <code>qweb-html</code>), <code>report_name</code> (required, the external id of the template) and <code>print_report_name</code> (a Python expression naming the file). For the print button to show in a form's <em>Print</em> menu, also set <code>binding_model_id</code>.</p>
+
+                <h2 id="course-report">Hands-on: a course information sheet</h2>
+                <p>Create <code>reports/vinc_course_report.xml</code> and declare it in the manifest's <code>data</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/reports/vinc_course_report.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="action_report_vinc_course" model="ir.actions.report"&gt;
+        &lt;field name="name"&gt;Course sheet&lt;/field&gt;
+        &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+        &lt;field name="report_type"&gt;qweb-pdf&lt;/field&gt;
+        &lt;field name="report_name"&gt;vinc_course.report_course&lt;/field&gt;
+        &lt;field name="binding_model_id" ref="model_vinc_course"/&gt;
+    &lt;/record&gt;
+
+    &lt;template id="report_course"&gt;
+        &lt;t t-call="web.html_container"&gt;
+            &lt;t t-foreach="docs" t-as="course"&gt;
+                &lt;t t-call="web.external_layout"&gt;
+                    &lt;div class="page"&gt;
+                        &lt;h2 t-field="course.name"/&gt;
+                        &lt;p&gt;Level: &lt;span t-field="course.level"/&gt;&lt;/p&gt;
+                        &lt;p&gt;Duration: &lt;span t-field="course.duration_hours"/&gt; hours&lt;/p&gt;
+                        &lt;table class="table table-sm"&gt;
+                            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Session&lt;/th&gt;&lt;th&gt;Ngày&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+                            &lt;tbody&gt;
+                                &lt;tr t-foreach="course.session_ids" t-as="session"&gt;
+                                    &lt;td&gt;&lt;span t-field="session.name"/&gt;&lt;/td&gt;
+                                    &lt;td&gt;&lt;span t-field="session.session_date"/&gt;&lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/tbody&gt;
+                        &lt;/table&gt;
+                    &lt;/div&gt;
+                &lt;/t&gt;
+            &lt;/t&gt;
+        &lt;/t&gt;
+    &lt;/template&gt;
+&lt;/odoo&gt;</code></pre>
+                <ul>
+                    <li><code>web.html_container</code> wraps the report's HTML skeleton.</li>
+                    <li><code>web.external_layout</code> adds the company's default header and footer; the PDF body is whatever sits inside <code>&lt;div class="page"&gt;</code>.</li>
+                    <li><code>docs</code> holds the records being printed, <code>doc_ids</code> their ids and <code>doc_model</code> their model. Templates also always get <code>time</code>, <code>user</code>, <code>res_company</code>, <code>web_base_url</code> and a <code>context_timestamp</code> helper that converts UTC times to the printing user's timezone.</li>
+                    <li>The template <code>id</code> (<code>report_course</code>) prefixed with the module name (<code>vinc_course.</code>) must equal the action's <code>report_name</code>.</li>
+                </ul>
+                <p>Upgrade with <code>-u vinc_course</code>, open a course, choose <em>Print</em> and then <em>Course sheet</em> to download the PDF.</p>
+
+                <h2 id="wkhtmltopdf">wkhtmltopdf and paper format</h2>
+                <p>Converting HTML to PDF is the job of <strong>wkhtmltopdf</strong>. Odoo 20 recommends version <strong>0.12.6</strong> so that PDFs get headers and footers, and it must be installed manually rather than through pip. Templates may use Bootstrap and FontAwesome classes, and local CSS can sit right inside the template.</p>
+                <p>A paper format is a record of the <code>report.paperformat</code> model with attributes such as <code>format</code> (A4 by default, or <code>custom</code>), <code>orientation</code> (Portrait/Landscape), <code>margin_*</code> (mm), <code>dpi</code> (default 90), <code>header_line</code> and <code>header_spacing</code>. Attach it to a report through <code>paperformat_id</code>; without one, the company's format applies.</p>
+                <h3 id="html-view">Viewing a report as a web page</h3>
+                <p>Reports are generated dynamically and reachable by URL, which is handy while styling because you can inspect the HTML right in the browser:</p>
+<pre><code>http://localhost:8069/report/html/vinc_course.report_course/1
+http://localhost:8069/report/pdf/vinc_course.report_course/1</code></pre>
+                <p>The trailing number is the id of the record to print.</p>
+
+                <h2 id="custom-report">Custom reports: feeding extra data to the template</h2>
+                <p>Normally the data used for rendering is taken from the report's own model. To bring in data from other models, define an abstract model named <code>report.&lt;module&gt;.&lt;report_name&gt;</code> with a <code>_get_report_values(docids, data=None)</code> method; Odoo looks for this model first and uses what it returns as the rendering context:</p>
+<pre><code>from odoo import api, models
+
+
+class ReportCourse(models.AbstractModel):
+    _name = 'report.vinc_course.report_course'
+
+    def _get_report_values(self, docids, data=None):
+        courses = self.env['vinc.course'].browse(docids)
+        return {
+            'doc_ids': docids,
+            'doc_model': 'vinc.course',
+            'docs': courses,
+            'total_hours': sum(courses.mapped('duration_hours')),
+        }</code></pre>
+                <p>Note: in a custom report the stock variables <code>docs</code>, <code>doc_ids</code> and <code>doc_model</code> are <strong>not</strong> added for you; if the template needs them, return them yourself as in the example.</p>
+
+                <h2 id="action-options">More report action options</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Attribute</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>groups_id</code></td><td>Restricts who may see and run the report to these groups</td></tr>
+                            <tr><td><code>multi</code></td><td>When <code>True</code> the action is hidden on form views (it appears only when several records are selected in a list)</td></tr>
+                            <tr><td><code>paperformat_id</code></td><td>Chooses the page layout; without it the company's default applies</td></tr>
+                            <tr><td><code>attachment_use</code></td><td>When <code>True</code> the report is generated once, on first request, and later prints come from the stored copy instead of being rebuilt. Meant for documents that must be produced only once (for legal reasons, say)</td></tr>
+                            <tr><td><code>attachment</code></td><td>A Python expression naming the stored report; the record is available as <code>object</code></td></tr>
+                            <tr><td><code>print_report_name</code></td><td>A Python expression naming the downloaded PDF; <code>name</code> is used when it is not set</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>For instance, to name the file after the record, <code>print_report_name</code> could be <code>'Sheet-%s' % (object.name)</code>.</p>
+
+                <h2 id="translate-report">Printing in the customer's language</h2>
+                <p>To print a report in each partner's language, split it into <strong>two templates</strong>: a main one and a translatable document template. The main template includes the document template and passes <code>t-lang</code>, holding either a language code (<code>fr</code>, <code>en_US</code>…) or a field of the record. If you show translatable fields (country names, sales terms…), re-read the record under the right context using <code>with_context(lang=...)</code>:</p>
+<pre><code>&lt;template id="report_course"&gt;
+    &lt;t t-call="web.html_container"&gt;
+        &lt;t t-foreach="docs" t-as="doc"&gt;
+            &lt;t t-call="vinc_course.report_course_document"
+               t-lang="doc.instructor_id.lang"/&gt;
+        &lt;/t&gt;
+    &lt;/t&gt;
+&lt;/template&gt;
+
+&lt;template id="report_course_document"&gt;
+    &lt;t t-set="doc" t-value="doc.with_context(lang=doc.instructor_id.lang)"/&gt;
+    &lt;t t-call="web.external_layout"&gt;
+        &lt;div class="page"&gt;&lt;h2 t-field="doc.name"/&gt;&lt;/div&gt;
+    &lt;/t&gt;
+&lt;/template&gt;</code></pre>
+                <ul>
+                    <li>If just the body should be translated and the page frame left in one fixed language, include the layout as <code>&lt;t t-call="web.external_layout" t-lang="en_US"&gt;</code>.</li>
+                    <li><code>t-lang</code> works only together with <code>t-call</code> to an external template; put on a plain XML node it has no effect. To translate one fragment, give it a template of its own and include that with <code>t-lang</code>.</li>
+                    <li>If the template shows no translatable fields, do not re-read the record under another language, which would just waste resources.</li>
+                </ul>
+
+                <h2 id="barcode-css-font">Barcodes, CSS and custom fonts</h2>
+                <ul>
+                    <li><strong>Barcodes / QR codes:</strong> they are images served by a controller and embedded in a report through QWeb: <code>&lt;img t-att-src="'/report/barcode/QR/%s' % 'your text'"/&gt;</code>. More parameters travel in the query string, such as <code>barcode_type</code>, <code>value</code>, <code>width</code> and <code>height</code>.</li>
+                    <li><strong>CSS:</strong> Bootstrap and FontAwesome classes are usable, and local CSS can sit inside the template. Global CSS goes in by inheriting the report layout template (<code>inherit_id="report.style"</code>) and adding styles with an <code>xpath</code>.</li>
+                    <li><strong>Custom fonts:</strong> the font and its LESS/CSS must be added to the <code>web.report_assets_common</code> bundle. Registering them in <code>web.assets_common</code> or <code>web.assets_backend</code> will <em>not</em> expose the font to report templates. You must also declare <code>@font-face</code> inside that LESS file, even if it was already declared in another bundle.</li>
+                </ul>
+
+                <h2 id="paperformat-example">A complete paper format example</h2>
+<pre><code>&lt;record id="paperformat_course_a5" model="report.paperformat"&gt;
+    &lt;field name="name"&gt;Course sheet A5&lt;/field&gt;
+    &lt;field name="format"&gt;A5&lt;/field&gt;
+    &lt;field name="orientation"&gt;Landscape&lt;/field&gt;
+    &lt;field name="margin_top"&gt;20&lt;/field&gt;
+    &lt;field name="margin_bottom"&gt;15&lt;/field&gt;
+    &lt;field name="margin_left"&gt;10&lt;/field&gt;
+    &lt;field name="margin_right"&gt;10&lt;/field&gt;
+    &lt;field name="header_line" eval="False"/&gt;
+    &lt;field name="header_spacing"&gt;10&lt;/field&gt;
+    &lt;field name="dpi"&gt;90&lt;/field&gt;
+&lt;/record&gt;</code></pre>
+                <p>Only <code>name</code> is mandatory. If you give explicit page dimensions (<code>page_height</code>, <code>page_width</code> in mm), set <code>format</code> to <code>custom</code>, because a predefined size cannot be combined with hand-set dimensions.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when building reports</p>
+                    <ul>
+                        <li><strong>Clicking print produces nothing, or Odoo cannot find the template.</strong> Check the action's <code>report_name</code>: it has to read <code>module_name.template_id</code>. A template <code>id="report_course"</code> in module <code>vinc_course</code> corresponds to <code>vinc_course.report_course</code>.</li>
+                        <li><strong>The PDF lacks header, footer or styling.</strong> Check which wkhtmltopdf is installed. The documentation says 0.12.6 is needed for header/footer, and global CSS must be added by inheriting the report layout template.</li>
+                        <li><strong>The template uses <code>docs</code> but a custom report does not provide it.</strong> When you use <code>_get_report_values</code>, add <code>docs</code>, <code>doc_ids</code> and <code>doc_model</code> to the returned dict yourself.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A report = a report action (<code>ir.actions.report</code>) + a QWeb template whose id matches <code>report_name</code>.</li>
+                    <li><code>web.html_container</code> and <code>web.external_layout</code> provide the skeleton and header/footer; content goes in <code>div.page</code>.</li>
+                    <li>Translating a report takes two templates and <code>t-lang</code>; custom fonts must go in <code>web.report_assets_common</code>.</li>
+                    <li>wkhtmltopdf 0.12.6 is required for PDFs to have header/footer.</li>
+                </ul>
+                <p>Next we move to the browser side with OWL, the framework behind Odoo's web interface.</p>
+
+                <div class="cta-box">
+                    <h3>Need polished PDF reports for a business?</h3>
+                    <p>The Odoo Developer Foundation course teaches QWeb report design from scratch, with mentor review of templates and layout.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What tool produces the PDF file in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Report layouts are authored with HTML and QWeb, and wkhtmltopdf performs the conversion to PDF. Odoo 20 recommends version 0.12.6 so PDFs get headers and footers, installed manually rather than through pip.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does the report template connect to the report action?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The action's report_name must equal the module name joined with the template id, for example vinc_course.report_course.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I make the print button appear in a form's Print menu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Declare the report action as an ir.actions.report record and set binding_model_id to the report's model.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When do I need a custom report with _get_report_values?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When the template needs data from models other than the report's own. You must then return docs, doc_ids and doc_model yourself because the default variables are not added automatically.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/reports.html" target="_blank" rel="noopener">Odoo 20 – QWeb Reports</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/qweb.html" target="_blank" rel="noopener">Odoo 20 – QWeb Templates</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/actions.html" target="_blank" rel="noopener">Odoo 20 – Actions (Report Actions)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install (wkhtmltopdf)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-qweb-pdf-reports.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-qweb-pdf-reports.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-inheritance-model-view.html"><small>← Previous</small>Odoo 20 Inheritance</a>
+                    <span class="next"><small>Next · Coming soon</small>OWL framework basics</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#qweb-basics">QWeb: Odoo's template language</a></li>
+                        <li><a href="#report-parts">What makes up a report?</a></li>
+                        <li><a href="#course-report">Hands-on: a course information sheet</a></li>
+                        <li><a href="#wkhtmltopdf">wkhtmltopdf and paper format</a></li>
+                        <li><a href="#custom-report">Custom reports: feeding extra data to the template</a></li>
+                        <li><a href="#action-options">More report action options</a></li>
+                        <li><a href="#translate-report">Printing in the customer's language</a></li>
+                        <li><a href="#barcode-css-font">Barcodes, CSS and custom fonts</a></li>
+                        <li><a href="#paperformat-example">A complete paper format example</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Many2one, One2many, Many2many trong Odoo 20 có ví dụ</title>
+    <meta name="description" content="Hiểu 3 field quan hệ Odoo 20: Many2one, One2many, Many2many, quy ước _id/_ids, inverse_name, Command, ondelete và lỗi thường gặp." />
+    <meta name="keywords" content="many2one odoo, one2many odoo, many2many odoo, odoo relational fields, odoo inverse_name, odoo Command" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Many2one, One2many, Many2many trong Odoo 20 có ví dụ" />
+    <meta property="og:description" content="Liên kết các model trong Odoo 20 bằng Many2one, One2many, Many2many, kèm ví dụ module khóa học và lỗi thường gặp." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/many2one-one2many-many2many-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Many2one, One2many, Many2many trong Odoo 20 có ví dụ",
+                "description": "Liên kết các model trong Odoo 20 bằng Many2one, One2many, Many2many, kèm ví dụ module khóa học và lỗi thường gặp.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/many2one-one2many-many2many-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Quan hệ giữa các model"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Many2one và One2many khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Many2one là liên kết đơn tới một bản ghi của model khác, lưu thành một cột trong bảng. One2many là nghịch đảo: danh sách các bản ghi ở model đích trỏ ngược về bản ghi hiện tại, nên bắt buộc có inverse_name chỉ tới một Many2one."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào dùng Many2many?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi mỗi bản ghi ở hai phía đều có thể liên kết với nhiều bản ghi phía còn lại, ví dụ khóa học và thẻ. Odoo dùng một bảng trung gian để lưu quan hệ này."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Tên field quan hệ nên đặt thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo quy ước, Many2one kết thúc bằng _id (ví dụ category_id), còn One2many và Many2many kết thúc bằng _ids (ví dụ tag_ids)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao không gán trực tiếp danh sách id vào One2many hoặc Many2many?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Hai loại field này nhận danh sách lệnh Command như create, link, unlink, set để thay đổi quan hệ một cách rõ ràng, thay vì thay thế cả danh sách id."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-many2one-one2many-many2many.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Quan hệ giữa các model</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 7 · Series Lập trình Odoo 20</span>
+            <h1>Many2one, One2many, Many2many trong Odoo 20: quan hệ giữa các model</h1>
+            <p class="post-lead">Dữ liệu thực tế luôn liên kết với nhau. Bài này giải thích ba field quan hệ của Odoo, cách chọn đúng loại và cách đọc ghi dữ liệu quan hệ, qua ví dụ module khóa học với nhóm, thẻ và buổi học.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo có ba field quan hệ: <code>Many2one</code> (nhiều bản ghi trỏ tới một, hiển thị như dropdown), <code>One2many</code> (danh sách bản ghi trỏ ngược về, nghịch đảo của Many2one) và <code>Many2many</code> (nhiều-nhiều).</strong> Quy ước đặt tên: Many2one kết thúc bằng <code>_id</code>, hai loại còn lại kết thúc bằng <code>_ids</code>. Giá trị của field quan hệ luôn là một recordset.</p>
+                </div>
+
+                <h2 id="vi-sao-quan-he">Vì sao cần quan hệ giữa các model?</h2>
+                <p>Trong thực tế, một model đứng một mình hiếm khi đủ. Khóa học thuộc một nhóm, có giảng viên phụ trách, gắn nhiều thẻ mô tả và gồm nhiều buổi học. Thay vì chép lại thông tin ở nhiều nơi, Odoo cho phép các model <em>liên kết</em> với nhau bằng field quan hệ. Trong bài này module <code>vinc_course</code> được mở rộng với ba model mới:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Model mới</th><th>Quan hệ với <code>vinc.course</code></th><th>Field quan hệ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>vinc.course.category</code></td><td>Một nhóm có nhiều khóa; một khóa thuộc một nhóm</td><td><code>Many2one</code></td></tr>
+                            <tr><td><code>vinc.course.tag</code></td><td>Một khóa có nhiều thẻ; một thẻ gắn cho nhiều khóa</td><td><code>Many2many</code></td></tr>
+                            <tr><td><code>vinc.course.session</code></td><td>Một khóa có nhiều buổi học; mỗi buổi thuộc một khóa</td><td><code>One2many</code> (nghịch đảo của một <code>Many2one</code>)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 300" role="img" aria-labelledby="dg-vi-07">
+                        <title id="dg-vi-07">Sơ đồ quan hệ giữa vinc.course và các model khác</title>
+                        <rect class="dg-accent" x="235" y="115" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="251" y="143">vinc.course</text>
+                        <text class="dg-text" x="251" y="168">Khóa học</text>
+                        <rect class="dg-box" x="20" y="15" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="36" y="43">vinc.course.category</text>
+                        <rect class="dg-box" x="20" y="225" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="36" y="253">res.users</text>
+                        <rect class="dg-box" x="390" y="15" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="406" y="43">vinc.course.tag</text>
+                        <rect class="dg-box" x="390" y="225" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="406" y="253">vinc.course.session</text>
+                        <path class="dg-arrow" d="M240 120 L170 78" /><text class="dg-text" x="60" y="104">category_id · Many2one</text>
+                        <path class="dg-arrow" d="M240 180 L170 222" /><text class="dg-text" x="60" y="206">instructor_id · Many2one</text>
+                        <path class="dg-arrow" d="M400 120 L470 78" /><text class="dg-text" x="440" y="104">tag_ids · Many2many</text>
+                        <path class="dg-arrow" d="M400 180 L470 222" /><text class="dg-text" x="395" y="206">session_ids · One2many</text>
+                        <text class="dg-text" x="410" y="278">course_id · Many2one (ngược lại)</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn: mũi tên đi từ model chứa field quan hệ.</figcaption>
+                </figure>
+
+                <h2 id="many2one">Many2one: liên kết đơn tới một bản ghi khác</h2>
+                <p>Many2one là liên kết đơn giản tới một bản ghi của model khác, trong form thường hiển thị như một dropdown. Một khóa học thuộc một nhóm, nhưng một nhóm có thể gắn cho nhiều khóa. Tạo model nhóm trước:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_category.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseCategory(models.Model):
+    _name = 'vinc.course.category'
+    _description = "Nhóm khóa học"
+
+    name = fields.Char(required=True)</code></pre>
+                <p>Sau đó thêm field vào model <code>vinc.course</code> (file <code>models/course.py</code> của bài 4):</p>
+<pre><code>category_id = fields.Many2one('vinc.course.category', string="Nhóm")
+instructor_id = fields.Many2one(
+    'res.users', string="Giảng viên", default=lambda self: self.env.user)</code></pre>
+                <ul>
+                    <li>Tham số đầu tiên là <code>comodel_name</code>, tên model đích. Tham số này bắt buộc (trừ field <code>related</code> hoặc field kế thừa).</li>
+                    <li>Truy cập dữ liệu bên kia bằng dấu chấm: <code>course.category_id.name</code>. Nếu chưa có giá trị, kết quả là recordset rỗng.</li>
+                    <li>Hai model hay được trỏ tới nhất là <code>res.partner</code> (một thực thể vật lý hoặc pháp lý: công ty, cá nhân, thậm chí chỉ là một địa chỉ liên hệ) và <code>res.users</code> (người dùng hệ thống, gồm người dùng nội bộ và người dùng portal).</li>
+                    <li><code>ondelete</code> quyết định chuyện gì xảy ra khi bản ghi được trỏ tới bị xóa: <code>'set null'</code>, <code>'restrict'</code> hoặc <code>'cascade'</code>.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Lấy thông tin môi trường hiện tại</p>
+                    <p>Biến <code>self.env</code> cho bạn nhiều thứ hữu ích: <code>self.env.user</code> là bản ghi người dùng hiện tại, <code>self.env.uid</code> là id của họ, <code>self.env.context</code> là context, <code>self.env.ref('xml_id')</code> trả về bản ghi theo external id, và <code>self.env['tên.model']</code> trả về model đó. Ví dụ trên dùng <code>self.env.user</code> để mặc định giảng viên là người đang đăng nhập.</p>
+                </div>
+
+                <h2 id="many2many">Many2many: quan hệ nhiều-nhiều</h2>
+                <p>Many2many là quan hệ nhiều chiều hai phía: bản ghi bên này có thể liên kết với bất kỳ số bản ghi nào bên kia. Một khóa có nhiều thẻ ("thực hành", "cho người mới") và một thẻ gắn cho nhiều khóa.</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_tag.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseTag(models.Model):
+    _name = 'vinc.course.tag'
+    _description = "Thẻ khóa học"
+
+    name = fields.Char(required=True)</code></pre>
+<pre><code># thêm vào vinc.course
+tag_ids = fields.Many2many('vinc.course.tag', string="Thẻ")</code></pre>
+                <p>Giá trị của field này là một recordset, nên phải duyệt bằng vòng lặp. Recordset hỗ trợ các thao tác chuẩn của Python như <code>len()</code>, <code>iter()</code> và phép tập hợp như <code>recs1 | recs2</code>:</p>
+<pre><code>for tag in course.tag_ids:
+    print(tag.name)</code></pre>
+                <p>Trong form view, thêm <code>widget="many2many_tags"</code> để các thẻ hiển thị gọn dạng nhãn: <code>&lt;field name="tag_ids" widget="many2many_tags"/&gt;</code>.</p>
+                <p>Bảng trung gian lưu quan hệ được Odoo tự đặt tên từ tên hai model. Bạn có thể chỉ định rõ bằng <code>relation</code>, <code>column1</code>, <code>column2</code> khi cần.</p>
+
+                <h2 id="one2many">One2many: danh sách bản ghi trỏ ngược lại</h2>
+                <p>One2many là nghịch đảo của Many2one. Mỗi buổi học thuộc đúng một khóa (Many2one), và từ khóa ta muốn xem toàn bộ các buổi (One2many). Vì vậy bạn khai báo Many2one ở model "nhiều" trước:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_session.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseSession(models.Model):
+    _name = 'vinc.course.session'
+    _description = "Buổi học"
+
+    name = fields.Char(required=True)
+    course_id = fields.Many2one('vinc.course', required=True, ondelete='cascade')
+    session_date = fields.Datetime()</code></pre>
+<pre><code># thêm vào vinc.course
+session_ids = fields.One2many('vinc.course.session', 'course_id', string="Buổi học")</code></pre>
+                <p>Tham số thứ nhất là <code>comodel_name</code>, tham số thứ hai là <code>inverse_name</code>: tên field Many2one ở model đích mà One2many này nghịch đảo. Cả hai đều bắt buộc (trừ field <code>related</code> hoặc kế thừa). Giá trị là recordset gồm mọi bản ghi của model đích có <code>course_id</code> bằng khóa học hiện tại.</p>
+
+                <h3 id="tham-so-quan-he">Các tham số của field quan hệ</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Field</th><th>Tham số</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Many2one</td><td><code>comodel_name</code></td><td>Tên model đích; bắt buộc trừ field <code>related</code> hoặc kế thừa. Giá trị là recordset 0 hoặc 1 bản ghi</td></tr>
+                            <tr><td>Many2one</td><td><code>ondelete</code></td><td>Hành động khi bản ghi được trỏ tới bị xóa: <code>'set null'</code>, <code>'restrict'</code>, <code>'cascade'</code></td></tr>
+                            <tr><td>Many2one</td><td><code>delegate</code></td><td><code>True</code> để truy cập các field của model đích từ model hiện tại (tương ứng <code>_inherits</code>)</td></tr>
+                            <tr><td>Many2one</td><td><code>check_company</code></td><td>Đánh dấu field được kiểm tra tính tương thích công ty trong <code>_check_company()</code></td></tr>
+                            <tr><td>One2many</td><td><code>comodel_name</code>, <code>inverse_name</code></td><td>Model đích và tên field Many2one ngược; bắt buộc trừ field <code>related</code> hoặc kế thừa</td></tr>
+                            <tr><td>Many2many</td><td><code>relation</code>, <code>column1</code>, <code>column2</code></td><td>Tên bảng trung gian và tên hai cột; tùy chọn, tự sinh từ tên model nếu <code>model_name</code> và <code>comodel_name</code> khác nhau</td></tr>
+                            <tr><td>Cả ba</td><td><code>domain</code>, <code>context</code></td><td>Domain gợi ý giá trị ứng viên và context dùng phía client khi xử lý field</td></tr>
+                            <tr><td>Cả ba</td><td><code>bypass_search_access</code></td><td>Có bỏ qua quyền truy cập trên model đích hay không (mặc định <code>False</code>)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">One2many là quan hệ "ảo"</p>
+                    <p>Vì One2many không tạo cột nào, trong model đích bắt buộc phải có sẵn field Many2one tương ứng. Cũng vì vậy, khi bạn tạo bản ghi qua một One2many, Odoo tự điền Many2one ngược (<code>course_id</code>) nên không cần đưa nó vào view của dòng con. Và không phải model nào cũng cần action hay menu riêng: model "buổi học" chỉ được truy cập thông qua khóa học nên không cần.</p>
+                </div>
+
+                <h3 id="command">Ghi dữ liệu vào One2many và Many2many</h3>
+                <p>Hai loại field này nhận danh sách <strong>lệnh</strong> (<code>Command</code>) để thay đổi quan hệ chứ không nhận trực tiếp danh sách id. Có bảy lệnh: <code>link</code>, <code>unlink</code>, <code>set</code>, <code>clear</code>, <code>create</code>, <code>update</code> và <code>delete</code>. Ví dụ trong <code>odoo shell</code>:</p>
+<pre><code>from odoo import Command
+
+tag = env['vinc.course.tag'].create({'name': "Thực hành"})
+course.write({
+    'tag_ids': [Command.link(tag.id)],
+    'session_ids': [Command.create({'name': "Buổi 1"})],
+})
+env.cr.commit()</code></pre>
+
+                <h3 id="bang-command">Bảy lệnh Command</h3>
+                <p>Mỗi lệnh thực chất là một bộ ba, phần tử đầu là mã số nguyên. Trong Python hãy dùng các hàm của <code>Command</code> thay vì viết tay bộ ba:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mã</th><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td><code>Command.create(values)</code></td><td>Tạo bản ghi mới ở model đích và liên kết. Với One2many, tạo một bản ghi cho mỗi bản ghi trong <code>self</code></td></tr>
+                            <tr><td>1</td><td><code>Command.update(id, values)</code></td><td>Ghi giá trị lên bản ghi liên quan</td></tr>
+                            <tr><td>2</td><td><code>Command.delete(id)</code></td><td>Xóa bản ghi liên quan khỏi database và bỏ liên kết. Với Many2many, việc xóa có thể bị chặn nếu bản ghi còn được liên kết ở nơi khác</td></tr>
+                            <tr><td>3</td><td><code>Command.unlink(id)</code></td><td>Chỉ bỏ liên kết. Với One2many, bản ghi bị xóa nếu field ngược có <code>ondelete='cascade'</code>; nếu không, field ngược được đặt về <code>False</code> và bản ghi vẫn còn</td></tr>
+                            <tr><td>4</td><td><code>Command.link(id)</code></td><td>Thêm liên kết tới bản ghi đã có</td></tr>
+                            <tr><td>5</td><td><code>Command.clear()</code></td><td>Bỏ mọi liên kết, như <code>unlink</code> trên từng bản ghi</td></tr>
+                            <tr><td>6</td><td><code>Command.set(ids)</code></td><td>Thay toàn bộ liên kết hiện tại bằng danh sách id mới (bỏ liên kết cái thừa, thêm liên kết cái mới)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">Khi gọi qua RPC</p>
+                    <p>Qua RPC (kể cả API JSON-2 ở bài 12), bạn không dùng được hàm hay tên hằng của <code>Command</code>. Phải viết bộ ba nguyên văn với mã số, ví dụ <code>[[4, 12, 0]]</code> để liên kết bản ghi id 12.</p>
+                </div>
+
+                <h2 id="khai-bao-file">Đừng quên các file đi kèm model mới</h2>
+                <p>Mỗi model mới kéo theo vài việc lặp lại, giống những gì bạn đã làm ở bài 4 đến 6:</p>
+                <ol>
+                    <li>Import file Python mới trong <code>models/__init__.py</code> (<code>from . import course_category</code>, <code>course_tag</code>, <code>course_session</code>).</li>
+                    <li>Thêm dòng quyền cho từng model vào <code>ir.model.access.csv</code>, ví dụ <code>access_vinc_course_category_user,vinc.course.category user,model_vinc_course_category,base.group_user,1,1,1,1</code>.</li>
+                    <li>Thêm action, menu và view cho model mới nếu người dùng cần quản lý chúng; thêm các field mới vào form, list, search view của khóa học.</li>
+                    <li>Nâng cấp module bằng <code>-u vinc_course</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học quan hệ</p>
+                    <ul>
+                        <li><strong>Tạo model mới nhưng người dùng không thấy hoặc Odoo không nạp.</strong> Thường là do quên một trong các bước: import file trong <code>__init__.py</code>, khai báo file dữ liệu trong <code>data</code>, hoặc thêm access rights cho model mới. Hãy lần lượt kiểm tra ba chỗ này và xem log lúc khởi động.</li>
+                        <li><strong>Hai field Many2many cùng trỏ một model đích trong một model.</strong> Nếu không khai báo tham số <code>relation</code>, cả hai sẽ dùng cùng một bảng trung gian, và ORM không chấp nhận điều đó. Hãy đặt <code>relation</code>, <code>column1</code>, <code>column2</code> riêng cho từng field.</li>
+                        <li><strong>One2many nhưng quên tạo Many2one ngược lại.</strong> <code>inverse_name</code> phải là tên một field Many2one có thật ở model đích. Hãy khai báo Many2one trước rồi mới viết One2many.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Many2one lưu một cột khóa ngoại và hiển thị như dropdown; One2many là nghịch đảo ảo; Many2many dùng bảng trung gian.</li>
+                    <li>Quy ước tên: <code>_id</code> cho Many2one, <code>_ids</code> cho hai loại còn lại.</li>
+                    <li>Ghi vào One2many/Many2many bằng <code>Command</code>; qua RPC dùng bộ ba có mã số.</li>
+                    <li>Mỗi model mới cần import, quyền truy cập và nâng cấp module.</li>
+                </ul>
+                <p>Bài tiếp theo thêm logic nghiệp vụ đầu tiên: computed field, onchange và constraint.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn thiết kế mô hình dữ liệu cho dự án thực tế?</h3>
+                    <p>Khóa Odoo Developer Foundation có bài tập thiết kế nhiều model liên kết và được mentor review, giúp bạn tránh các lỗi mô hình dữ liệu ngay từ đầu.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Many2one và One2many khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Many2one là liên kết đơn tới một bản ghi của model khác, lưu thành một cột trong bảng. One2many là nghịch đảo: danh sách các bản ghi ở model đích trỏ ngược về bản ghi hiện tại, nên bắt buộc có inverse_name chỉ tới một Many2one.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào dùng Many2many?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi mỗi bản ghi ở hai phía đều có thể liên kết với nhiều bản ghi phía còn lại, ví dụ khóa học và thẻ. Odoo dùng một bảng trung gian để lưu quan hệ này.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tên field quan hệ nên đặt thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo quy ước, Many2one kết thúc bằng _id (ví dụ category_id), còn One2many và Many2many kết thúc bằng _ids (ví dụ tag_ids).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao không gán trực tiếp danh sách id vào One2many hoặc Many2many?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Hai loại field này nhận danh sách lệnh Command như create, link, unlink, set để thay đổi quan hệ một cách rõ ràng, thay vì thay thế cả danh sách id.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/07_relations.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Relations between models</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (relational fields)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fmany2one-one2many-many2many-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fmany2one-one2many-many2many-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="view-action-menu-odoo.html"><small>← Bài trước</small>View, action và menu trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Computed fields, onchange &amp; constraints</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#vi-sao-quan-he">Vì sao cần quan hệ giữa các model?</a></li>
+                        <li><a href="#many2one">Many2one: liên kết đơn tới một bản ghi khác</a></li>
+                        <li><a href="#many2many">Many2many: quan hệ nhiều-nhiều</a></li>
+                        <li><a href="#one2many">One2many: danh sách bản ghi trỏ ngược lại</a></li>
+                        <li><a href="#khai-bao-file">Đừng quên các file đi kèm model mới</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

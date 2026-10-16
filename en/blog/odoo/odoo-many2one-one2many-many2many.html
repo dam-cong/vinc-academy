@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Many2one, One2many, Many2many with Examples</title>
+    <meta name="description" content="Understand Odoo 20 relational fields: Many2one, One2many, Many2many, the _id/_ids convention, inverse_name, Command, ondelete and common mistakes." />
+    <meta name="keywords" content="many2one odoo, one2many odoo, many2many odoo, odoo relational fields, odoo inverse_name, odoo Command" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Many2one, One2many, Many2many with Examples" />
+    <meta property="og:description" content="Link models in Odoo 20 with Many2one, One2many and Many2many, using a course module example and common mistakes." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-many2one-one2many-many2many.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Many2one, One2many, Many2many with Examples",
+                "description": "Link models in Odoo 20 with Many2one, One2many and Many2many, using a course module example and common mistakes.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-many2one-one2many-many2many.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-many2one-one2many-many2many.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Relations between models"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How do Many2one and One2many differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A Many2one is a single link to one record of another model, stored as a column in the table. A One2many works the other way around: the target records pointing back at the current one, so it needs an inverse_name naming a Many2one."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use Many2many?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When each record on either side may be tied to several on the opposite side, such as courses and tags. Odoo stores this relation in a link table."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How should relational fields be named?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "By convention a Many2one ends in _id (for example category_id), while One2many and Many2many end in _ids (for example tag_ids)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why not assign a plain list of ids to a relational list field?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "They take a list of Command operations (link, unlink, set, create and more), so every change to the relation is explicit instead of replacing the whole list of ids."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"many2one-one2many-many2many-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Relations between models</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 7 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Many2one, One2many and Many2many: Relations Between Models</h1>
+            <p class="post-lead">Real-world data is always connected. This guide explains Odoo's three relational fields, how to pick the right one and how to read and write relational data, using a course module with categories, tags and sessions.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo has three relational fields: <code>Many2one</code> (many records pointing to one, shown as a dropdown), <code>One2many</code> (the list of records pointing back, seen from the opposite side of a Many2one) and <code>Many2many</code>.</strong> Naming convention: a Many2one ends in <code>_id</code>, the other two end in <code>_ids</code>. The value of a relational field is always a recordset.</p>
+                </div>
+
+                <h2 id="why-relations">Why do models need relations?</h2>
+                <p>Real applications rarely get by with one lonely model. A course belongs to a category, has an instructor, carries several tags and consists of many sessions. Instead of copying information in several places, Odoo lets models <em>link</em> to each other through relational fields. In this part the <code>vinc_course</code> module grows by three new models:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>New model</th><th>Relation to <code>vinc.course</code></th><th>Relational field</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>vinc.course.category</code></td><td>A category holds many courses; a course has one category</td><td><code>Many2one</code></td></tr>
+                            <tr><td><code>vinc.course.tag</code></td><td>A course has many tags; a tag applies to many courses</td><td><code>Many2many</code></td></tr>
+                            <tr><td><code>vinc.course.session</code></td><td>A course has many sessions; each session belongs to one course</td><td><code>One2many</code> (inverse of a <code>Many2one</code>)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 300" role="img" aria-labelledby="dg-en-07">
+                        <title id="dg-en-07">Relations between vinc.course and the other models</title>
+                        <rect class="dg-accent" x="235" y="115" width="170" height="70" rx="12" />
+                        <text class="dg-title" x="251" y="143">vinc.course</text>
+                        <text class="dg-text" x="251" y="168">Course</text>
+                        <rect class="dg-box" x="20" y="15" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="36" y="43">vinc.course.category</text>
+                        <rect class="dg-box" x="20" y="225" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="36" y="253">res.users</text>
+                        <rect class="dg-box" x="390" y="15" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="406" y="43">vinc.course.tag</text>
+                        <rect class="dg-box" x="390" y="225" width="230" height="60" rx="12" />
+                        <text class="dg-title" x="406" y="253">vinc.course.session</text>
+                        <path class="dg-arrow" d="M240 120 L170 78" /><text class="dg-text" x="60" y="104">category_id · Many2one</text>
+                        <path class="dg-arrow" d="M240 180 L170 222" /><text class="dg-text" x="60" y="206">instructor_id · Many2one</text>
+                        <path class="dg-arrow" d="M400 120 L470 78" /><text class="dg-text" x="440" y="104">tag_ids · Many2many</text>
+                        <path class="dg-arrow" d="M400 180 L470 222" /><text class="dg-text" x="395" y="206">session_ids · One2many</text>
+                        <text class="dg-text" x="410" y="278">course_id · Many2one (inverse)</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy: arrows leave from the model that holds the relational field.</figcaption>
+                </figure>
+
+                <h2 id="many2one">Many2one: a single link to another record</h2>
+                <p>A Many2one is a plain link to one record of another model, usually rendered as a dropdown in forms. A course belongs to one category, while a category can be set on many courses. Create the category model first:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_category.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseCategory(models.Model):
+    _name = 'vinc.course.category'
+    _description = "Course category"
+
+    name = fields.Char(required=True)</code></pre>
+                <p>Then add fields to the <code>vinc.course</code> model (the <code>models/course.py</code> file from part 4):</p>
+<pre><code>category_id = fields.Many2one('vinc.course.category', string="Category")
+instructor_id = fields.Many2one(
+    'res.users', string="Instructor", default=lambda self: self.env.user)</code></pre>
+                <ul>
+                    <li>The first argument is <code>comodel_name</code>, the target model. You must always supply it, unless the field is <code>related</code> or inherited.</li>
+                    <li>Reach the data on the other side with dot notation: <code>course.category_id.name</code>. When nothing is set, you get an empty recordset.</li>
+                    <li>The two most common targets are <code>res.partner</code> (a real person or an organization, even just a contact address) and <code>res.users</code> (system users, either internal or portal).</li>
+                    <li><code>ondelete</code> decides what happens when the referenced record is deleted: <code>'set null'</code>, <code>'restrict'</code> or <code>'cascade'</code>.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Reading the current environment</p>
+                    <p>The <code>self.env</code> object is a handy toolbox. Use <code>self.env.user</code> to get whoever is logged in, <code>self.env.uid</code> for the numeric id, <code>self.env.context</code> for the context dictionary, <code>self.env.ref('xml_id')</code> to fetch a record by external id, and <code>self.env['model.name']</code> to reach any model. The example above relies on <code>self.env.user</code> so the instructor defaults to the person logged in.</p>
+                </div>
+
+                <h2 id="many2many">Many2many: many on both sides</h2>
+                <p>A Many2many works in both directions: each record on either side may be tied to several records on the opposite side. A course has several tags ("hands-on", "for beginners") and a tag applies to several courses.</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_tag.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseTag(models.Model):
+    _name = 'vinc.course.tag'
+    _description = "Course tag"
+
+    name = fields.Char(required=True)</code></pre>
+<pre><code># add to vinc.course
+tag_ids = fields.Many2many('vinc.course.tag', string="Tags")</code></pre>
+                <p>The value is a recordset, so you iterate with a loop. Recordsets behave like Python collections (<code>len()</code>, looping) and can be merged with <code>recs1 | recs2</code>:</p>
+<pre><code>for tag in course.tag_ids:
+    print(tag.name)</code></pre>
+                <p>In a form view, add <code>widget="many2many_tags"</code> so tags display compactly as badges: <code>&lt;field name="tag_ids" widget="many2many_tags"/&gt;</code>.</p>
+                <p>The intermediate table holding these links gets a name Odoo derives from the two model names. You can set it explicitly with <code>relation</code>, <code>column1</code> and <code>column2</code> when needed.</p>
+
+                <h2 id="one2many">One2many: the list pointing back</h2>
+                <p>A One2many mirrors a Many2one from the other side. Each session belongs to exactly one course (Many2one), and from a course we want to see all its sessions (One2many). So you declare the Many2one on the "many" side first:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course_session.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourseSession(models.Model):
+    _name = 'vinc.course.session'
+    _description = "Course session"
+
+    name = fields.Char(required=True)
+    course_id = fields.Many2one('vinc.course', required=True, ondelete='cascade')
+    session_date = fields.Datetime()</code></pre>
+<pre><code># add to vinc.course
+session_ids = fields.One2many('vinc.course.session', 'course_id', string="Sessions")</code></pre>
+                <p>The first argument is <code>comodel_name</code>; the second is <code>inverse_name</code>, the Many2one in the target model that this field reflects. Both must be supplied, again unless the field is <code>related</code> or inherited. The value contains every target record whose <code>course_id</code> points to the current course.</p>
+
+                <h3 id="relation-params">Parameters of relational fields</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Field</th><th>Parameter</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Many2one</td><td><code>comodel_name</code></td><td>The target model; required unless the field is <code>related</code> or inherited. The value is a recordset of 0 or 1 records</td></tr>
+                            <tr><td>Many2one</td><td><code>ondelete</code></td><td>What to do when the referenced record is deleted: <code>'set null'</code>, <code>'restrict'</code>, <code>'cascade'</code></td></tr>
+                            <tr><td>Many2one</td><td><code>delegate</code></td><td><code>True</code> exposes the target model's fields on the current model (matches <code>_inherits</code>)</td></tr>
+                            <tr><td>Many2one</td><td><code>check_company</code></td><td>Marks the field for company-compatibility checking in <code>_check_company()</code></td></tr>
+                            <tr><td>One2many</td><td><code>comodel_name</code>, <code>inverse_name</code></td><td>The target model and the name of the mirrored Many2one; required unless <code>related</code> or inherited</td></tr>
+                            <tr><td>Many2many</td><td><code>relation</code>, <code>column1</code>, <code>column2</code></td><td>Link table name and its two column names; optional, generated from the model names when <code>model_name</code> and <code>comodel_name</code> differ</td></tr>
+                            <tr><td>All three</td><td><code>domain</code>, <code>context</code></td><td>A domain narrowing candidate values, and a context applied on the client when handling the field</td></tr>
+                            <tr><td>All three</td><td><code>bypass_search_access</code></td><td>Whether access rights on the target model are bypassed (default <code>False</code>)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">A One2many is a "virtual" relation</p>
+                    <p>Since a One2many creates no column, the target model must already hold the matching Many2one. This is also why, when you create a record through a One2many, Odoo fills in the inverse Many2one (<code>course_id</code>) for you, so it need not appear in the child row's view. And not every model needs its own action or menu: the "session" model is only reached through a course, so it needs neither.</p>
+                </div>
+
+                <h3 id="command">Writing to One2many and Many2many</h3>
+                <p>These two field types take a list of <strong>commands</strong> (<code>Command</code>) to change the relation rather than a plain list of ids. Seven exist: <code>link</code>, <code>unlink</code>, <code>set</code>, <code>clear</code>, <code>create</code>, <code>update</code> and <code>delete</code>. For example in <code>odoo shell</code>:</p>
+<pre><code>from odoo import Command
+
+tag = env['vinc.course.tag'].create({'name': "Hands-on"})
+course.write({
+    'tag_ids': [Command.link(tag.id)],
+    'session_ids': [Command.create({'name': "Session 1"})],
+})
+env.cr.commit()</code></pre>
+
+                <h3 id="command-table">The seven Command operations</h3>
+                <p>Each operation is really a triplet whose first element is an integer code. In Python, build them with the <code>Command</code> helper functions instead of typing triplets by hand:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Code</th><th>Operation</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0</td><td><code>Command.create(values)</code></td><td>Creates a new record in the target model and links it. On a One2many it creates one record for each record in <code>self</code></td></tr>
+                            <tr><td>1</td><td><code>Command.update(id, values)</code></td><td>Writes values onto the related record</td></tr>
+                            <tr><td>2</td><td><code>Command.delete(id)</code></td><td>Removes the related record from the database and drops the link. On a Many2many the removal may be refused while the record is still linked elsewhere</td></tr>
+                            <tr><td>3</td><td><code>Command.unlink(id)</code></td><td>Drops only the link. On a One2many the record is deleted when the inverse field has <code>ondelete='cascade'</code>; otherwise the inverse is set to <code>False</code> and the record stays</td></tr>
+                            <tr><td>4</td><td><code>Command.link(id)</code></td><td>Adds a link to an existing record</td></tr>
+                            <tr><td>5</td><td><code>Command.clear()</code></td><td>Removes every link, like <code>unlink</code> on each record</td></tr>
+                            <tr><td>6</td><td><code>Command.set(ids)</code></td><td>Replaces all current links by the given list of ids (unlinking the surplus, linking the new)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">When calling over RPC</p>
+                    <p>Over RPC (including the JSON-2 API of part 12) neither the helper functions nor the constant names exist. You must send the literal triplet with its numeric code, e.g. <code>[[4, 12, 0]]</code> to link the record with id 12.</p>
+                </div>
+
+                <h2 id="supporting-files">Do not forget the files that come with a new model</h2>
+                <p>Every new model brings a few repeated chores, the same ones you did in parts 4 to 6:</p>
+                <ol>
+                    <li>Import the new Python file in <code>models/__init__.py</code> (<code>from . import course_category</code>, <code>course_tag</code>, <code>course_session</code>).</li>
+                    <li>Add an access line per model to <code>ir.model.access.csv</code>, e.g. <code>access_vinc_course_category_user,vinc.course.category user,model_vinc_course_category,base.group_user,1,1,1,1</code>.</li>
+                    <li>Add an action, menu and views for the new model if users should manage it, and surface the new fields in the course views.</li>
+                    <li>Upgrade with <code>-u vinc_course</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when learning relations</p>
+                    <ul>
+                        <li><strong>A new model that users cannot see, or that Odoo does not load.</strong> Usually one of these steps was skipped: importing the file in <code>__init__.py</code>, declaring the data file in <code>data</code>, or adding access rights for the new model. Check all three and read the startup log.</li>
+                        <li><strong>Two Many2many fields to the same target model within one model.</strong> Without an explicit <code>relation</code> parameter both would share one link table, which the ORM rejects. Give each field its own <code>relation</code>, <code>column1</code> and <code>column2</code>.</li>
+                        <li><strong>Writing a One2many but forgetting the Many2one it mirrors.</strong> <code>inverse_name</code> must name a real Many2one field in the target model. Declare the Many2one first, then the One2many.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A Many2one stores a foreign-key column and shows as a dropdown; a One2many is its virtual inverse; a Many2many uses a link table.</li>
+                    <li>Naming convention: <code>_id</code> for Many2one, <code>_ids</code> for the other two.</li>
+                    <li>Write to One2many/Many2many with <code>Command</code>; over RPC use numeric triplets.</li>
+                    <li>Every new model needs an import, access rights and a module upgrade.</li>
+                </ul>
+                <p>The next part adds your first business logic: computed fields, onchange and constraints.</p>
+
+                <div class="cta-box">
+                    <h3>Want to design data models for real projects?</h3>
+                    <p>The Odoo Developer Foundation course includes exercises with several linked models and mentor review, so you avoid data-model mistakes early.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do Many2one and One2many differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A Many2one is a single link to one record of another model, stored as a column in the table. A One2many works the other way around: the target records pointing back at the current one, so it needs an inverse_name naming a Many2one.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use Many2many?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When each record on either side may be tied to several on the opposite side, such as courses and tags. Odoo stores this relation in a link table.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How should relational fields be named?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">By convention a Many2one ends in _id (for example category_id), while One2many and Many2many end in _ids (for example tag_ids).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why not assign a plain list of ids to a relational list field?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">They take a list of Command operations (link, unlink, set, create and more), so every change to the relation is explicit instead of replacing the whole list of ids.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/07_relations.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Relations between models</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (relational fields)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-many2one-one2many-many2many.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-many2one-one2many-many2many.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-views-actions-menus.html"><small>← Previous</small>Odoo 20 Views, Actions and Menus</a>
+                    <span class="next"><small>Next · Coming soon</small>Computed fields, onchange &amp; constraints</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#why-relations">Why do models need relations?</a></li>
+                        <li><a href="#many2one">Many2one: a single link to another record</a></li>
+                        <li><a href="#many2many">Many2many: many on both sides</a></li>
+                        <li><a href="#one2many">One2many: the list pointing back</a></li>
+                        <li><a href="#supporting-files">Do not forget the files that come with a new model</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

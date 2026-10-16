@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unit test trong Odoo 20: TransactionCase, tag và Form</title>
+    <meta name="description" content="Hướng dẫn viết unit test Odoo 20: gói tests, TransactionCase, setUpClass, Form để test onchange, @tagged và chạy bằng --test-tags." />
+    <meta name="keywords" content="odoo unit test, odoo TransactionCase, odoo test-tags, odoo tagged, odoo Form test, odoo viết test" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Unit test trong Odoo 20: TransactionCase, tag và Form" />
+    <meta property="og:description" content="Viết và chạy unit test cho module Odoo 20 với TransactionCase, Form, tag post_install và --test-tags." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/unit-test-odoo-transactioncase.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Unit test trong Odoo 20: TransactionCase, tag và Form",
+                "description": "Viết và chạy unit test cho module Odoo 20 với TransactionCase, Form, tag post_install và --test-tags.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/unit-test-odoo-transactioncase.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Unit test trong Odoo"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Test của tôi không chạy, nguyên nhân thường gặp là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Hay gặp nhất là file test chưa được import trong tests/__init__.py, tên method không bắt đầu bằng test_, hoặc dùng unittest.TestCase thuần mà không gắn tag standard và post_install."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "TransactionCase hoạt động như thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Mọi method test chạy trong một transaction, mỗi method trong một sub-transaction (savepoint), và con trỏ database luôn đóng mà không commit, nên dữ liệu test được dọn sạch tự động."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao chạy riêng test của một module?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng --test-tags /ten_module, ví dụ --test-tags /vinc_course. Có thể thu hẹp tới class hoặc method bằng cú pháp [-][tag][/module][:class][.method]. Module phải đã được cài trong database."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào dùng Form trong test?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi cần kiểm tra onchange hoặc hành vi của form view phía server. Form gọi onchange khi tạo bản ghi và khi gán field, giống như người dùng thao tác trên giao diện."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-unit-tests-transactioncase.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Unit test trong Odoo</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 13 · Series Lập trình Odoo 20</span>
+            <h1>Unit test trong Odoo 20: TransactionCase, tag và Form</h1>
+            <p class="post-lead">Test tự động giúp bạn nâng cấp Odoo và sửa code mà không lo vỡ quy tắc nghiệp vụ. Bài này hướng dẫn viết test Python với TransactionCase, kiểm tra onchange bằng Form, gắn tag và chạy bằng --test-tags.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo dùng thư viện <code>unittest</code> của Python. Bạn tạo gói <code>tests/</code> trong module, đặt file tên <code>test_*.py</code>, import chúng trong <code>tests/__init__.py</code>, rồi viết class kế thừa <code>TransactionCase</code> với các method bắt đầu bằng <code>test_</code>.</strong> Chạy test bằng <code>--test-tags /tên_module</code> trên database đã cài module đó. Test không được import trong <code>tests/__init__.py</code> sẽ không chạy.</p>
+                </div>
+
+                <h2 id="3-loai-test">Odoo có những loại test nào?</h2>
+                <p>Odoo hỗ trợ ba loại kiểm thử: <strong>test đơn vị Python</strong> (kiểm tra logic nghiệp vụ của model), <strong>test đơn vị JavaScript</strong> (kiểm tra riêng phần mã JS) và <strong>tour</strong> (mô phỏng tình huống thật, bảo đảm phần Python và JavaScript nói chuyện đúng với nhau). Bài này tập trung vào test Python, loại bạn sẽ viết nhiều nhất khi phát triển module.</p>
+                <p>Test là tấm lưới an toàn: khi nâng cấp phiên bản Odoo hoặc sửa một method, bộ test cho bạn biết ngay các quy tắc nghiệp vụ như computed field, constraint và quyền truy cập ở bài trước còn đúng hay không.</p>
+
+                <h2 id="cau-truc-test">Cấu trúc thư mục test</h2>
+                <p>Chỉ cần tạo gói con <code>tests</code> trong module, Odoo sẽ tự dò tìm các file test bên trong. File test phải có tên bắt đầu bằng <code>test_</code> và được import trong <code>tests/__init__.py</code>:</p>
+<pre><code>vinc_course/
+├── ...
+└── tests/
+    ├── __init__.py
+    └── test_course.py</code></pre>
+                <p class="code-title">custom-addons/vinc_course/tests/__init__.py</p>
+<pre><code>from . import test_course</code></pre>
+
+                <h2 id="transaction-case">Viết test với TransactionCase</h2>
+                <p><code>TransactionCase</code> là lớp test dùng nhiều nhất. Mọi method test chạy trong cùng một transaction, mỗi method nằm trong một sub-transaction riêng (savepoint), và con trỏ database luôn bị đóng <strong>không commit</strong>. Nghĩa là dữ liệu test được dọn sạch tự động, không ảnh hưởng database. Dữ liệu dùng chung cho mọi method nên chuẩn bị một lần trong <code>setUpClass</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/tests/test_course.py</p>
+<pre><code>from odoo.exceptions import UserError, ValidationError
+from odoo.tests import Form, TransactionCase, tagged
+
+
+@tagged('post_install', '-at_install')
+class TestVincCourse(TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.course = cls.env['vinc.course'].create({
+            'name': "Odoo Foundation",
+            'duration_hours': 20,
+            'price': 2000,
+        })
+
+    def test_price_per_hour(self):
+        self.assertEqual(self.course.price_per_hour, 100)
+
+    def test_duration_must_be_positive(self):
+        with self.assertRaises(ValidationError):
+            self.course.duration_hours = 0
+
+    def test_cannot_delete_published(self):
+        self.course.is_published = True
+        with self.assertRaises(UserError):
+            self.course.unlink()
+
+    def test_publish_sets_start_date(self):
+        with Form(self.env['vinc.course']) as form:
+            form.name = "Form course"
+            form.is_published = True
+        self.assertTrue(form.record.start_date)</code></pre>
+                <ul>
+                    <li>Method test phải bắt đầu bằng <code>test_</code>.</li>
+                    <li>Dùng các hàm <code>assert*</code> chuẩn của <code>unittest</code> như <code>assertEqual</code>, <code>assertTrue</code>, <code>assertRaises</code>.</li>
+                    <li><code>self.env</code> là môi trường ORM để tạo và tìm bản ghi; <code>self.ref('module.xml_id')</code> trả id theo external id, <code>self.browse_ref(...)</code> trả luôn bản ghi.</li>
+                    <li>Mỗi method kết thúc sẽ dọn cache bản ghi và cache registry.</li>
+                </ul>
+
+                <h3 id="form-test">Kiểm tra onchange với Form</h3>
+                <p>Lớp <code>Form</code> mô phỏng form view ở phía server: gọi các onchange khi tạo bản ghi và khi gán giá trị cho field, xử lý mặc định quanh các field x2many. Vì onchange chỉ chạy trong form (bài 8), đây là cách test chúng. Gán field trực tiếp lên form, dùng form như context manager để tự lưu khi thoát, và lấy bản ghi đã lưu qua <code>form.record</code>. Lưu ý <code>save()</code> báo <code>AssertionError</code> nếu còn field bắt buộc chưa điền.</p>
+
+                <h3 id="form-x2many">Form với field nhiều-nhiều và một-nhiều</h3>
+                <p>Lớp <code>Form</code> xử lý cả field quan hệ. Với Many2one, bạn gán thẳng một recordset. Với Many2many, field là một <code>M2MProxy</code> để thêm hoặc bớt bản ghi. Với One2many, vì danh sách này chỉ tồn tại thông qua bản ghi cha, bạn thao tác bằng các "form con" tạo bởi <code>new()</code> và <code>edit()</code>, thường dùng như context manager để form con được lưu vào bản ghi cha:</p>
+<pre><code>with Form(self.course) as form:
+    form.tag_ids.add(self.tag)             # Many2many: thêm
+    form.tag_ids.remove(id=self.old_tag.id)  # Many2many: bớt theo id
+    with form.session_ids.new() as line:   # One2many: dòng mới
+        line.name = "Buổi 1"
+    with form.session_ids.edit(0) as line: # sửa dòng đầu tiên
+        line.name = "Buổi mở đầu"
+    form.session_ids.remove(index=0)       # xóa dòng đầu tiên</code></pre>
+                <p>Hai quy tắc nên nhớ khi dùng <code>Form</code>: <code>save()</code> không lưu field chỉ đọc và field không bị sửa (bất kỳ phép gán hay onchange nào cũng đánh dấu field là đã sửa, kể cả khi gán đúng giá trị cũ); và nếu không có gì cần lưu thì <code>save()</code> chỉ trả về bản ghi hiện tại. Có thể truyền <code>view</code> (id, xmlid hoặc đối tượng view) để dùng đúng view cho onchange và ràng buộc của view; không truyền thì dùng form view mặc định của model.</p>
+
+                <h2 id="http-case">Test giao diện và HTTP với HttpCase</h2>
+                <p>Test Python thuần không chạm tới trình duyệt. Với những gì cần có HTTP hoặc JavaScript, Odoo cung cấp <code>HttpCase</code>: một test case có transaction, kèm hàm <code>url_open</code> để gọi URL và Chrome headless để chạy mã JavaScript. Loại thứ ba, <strong>tour</strong>, mô phỏng một tình huống thật nhằm bảo đảm phần Python và JavaScript nói chuyện đúng với nhau.</p>
+                <p>Hàm <code>browser_js(url_path, code, ...)</code> mở trang trong trình duyệt và chạy mã JavaScript. Các tham số hay dùng:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tham số</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>url_path</code></td><td>Đường dẫn trang cần mở</td></tr>
+                            <tr><td><code>code</code></td><td>Mã JavaScript cần chạy</td></tr>
+                            <tr><td><code>ready</code></td><td>Đối tượng JavaScript cần chờ sẵn sàng trước khi chạy tiếp</td></tr>
+                            <tr><td><code>login</code></td><td>Người dùng đăng nhập để chạy test, ví dụ <code>'admin'</code></td></tr>
+                            <tr><td><code>timeout</code></td><td>Thời gian chờ tối đa tính bằng giây, mặc định 60</td></tr>
+                            <tr><td><code>success_signal</code></td><td>Chuỗi báo thành công khi gọi <code>console.log()</code>, mặc định <code>"test successful"</code></td></tr>
+                            <tr><td><code>error_checker</code></td><td>Hàm lọc bớt các log lỗi cần bỏ qua; nếu không có, mọi log lỗi đều làm test thất bại</td></tr>
+                            <tr><td><code>watch</code>, <code>debug</code></td><td>Mở cửa sổ trình duyệt để xem test chạy, hoặc mở Chrome toàn màn hình với devtools và breakpoint</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Test báo thành công bằng cách ghi <code>console.log()</code> đúng chuỗi <code>success_signal</code>; báo thất bại bằng cách ném ngoại lệ hoặc gọi <code>console.error</code> kèm thông điệp. Với chế độ debug, tour được chạy với tham số <code>debug=assets</code> và dừng ngay tại ngoại lệ.</p>
+
+                <h2 id="du-lieu-test">Chuẩn bị dữ liệu và dọn dẹp</h2>
+                <ul>
+                    <li>Dữ liệu chung cho mọi method nên tạo một lần trong <code>setUpClass</code>; cách này phù hợp với bộ test gồm các test nhanh nhưng cần nhiều dữ liệu nền.</li>
+                    <li>Sau mỗi method, Odoo dọn cache bản ghi và cache registry. Tuy nhiên các model và field trong registry thì <strong>không</strong> được dọn. Nếu test tạo model hoặc field tùy biến, hãy chuẩn bị bước dọn bằng <code>self.env.transaction.will_change_registry()</code>.</li>
+                    <li>Hai hàm tiện ích sẵn có: <code>self.ref('module.xml_id')</code> trả id, <code>self.browse_ref('module.xml_id')</code> trả bản ghi; cả hai báo <code>ValueError</code> nếu không tìm thấy external id. Phải viết đủ dạng <code>module.identifier</code>.</li>
+                </ul>
+
+                <h2 id="vi-du-tag">Ví dụ chọn test bằng tag</h2>
+                <p>Theo mặc định, test kế thừa <code>BaseCase</code> được xem là <code>standard</code>. Bạn có thể loại một class khỏi bộ mặc định, rồi chỉ chạy nó khi cần:</p>
+<pre><code>@tagged('-standard', 'nice')
+class TestNice(TransactionCase):
+    ...
+
+# chạy riêng test gắn tag nice
+python3 odoo-bin -d odoo20_test --test-tags nice
+# chạy cả nice lẫn standard (các giá trị cộng dồn)
+python3 odoo-bin -d odoo20_test --test-tags nice,standard
+# chạy standard nhưng bỏ slow
+python3 odoo-bin -d odoo20_test --test-tags 'standard,-slow'</code></pre>
+                <p><code>@tagged</code> là decorator cho <em>class</em>, không có tác dụng khi gắn lên hàm hay method. Tiền tố <code>-</code> loại bỏ tag hoặc loại các test mang tag đó khỏi tập được chọn, kể cả khi chúng được chọn bởi một tag khác. Trong spec <code>[-][tag][/module][:class][.method]</code>, nếu tên method không trùng với test nào khác, bạn có thể chỉ viết <code>.ten_method</code>; nhiều spec ngăn cách bằng dấu phẩy.</p>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Test Python nằm trong gói <code>tests/</code>, file <code>test_*.py</code>, phải được import trong <code>tests/__init__.py</code>.</li>
+                    <li><code>TransactionCase</code> dọn dữ liệu tự động; dùng <code>setUpClass</code> cho dữ liệu chung.</li>
+                    <li><code>Form</code> là cách test onchange và hành vi form, kể cả field x2many.</li>
+                    <li><code>HttpCase</code> và tour kiểm tra phần giao diện và sự phối hợp Python - JavaScript.</li>
+                    <li>Chạy bằng <code>--test-tags /module</code> trên database đã cài module.</li>
+                </ul>
+                <p>Bài cuối của series sẽ đưa mọi thứ lên môi trường thật: cấu hình production, Nginx, HTTPS và workers.</p>
+
+                <h2 id="tags">Gắn tag và chạy test</h2>
+                <p>Tag giúp chọn test để chạy. Decorator <code>@tagged()</code> áp dụng lên <em>class</em> (không có tác dụng với hàm hoặc method). Tiền tố <code>-</code> bỏ một tag. Các tag đặc biệt:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tag</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>standard</code></td><td>Test kế thừa <code>BaseCase</code> ngầm có tag này; <code>--test-tags</code> mặc định cũng là <code>standard</code></td></tr>
+                            <tr><td><code>post_install</code></td><td>Chạy sau khi mọi module đã được cài</td></tr>
+                            <tr><td><code>at_install</code></td><td>Chạy ngay sau khi cài module, trước khi cài các module khác. Ít khi cần vì cản trở chạy song song; thường đi kèm <code>-post_install</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Cú pháp đầy đủ của <code>--test-tags</code> là <code>[-][tag][/module][:class][.method]</code>:</p>
+<pre><code># cài module (hoặc -u) và chạy test của riêng vinc_course rồi dừng
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_test -i vinc_course --test-tags /vinc_course --stop-after-init
+
+# chỉ một class hoặc một method
+python3 odoo-bin -d odoo20_test --test-tags /vinc_course:TestVincCourse.test_price_per_hour
+
+# mọi test standard trừ test gắn tag slow
+python3 odoo-bin -d odoo20_test --test-tags 'standard,-slow'</code></pre>
+                <p>Dùng <code>--test-tags</code> thì không cần thêm <code>--test-enable</code>. Hãy chạy test trên một database riêng (ví dụ <code>odoo20_test</code>) thay vì database làm việc hằng ngày.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới viết test</p>
+                    <ul>
+                        <li><strong>Viết test xong nhưng không thấy chạy.</strong> Thường là file test chưa được import trong <code>tests/__init__.py</code> (tài liệu cảnh báo test không được import sẽ không chạy), method không bắt đầu bằng <code>test_</code>, hoặc dùng <code>unittest.TestCase</code> thuần mà không gắn tag <code>standard</code>/<code>post_install</code> nên không nằm trong bộ test mặc định.</li>
+                        <li><strong>Chạy <code>--test-tags</code> mà module chưa được cài trong database.</strong> Test chỉ chạy trên module đã cài. Với database mới, thêm <code>-i tên_module</code> ít nhất một lần; sau đó nếu sửa code, dùng <code>-u</code>.</li>
+                    </ul>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Muốn xây thói quen viết test cho dự án Odoo?</h3>
+                    <p>Khóa Odoo Advanced Developer có phần thực hành viết test cho model, onchange và API, giúp nâng cấp phiên bản an tâm hơn.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-A">Xem khóa Odoo Advanced Developer</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Test của tôi không chạy, nguyên nhân thường gặp là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Hay gặp nhất là file test chưa được import trong tests/__init__.py, tên method không bắt đầu bằng test_, hoặc dùng unittest.TestCase thuần mà không gắn tag standard và post_install.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>TransactionCase hoạt động như thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Mọi method test chạy trong một transaction, mỗi method trong một sub-transaction (savepoint), và con trỏ database luôn đóng mà không commit, nên dữ liệu test được dọn sạch tự động.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao chạy riêng test của một module?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng --test-tags /ten_module, ví dụ --test-tags /vinc_course. Có thể thu hẹp tới class hoặc method bằng cú pháp [-][tag][/module][:class][.method]. Module phải đã được cài trong database.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào dùng Form trong test?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi cần kiểm tra onchange hoặc hành vi của form view phía server. Form gọi onchange khi tạo bản ghi và khi gán field, giống như người dùng thao tác trên giao diện.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Funit-test-odoo-transactioncase.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Funit-test-odoo-transactioncase.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="web-controller-json-2-api-odoo.html"><small>← Bài trước</small>Web controller và JSON-2 API trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Triển khai Odoo production</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#3-loai-test">Odoo có những loại test nào?</a></li>
+                        <li><a href="#cau-truc-test">Cấu trúc thư mục test</a></li>
+                        <li><a href="#transaction-case">Viết test với TransactionCase</a></li>
+                        <li><a href="#http-case">Test giao diện và HTTP với HttpCase</a></li>
+                        <li><a href="#du-lieu-test">Chuẩn bị dữ liệu và dọn dẹp</a></li>
+                        <li><a href="#vi-du-tag">Ví dụ chọn test bằng tag</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#tags">Gắn tag và chạy test</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

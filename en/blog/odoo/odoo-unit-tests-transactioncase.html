@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Unit Tests: TransactionCase, Tags and Form</title>
+    <meta name="description" content="Odoo 20 unit testing guide: the tests package, TransactionCase, setUpClass, Form to test onchange, @tagged and running with --test-tags." />
+    <meta name="keywords" content="odoo unit test, odoo TransactionCase, odoo test-tags, odoo tagged, odoo Form test, odoo testing" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Unit Tests: TransactionCase, Tags and Form" />
+    <meta property="og:description" content="Write and run unit tests for Odoo 20 modules with TransactionCase, Form, the post_install tag and --test-tags." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-unit-tests-transactioncase.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Unit Tests: TransactionCase, Tags and Form",
+                "description": "Write and run unit tests for Odoo 20 modules with TransactionCase, Form, the post_install tag and --test-tags.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-unit-tests-transactioncase.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-unit-tests-transactioncase.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Unit tests in Odoo"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "My test does not run. What are the usual causes?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Most often the test file is not imported in tests/__init__.py, the method name does not start with test_, or a bare unittest.TestCase was used without the standard and post_install tags."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does TransactionCase work?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "All test methods run in one transaction, each in its own sub-transaction (savepoint), and at the end the cursor is closed with no commit, so test data disappears on its own."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I run the tests of just one module?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Use --test-tags /module_name, for example --test-tags /vinc_course. Narrow it to a class or method with the syntax [-][tag][/module][:class][.method]. The module must already be installed in the database."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use Form in a test?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When you need to check onchanges or form-view behavior on the server side. Form fires onchanges at creation and when you assign fields, just like a user working in the interface."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"unit-test-odoo-transactioncase.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Unit tests in Odoo</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 13 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Unit Tests: TransactionCase, Tags and Form</h1>
+            <p class="post-lead">Automated tests let you upgrade Odoo and edit code without fear of breaking business rules. This guide shows how to write Python tests with TransactionCase, check onchanges with Form, add tags and run with --test-tags.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo builds on Python's <code>unittest</code> library. You add a <code>tests/</code> package to the module, put files named <code>test_*.py</code> in it, import them in <code>tests/__init__.py</code>, then write classes extending <code>TransactionCase</code> whose methods start with <code>test_</code>.</strong> Run them with <code>--test-tags /module_name</code> on a database where the module is installed. A test that is not imported in <code>tests/__init__.py</code> simply does not run.</p>
+                </div>
+
+                <h2 id="test-kinds">What kinds of tests does Odoo have?</h2>
+                <p>Odoo supports three flavors of testing: <strong>Python unit tests</strong> (checking a model's business logic), <strong>JavaScript unit tests</strong> (checking the JS code on its own) and <strong>tours</strong> (simulating a real session to make sure the Python and JavaScript halves cooperate). This part concentrates on Python tests, the kind you will write most while building modules.</p>
+                <p>Tests are a safety net: when you upgrade Odoo or edit a method, the suite tells you at once whether the business rules from earlier parts, such as computed fields, constraints and access rights, still hold.</p>
+
+                <h2 id="test-layout">Test folder layout</h2>
+                <p>Add a package named <code>tests</code> to the module and Odoo discovers the test files inside it automatically. A test file's name must start with <code>test_</code> and it must be imported in <code>tests/__init__.py</code>:</p>
+                <pre><code>vinc_course/
+├── ...
+└── tests/
+    ├── __init__.py
+    └── test_course.py</code></pre>
+                <p class="code-title">custom-addons/vinc_course/tests/__init__.py</p>
+<pre><code>from . import test_course</code></pre>
+
+                <h2 id="transaction-case">Writing tests with TransactionCase</h2>
+                <p><code>TransactionCase</code> is the most used test class. All test methods share one transaction, each method sits in its own savepoint, and at the end the cursor is shut <strong>with no commit</strong>. So test data is cleaned up automatically and your database stays untouched. Data shared by all methods should be prepared once in <code>setUpClass</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/tests/test_course.py</p>
+<pre><code>from odoo.exceptions import UserError, ValidationError
+from odoo.tests import Form, TransactionCase, tagged
+
+
+@tagged('post_install', '-at_install')
+class TestVincCourse(TransactionCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.course = cls.env['vinc.course'].create({
+            'name': "Odoo Foundation",
+            'duration_hours': 20,
+            'price': 2000,
+        })
+
+    def test_price_per_hour(self):
+        self.assertEqual(self.course.price_per_hour, 100)
+
+    def test_duration_must_be_positive(self):
+        with self.assertRaises(ValidationError):
+            self.course.duration_hours = 0
+
+    def test_cannot_delete_published(self):
+        self.course.is_published = True
+        with self.assertRaises(UserError):
+            self.course.unlink()
+
+    def test_publish_sets_start_date(self):
+        with Form(self.env['vinc.course']) as form:
+            form.name = "Form course"
+            form.is_published = True
+        self.assertTrue(form.record.start_date)</code></pre>
+                <ul>
+                    <li>Give every test method a <code>test_</code> prefix.</li>
+                    <li>Use the standard <code>unittest</code> assertions such as <code>assertEqual</code>, <code>assertTrue</code> and <code>assertRaises</code>.</li>
+                    <li><code>self.env</code> is the ORM environment for creating and searching records; <code>self.ref('module.xml_id')</code> returns an id from an external id, and <code>self.browse_ref(...)</code> returns the record itself.</li>
+                    <li>After each method finishes, the record cache and registry cache are cleaned.</li>
+                </ul>
+
+                <h3 id="form-test">Testing onchanges with Form</h3>
+                <p>The <code>Form</code> class imitates a form view on the server side: it fires onchanges at creation and whenever you set a field, and handles defaults around x2many fields. Because onchanges only run inside forms (part 8), this is how you test them. Assign fields straight onto the form, use it as a context manager so it saves on exit, and fetch the saved record through <code>form.record</code>. Note that <code>save()</code> raises <code>AssertionError</code> if a required field is still empty.</p>
+
+                <h3 id="form-x2many">Form with many-to-many and one-to-many fields</h3>
+                <p>The <code>Form</code> class copes with relational fields too. For a Many2one you simply assign a recordset. A Many2many appears as an <code>M2MProxy</code> that lets you add or drop records. A One2many exists only through its parent, so you work on it with sub-forms produced by <code>new()</code> and <code>edit()</code>, normally used as context managers so each sub-form is saved into the parent:</p>
+<pre><code>with Form(self.course) as form:
+    form.tag_ids.add(self.tag)               # Many2many: add
+    form.tag_ids.remove(id=self.old_tag.id)  # Many2many: drop by id
+    with form.session_ids.new() as line:     # One2many: new line
+        line.name = "Session 1"
+    with form.session_ids.edit(0) as line:   # edit the first line
+        line.name = "Opening session"
+    form.session_ids.remove(index=0)         # delete the first line</code></pre>
+                <p>Two rules worth keeping in mind with <code>Form</code>: <code>save()</code> skips read-only fields and untouched ones (any assignment or onchange flags a field as modified, even when it receives its old value); and when there is nothing to save it just returns the current record. You may pass <code>view</code> (an id, an xmlid or a view object) as the source of onchange and constraint behavior; otherwise the model's default form view applies.</p>
+
+                <h2 id="http-case">Testing the interface and HTTP with HttpCase</h2>
+                <p>Plain Python tests never touch a browser. For anything involving HTTP or JavaScript, Odoo provides <code>HttpCase</code>: a transactional test case equipped with a <code>url_open</code> helper to request URLs and headless Chrome to run JavaScript. The third kind of test, the <strong>tour</strong>, plays out a realistic scenario to confirm that the Python and JavaScript sides cooperate.</p>
+                <p>The <code>browser_js(url_path, code, ...)</code> helper opens a page in the browser and executes JavaScript. Its commonly used parameters:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Parameter</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>url_path</code></td><td>Path of the page to load</td></tr>
+                            <tr><td><code>code</code></td><td>JavaScript to execute</td></tr>
+                            <tr><td><code>ready</code></td><td>A JavaScript object that must exist before the run continues</td></tr>
+                            <tr><td><code>login</code></td><td>Which user is logged in during the test, such as <code>'admin'</code></td></tr>
+                            <tr><td><code>timeout</code></td><td>Maximum wait in seconds, 60 by default</td></tr>
+                            <tr><td><code>success_signal</code></td><td>The string to <code>console.log()</code> on success, <code>"test successful"</code> by default</td></tr>
+                            <tr><td><code>error_checker</code></td><td>A function that filters out error logs to ignore; without it every error log fails the test</td></tr>
+                            <tr><td><code>watch</code>, <code>debug</code></td><td>Open a browser window so you can watch the run, or open full-screen Chrome with devtools and a breakpoint</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A test signals success by logging the exact <code>success_signal</code> string with <code>console.log()</code>, and signals failure by throwing an exception or by calling <code>console.error</code> and passing text. In debug mode the tour runs with <code>debug=assets</code> and stops right at the exception.</p>
+
+                <h2 id="test-data">Preparing data and cleaning up</h2>
+                <ul>
+                    <li>Data shared by all methods belongs in <code>setUpClass</code>, created once; this suits suites made of quick tests that nevertheless need a lot of background data.</li>
+                    <li>Once each method ends, Odoo empties both the record cache and the registry cache. Models and fields in the registry, however, are <strong>not</strong> wiped. If a test creates custom models or fields, arrange the cleanup with <code>self.env.transaction.will_change_registry()</code>.</li>
+                    <li>Two built-in helpers: <code>self.ref('module.xml_id')</code> returns an id and <code>self.browse_ref('module.xml_id')</code> returns the record; both raise <code>ValueError</code> when the external id is missing, and the id must be written in full as <code>module.identifier</code>.</li>
+                </ul>
+
+                <h2 id="tag-examples">Selecting tests with tags: examples</h2>
+                <p>By default a test deriving from <code>BaseCase</code> counts as <code>standard</code>. You can remove a class from the default suite and run it only on demand:</p>
+<pre><code>@tagged('-standard', 'nice')
+class TestNice(TransactionCase):
+    ...
+
+# run only tests tagged nice
+python3 odoo-bin -d odoo20_test --test-tags nice
+# run both nice and standard (values add up)
+python3 odoo-bin -d odoo20_test --test-tags nice,standard
+# run standard but leave out slow
+python3 odoo-bin -d odoo20_test --test-tags 'standard,-slow'</code></pre>
+                <p><code>@tagged</code> decorates <em>classes</em>; put on a function or method it does nothing. A <code>-</code> prefix drops a tag, or drops tests carrying that tag from the selection even when another tag selected them. In the <code>[-][tag][/module][:class][.method]</code> spec, a method name that is unique can stand alone as <code>.method_name</code>; separate several specs with commas.</p>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Python tests live in the <code>tests/</code> package, in <code>test_*.py</code> files imported by <code>tests/__init__.py</code>.</li>
+                    <li><code>TransactionCase</code> cleans up data automatically; use <code>setUpClass</code> for shared data.</li>
+                    <li><code>Form</code> is how you test onchanges and form behavior, including x2many fields.</li>
+                    <li><code>HttpCase</code> and tours cover the interface and the Python-JavaScript cooperation.</li>
+                    <li>Run with <code>--test-tags /module</code> on a database where the module is installed.</li>
+                </ul>
+                <p>The final part of the series takes everything to a real environment: production configuration, Nginx, HTTPS and workers.</p>
+
+                <h2 id="tags">Tagging and running tests</h2>
+                <p>Tags help you pick which tests to run. The <code>@tagged()</code> decorator works on <em>classes</em> (it does nothing on functions or methods). A <code>-</code> prefix removes a tag. The special tags:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tag</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>standard</code></td><td>Tests deriving from <code>BaseCase</code> carry it implicitly; and <code>standard</code> is also the default value of <code>--test-tags</code></td></tr>
+                            <tr><td><code>post_install</code></td><td>Runs after every module has been installed</td></tr>
+                            <tr><td><code>at_install</code></td><td>Runs immediately after the module installs, before other modules do. Rarely needed because it hinders parallel runs; usually paired with <code>-post_install</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Specs given to <code>--test-tags</code> follow the pattern <code>[-][tag][/module][:class][.method]</code>:</p>
+                <pre><code># install (or -u) the module, run only its tests, then stop
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_test -i vinc_course --test-tags /vinc_course --stop-after-init
+
+# a single class or method
+python3 odoo-bin -d odoo20_test --test-tags /vinc_course:TestVincCourse.test_price_per_hour
+
+# every standard test except those tagged slow
+python3 odoo-bin -d odoo20_test --test-tags 'standard,-slow'</code></pre>
+                <p>With <code>--test-tags</code> there is no need to add <code>--test-enable</code>. Run tests on a separate database (for example <code>odoo20_test</code>) instead of your everyday working one.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting to write tests</p>
+                    <ul>
+                        <li><strong>You wrote a test but it never runs.</strong> Typically the file is not imported in <code>tests/__init__.py</code> (the documentation warns such tests are skipped), the method name does not start with <code>test_</code>, or you used a bare <code>unittest.TestCase</code> without the <code>standard</code>/<code>post_install</code> tags, so it is outside the default suite.</li>
+                        <li><strong>Running <code>--test-tags</code> but the module is not installed in that database.</strong> Tests execute only for installed modules. On a fresh database add <code>-i module_name</code> at least once; afterwards, when you change code, use <code>-u</code>.</li>
+                    </ul>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Want to build a testing habit for Odoo projects?</h3>
+                    <p>The Odoo Advanced Developer course practices writing tests for models, onchanges and APIs, so version upgrades become less stressful.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-A">See Odoo Advanced Developer</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>My test does not run. What are the usual causes?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Most often the test file is not imported in tests/__init__.py, the method name does not start with test_, or a bare unittest.TestCase was used without the standard and post_install tags.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does TransactionCase work?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">All test methods run in one transaction, each in its own sub-transaction (savepoint), and at the end the cursor is closed with no commit, so test data disappears on its own.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I run the tests of just one module?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Use --test-tags /module_name, for example --test-tags /vinc_course. Narrow it to a class or method with the syntax [-][tag][/module][:class][.method]. The module must already be installed in the database.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use Form in a test?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When you need to check onchanges or form-view behavior on the server side. Form fires onchanges at creation and when you assign fields, just like a user working in the interface.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-unit-tests-transactioncase.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-unit-tests-transactioncase.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-web-controllers-json-2-api.html"><small>← Previous</small>Odoo 20 Web Controllers and the JSON-2 API</a>
+                    <span class="next"><small>Next · Coming soon</small>Deploying Odoo to production</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#test-kinds">What kinds of tests does Odoo have?</a></li>
+                        <li><a href="#test-layout">Test folder layout</a></li>
+                        <li><a href="#transaction-case">Writing tests with TransactionCase</a></li>
+                        <li><a href="#http-case">Testing the interface and HTTP with HttpCase</a></li>
+                        <li><a href="#test-data">Preparing data and cleaning up</a></li>
+                        <li><a href="#tag-examples">Selecting tests with tags: examples</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#tags">Tagging and running tests</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

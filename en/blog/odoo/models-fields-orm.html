@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Models, Fields and ORM: Build Your First Model</title>
+    <meta name="description" content="Odoo 20 ORM guide: declare models with _name, choose field types, use required/default, meet automatic fields and run create, search, write, unlink." />
+    <meta name="keywords" content="odoo orm, odoo model, odoo fields, odoo 20 create model, odoo recordset, odoo create search write unlink" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Models, Fields and ORM: Build Your First Model" />
+    <meta property="og:description" content="Create your first model, understand field types and use the Odoo 20 ORM to add, find, edit and delete data." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/models-fields-orm.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Models, Fields and ORM: Build Your First Model",
+                "description": "Create your first model, understand field types and use the Odoo 20 ORM to add, find, edit and delete data.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/models-fields-orm.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Models, fields and ORM"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How is the PostgreSQL table named?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo takes the model _name and replaces dots with underscores. For example the model vinc.course creates the table vinc_course."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why is there no column after I added a new field?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Restart the server and run with -d and -u plus the module name so the ORM applies the schema change. Saving the Python file or reloading the browser is not enough."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Where do id, create_date and write_date come from?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "They are automatic fields Odoo adds to every model: id, create_date, create_uid, write_date and write_uid. You can read them but not write them."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I use search or browse to query records?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "search filters records with a domain, while browse fetches records from ids you already know. Both return a recordset."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/model-field-orm-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Models, fields and ORM</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 4 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Models, Fields and ORM: Build Your First Model</h1>
+            <p class="post-lead">The model is the heart of every Odoo module. This guide shows how to declare a model in Python, pick the right field types, and use recordsets to add, find, edit and delete data without writing SQL.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>In Odoo 20, each data table is declared by a Python class extending <code>models.Model</code>, and <code>_name</code> is its required attribute.</strong> Columns are <code>fields.*</code> attributes (Char, Integer, Selection…). After editing a Python file, restart the server with <code>-d</code> and <code>-u</code> so the ORM creates the table and columns in PostgreSQL. You read and write data through recordsets with <code>create</code>, <code>search</code>, <code>write</code> and <code>unlink</code>.</p>
+                </div>
+
+                <h2 id="model-orm">What are models and the ORM?</h2>
+                <p>The ORM (Object-Relational Mapping) is a layer that lets you work with data as Python objects instead of hand-writing most SQL. Each <strong>model</strong> is a class extending <code>models.Model</code>; Odoo reads that declaration, creates the matching PostgreSQL table, and adds access-control and extensibility services on top.</p>
+                <p>The smallest model definition is just <code>_name</code>, a dotted identifier such as <code>vinc.course</code>. Odoo's tutorial notes that this alone gives the ORM enough information to create a table; the table name comes from <code>_name</code> with dots replaced by underscores, so <code>vinc.course</code> becomes the table <code>vinc_course</code>.</p>
+                <div class="callout tip">
+                    <p class="callout-title">File layout convention</p>
+                    <p>Keep all models in a <code>models/</code> folder, one Python file per model. That file is imported in <code>models/__init__.py</code>, and the <code>models</code> folder is imported in the module's root <code>__init__.py</code> (the scaffold from part 3 already does this last step).</p>
+                </div>
+
+                <h2 id="first-model">Your first model: vinc.course</h2>
+                <p>We continue the <code>vinc_course</code> module from the previous part and add a course model. Create <code>models/course.py</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = "Course"
+
+    name = fields.Char(string="Course name", required=True)
+    description = fields.Text()
+    start_date = fields.Date()
+    duration_hours = fields.Integer(help="Total hours of teaching")
+    price = fields.Float()
+    is_published = fields.Boolean(default=False)
+    level = fields.Selection(
+        [('beginner', "Beginner"), ('intermediate', "Intermediate"), ('advanced', "Advanced")],
+        default='beginner',
+    )</code></pre>
+                <p class="code-title">custom-addons/vinc_course/models/__init__.py</p>
+<pre><code>from . import course</code></pre>
+                <p>The <code>__init__.py</code> generated by scaffold imports the sample <code>models.py</code>; replace that line with the <code>course</code> import shown above.</p>
+                <p>Any change to Python files requires a server restart. Since we just added a new model, the module must be upgraded so the ORM applies the schema change to the database. Remember that <code>-u</code> always goes together with <code>-d</code>:</p>
+<pre><code>python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -u vinc_course</code></pre>
+                <p>On startup the log may warn that the model has no access rules. That is expected at this stage and is fixed in part 5. Check that the table exists using <code>psql</code>:</p>
+<pre><code>psql -d odoo20_dev -c "\d vinc_course"</code></pre>
+                <p>In the output, besides the columns you declared there are a few you did not write. Those are the automatic fields covered below.</p>
+
+                <h3 id="model-attributes">Configuration attributes of a model</h3>
+                <p>Besides <code>_name</code> and <code>_description</code>, a model has several optional underscore attributes:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Attribute</th><th>Default</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_name</code></td><td>None</td><td>Dotted model name; required for a new model</td></tr>
+                            <tr><td><code>_description</code></td><td>None</td><td>The model's everyday name; leaving it out makes the log warn</td></tr>
+                            <tr><td><code>_order</code></td><td><code>'id'</code></td><td>Default ordering of search results</td></tr>
+                            <tr><td><code>_rec_name</code></td><td><code>name</code></td><td>The field used to label records</td></tr>
+                            <tr><td><code>_table</code></td><td>Derived from <code>_name</code></td><td>The SQL table name when the model has a table</td></tr>
+                            <tr><td><code>_auto</code></td><td><code>True</code> for <code>Model</code></td><td>Whether a database table is created</td></tr>
+                            <tr><td><code>_log_access</code></td><td>Follows <code>_auto</code></td><td>Whether the access-log fields (<code>create_date</code>, <code>write_uid</code>…) are generated and maintained</td></tr>
+                            <tr><td><code>_inherit</code>, <code>_inherits</code></td><td>Empty</td><td>Model inheritance; see part 9</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>There are three base classes for models: <code>Model</code> (stored in the database, used most of the time), <code>TransientModel</code> (temporary data, used for wizards) and <code>AbstractModel</code> (no table; a base class for other models to inherit from).</p>
+
+                <h2 id="field-types">Basic field types</h2>
+                <p>Fields are class attributes that determine which data a model holds and how it is persisted. There are two groups: <em>simple</em> fields (plain values that live as columns of the model table) and <em>relational</em> fields (linking records together, covered in part 7).</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Field</th><th>Python type</th><th>PostgreSQL column</th><th>Use it for</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>Char</code></td><td>str</td><td>character varying</td><td>Single-line strings: names, codes, postcodes</td></tr>
+                            <tr><td><code>Text</code></td><td>str</td><td>text</td><td>Long, multi-line text</td></tr>
+                            <tr><td><code>Integer</code></td><td>int</td><td>integer</td><td>Whole numbers: hours, rooms</td></tr>
+                            <tr><td><code>Float</code></td><td>float</td><td>double precision</td><td>Decimal numbers: prices, areas</td></tr>
+                            <tr><td><code>Boolean</code></td><td>bool</td><td>boolean</td><td>Yes/no flags: published, has garage</td></tr>
+                            <tr><td><code>Date</code></td><td>date</td><td>date</td><td>A date without time</td></tr>
+                            <tr><td><code>Selection</code></td><td>str</td><td>character varying</td><td>One choice from a fixed list of (value, label) pairs</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>For <code>Selection</code>, the <code>selection</code> attribute is mandatory (except for extended or <code>related</code> fields). The value stored in the database is the first item of each pair; the second item is the label shown to users.</p>
+
+                <h2 id="field-attributes">Common field attributes</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Attribute</th><th>Default</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>string</code></td><td>Capitalized field name</td><td>Label shown in the interface</td></tr>
+                            <tr><td><code>required</code></td><td><code>False</code></td><td>A value is mandatory; it needs a <code>default</code> or must always be passed on creation. The database column becomes <em>not null</em></td></tr>
+                            <tr><td><code>help</code></td><td>Empty</td><td>Explanatory tooltip for users</td></tr>
+                            <tr><td><code>default</code></td><td>None</td><td>Default value: a fixed value or a function</td></tr>
+                            <tr><td><code>readonly</code></td><td><code>False</code></td><td>Affects the UI only; assigning the value from code still works</td></tr>
+                            <tr><td><code>index</code></td><td><code>False</code></td><td>Asks the database to index this column</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="more-field-attributes">A few more useful field attributes</h3>
+                <ul>
+                    <li><code>copy</code>: whether the value is carried over when a record is duplicated (<code>True</code> for ordinary fields). A Char field called <code>name</code> is flagged by default so duplicates get a "(copy)" label.</li>
+                    <li><code>groups</code>: a comma-separated string of groups allowed to access the field; details in part 5.</li>
+                    <li><code>index</code>: besides <code>True</code>/<code>False</code> it can be <code>"btree"</code> (a standard index, good for Many2one), <code>"btree_not_null"</code> (skips NULL values) or <code>"trigram"</code> (a GIN index, good for text search).</li>
+                    <li><code>translate</code> (Char, Text) makes the value translatable; <code>size</code> caps the length of a Char.</li>
+                    <li>A Float's <code>digits</code> is a pair (total digits, decimals). For quantities tied to a unit of measure, use <code>Float.round()</code>, <code>is_zero()</code> and <code>compare()</code> so comparisons respect the precision.</li>
+                </ul>
+
+                <h2 id="automatic-fields">Automatic fields</h2>
+                <p>Odoo adds a few fields to every model. The system manages them: you can read them but not write them:</p>
+                <ul>
+                    <li><code>id</code>: the unique identifier of a record.</li>
+                    <li><code>create_date</code> and <code>create_uid</code>: the creation time and author of the record.</li>
+                    <li><code>write_date</code> and <code>write_uid</code>: the time and author of the latest edit.</li>
+                </ul>
+                <p>So you never need to design "created on" or "created by" columns for each table.</p>
+
+                <h2 id="recordset-crud">Recordsets and CRUD with the ORM</h2>
+                <p>All interaction with models goes through <strong>recordsets</strong>: an ordered group of rows from one model, anywhere between empty and the whole table. Looping over a recordset hands you each record separately. The easiest place to experiment is <code>odoo shell</code>, where <code>env</code> is already available:</p>
+<pre><code>python3 odoo-bin shell -c ~/odoo-dev/odoo20.conf -d odoo20_dev</code></pre>
+<pre><code>Course = env['vinc.course']
+
+# Create: build a record from a dict
+course = Course.create({'name': "Odoo Developer Foundation", 'duration_hours': 24})
+
+# Read: access fields as attributes
+course.name            # 'Odoo Developer Foundation'
+course.level           # 'beginner' (the default value)
+
+# Search: filter with a domain, a list of conditions
+Course.search([('level', '=', 'beginner')])
+Course.search_count([])          # count records
+Course.browse(course.id)         # fetch by id
+
+# Update: assign directly or use write
+course.duration_hours = 32
+course.write({'is_published': True})
+
+# Delete
+course.unlink()
+
+env.cr.commit()        # only when you really want to save to the database</code></pre>
+                <p>A few things worth remembering about recordsets:</p>
+                <ul>
+                    <li>The domain passed to <code>search</code> is a list of <code>(field name, operator, value)</code> triples; an empty list matches everything. You can cap results with <code>limit</code>, skip with <code>offset</code> and sort with <code>order</code>.</li>
+                    <li>A relational field gives back a recordset even when nothing is set; it is simply empty.</li>
+                    <li>To total a field over many records, use <code>mapped()</code>, e.g. <code>sum(courses.mapped('duration_hours'))</code>.</li>
+                    <li>When a method only accepts one record, call <code>self.ensure_one()</code> at the top so it fails early if it receives several.</li>
+                    <li>Odoo caches and prefetches data to avoid repeated queries, so looping over a recordset is usually faster than querying record by record.</li>
+                </ul>
+
+                <h3 id="search-params">The parameters of search</h3>
+<pre><code>Course.search([('is_published', '=', True)], order='start_date desc', limit=10, offset=20)</code></pre>
+                <p><code>order</code> is the sort string, <code>limit</code> the maximum number of records returned (all by default) and <code>offset</code> how many records to skip (none by default), handy for pagination. If the user lacks read access, <code>search</code> raises <code>AccessError</code>. It is a high-level method that should not be overridden; to count, use <code>search_count()</code>.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when learning the ORM</p>
+                    <ul>
+                        <li><strong>Adding a field in code but not seeing it in the interface or database.</strong> For Python files, reloading the browser is not enough: restart the server, and for the ORM to add the new column to the table you must run with <code>-d db_name -u module_name</code>.</li>
+                        <li><strong>Reading <code>records.name</code> on a multi-record recordset.</strong> For non-relational fields the documentation says this raises an error, since the ORM cannot tell which record's value you mean. Loop with <code>for record in records</code>, or use <code>mapped('name')</code> if you need the list of values.</li>
+                        <li><strong>Giving a field the same name as a method in the same class.</strong> The documentation warns that the later declaration silently overwrites the earlier one. Start method names with <code>_compute_</code>, <code>action_</code> and so on to avoid clashes.</li>
+                    </ul>
+                </div>
+
+                <div class="callout tip">
+                    <p class="callout-title">Keep state out of module-level globals</p>
+                    <p>One Odoo process may serve several databases at once, each with its own set of installed modules. Data stored in a Python global would leak between them, so keep it in records instead.</p>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A model is a class extending <code>models.Model</code> with a required <code>_name</code>; the ORM generates the table.</li>
+                    <li>Fields declare columns; attributes such as <code>required</code>, <code>default</code>, <code>copy</code> and <code>index</code> tune behavior.</li>
+                    <li>All data access goes through recordsets: <code>create</code>, <code>search</code>, <code>browse</code>, <code>write</code>, <code>unlink</code>.</li>
+                    <li>Python edits need a restart; new columns need <code>-u</code> together with <code>-d</code>.</li>
+                </ul>
+                <p>The next part gives the model you just made its permissions: access rights and record rules.</p>
+
+                <div class="cta-box">
+                    <h3>Want to master the ORM through real projects?</h3>
+                    <p>The Odoo Developer Foundation course includes exercises that build a complete module, with mentor code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How is the PostgreSQL table named?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo takes the model _name and replaces dots with underscores. For example the model vinc.course creates the table vinc_course.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why is there no column after I added a new field?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Restart the server and run with -d and -u plus the module name so the ORM applies the schema change. Saving the Python file or reloading the browser is not enough.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Where do id, create_date and write_date come from?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">They are automatic fields Odoo adds to every model: id, create_date, create_uid, write_date and write_uid. You can read them but not write them.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I use search or browse to query records?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">search filters records with a domain, while browse fetches records from ids you already know. Both return a recordset.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fmodels-fields-orm.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fmodels-fields-orm.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="first-odoo-module.html"><small>← Previous</small>Your first module &amp; manifest</a>
+                    <span class="next"><small>Next · Coming soon</small>Security: access rights &amp; record rules</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#model-orm">Models and the ORM</a></li>
+                        <li><a href="#first-model">First model</a></li>
+                        <li><a href="#field-types">Basic field types</a></li>
+                        <li><a href="#field-attributes">Field attributes</a></li>
+                        <li><a href="#automatic-fields">Automatic fields</a></li>
+                        <li><a href="#recordset-crud">Recordsets and CRUD</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lập trình Odoo 20 từ A–Z cho Developer | Vinc Academy</title>
+    <meta name="description" content="Series tự học lập trình Odoo 20 cho developer: module, ORM, views, security, OWL, API, triển khai. Biên soạn bởi Vinc Academy, cập nhật theo tài liệu Odoo." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Lập trình Odoo 20 từ A–Z cho Developer" />
+    <meta property="og:description" content="Series tự học lập trình Odoo 20: module, ORM, views, security, OWL, API, triển khai." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-hub.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Lập trình Odoo 20 từ A–Z",
+        "description": "Series tự học lập trình Odoo 20 cho developer do Vinc Academy biên soạn.",
+        "url": "https://vinc-academy.vercel.app/blog/odoo/",
+        "inLanguage": "vi",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "TechArticle", "headline": "Odoo là gì? Kiến thức nền tảng cho lập trình viên (Odoo 20)", "url": "https://vinc-academy.vercel.app/blog/odoo/odoo-la-gi.html" },
+            { "@type": "TechArticle", "headline": "Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer", "url": "https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html" },
+            { "@type": "TechArticle", "headline": "Tạo module Odoo 20 đầu tiên: cấu trúc, manifest và cài đặt", "url": "https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html" },
+            { "@type": "TechArticle", "headline": "Model, field và ORM trong Odoo 20: tạo model đầu tiên", "url": "https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" },
+            { "@type": "TechArticle", "headline": "Phân quyền Odoo 20: access rights và record rules", "url": "https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" },
+            { "@type": "TechArticle", "headline": "View, action và menu trong Odoo 20: list, form, search", "url": "https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" },
+            { "@type": "TechArticle", "headline": "Many2one, One2many, Many2many trong Odoo 20 có ví dụ", "url": "https://vinc-academy.vercel.app/blog/odoo/many2one-one2many-many2many-odoo.html" },
+            { "@type": "TechArticle", "headline": "Computed field, onchange và constraint trong Odoo 20", "url": "https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" },
+            { "@type": "TechArticle", "headline": "Kế thừa trong Odoo 20: _inherit, xpath, ghi đè method", "url": "https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" },
+            { "@type": "TechArticle", "headline": "Báo cáo PDF trong Odoo 20 với QWeb: hướng dẫn từ A–Z", "url": "https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" },
+            { "@type": "TechArticle", "headline": "OWL trong Odoo 20: component, hook và assets cơ bản", "url": "https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" },
+            { "@type": "TechArticle", "headline": "Web controller và JSON-2 API trong Odoo 20 từ A–Z", "url": "https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" },
+            { "@type": "TechArticle", "headline": "Unit test trong Odoo 20: TransactionCase, tag và Form", "url": "https://vinc-academy.vercel.app/blog/odoo/unit-test-odoo-transactioncase.html" },
+            { "@type": "TechArticle", "headline": "Triển khai Odoo 20 production: Nginx, HTTPS, workers", "url": "https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/index.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li aria-current="page">Odoo</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Chủ đề · Miễn phí</span>
+            <h1>Odoo</h1>
+            <p class="post-lead">Kiến thức lập trình và triển khai Odoo cho developer, do Vinc Academy biên soạn, bám sát tài liệu Developer chính thức của Odoo.</p>
+        </header>
+
+        <h2 class="series-title">Series: Lập trình Odoo 20 từ A–Z</h2>
+        <p class="series-desc">Tự học từ hiểu Odoo là gì đến viết module, phân quyền, giao diện OWL, tích hợp API và triển khai production.</p>
+
+        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
+            <button type="button" class="chip active" data-sort="new">Bài mới</button>
+            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
+        </div>
+        <ol class="post-grid">
+            <li><a class="post-card" href="odoo-la-gi.html">
+                <span class="post-num">Bài 01</span>
+                <h2>Odoo là gì? Kiến thức nền tảng cho lập trình viên</h2>
+                <p>Kiến trúc 3 tầng, cấu trúc module, Community vs Enterprise, yêu cầu Odoo 20 và lộ trình học.</p>
+                <span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="odoo-la-gi">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span>
+            </a></li>
+            <li><a class="post-card" href="cai-dat-odoo-20.html"><span class="post-num">Bài 02</span><h2>Cài đặt môi trường Odoo 20</h2><p>Cài từ source và Docker Compose, chạy odoo-bin, bật developer mode, xử lý lỗi thường gặp.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="cai-dat-odoo-20">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="tao-module-odoo-dau-tien.html"><span class="post-num">Bài 03</span><h2>Tạo module đầu tiên &amp; manifest</h2><p>Khung thư mục, __manifest__.py, cài và nâng cấp module.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tao-module-odoo-dau-tien">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="model-field-orm-odoo.html"><span class="post-num">Bài 04</span><h2>Model, fields &amp; ORM</h2><p>Các loại field, recordset, thao tác CRUD với ORM.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="phan-quyen-odoo-access-rights-record-rules.html"><span class="post-num">Bài 05</span><h2>Security: access rights &amp; record rules</h2><p>Nhóm người dùng, ir.model.access.csv, quy tắc theo bản ghi.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="view-action-menu-odoo.html"><span class="post-num">Bài 06</span><h2>Views &amp; actions</h2><p>Form, list, search, kanban; menu và window action.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="many2one-one2many-many2many-odoo.html"><span class="post-num">Bài 07</span><h2>Quan hệ giữa các model</h2><p>Many2one, One2many, Many2many trong thực tế.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="computed-field-onchange-constraint-odoo.html"><span class="post-num">Bài 08</span><h2>Computed fields, onchange &amp; constraints</h2><p>Logic nghiệp vụ tự động và ràng buộc dữ liệu.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="ke-thua-model-view-odoo.html"><span class="post-num">Bài 09</span><h2>Kế thừa trong Odoo</h2><p>Mở rộng model và view của module khác đúng cách.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="bao-cao-pdf-qweb-odoo.html"><span class="post-num">Bài 10</span><h2>Báo cáo PDF với QWeb</h2><p>Thiết kế template và in báo cáo nghiệp vụ.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="owl-framework-odoo-co-ban.html"><span class="post-num">Bài 11</span><h2>OWL framework cơ bản</h2><p>Component, hooks, services trên giao diện Odoo.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="web-controller-json-2-api-odoo.html"><span class="post-num">Bài 12</span><h2>Web controllers &amp; JSON-2 API</h2><p>Tạo endpoint và tích hợp hệ thống bên ngoài.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="unit-test-odoo-transactioncase.html"><span class="post-num">Bài 13</span><h2>Unit test trong Odoo</h2><p>Viết test bảo vệ module trước mỗi lần nâng cấp.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><a class="post-card" href="trien-khai-odoo-production-nginx-workers.html"><span class="post-num">Bài 14</span><h2>Triển khai Odoo production</h2><p>Linux, Docker, Nginx, SSL, sao lưu và giám sát.</p><span class="post-status">Đã xuất bản</span></a></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Muốn học nhanh hơn với mentor?</h3>
+                <p>Khóa Odoo Developer Foundation giúp bạn tự xây module hoàn chỉnh sau 8 buổi, có dự án thực tế và review code.</p>
+                <div class="cta-actions">
+                    <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                    <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

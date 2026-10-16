@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog kiến thức lập trình: Python, Git, SQL, Odoo, AI | Vinc Academy</title>
+    <meta name="description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Blog kiến thức lập trình & công nghệ" />
+    <meta property="og:description" content="Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/blog-hub.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Blog kiến thức lập trình & công nghệ",
+        "description": "Blog chia sẻ kiến thức lập trình và công nghệ của Vinc Academy: Python, Git, SQL, Odoo, AI. Bài viết thực hành, miễn phí cho developer.",
+        "url": "https://vinc-academy.vercel.app/blog/",
+        "inLanguage": "vi",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "CollectionPage", "name": "Odoo", "url": "https://vinc-academy.vercel.app/blog/odoo/" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../en/blog/index.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../index.html">Trang chủ</a></li>
+            <li aria-current="page">Kiến thức</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Kiến thức · Miễn phí</span>
+            <h1>Blog kiến thức lập trình</h1>
+            <p class="post-lead">Nơi Vinc Academy chia sẻ kiến thức thực hành về lập trình và công nghệ: Python, Git, SQL, Odoo, AI. Chọn một chủ đề để bắt đầu.</p>
+        </header>
+
+        <input type="search" id="post-search" class="post-search" placeholder="Tìm chủ đề: Python, Git, SQL..." aria-label="Tìm chủ đề">
+        <p class="prog-empty" id="post-empty" hidden>Không tìm thấy chủ đề phù hợp.</p>
+        <ol class="post-grid">
+            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Chủ đề</span><h2>Odoo</h2><p>Lập trình Odoo 20 từ A–Z: module, ORM, view, bảo mật, OWL, API, triển khai.</p><span class="post-status">Đã xuất bản</span></a></li>
+            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>Python</h2><p>Nền tảng Python và kỹ thuật thực chiến cho developer.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>Git</h2><p>Quản lý mã nguồn, nhánh, review và làm việc nhóm với Git/GitLab.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>SQL &amp; PostgreSQL</h2><p>Truy vấn, thiết kế dữ liệu và tối ưu hiệu năng với PostgreSQL.</p><span class="post-status">Sắp ra mắt</span></div></li>
+            <li><div class="post-card soon"><span class="post-num">Chủ đề</span><h2>AI cho lập trình</h2><p>Dùng AI để viết, review và debug code hiệu quả.</p><span class="post-status">Sắp ra mắt</span></div></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Muốn học nhanh hơn với mentor?</h3>
+                <p>Các khóa học tại Vinc Academy có dự án thực tế và review code từ giảng viên.</p>
+                <div class="cta-actions">
+                    <a href="../index.html#programs">Xem chương trình</a>
+                    <a href="../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+
+</html>

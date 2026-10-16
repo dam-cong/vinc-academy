@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Computed field, onchange và constraint trong Odoo 20</title>
+    <meta name="description" content="Hướng dẫn Odoo 20: computed field với @api.depends, inverse, store=True, onchange, ràng buộc SQL models.Constraint và @api.constrains." />
+    <meta name="keywords" content="odoo computed field, api.depends, odoo onchange, odoo constrains, odoo sql constraint, odoo inverse" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-computed-field-onchange-constraints.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Computed field, onchange và constraint trong Odoo 20" />
+    <meta property="og:description" content="Tính giá trị tự động, hỗ trợ nhập liệu và bảo vệ dữ liệu với computed field, onchange và constraint trong Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/computed-field-onchange-constraint-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Computed field, onchange và constraint trong Odoo 20",
+                "description": "Tính giá trị tự động, hỗ trợ nhập liệu và bảo vệ dữ liệu với computed field, onchange và constraint trong Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/computed-field-onchange-constraint-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/computed-field-onchange-constraint-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Computed fields, onchange & constraints"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Computed field khác field thường thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Field thường lưu và đọc trực tiếp từ database. Computed field có giá trị do một method tính khi cần, và theo mặc định không được lưu nên không thể tìm kiếm trừ khi đặt store=True hoặc định nghĩa search."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào nên đặt store=True cho computed field?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi cần tìm kiếm hoặc nhóm theo field đó. Nhưng mỗi lần phụ thuộc thay đổi, giá trị phải tính lại cho mọi bản ghi liên quan, có thể rất nặng với dữ liệu lớn, nên hãy cân nhắc chi phí."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao không đặt logic nghiệp vụ trong onchange?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Onchange chỉ chạy trong form view. Khi tạo bản ghi bằng code, import hay API thì nó không được kích hoạt, nên quy tắc nghiệp vụ nên đặt ở computed field hoặc constraint."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nên dùng ràng buộc SQL hay Python?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Ràng buộc SQL hiệu quả hơn và nên được ưu tiên khi điều kiện biểu diễn được bằng SQL. Dùng ràng buộc Python với @api.constrains khi cần kiểm tra phức tạp hơn."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-computed-field-onchange-constraints.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Computed fields, onchange & constraints</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 8 · Series Lập trình Odoo 20</span>
+            <h1>Computed field, onchange và constraint trong Odoo 20</h1>
+            <p class="post-lead">Logic nghiệp vụ đầu tiên của module thường là tính toán tự động và chặn dữ liệu sai. Bài này giải thích computed field, onchange và constraint, khi nào dùng cái nào, và vì sao không đặt quy tắc nghiệp vụ trong onchange.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Computed field tính giá trị từ các field khác bằng method gán cho <code>compute=</code>, khai báo phụ thuộc với <code>@api.depends</code>. Onchange chỉ giúp người dùng nhập liệu trên form, còn constraint đảm bảo dữ liệu luôn hợp lệ.</strong> Ưu tiên computed field thay cho onchange, và dùng ràng buộc SQL (<code>models.Constraint</code>) trước, ràng buộc Python (<code>@api.constrains</code>) khi cần kiểm tra phức tạp hơn.</p>
+                </div>
+
+                <h2 id="computed-field">Computed field: giá trị tính từ field khác</h2>
+                <p>Cho tới giờ, mỗi field được lưu thẳng xuống database và đọc thẳng từ đó. Với <strong>computed field</strong>, giá trị không đọc từ database mà được tính ngay khi cần bằng một method của model. Để tạo computed field, đặt thuộc tính <code>compute</code> bằng tên method; method phải gán giá trị cho field ở <strong>mọi bản ghi trong <code>self</code></strong>. Theo quy ước, method tính toán là private, tên bắt đầu bằng <code>_</code>.</p>
+                <p>Ví dụ: tổng số buổi học và giá trung bình mỗi giờ của khóa học (thêm vào <code>models/course.py</code>):</p>
+<pre><code>session_count = fields.Integer(compute='_compute_session_count')
+price_per_hour = fields.Float(compute='_compute_price_per_hour')
+
+@api.depends('session_ids')
+def _compute_session_count(self):
+    for course in self:
+        course.session_count = len(course.session_ids)
+
+@api.depends('price', 'duration_hours')
+def _compute_price_per_hour(self):
+    for course in self:
+        course.price_per_hour = (
+            course.price / course.duration_hours if course.duration_hours else 0.0)</code></pre>
+                <p>Các dòng trên được thêm vào class <code>VincCourse</code>; nhớ <code>from odoo import api, fields, models</code> ở đầu file.</p>
+                <ul>
+                    <li><code>@api.depends(...)</code> khai báo các field mà kết quả phụ thuộc. ORM dùng danh sách này để tính lại field mỗi khi một trong các field đó thay đổi.</li>
+                    <li><code>self</code> là recordset, nên luôn duyệt bằng <code>for record in self</code>.</li>
+                    <li>Có thể dùng đường dẫn qua field quan hệ làm phụ thuộc, ví dụ <code>@api.depends('session_ids.session_date')</code>. Nó áp dụng được cho Many2one, One2many và Many2many.</li>
+                    <li>Với tập bản ghi nhiều phần tử, <code>mapped()</code> giúp lấy danh sách giá trị gọn hơn, ví dụ <code>max(course.session_ids.mapped('session_date'))</code>.</li>
+                </ul>
+
+                <h3 id="inverse">Hàm inverse: cho phép sửa field tính toán</h3>
+                <p>Mặc định computed field là chỉ đọc vì người dùng không được đặt giá trị cho nó. Nếu muốn nhập được cả hai chiều, thêm tham số <code>inverse</code>. Method compute đặt giá trị cho field tính toán; method inverse làm ngược lại, đặt giá trị cho các field mà nó phụ thuộc. Lưu ý: inverse được gọi khi <em>lưu</em> bản ghi, còn compute được gọi mỗi lần phụ thuộc thay đổi.</p>
+<pre><code>duration_days = fields.Float(compute='_compute_duration_days',
+                             inverse='_inverse_duration_days')
+
+@api.depends('duration_hours')
+def _compute_duration_days(self):
+    for course in self:
+        course.duration_days = course.duration_hours / 8.0
+
+def _inverse_duration_days(self):
+    for course in self:
+        course.duration_hours = int(course.duration_days * 8)</code></pre>
+
+                <h3 id="store-compute">Có lưu computed field hay không?</h3>
+                <p>Computed field mặc định <strong>không lưu</strong> trong database, nên không thể tìm kiếm theo nó (trừ khi định nghĩa thêm method <code>search</code>). Đặt <code>store=True</code> để lưu xuống bảng, nhờ đó tìm kiếm và nhóm được. Cái giá là tải tính toán: mỗi lần phụ thuộc đổi, giá trị được tính lại cho mọi bản ghi liên quan, có thể rất nặng khi có hàng triệu bản ghi. Computed field cũng có thể phụ thuộc computed field khác, ORM vẫn tính đúng thứ tự nhưng đôi khi tốn hiệu năng. Hãy ước lượng chi phí trước khi quyết định.</p>
+
+                <h3 id="related-field">Related field: tính từ một field ở model khác</h3>
+                <p><strong>Related field</strong> là trường hợp đặc biệt của computed field: nó lấy giá trị của một field con bằng cách đi qua chuỗi field quan hệ rồi đọc field ở model cuối chuỗi, khai báo bằng tham số <code>related</code>:</p>
+<pre><code>instructor_name = fields.Char(related='instructor_id.partner_id.name')
+instructor_email = fields.Char(related='instructor_id.email', store=True,
+                               depends=['instructor_id'])</code></pre>
+                <ul>
+                    <li>Theo mặc định related field <strong>không lưu</strong>, không được sao chép khi duplicate, chỉ đọc và được tính ở chế độ superuser. Thêm <code>store=True</code> để lưu như computed field; khi đó nó tự tính lại khi phụ thuộc đổi.</li>
+                    <li>Nhiều thuộc tính được tự sao chép từ field nguồn nếu bạn không khai báo lại: <code>string</code>, <code>help</code>, <code>groups</code>, <code>digits</code>, <code>size</code>, <code>translate</code>, <code>selection</code>, <code>comodel_name</code>, <code>domain</code>, <code>context</code>; <code>required</code> chỉ được copy nếu mọi field trong chuỗi đều bắt buộc.</li>
+                    <li>Muốn kiểm soát chính xác khi nào tính lại, dùng <code>depends=['instructor_id']</code>: field chỉ tính lại khi <code>instructor_id</code> đổi, không phải khi tên bên kia đổi.</li>
+                    <li>Không thể nối chuỗi các field Many2many hoặc One2many trong phụ thuộc của related field. Chỉ được tham chiếu tới One2many hoặc Many2many của model khác khi đi qua một Many2one ở model hiện tại.</li>
+                </ul>
+
+                <h3 id="compute-nang-cao">Các thuộc tính nâng cao của computed field</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tính năng</th><th>Cách dùng</th><th>Ghi chú</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>compute_sudo</code></td><td>Đặt trên field</td><td>Mặc định <code>True</code>: field được tính lại với quyền superuser</td></tr>
+                            <tr><td><code>search</code></td><td><code>search='_search_xxx'</code></td><td>Tên method trả về domain, cho phép tìm kiếm trên computed field không lưu mà không cần <code>store=True</code></td></tr>
+                            <tr><td><code>@api.depends_context</code></td><td><code>@api.depends_context('company')</code></td><td>Khai báo phụ thuộc vào khóa trong context cho method compute không lưu. Giá trị phải hashable; <code>company</code>, <code>uid</code>, <code>active_test</code> có hỗ trợ đặc biệt</td></tr>
+                            <tr><td>Nhiều field một method</td><td>Cùng <code>compute='_apply_discount'</code></td><td>Một method gán nhiều field; với <code>inverse</code> thì không nên dùng chung vì các field dùng cùng inverse bị "bảo vệ" khi đang chạy inverse</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="onchange">Onchange: hỗ trợ nhập liệu trên form</h2>
+                <p>Cơ chế onchange cho phép giao diện cập nhật form ngay khi người dùng điền một field, <em>mà không lưu gì xuống database</em>. Bạn viết method gắn <code>@api.onchange('tên_field')</code>; trong method, <code>self</code> đại diện cho bản ghi trên form, và mọi thay đổi bạn đặt lên <code>self</code> sẽ hiện ra trên form. Không cần vòng lặp, vì onchange chỉ chạy trong form nên <code>self</code> luôn là một bản ghi.</p>
+<pre><code>@api.onchange('is_published')
+def _onchange_is_published(self):
+    if self.is_published and not self.start_date:
+        self.start_date = fields.Date.today()</code></pre>
+                <p>Người dùng vẫn tự do sửa lại giá trị sau đó. Onchange cũng có thể trả về cảnh báo không chặn, dạng <code>{'warning': {'title': ..., 'message': ...}}</code>. Hai giới hạn cần nhớ: <code>@onchange</code> chỉ hỗ trợ tên field đơn, không dùng đường dẫn có dấu chấm như <code>partner_id.tz</code>; và đừng gọi <code>create</code>, <code>write</code>, <code>unlink</code> trên bản ghi giả của onchange vì hành vi không xác định, chỉ cần gán trực tiếp giá trị field.</p>
+
+                <h3 id="gioi-han-onchange">Các giới hạn cần biết của onchange</h3>
+                <ul>
+                    <li>Method onchange chạy trên một bản ghi "giả" chứa các giá trị hiện có trên form; mọi phép gán field lên bản ghi này tự động được gửi về client.</li>
+                    <li>Một field One2many hoặc Many2many <strong>không thể tự thay đổi chính nó</strong> qua onchange; đây là giới hạn của web client.</li>
+                    <li>Muốn đặt nhiều giá trị cùng lúc có thể dùng <code>self.update({...})</code> thay vì gán từng field.</li>
+                    <li>Có thể trả về cảnh báo dạng thông báo nhỏ bằng <code>'type': 'notification'</code>; mặc định cảnh báo hiện trong hộp thoại.</li>
+                </ul>
+
+                <h3 id="compute-vs-onchange">Chọn computed hay onchange?</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>Computed field</th><th>Onchange</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Khi nào chạy</td><td>Mọi lúc, kể cả khi tạo bản ghi bằng code</td><td>Chỉ trong form view</td></tr>
+                            <tr><td>Chứa logic nghiệp vụ</td><td>Phù hợp</td><td><strong>Không</strong>, vì tạo bản ghi bằng code sẽ không kích hoạt</td></tr>
+                            <tr><td>Dễ debug</td><td>Dễ: field do một method đặt ra</td><td>Khó: nhiều onchange có thể cùng đặt một field</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Nguyên tắc của tài liệu Odoo: nếu hai cách cùng làm được, hãy ưu tiên computed field. Và đừng cố làm cho form "quá thông minh": quá nhiều tự động hóa sẽ khiến người dùng bối rối.</p>
+
+                <h2 id="constraints">Constraint: giữ dữ liệu luôn hợp lệ</h2>
+                <p>Làm sao ngăn người dùng nhập sai, ví dụ giá âm? Odoo có hai cách để tự động kiểm tra các điều kiện bất biến: ràng buộc SQL và ràng buộc Python.</p>
+
+                <h3 id="sql-constraint">Ràng buộc SQL</h3>
+                <p>Khai báo bằng thuộc tính <code>models.Constraint</code> với biểu thức SQL và thông báo lỗi. Đây là cách hiệu quả để đảm bảo nhất quán dữ liệu:</p>
+<pre><code>_check_price = models.Constraint(
+    'CHECK(price &gt;= 0)',
+    "Giá khóa học không được âm.",
+)
+_name_uniq = models.Constraint(
+    'UNIQUE(name)',
+    "Tên khóa học đã tồn tại.",
+)</code></pre>
+
+                <h3 id="python-constraint">Ràng buộc Python</h3>
+                <p>Khi cần kiểm tra phức tạp hơn, dùng method gắn <code>@api.constrains</code>, liệt kê các field liên quan. Ràng buộc tự chạy khi một trong các field đó bị sửa, và phải ném <code>ValidationError</code> nếu điều kiện không thỏa:</p>
+<pre><code>from odoo.exceptions import ValidationError
+
+@api.constrains('duration_hours')
+def _check_duration(self):
+    for course in self:
+        if course.duration_hours &lt;= 0:
+            raise ValidationError("Số giờ học phải lớn hơn 0.")</code></pre>
+                <p>Khi so sánh số thực (Float), luôn dùng <code>float_compare()</code> và <code>float_is_zero()</code> trong <code>odoo.tools.float_utils</code> thay vì so sánh trực tiếp. Khi hiệu năng quan trọng, ưu tiên ràng buộc SQL hơn Python.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Dùng onchange để chứa quy tắc nghiệp vụ.</strong> Bạn nhập thử trên form thấy chạy tốt, nhưng khi tạo bản ghi bằng code, import file hoặc qua API thì quy tắc không chạy. Onchange chỉ kích hoạt trong form view; quy tắc nghiệp vụ nên đặt ở computed field hoặc constraint.</li>
+                        <li><strong>Thêm ràng buộc SQL xong, nâng cấp module bị lỗi.</strong> Nếu dữ liệu cũ đã vi phạm (ví dụ có khóa học giá 0 khi thêm <code>CHECK(price &gt; 0)</code>), ràng buộc không áp dụng được và log báo không thể thêm constraint. Hãy sửa hoặc xóa dữ liệu vi phạm rồi nâng cấp lại.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Computed field: <code>compute</code> + <code>@api.depends</code>; gán giá trị cho mọi bản ghi trong <code>self</code>.</li>
+                    <li><code>inverse</code> cho phép sửa field tính toán; <code>store=True</code> cho phép tìm kiếm nhưng tốn tính toán.</li>
+                    <li>Related field là computed field đi qua chuỗi quan hệ; mặc định không lưu và chỉ đọc.</li>
+                    <li>Onchange chỉ giúp nhập liệu trên form; quy tắc nghiệp vụ thuộc về computed field và constraint.</li>
+                    <li>Ưu tiên ràng buộc SQL; dùng Python khi cần kiểm tra phức tạp.</li>
+                </ul>
+                <p>Bài tiếp theo trình bày cách mở rộng model và view của module khác: kế thừa.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn viết logic nghiệp vụ Odoo sạch và đúng chuẩn?</h3>
+                    <p>Khóa Odoo Developer Foundation có phần thực hành computed field, onchange và constraint trên bài toán thật, kèm review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Computed field khác field thường thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Field thường lưu và đọc trực tiếp từ database. Computed field có giá trị do một method tính khi cần, và theo mặc định không được lưu nên không thể tìm kiếm trừ khi đặt store=True hoặc định nghĩa search.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào nên đặt store=True cho computed field?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi cần tìm kiếm hoặc nhóm theo field đó. Nhưng mỗi lần phụ thuộc thay đổi, giá trị phải tính lại cho mọi bản ghi liên quan, có thể rất nặng với dữ liệu lớn, nên hãy cân nhắc chi phí.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao không đặt logic nghiệp vụ trong onchange?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Onchange chỉ chạy trong form view. Khi tạo bản ghi bằng code, import hay API thì nó không được kích hoạt, nên quy tắc nghiệp vụ nên đặt ở computed field hoặc constraint.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên dùng ràng buộc SQL hay Python?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Ràng buộc SQL hiệu quả hơn và nên được ưu tiên khi điều kiện biểu diễn được bằng SQL. Dùng ràng buộc Python với @api.constrains khi cần kiểm tra phức tạp hơn.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/08_compute_onchange.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Computed fields and onchanges</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/10_constraints.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Constraints</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fcomputed-field-onchange-constraint-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fcomputed-field-onchange-constraint-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="many2one-one2many-many2many-odoo.html"><small>← Bài trước</small>Many2one, One2many, Many2many trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Kế thừa trong Odoo</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#computed-field">Computed field: giá trị tính từ field khác</a></li>
+                        <li><a href="#onchange">Onchange: hỗ trợ nhập liệu trên form</a></li>
+                        <li><a href="#constraints">Constraint: giữ dữ liệu luôn hợp lệ</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

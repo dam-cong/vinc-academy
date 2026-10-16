@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phân quyền Odoo 20: access rights và record rules</title>
+    <meta name="description" content="Hướng dẫn phân quyền Odoo 20: viết ir.model.access.csv, hiểu access rights, record rules, rule toàn cục và theo nhóm, giới hạn quyền theo field." />
+    <meta name="keywords" content="odoo access rights, odoo record rules, ir.model.access.csv, phân quyền odoo 20, ir.rule, odoo security" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-access-rights-record-rules.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Phân quyền Odoo 20: access rights và record rules" />
+    <meta property="og:description" content="Cấp quyền theo model bằng ir.model.access.csv và giới hạn theo bản ghi bằng record rules trong Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/phan-quyen-odoo-access-rights-record-rules.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Phân quyền Odoo 20: access rights và record rules",
+                "description": "Cấp quyền theo model bằng ir.model.access.csv và giới hạn theo bản ghi bằng record rules trong Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/phan-quyen-odoo-access-rights-record-rules.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/phan-quyen-odoo-access-rights-record-rules.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Security: access rights & record rules"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao model mới tạo mà người dùng không thấy dữ liệu?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi một model chưa có access right nào, Odoo coi là không ai được truy cập và ghi cảnh báo no access rules vào log. Hãy tạo file ir.model.access.csv, khai báo trong data của manifest rồi nâng cấp module."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa access rights và record rules?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Access rights cấp quyền thao tác trên toàn bộ model cho một nhóm. Record rules đặt thêm điều kiện theo từng bản ghi, ví dụ chỉ cho thấy bản ghi đã xuất bản. Rule được kiểm tra sau access rights."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Rule toàn cục và rule theo nhóm khác gì nhau?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Các rule toàn cục giao nhau nên phải thỏa tất cả và luôn thu hẹp quyền. Các rule theo nhóm hợp nhất nên thỏa một trong số đó là đủ, có thể mở rộng quyền nhưng không vượt giới hạn của rule toàn cục."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Cột model_id:id trong ir.model.access.csv viết thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Viết model_ cộng với _name của model, đổi dấu chấm thành gạch dưới. Ví dụ model vinc.course có giá trị model_vinc_course."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-access-rights-record-rules.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Security: access rights & record rules</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 5 · Series Lập trình Odoo 20</span>
+            <h1>Phân quyền Odoo 20: access rights và record rules</h1>
+            <p class="post-lead">Phân quyền quyết định ai được xem và sửa dữ liệu nào. Bài này giúp bạn khai báo access rights cho model, viết record rules theo từng bản ghi và tránh các sai lầm bảo mật mà tài liệu Odoo cảnh báo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo dùng hai cơ chế phân quyền theo dữ liệu, cùng gắn với nhóm người dùng: access rights (quyền theo model) và record rules (điều kiện theo từng bản ghi).</strong> Model nào chưa có access right thì không ai truy cập được. Bạn khai báo quyền trong <code>security/ir.model.access.csv</code>, rồi nhớ liệt kê file này trong <code>data</code> của manifest; record rule được viết bằng XML với <code>domain_force</code>.</p>
+                </div>
+
+                <h2 id="du-lieu-csv">File dữ liệu CSV: nền tảng của phân quyền</h2>
+                <p>Odoo là hệ thống hướng dữ liệu: ngoài code Python, giá trị của một module còn nằm ở dữ liệu nó nạp vào khi cài. Một cách nạp là file CSV; cấu hình phân quyền cũng đi theo con đường này. Có ba quy ước cần nhớ:</p>
+                <ul>
+                    <li>Theo quy ước, file dữ liệu liên quan phân quyền nằm trong thư mục <code>security/</code>, file về view và action nằm trong <code>views/</code>.</li>
+                    <li>Mọi file đều phải được khai báo trong danh sách <code>data</code> của <code>__manifest__.py</code>, và chỉ được nạp khi cài hoặc nâng cấp module.</li>
+                    <li>File được nạp tuần tự theo thứ tự trong manifest, nên dữ liệu A tham chiếu tới dữ liệu B thì B phải đứng trước.</li>
+                </ul>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 354" role="img" aria-labelledby="dg-vi-05">
+                        <title id="dg-vi-05">Sơ đồ các lớp kiểm tra quyền truy cập trong Odoo</title>
+                        <rect class="dg-box" x="20" y="8" width="600" height="56" rx="12" />
+                        <text class="dg-title" x="36" y="36">Người dùng thuộc một hoặc nhiều nhóm (res.groups)</text>
+                        <path class="dg-arrow" d="M320 66 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="88" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="116">1. Access rights (ir.model.access)</text>
+                        <text class="dg-text" x="36" y="142">Theo model; cộng dồn giữa các nhóm; chưa có quyền = bị chặn</text>
+                        <path class="dg-arrow" d="M320 160 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="182" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="210">2. Record rules (ir.rule)</text>
+                        <text class="dg-text" x="36" y="236">Theo bản ghi; mặc định cho phép; rule toàn cục giao nhau, rule nhóm hợp nhất</text>
+                        <path class="dg-arrow" d="M320 254 v18 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="276" width="600" height="70" rx="12" />
+                        <text class="dg-title" x="36" y="304">3. Quyền theo field (thuộc tính groups)</text>
+                        <text class="dg-text" x="36" y="330">Field bị loại khỏi view, đọc/ghi trực tiếp báo lỗi truy cập</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu bảo mật Odoo 20.</figcaption>
+                </figure>
+
+                <h2 id="nhom-nguoi-dung">Nhóm người dùng (res.groups)</h2>
+                <p>Cả hai cơ chế đều gắn với người dùng thông qua nhóm: một người dùng thuộc bao nhiêu nhóm tùy ý, và các cơ chế bảo mật được gắn vào nhóm. Model <code>res.groups</code> có các thuộc tính chính:</p>
+                <ul>
+                    <li><code>name</code>: tên dễ đọc, nói rõ vai trò hoặc mục đích của nhóm.</li>
+                    <li><code>category_id</code>: danh mục module, dùng để gắn nhóm với một ứng dụng (một tập model nghiệp vụ liên quan) và biến chúng thành lựa chọn loại trừ trong form người dùng.</li>
+                    <li><code>implied_ids</code>: các nhóm khác được gán cùng khi gán nhóm này. Đây là kiểu "kế thừa giả" cho tiện: vẫn có thể gỡ nhóm được ngụ ý khỏi một người dùng mà không gỡ nhóm gốc.</li>
+                    <li><code>comment</code>: ghi chú thêm về nhóm.</li>
+                </ul>
+
+                <h2 id="access-rights">Access rights: quyền theo model</h2>
+                <p>Access right cho phép một nhóm người dùng thực hiện các thao tác trên toàn bộ một model. Nếu không có access right nào khớp với thao tác của người dùng (qua các nhóm của họ), người đó không có quyền. Chính vì vậy, khi model vừa tạo ở bài 4 chưa có quyền nào, Odoo ghi cảnh báo <em>no access rules</em> vào log và chặn mọi truy cập.</p>
+                <p>Access right là bản ghi của model <code>ir.model.access</code> với các thuộc tính chính: <code>model_id</code> (model áp dụng), <code>group_id</code> (nhóm được cấp; để trống nghĩa là cấp cho mọi người dùng, kể cả portal và public) và bốn quyền <code>perm_read</code>, <code>perm_write</code>, <code>perm_create</code>, <code>perm_unlink</code>. Mặc định cả bốn quyền đều tắt. Các access right có tính cộng dồn: quyền của người dùng là hợp của quyền từ tất cả các nhóm mà họ thuộc về.</p>
+                <p>Tạo file <code>security/ir.model.access.csv</code> cho model <code>vinc.course</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/security/ir.model.access.csv</p>
+<pre><code>id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vinc_course_user,vinc.course user,model_vinc_course,base.group_user,1,1,1,1</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cột</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>id</code></td><td>Mã định danh ngoài (external id) của access right, nên duy nhất trong module</td></tr>
+                            <tr><td><code>name</code></td><td>Tên mô tả</td></tr>
+                            <tr><td><code>model_id:id</code></td><td>Model áp dụng, viết theo mẫu <code>model_</code> + <code>_name</code> với dấu chấm đổi thành gạch dưới: <code>vinc.course</code> thành <code>model_vinc_course</code></td></tr>
+                            <tr><td><code>group_id:id</code></td><td>Nhóm được cấp quyền; <code>base.group_user</code> là nhóm người dùng nội bộ</td></tr>
+                            <tr><td><code>perm_*</code></td><td>1 là cho phép, 0 là không. <code>unlink</code> tương đương "xóa"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Muốn nhóm này chỉ được xem, đổi bốn số cuối thành <code>1,0,0,0</code>. Sau đó khai báo file trong manifest, đặt trước các file view:</p>
+<pre><code>'data': [
+    'security/ir.model.access.csv',
+],</code></pre>
+                <p>Chạy lại <code>-u vinc_course</code>: cảnh báo <em>no access rules</em> sẽ biến mất.</p>
+
+                <h2 id="record-rules">Record rules: điều kiện theo từng bản ghi</h2>
+                <p>Access right trả lời câu hỏi "được thao tác trên model này không". <strong>Record rule</strong> trả lời tiếp: "được thao tác trên những bản ghi nào". Rule được kiểm tra theo từng bản ghi, sau access right, và là bản ghi của model <code>ir.rule</code>. Điểm khác biệt quan trọng: rule theo kiểu <em>mặc định cho phép</em>. Nếu access right đã cấp quyền và không có rule nào áp dụng, người dùng được truy cập.</p>
+                <p>Các thuộc tính chính của <code>ir.rule</code>:</p>
+                <ul>
+                    <li><code>model_id</code>: model chịu tác động.</li>
+                    <li><code>groups</code>: các nhóm bị áp dụng; để trống thì là rule toàn cục (global).</li>
+                    <li><code>domain_force</code>: điều kiện viết dưới dạng domain. Bản ghi khớp domain thì thao tác được phép, không khớp thì bị cấm. Trong domain dùng được <code>user</code>, <code>time</code>, <code>company_id</code>, <code>company_ids</code>.</li>
+                    <li><code>perm_*</code>: rule áp dụng cho thao tác nào. Ở rule, thao tác không được chọn thì rule không kiểm tra; mặc định chọn tất cả (khác với access right).</li>
+                </ul>
+                <p>Ví dụ: người dùng nội bộ chỉ thấy các khóa học đã xuất bản.</p>
+                <p class="code-title">custom-addons/vinc_course/security/vinc_course_rules.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="vinc_course_rule_published" model="ir.rule"&gt;
+        &lt;field name="name"&gt;Vinc Course: only published for users&lt;/field&gt;
+        &lt;field name="model_id" ref="model_vinc_course"/&gt;
+        &lt;field name="groups" eval="[(4, ref('base.group_user'))]"/&gt;
+        &lt;field name="domain_force"&gt;[('is_published', '=', True)]&lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <p>Thêm <code>'security/vinc_course_rules.xml'</code> vào <code>data</code> ngay sau file CSV rồi nâng cấp module.</p>
+
+                <h3 id="global-group">Rule toàn cục và rule theo nhóm</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th></th><th>Rule toàn cục (không có nhóm)</th><th>Rule theo nhóm</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Khi nhiều rule cùng áp dụng</td><td>Giao nhau: phải thỏa tất cả</td><td>Hợp nhất: thỏa một trong số đó là đủ</td></tr>
+                            <tr><td>Thêm rule mới thì</td><td>Luôn thu hẹp thêm quyền truy cập</td><td>Có thể mở rộng quyền, nhưng không vượt giới hạn của rule toàn cục</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="quyen-theo-field">Giới hạn quyền ở mức field</h2>
+                <p>Một field có thể mang thuộc tính <code>groups</code> (chuỗi các external id, cách nhau bởi dấu phẩy). Người dùng không thuộc nhóm nào trong danh sách sẽ không thấy field đó trong view, và việc đọc hoặc ghi trực tiếp field sẽ báo lỗi truy cập. Ví dụ: <code>price = fields.Float(groups='base.group_system')</code>.</p>
+
+                <h2 id="sai-lam-bao-mat">Các sai lầm bảo mật cần tránh</h2>
+                <p>Tài liệu Odoo nhấn mạnh vài lỗi developer hay mắc, đáng đọc ngay từ khi mới học:</p>
+                <ul>
+                    <li><strong>Tin vào đối số của method công khai.</strong> Mọi method không bắt đầu bằng <code>_</code> đều có thể bị gọi qua RPC với tham số tùy ý, còn quyền chỉ được kiểm tra khi có thao tác CRUD. Method cần làm việc nhạy cảm phải tự kiểm tra điều kiện, và nên đặt phần xử lý nội bộ ở method bắt đầu bằng <code>_</code>.</li>
+                    <li><strong>Bỏ qua ORM để chạy SQL trực tiếp.</strong> Làm vậy bỏ qua cả dịch thuật, active, quyền truy cập. Hãy ưu tiên <code>search</code>; nếu bắt buộc dùng SQL, luôn truyền tham số riêng, không nối chuỗi.</li>
+                    <li><strong>Dùng <code>t-raw</code> để hiển thị nội dung người dùng nhập</strong> trong template, vì đây là con đường phổ biến dẫn tới XSS.</li>
+                </ul>
+
+                <h3 id="chi-tiet-bao-mat">Ba mẫu an toàn nên thuộc lòng</h3>
+                <ul>
+                    <li><strong>Không nối chuỗi vào câu SQL.</strong> Không bao giờ dùng phép cộng chuỗi hay định dạng <code>%</code> để đưa biến vào truy vấn. Hãy truyền tham số riêng để thư viện cơ sở dữ liệu (psycopg2) tự quyết định cách định dạng; Odoo còn có lớp <code>SQL</code> để dựng truy vấn từ mẫu và xử lý đầu vào. Thứ tự từ tệ tới tốt: nối chuỗi, truyền tham số, lớp <code>SQL</code>, và tốt nhất là dùng ORM với <code>search([...])</code>.</li>
+                    <li><strong>Dùng lớp <code>Domain</code> thay vì ghép danh sách domain.</strong> Domain là danh sách có thể serialize, nếu người dùng kiểm soát một phần đầu vào chưa chuẩn hóa thì họ có thể chèn thêm điều kiện (ví dụ <code>['|', ('id', '&gt;', 0)]</code> để thấy mọi bản ghi). Hãy dùng <code>Domain(...)</code> và phép <code>&amp;=</code> để kết hợp an toàn.</li>
+                    <li><strong>Không dùng <code>t-raw</code> với nội dung do người dùng nhập.</strong> Rất khó đảm bảo toàn vẹn dữ liệu từ lúc tính toán đến khi vào DOM, và một <code>t-raw</code> an toàn hôm nay có thể không còn an toàn sau lần sửa lỗi hay refactor sau. Hãy dùng <code>t-out</code>, vốn tự escape HTML.</li>
+                </ul>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học phân quyền</p>
+                    <ul>
+                        <li><strong>Model đã có, người dùng bình thường lại không thấy gì.</strong> Kiểm tra log lúc khởi động xem có cảnh báo <em>no access rules</em> không. Theo tài liệu, model chưa khai báo access right thì Odoo coi là không ai được truy cập. Tạo <code>ir.model.access.csv</code>, thêm vào <code>data</code> trong manifest rồi nâng cấp bằng <code>-u</code>.</li>
+                        <li><strong>Tạo nhiều rule toàn cục cho cùng một model.</strong> Các rule toàn cục giao nhau, nên hai rule không chồng lấn nhau sẽ khiến không bản ghi nào còn thỏa, và mọi người dùng mất quyền. Tài liệu cảnh báo đây là việc rủi ro; ưu tiên rule theo nhóm khi có thể.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Quyền theo thứ tự: nhóm, access rights (theo model), record rules (theo bản ghi), quyền theo field.</li>
+                    <li>Model chưa có access right thì không ai truy cập được; khai báo trong <code>ir.model.access.csv</code> và liệt kê trong <code>data</code>.</li>
+                    <li>Record rule mặc định cho phép; hạn chế dùng nhiều rule toàn cục.</li>
+                    <li>Method công khai, SQL thô và <code>t-raw</code> là ba nguồn lỗi bảo mật phổ biến.</li>
+                </ul>
+                <p>Bài tiếp theo xây giao diện đầu tiên: menu, action và view.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn xây module có phân quyền đúng chuẩn?</h3>
+                    <p>Khóa Odoo Developer Foundation có phần thực hành phân quyền và review code, giúp bạn tránh các lỗi bảo mật ngay từ đầu.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao model mới tạo mà người dùng không thấy dữ liệu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi một model chưa có access right nào, Odoo coi là không ai được truy cập và ghi cảnh báo no access rules vào log. Hãy tạo file ir.model.access.csv, khai báo trong data của manifest rồi nâng cấp module.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa access rights và record rules?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Access rights cấp quyền thao tác trên toàn bộ model cho một nhóm. Record rules đặt thêm điều kiện theo từng bản ghi, ví dụ chỉ cho thấy bản ghi đã xuất bản. Rule được kiểm tra sau access rights.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Rule toàn cục và rule theo nhóm khác gì nhau?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Các rule toàn cục giao nhau nên phải thỏa tất cả và luôn thu hẹp quyền. Các rule theo nhóm hợp nhất nên thỏa một trong số đó là đủ, có thể mở rộng quyền nhưng không vượt giới hạn của rule toàn cục.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Cột model_id:id trong ir.model.access.csv viết thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Viết model_ cộng với _name của model, đổi dấu chấm thành gạch dưới. Ví dụ model vinc.course có giá trị model_vinc_course.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/04_securityintro.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Security, a brief introduction</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/security.html" target="_blank" rel="noopener">Odoo 20 – Security in Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/data.html" target="_blank" rel="noopener">Odoo 20 – Data files</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fphan-quyen-odoo-access-rights-record-rules.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fphan-quyen-odoo-access-rights-record-rules.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="model-field-orm-odoo.html"><small>← Bài trước</small>Model, field và ORM trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Views &amp; actions</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#du-lieu-csv">File dữ liệu CSV: nền tảng của phân quyền</a></li>
+                        <li><a href="#nhom-nguoi-dung">Nhóm người dùng (res.groups)</a></li>
+                        <li><a href="#access-rights">Access rights: quyền theo model</a></li>
+                        <li><a href="#record-rules">Record rules: điều kiện theo từng bản ghi</a></li>
+                        <li><a href="#quyen-theo-field">Giới hạn quyền ở mức field</a></li>
+                        <li><a href="#sai-lam-bao-mat">Các sai lầm bảo mật cần tránh</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

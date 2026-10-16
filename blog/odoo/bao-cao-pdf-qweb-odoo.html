@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo PDF trong Odoo 20 với QWeb: hướng dẫn từ A–Z</title>
+    <meta name="description" content="Tạo báo cáo PDF Odoo 20 bằng QWeb: ir.actions.report, template, web.external_layout, paper format, wkhtmltopdf và báo cáo tùy biến." />
+    <meta name="keywords" content="odoo qweb report, báo cáo pdf odoo, ir.actions.report, wkhtmltopdf odoo, odoo external_layout, odoo paperformat" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-qweb-pdf-reports.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Báo cáo PDF trong Odoo 20 với QWeb: hướng dẫn từ A–Z" />
+    <meta property="og:description" content="Tạo và in báo cáo PDF trong Odoo 20 bằng QWeb: action, template, khổ giấy và báo cáo tùy biến." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/bao-cao-pdf-qweb-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Báo cáo PDF trong Odoo 20 với QWeb: hướng dẫn từ A–Z",
+                "description": "Tạo và in báo cáo PDF trong Odoo 20 bằng QWeb: action, template, khổ giấy và báo cáo tùy biến.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/bao-cao-pdf-qweb-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/bao-cao-pdf-qweb-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Báo cáo PDF với QWeb"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Odoo tạo file PDF bằng công cụ nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Báo cáo được viết bằng HTML/QWeb, và việc chuyển sang PDF do wkhtmltopdf thực hiện. Odoo 20 khuyến nghị bản 0.12.6 để PDF có header và footer, cài thủ công chứ không qua pip."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Template báo cáo liên kết với report action thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Thuộc tính report_name của report action phải bằng tên module ghép với id của template, ví dụ vinc_course.report_course."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao để nút in hiện trong menu Print của form?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khai báo report action bằng bản ghi ir.actions.report rồi đặt binding_model_id trỏ tới model của báo cáo."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào cần báo cáo tùy biến với _get_report_values?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi template cần thêm dữ liệu từ model khác ngoài model của báo cáo. Khi đó bạn phải tự trả về docs, doc_ids và doc_model vì các biến mặc định không được thêm tự động."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-qweb-pdf-reports.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Báo cáo PDF với QWeb</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 10 · Series Lập trình Odoo 20</span>
+            <h1>Báo cáo PDF trong Odoo 20 với QWeb: hướng dẫn từ A–Z</h1>
+            <p class="post-lead">Hóa đơn, phiếu, báo giá đều là báo cáo PDF. Bài này hướng dẫn bạn viết template QWeb, khai báo report action, chọn khổ giấy và xử lý các lỗi thường gặp với wkhtmltopdf.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Báo cáo PDF trong Odoo 20 được viết bằng HTML/QWeb và render thành PDF bởi wkhtmltopdf.</strong> Bạn cần hai thứ: một <em>report action</em> (<code>ir.actions.report</code>) và một <em>template QWeb</em> có <code>id</code> trùng với <code>report_name</code> của action. Trong template, <code>t-foreach</code>, <code>t-if</code>, <code>t-out</code>, <code>t-field</code> và <code>t-call</code> là các chỉ thị dùng nhiều nhất.</p>
+                </div>
+
+                <h2 id="qweb-co-ban">QWeb: ngôn ngữ template của Odoo</h2>
+                <p>QWeb là engine template XML chính của Odoo, chủ yếu sinh ra các đoạn HTML và trang HTML: giao diện kanban, trang website, và báo cáo PDF. Các chỉ thị là thuộc tính XML bắt đầu bằng <code>t-</code>; thẻ <code>&lt;t&gt;</code> là phần tử giữ chỗ, chạy chỉ thị nhưng không tự sinh ra đầu ra.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Chỉ thị</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>t-if</code>, <code>t-elif</code>, <code>t-else</code></td><td>Hiển thị phần tử có điều kiện; điều kiện sai thì phần tử bị bỏ hẳn khỏi kết quả</td></tr>
+                            <tr><td><code>t-foreach</code> + <code>t-as</code></td><td>Lặp qua một tập; <code>t-as</code> đặt tên cho phần tử đang lặp</td></tr>
+                            <tr><td><code>t-out</code></td><td>Xuất giá trị biểu thức, tự động escape HTML để hạn chế rủi ro XSS</td></tr>
+                            <tr><td><code>t-set</code> + <code>t-value</code></td><td>Gán giá trị cho biến</td></tr>
+                            <tr><td><code>t-call</code></td><td>Gọi một template khác</td></tr>
+                            <tr><td><code>t-field</code></td><td>Xuất field của bản ghi và tự định dạng theo kiểu field; chỉ dùng được khi truy cập field (<code>a.b</code>) trên bản ghi do ORM trả về</td></tr>
+                            <tr><td><code>t-att-*</code>, <code>t-attf-*</code></td><td>Đặt thuộc tính HTML động</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="report-gom-gi">Một báo cáo gồm những gì?</h2>
+                <p>Mỗi báo cáo PDF cần:</p>
+                <ol>
+                    <li><strong>Report action</strong> (bản ghi <code>ir.actions.report</code>): khai báo báo cáo về model nào, loại gì, dùng template nào.</li>
+                    <li><strong>Template QWeb</strong>: nội dung HTML của báo cáo.</li>
+                    <li>(Tùy chọn) <strong>Paper format</strong>: khổ giấy, lề, hướng giấy.</li>
+                </ol>
+                <p>Các thuộc tính chính của report action: <code>name</code> (bắt buộc), <code>model</code> (bắt buộc, model của báo cáo), <code>report_type</code> (mặc định <code>qweb-pdf</code>, hoặc <code>qweb-html</code>), <code>report_name</code> (bắt buộc, external id của template) và <code>print_report_name</code> (biểu thức Python đặt tên file). Muốn nút in xuất hiện trong menu <em>Print</em> của form view, cần thêm <code>binding_model_id</code>.</p>
+
+                <h2 id="report-vinc-course">Thực hành: phiếu thông tin khóa học</h2>
+                <p>Tạo file <code>reports/vinc_course_report.xml</code> và khai báo trong <code>data</code> của manifest:</p>
+                <p class="code-title">custom-addons/vinc_course/reports/vinc_course_report.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="action_report_vinc_course" model="ir.actions.report"&gt;
+        &lt;field name="name"&gt;Phiếu khóa học&lt;/field&gt;
+        &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+        &lt;field name="report_type"&gt;qweb-pdf&lt;/field&gt;
+        &lt;field name="report_name"&gt;vinc_course.report_course&lt;/field&gt;
+        &lt;field name="binding_model_id" ref="model_vinc_course"/&gt;
+    &lt;/record&gt;
+
+    &lt;template id="report_course"&gt;
+        &lt;t t-call="web.html_container"&gt;
+            &lt;t t-foreach="docs" t-as="course"&gt;
+                &lt;t t-call="web.external_layout"&gt;
+                    &lt;div class="page"&gt;
+                        &lt;h2 t-field="course.name"/&gt;
+                        &lt;p&gt;Cấp độ: &lt;span t-field="course.level"/&gt;&lt;/p&gt;
+                        &lt;p&gt;Thời lượng: &lt;span t-field="course.duration_hours"/&gt; giờ&lt;/p&gt;
+                        &lt;table class="table table-sm"&gt;
+                            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Buổi học&lt;/th&gt;&lt;th&gt;Ngày&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+                            &lt;tbody&gt;
+                                &lt;tr t-foreach="course.session_ids" t-as="session"&gt;
+                                    &lt;td&gt;&lt;span t-field="session.name"/&gt;&lt;/td&gt;
+                                    &lt;td&gt;&lt;span t-field="session.session_date"/&gt;&lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/tbody&gt;
+                        &lt;/table&gt;
+                    &lt;/div&gt;
+                &lt;/t&gt;
+            &lt;/t&gt;
+        &lt;/t&gt;
+    &lt;/template&gt;
+&lt;/odoo&gt;</code></pre>
+                <ul>
+                    <li><code>web.html_container</code> bọc khung HTML của báo cáo.</li>
+                    <li><code>web.external_layout</code> thêm header và footer mặc định của công ty; phần thân PDF là nội dung trong <code>&lt;div class="page"&gt;</code>.</li>
+                    <li><code>docs</code> là các bản ghi mà báo cáo đang in; <code>doc_ids</code> là danh sách id và <code>doc_model</code> là model của chúng. Template còn luôn có sẵn <code>time</code>, <code>user</code>, <code>res_company</code>, <code>web_base_url</code> và hàm <code>context_timestamp</code> để đổi giờ UTC sang múi giờ người in.</li>
+                    <li><code>id</code> của template (<code>report_course</code>) ghép với tên module (<code>vinc_course.</code>) phải trùng với <code>report_name</code> của action.</li>
+                </ul>
+                <p>Nâng cấp module bằng <code>-u vinc_course</code>, mở một khóa học, chọn <em>Print</em> rồi <em>Phiếu khóa học</em> để tải PDF.</p>
+
+                <h2 id="wkhtmltopdf">wkhtmltopdf và định dạng giấy</h2>
+                <p>Việc chuyển HTML sang PDF do <strong>wkhtmltopdf</strong> thực hiện. Odoo 20 khuyến nghị bản <strong>0.12.6</strong> để PDF có header và footer, và phải cài thủ công chứ không qua pip. Trong template có thể dùng class Bootstrap và FontAwesome, đặt CSS cục bộ ngay trong template.</p>
+                <p>Khổ giấy là bản ghi của model <code>report.paperformat</code> với các thuộc tính như <code>format</code> (A4 mặc định, hoặc <code>custom</code>), <code>orientation</code> (Portrait/Landscape), <code>margin_*</code> (mm), <code>dpi</code> (mặc định 90), <code>header_line</code>, <code>header_spacing</code>. Gắn vào báo cáo qua <code>paperformat_id</code>; nếu không có thì dùng khổ giấy của công ty.</p>
+                <h3 id="in-html">Xem báo cáo như trang web</h3>
+                <p>Báo cáo được sinh động và truy cập trực tiếp qua URL, rất tiện khi chỉnh giao diện vì xem được HTML ngay trên trình duyệt:</p>
+<pre><code>http://localhost:8069/report/html/vinc_course.report_course/1
+http://localhost:8069/report/pdf/vinc_course.report_course/1</code></pre>
+                <p>Số cuối là id của bản ghi cần in.</p>
+
+                <h2 id="custom-report">Báo cáo tùy biến: đưa thêm dữ liệu vào template</h2>
+                <p>Mặc định, dữ liệu render lấy từ model của báo cáo. Nếu cần thêm dữ liệu từ model khác, tạo một model trừu tượng tên <code>report.&lt;module&gt;.&lt;report_name&gt;</code> có method <code>_get_report_values(docids, data=None)</code>; Odoo sẽ tìm model này trước và dùng giá trị nó trả về làm ngữ cảnh render:</p>
+<pre><code>from odoo import api, models
+
+
+class ReportCourse(models.AbstractModel):
+    _name = 'report.vinc_course.report_course'
+
+    def _get_report_values(self, docids, data=None):
+        courses = self.env['vinc.course'].browse(docids)
+        return {
+            'doc_ids': docids,
+            'doc_model': 'vinc.course',
+            'docs': courses,
+            'total_hours': sum(courses.mapped('duration_hours')),
+        }</code></pre>
+                <p>Lưu ý: với báo cáo tùy biến, các biến mặc định <code>docs</code>, <code>doc_ids</code>, <code>doc_model</code> <strong>không</strong> được thêm tự động; nếu template cần, bạn phải tự trả về như ví dụ trên.</p>
+
+                <h2 id="tuy-chon-action">Các tùy chọn khác của report action</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thuộc tính</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>groups_id</code></td><td>Các nhóm được phép xem và dùng báo cáo</td></tr>
+                            <tr><td><code>multi</code></td><td>Nếu đặt <code>True</code>, action không hiện trên form view (chỉ hiện khi chọn nhiều bản ghi trong list)</td></tr>
+                            <tr><td><code>paperformat_id</code></td><td>Khổ giấy dùng cho báo cáo; không có thì dùng khổ giấy của công ty</td></tr>
+                            <tr><td><code>attachment_use</code></td><td>Nếu <code>True</code>, báo cáo chỉ được sinh một lần ở lần yêu cầu đầu và các lần sau in lại từ bản đã lưu, thay vì sinh lại. Dùng cho báo cáo chỉ được tạo một lần (ví dụ vì lý do pháp lý)</td></tr>
+                            <tr><td><code>attachment</code></td><td>Biểu thức Python đặt tên báo cáo được lưu; bản ghi có sẵn dưới tên <code>object</code></td></tr>
+                            <tr><td><code>print_report_name</code></td><td>Biểu thức Python đặt tên file PDF tải về; không đặt thì dùng <code>name</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Ví dụ đặt tên file theo bản ghi: <code>print_report_name</code> có thể là <code>'Phieu-%s' % (object.name)</code>.</p>
+
+                <h2 id="dich-bao-cao">Dịch báo cáo theo ngôn ngữ của khách hàng</h2>
+                <p>Muốn in báo cáo bằng ngôn ngữ của từng đối tác, hãy tách làm <strong>hai template</strong>: template chính, và template tài liệu có thể dịch. Template chính gọi template tài liệu với thuộc tính <code>t-lang</code> là mã ngôn ngữ (như <code>fr</code>, <code>en_US</code>) hoặc một field của bản ghi. Nếu dùng field có thể dịch (tên quốc gia, điều khoản bán hàng…), cần đọc lại bản ghi với ngữ cảnh đúng bằng <code>with_context(lang=...)</code>:</p>
+<pre><code>&lt;template id="report_course"&gt;
+    &lt;t t-call="web.html_container"&gt;
+        &lt;t t-foreach="docs" t-as="doc"&gt;
+            &lt;t t-call="vinc_course.report_course_document"
+               t-lang="doc.instructor_id.lang"/&gt;
+        &lt;/t&gt;
+    &lt;/t&gt;
+&lt;/template&gt;
+
+&lt;template id="report_course_document"&gt;
+    &lt;t t-set="doc" t-value="doc.with_context(lang=doc.instructor_id.lang)"/&gt;
+    &lt;t t-call="web.external_layout"&gt;
+        &lt;div class="page"&gt;&lt;h2 t-field="doc.name"/&gt;&lt;/div&gt;
+    &lt;/t&gt;
+&lt;/template&gt;</code></pre>
+                <ul>
+                    <li>Nếu chỉ muốn dịch phần thân nhưng giữ header và footer ở ngôn ngữ mặc định, gọi layout bằng <code>&lt;t t-call="web.external_layout" t-lang="en_US"&gt;</code>.</li>
+                    <li><code>t-lang</code> chỉ có tác dụng khi dùng cùng <code>t-call</code> tới template ngoài; đặt lên thẻ XML khác sẽ không dịch được một phần của template. Muốn dịch một đoạn, tách đoạn đó thành template riêng rồi gọi bằng <code>t-lang</code>.</li>
+                    <li>Nếu template không dùng field dịch được thì không cần đọc lại bản ghi theo ngôn ngữ khác, vì làm vậy chỉ gây tốn hiệu năng.</li>
+                </ul>
+
+                <h2 id="barcode-css-font">Mã vạch, CSS và font tùy biến</h2>
+                <ul>
+                    <li><strong>Mã vạch / QR:</strong> là hình ảnh do một controller trả về, nhúng vào báo cáo bằng QWeb: <code>&lt;img t-att-src="'/report/barcode/QR/%s' % 'nội dung'"/&gt;</code>. Có thể truyền thêm tham số qua query string như <code>barcode_type</code>, <code>value</code>, <code>width</code>, <code>height</code>.</li>
+                    <li><strong>CSS:</strong> dùng được class Bootstrap và FontAwesome; CSS cục bộ đặt thẳng trong template. CSS toàn cục chèn bằng cách kế thừa template layout báo cáo (<code>inherit_id="report.style"</code>) rồi thêm style bằng <code>xpath</code>.</li>
+                    <li><strong>Font tùy biến:</strong> phải thêm font và CSS/LESS liên quan vào bundle <code>web.report_assets_common</code>. Thêm vào <code>web.assets_common</code> hoặc <code>web.assets_backend</code> sẽ <em>không</em> làm font dùng được trong báo cáo QWeb. Bạn cũng phải khai báo <code>@font-face</code> trong file LESS đó, kể cả khi đã dùng ở bundle khác.</li>
+                </ul>
+
+                <h2 id="paperformat-vi-du">Ví dụ đầy đủ về paper format</h2>
+<pre><code>&lt;record id="paperformat_course_a5" model="report.paperformat"&gt;
+    &lt;field name="name"&gt;Phiếu khóa học A5&lt;/field&gt;
+    &lt;field name="format"&gt;A5&lt;/field&gt;
+    &lt;field name="orientation"&gt;Landscape&lt;/field&gt;
+    &lt;field name="margin_top"&gt;20&lt;/field&gt;
+    &lt;field name="margin_bottom"&gt;15&lt;/field&gt;
+    &lt;field name="margin_left"&gt;10&lt;/field&gt;
+    &lt;field name="margin_right"&gt;10&lt;/field&gt;
+    &lt;field name="header_line" eval="False"/&gt;
+    &lt;field name="header_spacing"&gt;10&lt;/field&gt;
+    &lt;field name="dpi"&gt;90&lt;/field&gt;
+&lt;/record&gt;</code></pre>
+                <p>Chỉ <code>name</code> là bắt buộc. Nếu bạn khai báo kích thước trang cụ thể (<code>page_height</code>, <code>page_width</code>, tính bằng mm), phải đặt <code>format</code> là <code>custom</code>, vì không thể dùng khổ giấy định sẵn cùng lúc với kích thước tự đặt.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi làm báo cáo</p>
+                    <ul>
+                        <li><strong>Bấm in nhưng không có báo cáo, hoặc Odoo báo không tìm thấy template.</strong> Kiểm tra <code>report_name</code> của action: nó phải khớp <code>tên_module.id_template</code>. Template <code>id="report_course"</code> trong module <code>vinc_course</code> tương ứng <code>vinc_course.report_course</code>.</li>
+                        <li><strong>PDF thiếu header, footer hoặc style.</strong> Kiểm tra bản wkhtmltopdf đã cài. Tài liệu cho biết cần 0.12.6 để có header/footer, và CSS toàn cục phải chèn qua template kế thừa layout báo cáo.</li>
+                        <li><strong>Template dùng <code>docs</code> nhưng báo cáo tùy biến không có.</strong> Khi dùng <code>_get_report_values</code>, tự thêm <code>docs</code>, <code>doc_ids</code>, <code>doc_model</code> vào dict trả về.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Báo cáo = report action (<code>ir.actions.report</code>) + template QWeb có id khớp <code>report_name</code>.</li>
+                    <li><code>web.html_container</code> và <code>web.external_layout</code> tạo khung và header/footer; nội dung nằm trong <code>div.page</code>.</li>
+                    <li>Dịch báo cáo cần hai template và <code>t-lang</code>; font tùy biến phải vào <code>web.report_assets_common</code>.</li>
+                    <li>wkhtmltopdf 0.12.6 là điều kiện để PDF có header/footer.</li>
+                </ul>
+                <p>Tiếp theo, chúng ta chuyển sang phía trình duyệt với OWL, framework dựng giao diện web của Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Cần xuất báo cáo PDF đẹp cho doanh nghiệp?</h3>
+                    <p>Khóa Odoo Developer Foundation hướng dẫn thiết kế báo cáo QWeb từ đầu, có mentor review template và layout.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo tạo file PDF bằng công cụ nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Báo cáo được viết bằng HTML/QWeb, và việc chuyển sang PDF do wkhtmltopdf thực hiện. Odoo 20 khuyến nghị bản 0.12.6 để PDF có header và footer, cài thủ công chứ không qua pip.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Template báo cáo liên kết với report action thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Thuộc tính report_name của report action phải bằng tên module ghép với id của template, ví dụ vinc_course.report_course.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao để nút in hiện trong menu Print của form?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khai báo report action bằng bản ghi ir.actions.report rồi đặt binding_model_id trỏ tới model của báo cáo.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào cần báo cáo tùy biến với _get_report_values?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi template cần thêm dữ liệu từ model khác ngoài model của báo cáo. Khi đó bạn phải tự trả về docs, doc_ids và doc_model vì các biến mặc định không được thêm tự động.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/reports.html" target="_blank" rel="noopener">Odoo 20 – QWeb Reports</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/qweb.html" target="_blank" rel="noopener">Odoo 20 – QWeb Templates</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/actions.html" target="_blank" rel="noopener">Odoo 20 – Actions (Report Actions)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install (wkhtmltopdf)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fbao-cao-pdf-qweb-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fbao-cao-pdf-qweb-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="ke-thua-model-view-odoo.html"><small>← Bài trước</small>Kế thừa trong Odoo 20</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>OWL framework cơ bản</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#qweb-co-ban">QWeb: ngôn ngữ template của Odoo</a></li>
+                        <li><a href="#report-gom-gi">Một báo cáo gồm những gì?</a></li>
+                        <li><a href="#report-vinc-course">Thực hành: phiếu thông tin khóa học</a></li>
+                        <li><a href="#wkhtmltopdf">wkhtmltopdf và định dạng giấy</a></li>
+                        <li><a href="#custom-report">Báo cáo tùy biến: đưa thêm dữ liệu vào template</a></li>
+                        <li><a href="#tuy-chon-action">Các tùy chọn khác của report action</a></li>
+                        <li><a href="#dich-bao-cao">Dịch báo cáo theo ngôn ngữ của khách hàng</a></li>
+                        <li><a href="#barcode-css-font">Mã vạch, CSS và font tùy biến</a></li>
+                        <li><a href="#paperformat-vi-du">Ví dụ đầy đủ về paper format</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

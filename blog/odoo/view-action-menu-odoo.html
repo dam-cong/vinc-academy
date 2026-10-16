@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View, action và menu trong Odoo 20: list, form, search</title>
+    <meta name="description" content="Hướng dẫn tạo giao diện Odoo 20: action act_window, menuitem 3 cấp, list view, form view, search view, filter, domain và --dev=xml." />
+    <meta name="keywords" content="odoo view, odoo action, odoo menuitem, odoo list view, odoo form view, odoo search view, odoo domain" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-views-actions-menus.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="View, action và menu trong Odoo 20: list, form, search" />
+    <meta property="og:description" content="Dựng giao diện module Odoo 20 với action, menu và các view list, form, search, kèm domain và mẹo --dev=xml." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/view-action-menu-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "View, action và menu trong Odoo 20: list, form, search",
+                "description": "Dựng giao diện module Odoo 20 với action, menu và các view list, form, search, kèm domain và mẹo --dev=xml.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/view-action-menu-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/view-action-menu-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Views & actions"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Chuỗi Menu, Action, View hoạt động thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Người dùng bấm menu, menu mở một action, action chỉ ra model và các chế độ xem như list và form, mỗi chế độ xem là một view. Action là cầu nối giữa menu và model."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao sửa file XML mà giao diện không đổi?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "File dữ liệu chỉ được nạp khi cài hoặc nâng cấp module, nên bạn cần chạy lại với -u. Trình duyệt cũng lưu cache menu và view, hãy tải lại trang. Có thể dùng --dev=xml để đỡ phải nâng cấp."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Domain trong Odoo là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Domain là danh sách các tiêu chí chọn một tập con bản ghi, mỗi tiêu chí là bộ ba gồm tên field, toán tử và giá trị. Các tiêu chí mặc định kết hợp bằng AND và có thể dùng các toán tử &, | và !."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Search view khác list view ở điểm nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "List view hiển thị bản ghi dạng bảng, còn search view không hiển thị dữ liệu mà dùng để lọc và nhóm nội dung của các view khác."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/"odoo-views-actions-menus.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Views & actions</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 6 · Series Lập trình Odoo 20</span>
+            <h1>View, action và menu trong Odoo 20: list, form, search</h1>
+            <p class="post-lead">Giao diện Odoo được dựng từ các bản ghi XML. Bài này hướng dẫn bạn nối menu, action và view, thiết kế list, form, search view cho model khóa học, và hiểu domain để lọc dữ liệu.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Giao diện Odoo được dựng từ các bản ghi XML theo chuỗi Menu → Action → View.</strong> Menu mở một action (<code>ir.actions.act_window</code>), action trỏ tới model và danh sách chế độ xem (<code>list,form</code>), mỗi chế độ là một view (<code>ir.ui.view</code>) có root <code>&lt;list&gt;</code>, <code>&lt;form&gt;</code> hoặc <code>&lt;search&gt;</code>. File XML phải được khai báo trong <code>data</code> của manifest, và chỉ nạp lại khi nâng cấp bằng <code>-u</code>.</p>
+                </div>
+
+                <h2 id="menu-action-view">Chuỗi Menu → Action → View</h2>
+                <p>Ở bài 5 chúng ta đã nạp dữ liệu bằng CSV. Khi dữ liệu có cấu trúc phức tạp hơn, ví dụ cấu trúc một view, Odoo dùng file <strong>XML</strong>. File XML đặt cùng thư mục với CSV (file liên quan giao diện đặt trong <code>views/</code>), khai báo trong <code>data</code> giống nhau và cũng được nạp tuần tự theo thứ tự trong manifest.</p>
+                <p>Phần lớn giao diện Odoo được tạo bằng cách ghép các bản ghi XML với nhau theo mô hình quen thuộc:</p>
+                <ol>
+                    <li><strong>Menu</strong>: mục người dùng bấm vào.</li>
+                    <li><strong>Action</strong>: cầu nối giữa menu và model, quyết định mở model nào, bằng những view nào.</li>
+                    <li><strong>View</strong>: cách hiển thị các bản ghi (danh sách, form, tìm kiếm…).</li>
+                </ol>
+                <div class="callout tip">
+                    <p class="callout-title">Mẹo thực tế</p>
+                    <p>Khi dữ liệu thuần túy và cần nạp nhanh, CSV được ưu tiên vì tốc độ nạp nhanh hơn XML. Với giao diện, XML là lựa chọn gần như duy nhất.</p>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 150" role="img" aria-labelledby="dg-vi-06">
+                        <title id="dg-vi-06">Chuỗi Menu, Action, View và Model</title>
+                        <rect class="dg-box" x="10" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="26" y="48">Menu</text>
+                        <text class="dg-text" x="26" y="86">ir.ui.menu</text>
+                        <path class="dg-arrow" d="M142 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="170" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="186" y="48">Action</text>
+                        <text class="dg-text" x="186" y="86">ir.actions.act_window</text>
+                        <path class="dg-arrow" d="M302 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="330" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="346" y="48">View</text>
+                        <text class="dg-text" x="346" y="86">ir.ui.view</text>
+                        <path class="dg-arrow" d="M462 62 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="490" y="20" width="130" height="84" rx="12" />
+                        <text class="dg-title" x="506" y="48">Model</text>
+                        <text class="dg-text" x="506" y="86">vinc.course</text>
+                        <text class="dg-text" x="20" y="136">Người dùng bấm menu → action chọn model và chế độ xem → view hiển thị bản ghi</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn dựa trên tài liệu Odoo 20.</figcaption>
+                </figure>
+
+                <h2 id="action">Action: nối menu với model</h2>
+                <p>Action có thể được kích hoạt bằng ba cách: bấm vào menu, bấm nút trong view (nếu nút nối với action), hoặc là hành động ngữ cảnh trên bản ghi. Bài này chỉ dùng cách đầu tiên. Ví dụ action mở model <code>vinc.course</code> ở dạng danh sách và form:</p>
+                <p class="code-title">custom-addons/vinc_course/views/vinc_course_views.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="vinc_course_action" model="ir.actions.act_window"&gt;
+        &lt;field name="name"&gt;Khóa học&lt;/field&gt;
+        &lt;field name="res_model"&gt;vinc.course&lt;/field&gt;
+        &lt;field name="view_mode"&gt;list,form&lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <ul>
+                    <li><code>id</code>: external id, dùng để tham chiếu bản ghi mà không cần biết id trong database.</li>
+                    <li><code>model="ir.actions.act_window"</code>: loại action mở cửa sổ hiển thị bản ghi.</li>
+                    <li><code>res_model</code>: model mà action áp dụng.</li>
+                    <li><code>view_mode</code>: các chế độ xem được phép, cách nhau bởi dấu phẩy; mặc định là <code>list,form</code>.</li>
+                </ul>
+
+                <h3 id="loai-action">Các loại action</h3>
+                <p>Mọi action đều có hai thuộc tính bắt buộc: <code>type</code> (loại action, quyết định field nào dùng được và cách diễn giải) và <code>name</code> (mô tả ngắn cho người dùng). Action ra mắt dưới nhiều dạng, chẳng hạn bản ghi trong database hoặc từ điển do một method nút bấm trả về.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Loại</th><th>Dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Window (<code>ir.actions.act_window</code>)</td><td>Loại phổ biến nhất: hiển thị một model qua các view</td></tr>
+                            <tr><td>URL (<code>ir.actions.act_url</code>)</td><td>Mở một địa chỉ web; <code>target</code> là <code>new</code> (mặc định, cửa sổ mới), <code>self</code> (thay nội dung hiện tại) hoặc <code>download</code></td></tr>
+                            <tr><td>Server (<code>ir.actions.server</code>)</td><td>Chạy tự động (ví dụ qua action rule) hoặc thủ công từ menu ngữ cảnh</td></tr>
+                            <tr><td>Report (<code>ir.actions.report</code>)</td><td>In báo cáo; xem bài 10</td></tr>
+                            <tr><td>Client (<code>ir.actions.client</code>)</td><td>Hành động do phía client xử lý hoàn toàn, nhận diện bằng <code>tag</code></td></tr>
+                            <tr><td>Scheduled (<code>ir.cron</code>)</td><td>Tự chạy theo tần suất định sẵn</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Ngoài ra, action có thể gắn vào menu ngữ cảnh của một model bằng <code>binding_model_id</code>: <code>binding_type</code> là <code>action</code> (mặc định, menu <em>Action</em>) hoặc <code>report</code> (menu <em>Print</em>), và <code>binding_view_types</code> mặc định là <code>list,form</code>.</p>
+                <h3 id="act-window-view">Chỉ định view cụ thể cho action</h3>
+                <p>Với action window, <code>view_mode</code> là chuỗi các loại view cách nhau bởi dấu phẩy, <strong>không có khoảng trắng</strong>. Nếu muốn dùng một view cụ thể thay vì view mặc định, đặt <code>view_id</code>. Khi model có nhiều view và bạn muốn kiểm soát thứ tự, nên dùng bản ghi <code>ir.actions.act_window.view</code> thay cho <code>view_ids</code>:</p>
+<pre><code>&lt;record id="vinc_course_action_list" model="ir.actions.act_window.view"&gt;
+    &lt;field name="sequence" eval="1"/&gt;
+    &lt;field name="view_mode"&gt;list&lt;/field&gt;
+    &lt;field name="view_id" ref="vinc_course_view_list"/&gt;
+    &lt;field name="act_window_id" ref="vinc_course_action"/&gt;
+&lt;/record&gt;</code></pre>
+                <p>Phía server ghép danh sách view theo thứ tự: lấy từng cặp (id, loại) trong <code>view_ids</code> theo <code>sequence</code>; thêm <code>view_id</code> nếu loại của nó chưa có; rồi với mỗi loại còn thiếu trong <code>view_mode</code> thêm một mục không có id, để client lấy view mặc định. Loại đầu tiên trong danh sách là view mở ra đầu tiên.</p>
+
+                <h2 id="menu">Menu: ba cấp</h2>
+                <p>Menu là bản ghi của model <code>ir.ui.menu</code>, nhưng ta dùng thẻ rút gọn <code>&lt;menuitem&gt;</code> cho gọn. Trong thực tế có ba cấp: menu gốc (hiện trong bộ chuyển ứng dụng), menu cấp một (hiện trên thanh trên cùng) và menu action. Cách dễ nhất là khai báo lồng nhau trong XML:</p>
+                <p class="code-title">custom-addons/vinc_course/views/vinc_course_menus.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;menuitem id="vinc_course_menu_root" name="Vinc Course"&gt;
+        &lt;menuitem id="vinc_course_menu_main" name="Khóa học"&gt;
+            &lt;menuitem id="vinc_course_menu_action" action="vinc_course_action"/&gt;
+        &lt;/menuitem&gt;
+    &lt;/menuitem&gt;
+&lt;/odoo&gt;</code></pre>
+                <p>Tên của menu cấp ba lấy từ tên của action. Khai báo hai file mới trong manifest, <strong>đặt file view chứa action trước file menu</strong> vì menu tham chiếu tới action:</p>
+<pre><code>'data': [
+    'security/ir.model.access.csv',
+    'views/vinc_course_views.xml',
+    'views/vinc_course_menus.xml',
+],</code></pre>
+                <p>Chạy <code>-u vinc_course</code>, tải lại trình duyệt (web client lưu cache menu và view) rồi vào menu mới, bạn đã có thể tạo khóa học bằng view mặc định do Odoo sinh sẵn.</p>
+
+                <h2 id="views">Tự thiết kế view: list, form, search</h2>
+                <p>View là bản ghi của model <code>ir.ui.view</code>, thường nằm chung file XML với action và menu. Mỗi view có <code>name</code>, <code>model</code> và <code>arch</code> (cấu trúc XML của view). Thêm các bản ghi sau vào <code>vinc_course_views.xml</code>, bên trong thẻ <code>&lt;odoo&gt;</code>:</p>
+
+                <h3 id="view-list">List view</h3>
+                <p>Hiển thị bản ghi dạng bảng, root là <code>&lt;list&gt;</code>, mỗi <code>field</code> là một cột:</p>
+<pre><code>&lt;record id="vinc_course_view_list" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.list&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;list&gt;
+            &lt;field name="name"/&gt;
+            &lt;field name="level"/&gt;
+            &lt;field name="start_date"/&gt;
+            &lt;field name="duration_hours"/&gt;
+            &lt;field name="price"/&gt;
+            &lt;field name="is_published"/&gt;
+        &lt;/list&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="view-form">Form view</h3>
+                <p>Dùng để tạo và sửa một bản ghi, root là <code>&lt;form&gt;</code>. Các phần tử cấu trúc là <code>group</code> và <code>notebook</code>; có thể dùng cả thẻ HTML như <code>div</code>, <code>h1</code> và thuộc tính <code>class</code>:</p>
+<pre><code>&lt;record id="vinc_course_view_form" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.form&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;form&gt;
+            &lt;sheet&gt;
+                &lt;h1&gt;&lt;field name="name"/&gt;&lt;/h1&gt;
+                &lt;group&gt;
+                    &lt;group&gt;
+                        &lt;field name="level"/&gt;
+                        &lt;field name="start_date"/&gt;
+                    &lt;/group&gt;
+                    &lt;group&gt;
+                        &lt;field name="duration_hours"/&gt;
+                        &lt;field name="price"/&gt;
+                        &lt;field name="is_published"/&gt;
+                    &lt;/group&gt;
+                &lt;/group&gt;
+                &lt;notebook&gt;
+                    &lt;page string="Mô tả"&gt;
+                        &lt;field name="description"/&gt;
+                    &lt;/page&gt;
+                &lt;/notebook&gt;
+            &lt;/sheet&gt;
+        &lt;/form&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="view-search">Search view</h3>
+                <p>Khác với list và form, search view không hiển thị dữ liệu; nó lọc nội dung của các view khác. Root là <code>&lt;search&gt;</code>. Các <code>field</code> tạo ô tìm nhanh; <code>filter</code> là công tắc cho một lần tìm định sẵn, bắt buộc có <code>domain</code> (thêm điều kiện lọc) hoặc <code>context</code> (với khóa <code>group_by</code> để nhóm kết quả):</p>
+<pre><code>&lt;record id="vinc_course_view_search" model="ir.ui.view"&gt;
+    &lt;field name="name"&gt;vinc.course.search&lt;/field&gt;
+    &lt;field name="model"&gt;vinc.course&lt;/field&gt;
+    &lt;field name="arch" type="xml"&gt;
+        &lt;search&gt;
+            &lt;field name="name"/&gt;
+            &lt;field name="level"/&gt;
+            &lt;filter name="published" string="Đã xuất bản"
+                    domain="[('is_published', '=', True)]"/&gt;
+            &lt;filter name="group_level" string="Theo cấp độ"
+                    context="{'group_by': 'level'}"/&gt;
+        &lt;/search&gt;
+    &lt;/field&gt;
+&lt;/record&gt;</code></pre>
+
+                <h3 id="domain">Domain: ngôn ngữ của điều kiện lọc</h3>
+                <p>Domain là danh sách các tiêu chí chọn một tập con bản ghi. Mỗi tiêu chí là bộ ba (tên field, toán tử, giá trị). Mặc định các tiêu chí kết hợp bằng AND; muốn rõ ràng hơn, dùng các toán tử <code>&amp;</code> (và), <code>|</code> (hoặc), <code>!</code> (phủ định) đặt <strong>trước</strong> các toán hạng của chúng:</p>
+<pre><code>[('level', '=', 'beginner'), ('price', '&gt;', 0)]
+
+['|', ('level', '=', 'beginner'), ('is_published', '=', True)]</code></pre>
+                <p>Trong XML, ký tự <code>&lt;</code> và <code>&amp;</code> không được viết trực tiếp. Hãy dùng <code>&amp;lt;</code> và <code>&amp;amp;</code>, ví dụ <code>domain="[('price', '&amp;lt;', 1000)]"</code>.</p>
+
+                <h3 id="kanban">Còn kanban thì sao?</h3>
+                <p>Kanban là view dạng bảng thẻ (card): mỗi bản ghi là một thẻ, có thể gom thành cột để theo dõi tiến độ công việc. Root là <code>&lt;kanban&gt;</code>, và Odoo chỉ mở mười cột đầu tiên, các cột sau được thu gọn cho tới khi người dùng mở ra. Cách dựng thẻ cần hiểu QWeb nên chúng ta để dành cho các bài sau; để dùng, bạn chỉ cần thêm <code>kanban</code> vào <code>view_mode</code> của action khi đã có view tương ứng.</p>
+
+                <h2 id="dev-xml">Sửa view nhanh với --dev=xml</h2>
+                <p>Mỗi lần sửa view mà phải khởi động lại server rất mất thời gian. Hãy chạy với tham số <code>--dev=xml</code>: sau khi sửa file XML, bạn chỉ cần tải lại trang để thấy thay đổi.</p>
+<pre><code>python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -u vinc_course --dev=xml</code></pre>
+
+                <h2 id="active-field">Field đặc biệt: active</h2>
+                <p>Một vài tên field được dành riêng cho hành vi định sẵn. Điển hình là <code>active</code>: khi một bản ghi có <code>active=False</code>, nó tự động bị loại khỏi mọi kết quả tìm kiếm, và để thấy lại bạn phải tìm riêng các bản ghi không hoạt động. Nếu bạn thêm field này, hãy đặt mặc định <code>default=True</code> để bản ghi mới không biến mất.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới viết view</p>
+                    <ul>
+                        <li><strong>Sao chép một view rồi quên đổi <code>id</code>.</strong> Mỗi view phải có external id riêng; khi copy-paste, luôn sửa <code>id</code> (và nên sửa cả <code>name</code>) để không ghi đè view cũ.</li>
+                        <li><strong>Viết <code>&lt;</code> hoặc <code>&amp;</code> thẳng trong <code>domain</code> của file XML.</strong> XML không cho phép hai ký tự này trong nội dung phần tử và thuộc tính; hãy đổi thành <code>&amp;lt;</code> và <code>&amp;amp;</code>.</li>
+                        <li><strong>Đã sửa file XML nhưng giao diện vẫn như cũ.</strong> Hãy chạy lại với <code>-u</code> (hoặc dùng <code>--dev=xml</code>) và tải lại trình duyệt, vì web client lưu cache menu và view.</li>
+                        <li><strong>Không thấy nút Tạo.</strong> Nếu người dùng chỉ có quyền đọc, nút này không hiện. Kiểm tra lại <code>ir.model.access.csv</code> ở bài 5.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Giao diện Odoo: Menu mở Action, Action chọn Model và <code>view_mode</code>, mỗi chế độ là một View.</li>
+                    <li>File XML phải khai báo trong <code>data</code> theo thứ tự (action trước menu) và nâng cấp bằng <code>-u</code>.</li>
+                    <li>List, form, search là ba view cơ bản; search dùng <code>filter</code> với <code>domain</code> hoặc <code>group_by</code>.</li>
+                    <li>Domain là danh sách điều kiện; trong XML nhớ escape <code>&amp;lt;</code> và <code>&amp;amp;</code>.</li>
+                </ul>
+                <p>Bài tiếp theo kết nối các model với nhau bằng field quan hệ.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn thiết kế giao diện Odoo thật nhanh và đẹp?</h3>
+                    <p>Khóa Odoo Developer Foundation hướng dẫn xây view, menu và action cho module hoàn chỉnh, có mentor review từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Chuỗi Menu, Action, View hoạt động thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Người dùng bấm menu, menu mở một action, action chỉ ra model và các chế độ xem như list và form, mỗi chế độ xem là một view. Action là cầu nối giữa menu và model.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao sửa file XML mà giao diện không đổi?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">File dữ liệu chỉ được nạp khi cài hoặc nâng cấp module, nên bạn cần chạy lại với -u. Trình duyệt cũng lưu cache menu và view, hãy tải lại trang. Có thể dùng --dev=xml để đỡ phải nâng cấp.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Domain trong Odoo là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Domain là danh sách các tiêu chí chọn một tập con bản ghi, mỗi tiêu chí là bộ ba gồm tên field, toán tử và giá trị. Các tiêu chí mặc định kết hợp bằng AND và có thể dùng các toán tử &amp;, | và !.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Search view khác list view ở điểm nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">List view hiển thị bản ghi dạng bảng, còn search view không hiển thị dữ liệu mà dùng để lọc và nhóm nội dung của các view khác.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/05_firstui.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Finally, some UI to play with</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/06_basicviews.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Basic views</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/actions.html" target="_blank" rel="noopener">Odoo 20 – Actions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/user_interface/view_architectures.html" target="_blank" rel="noopener">Odoo 20 – View architectures</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fview-action-menu-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fview-action-menu-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="phan-quyen-odoo-access-rights-record-rules.html"><small>← Bài trước</small>Phân quyền Odoo 20: access rights và record rules</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Quan hệ giữa các model</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#menu-action-view">Chuỗi Menu → Action → View</a></li>
+                        <li><a href="#action">Action: nối menu với model</a></li>
+                        <li><a href="#menu">Menu: ba cấp</a></li>
+                        <li><a href="#views">Tự thiết kế view: list, form, search</a></li>
+                        <li><a href="#dev-xml">Sửa view nhanh với --dev=xml</a></li>
+                        <li><a href="#active-field">Field đặc biệt: active</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

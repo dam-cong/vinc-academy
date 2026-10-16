@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/odoo", "destination": "/blog/odoo/", "permanent": true },
+    { "source": "/odoo/index.html", "destination": "/blog/odoo/", "permanent": true },
+    { "source": "/odoo/:path*", "destination": "/blog/odoo/:path*", "permanent": true },
+    { "source": "/en/odoo", "destination": "/en/blog/odoo/", "permanent": true },
+    { "source": "/en/odoo/index.html", "destination": "/en/blog/odoo/", "permanent": true },
+    { "source": "/en/odoo/:path*", "destination": "/en/blog/odoo/:path*", "permanent": true }
+  ]
+}

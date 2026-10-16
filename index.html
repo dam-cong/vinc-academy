@@ -54,7 +54,7 @@
             <a href="#programs" data-i18n="nav.programs">Chương trình</a>
             <a href="#register" data-i18n="nav.pricing">Học phí</a>
             <a href="#faq" data-i18n="nav.faq">FAQ</a>
-            <a href="odoo/index.html" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="blog/index.html" data-i18n="nav.blog">Kiến thức</a>
             <a href="#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
         </div>
         <button class="btn-nav" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})" data-i18n="nav.register">Tư vấn miễn phí</button>
@@ -86,16 +86,22 @@
     <section class="hero">
         <div class="hero-left">
             <div class="hero-badge" data-i18n="hero.badge">Đào tạo thực chiến · 100% dự án thật</div>
-            <h1 data-i18n-html="hero.title">Đào tạo Odoo<br><span class="accent">thực chiến</span><br>cho Developer</h1>
+            <h1 data-i18n-html="hero.title">Từ sinh viên<br><span class="accent">đến Odoo Developer</span><br>sẵn sàng đi làm</h1>
             <p class="hero-desc" data-i18n="hero.desc">Từ Developer Foundation đến AI & Vibe Coding — 6 chương trình Odoo thực chiến, lộ trình rõ ràng, bài tập thực tế,
                 giảng viên kinh nghiệm doanh nghiệp.</p>
             <div class="hero-actions">
                 <button class="btn-primary"
+                    onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})"
+                    data-i18n="hero.btn2">Xem lộ trình học</button>
+                <button class="btn-secondary"
                     onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})"
                     data-i18n="hero.btn1">Nhận tư vấn miễn phí</button>
-                <button class="btn-secondary"
-                    onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})"
-                    data-i18n="hero.btn2">Xem chương trình</button>
+            </div>
+            <div class="hero-pick">
+                <span data-i18n="hero.who">Bạn đang là ai?</span>
+                <button type="button" data-pick="new" data-i18n="f.new">🎓 Chưa biết code</button>
+                <button type="button" data-pick="dev" data-i18n="f.dev">💻 Biết code, muốn vào Odoo</button>
+                <button type="button" data-pick="pro" data-i18n="f.pro">🚀 Đã làm Odoo</button>
             </div>
         </div>
         <div class="hero-stats">
@@ -302,40 +308,51 @@
         <h2 data-i18n="programs.title">6 chương trình Odoo thực chiến</h2>
         <p class="section-sub" data-i18n="programs.sub">Từ nền tảng lập trình đến AI — lộ trình bài bản cho mọi cấp độ</p>
         <div class="levels-grid program-levels">
-            <div class="level-card">
+            <button type="button" class="level-card" data-level="1">
+                <span class="level-start" data-i18n="road.start">Bắt đầu</span>
                 <div class="level-num">L1</div>
                 <div class="level-name" data-i18n="road.card1">Nền tảng</div>
                 <div class="level-desc" data-i18n="road.card1d">Python · SQL · Git</div>
-            </div>
-            <div class="level-card">
+            </button>
+            <button type="button" class="level-card" data-level="2">
                 <div class="level-num">L2</div>
                 <div class="level-name" data-i18n="road.card2">Odoo Core</div>
                 <div class="level-desc" data-i18n="road.card2d">Junior Odoo Developer</div>
-            </div>
-            <div class="level-card">
+            </button>
+            <button type="button" class="level-card" data-level="3">
                 <div class="level-num">L3</div>
                 <div class="level-name" data-i18n="road.card3">AI</div>
                 <div class="level-desc" data-i18n="road.card3d">AI-Enhanced Developer</div>
-            </div>
-            <div class="level-card">
+            </button>
+            <button type="button" class="level-card" data-level="4">
                 <div class="level-num">L4</div>
                 <div class="level-name" data-i18n="road.card4">BA / Functional</div>
                 <div class="level-desc" data-i18n="road.card4d">Functional Consultant</div>
-            </div>
-            <div class="level-card">
+            </button>
+            <button type="button" class="level-card" data-level="5">
                 <div class="level-num">L5</div>
                 <div class="level-name" data-i18n="road.card5">Advanced</div>
                 <div class="level-desc" data-i18n="road.card5d">Senior Developer</div>
-            </div>
-            <div class="level-card">
+            </button>
+            <button type="button" class="level-card" data-level="6">
                 <div class="level-num">L6</div>
                 <div class="level-name" data-i18n="road.card6">DevOps</div>
                 <div class="level-desc" data-i18n="road.card6d">Production Deployment</div>
-            </div>
+            </button>
         </div>
+        <div class="prog-filter">
+            <div class="chips" role="group">
+                <button type="button" class="chip active" data-aud="all" data-i18n="f.all">Tất cả</button>
+                <button type="button" class="chip" data-aud="new" data-i18n="f.new">🎓 Chưa biết code</button>
+                <button type="button" class="chip" data-aud="dev" data-i18n="f.dev">💻 Biết code, muốn vào Odoo</button>
+                <button type="button" class="chip" data-aud="pro" data-i18n="f.pro">🚀 Đã làm Odoo</button>
+            </div>
+            <input type="search" id="prog-search" data-i18n-placeholder="f.search" placeholder="Tìm chương trình..." aria-label="Tìm chương trình">
+        </div>
+        <p class="prog-empty" id="prog-empty" hidden data-i18n="f.empty">Chưa có chương trình phù hợp — thử bỏ bộ lọc hoặc nhận tư vấn miễn phí.</p>
         <div class="courses-grid">
             <!-- 1. Developer Foundation (featured) -->
-            <div class="course-card featured" onclick="window.location='program-detail.html?code=DEV-F'">
+            <div class="course-card featured" data-level="1" data-aud="new dev">
                 <div class="course-icon ci-blue">
                     <img src="image/python.png" alt="Developer Foundation">
                 </div>
@@ -354,13 +371,12 @@
                     <a href="program-detail.html?code=DEV-F" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
                 </div>
                 <div class="course-footer">
-                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-hot" data-i18n="p.1.badge">🔥 Nền tảng</span>
                 </div>
             </div>
 
             <!-- 2. Odoo Developer Foundation -->
-            <div class="course-card" onclick="window.location='program-detail.html?code=ODO-F'">
+            <div class="course-card" data-level="2" data-aud="dev">
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="Odoo Developer Foundation">
                 </div>
@@ -379,13 +395,12 @@
                     <a href="program-detail.html?code=ODO-F" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
                 </div>
                 <div class="course-footer">
-                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-hot" data-i18n="p.2.badge">🔥 Cốt lõi</span>
                 </div>
             </div>
 
             <!-- 3. AI & Vibe Coding Odoo -->
-            <div class="course-card" onclick="window.location='program-detail.html?code=AI-O'">
+            <div class="course-card" data-level="3" data-aud="dev pro">
                 <div class="course-icon ci-blue">
                     <img src="image/odoo.png" alt="AI & Vibe Coding Odoo">
                 </div>
@@ -405,14 +420,13 @@
                     <a href="program-detail.html?code=AI-O" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
                 </div>
                 <div class="course-footer">
-                    <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                     <span class="badge badge-new" data-i18n="p.3.badge">✨ AI</span>
                 </div>
             </div>
 
             <!-- 4. Odoo Business & Functional (hidden) -->
             <div class="program-hidden">
-                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-B'">
+                <div class="course-card" data-level="4" data-aud="dev pro">
                     <div class="course-icon ci-blue">
                         <img src="image/postgresql.jpg" alt="Odoo Business & Functional">
                     </div>
@@ -430,7 +444,6 @@
                         <a href="program-detail.html?code=ODO-B" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
                     </div>
                     <div class="course-footer">
-                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-pop" data-i18n="p.4.badge">Nghiệp vụ</span>
                     </div>
                 </div>
@@ -438,7 +451,7 @@
 
             <!-- 5. Odoo Advanced Developer (hidden) -->
             <div class="program-hidden">
-                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-A'">
+                <div class="course-card" data-level="5" data-aud="pro">
                     <div class="course-icon ci-blue">
                         <img src="image/odoo.png" alt="Odoo Advanced Developer">
                     </div>
@@ -457,7 +470,6 @@
                         <a href="program-detail.html?code=ODO-A" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 8 buổi</a>
                     </div>
                     <div class="course-footer">
-                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-pop" data-i18n="p.5.badge">Chuyên sâu</span>
                     </div>
                 </div>
@@ -465,7 +477,7 @@
 
             <!-- 6. DevOps for Odoo (hidden) -->
             <div class="program-hidden">
-                <div class="course-card" onclick="window.location='program-detail.html?code=ODO-D'">
+                <div class="course-card" data-level="6" data-aud="pro">
                     <div class="course-icon ci-blue">
                         <img src="image/devops.jpg" alt="DevOps for Odoo">
                     </div>
@@ -484,15 +496,9 @@
                         <a href="program-detail.html?code=ODO-D" class="program-detail-link" data-i18n="p.detail">📖 Xem chi tiết 5 buổi</a>
                     </div>
                     <div class="course-footer">
-                        <span class="program-price">— <small data-i18n="p.free">trong combo</small></span>
                         <span class="badge badge-new" data-i18n="p.6.badge">Triển khai</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Expand button -->
-            <div class="expand-btn-wrap">
-                <button class="expand-btn" onclick="togglePrograms(this)" data-expanded="false">+ Xem thêm 3 chương trình</button>
             </div>
         </div>
     </section>
@@ -637,6 +643,10 @@
                         class="faq-arrow">▾</span></div>
                 <div class="faq-a" data-i18n="faq.a5">Học phí tùy theo combo bạn chọn. Nhắn Zalo 036 3729 276 để nhận báo giá chi tiết và các hình thức thanh toán linh hoạt.</div>
             </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.qn">Mới ra trường / mới đi làm thì nên bắt đầu từ đâu?</span> <span class="faq-arrow">▾</span></div>
+                <div class="faq-a" data-i18n="faq.an">Chưa biết code: bắt đầu từ L1 Developer Foundation. Đã có nền tảng lập trình: vào thẳng L2 Odoo Developer Foundation. Chọn bộ lọc “Bạn đang là ai?” ở mục Chương trình để xem đúng lộ trình, hoặc nhận tư vấn miễn phí.</div>
+            </div>
         </div>
     </section>
 
@@ -673,7 +683,7 @@
             <a href="#programs" data-i18n="nav.programs">Chương trình</a>
             <a href="#register" data-i18n="nav.pricing">Học phí</a>
             <a href="#faq" data-i18n="nav.faq">FAQ</a>
-            <a href="odoo/index.html" data-i18n="nav.blog">Lập trình Odoo</a>
+            <a href="blog/index.html" data-i18n="nav.blog">Kiến thức</a>
             <a href="#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
             <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
             <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>

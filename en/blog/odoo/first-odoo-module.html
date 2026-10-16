@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your First Odoo 20 Module: Structure, Manifest and Install</title>
+    <meta name="description" content="Create an Odoo 20 module: use odoo-bin scaffold, understand each file, the key __manifest__.py fields, and install or upgrade with -i and -u." />
+    <meta name="keywords" content="create odoo 20 module, odoo manifest, __manifest__.py, odoo scaffold, install odoo module, odoo -u" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/tao-module-odoo-dau-tien.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Your First Odoo 20 Module: Structure, Manifest and Install" />
+    <meta property="og:description" content="Scaffold a skeleton, write __manifest__.py, then install and upgrade an Odoo 20 module the right way." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/first-odoo-module.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Your First Odoo 20 Module: Structure, Manifest and Install",
+                "description": "Scaffold a skeleton, write __manifest__.py, then install and upgrade an Odoo 20 module the right way.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/first-odoo-module.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/first-odoo-module.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Your first module"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is the minimum a module needs?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Two files: __init__.py and __manifest__.py. The manifest only requires the name key, but you should also declare a version, author, dependencies and the list of data files."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does my new module not show up in Apps?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "There are three common causes: the Apps filter is switched on while the module does not set application to True, developer mode is off or you did not click Update Apps List, or the module folder is not on --addons-path."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between -i and -u in odoo-bin?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "-i installs a module for the first time, -u updates an installed module after you change code or data files. Both must be used together with -d to name the database."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do I have to list base in depends?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo always installs base, but the documentation recommends declaring it in depends anyway so that your module is upgraded whenever base is upgraded."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/tao-module-odoo-dau-tien.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Your first module</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 3 · Odoo 20 Development Series</span>
+            <h1>Your First Odoo 20 Module: Structure, Manifest and Install</h1>
+            <p class="post-lead">Every Odoo feature lives in a module. This guide shows you how to generate a module skeleton with scaffold, what each file is for, how to write a proper manifest, and how to install and upgrade a module while developing.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="tao-module-odoo-dau-tien" data-view-hit>–</b> views</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>An Odoo 20 module needs only two files: <code>__init__.py</code> and <code>__manifest__.py</code>, and the manifest requires just one key, <code>name</code>.</strong> The <code>odoo-bin scaffold</code> command generates a standard skeleton. Put the module on the <code>addons-path</code>, enable developer mode, choose <em>Update Apps List</em> and install it; after changing code, upgrade it with <code>-u</code>.</p>
+                </div>
+
+                <h2 id="minimal-module">What does a minimal Odoo module contain?</h2>
+                <p>Every feature you write for Odoo lives in a module: a Python directory with its own declaration for Odoo. The conditions for Odoo to recognize that directory are small:</p>
+                <ul>
+                    <li><code>__init__.py</code>: turns the directory into a Python package. It can stay empty at first; later it imports sub-packages such as <code>models</code>.</li>
+                    <li><code>__manifest__.py</code>: a file holding a single Python dictionary that describes the module. The only required key is <code>name</code>, but in practice you should declare more.</li>
+                </ul>
+                <p>With these two files in a directory on the <code>addons-path</code>, Odoo can already list the module, even though it is still an empty shell with no features.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Check before you build</p>
+                    <p>Before writing a new module, make sure Odoo (or a community addon repository) does not already solve the problem. Re-implementing something that exists is the most expensive kind of maintenance.</p>
+                </div>
+
+                <h2 id="scaffold">Generate a skeleton with odoo-bin scaffold</h2>
+                <p>Instead of creating every file by hand, use the <code>scaffold</code> command. It takes the module name (required) and a destination directory (the current directory by default). In this series the example module is called <code>vinc_course</code> and manages courses:</p>
+<pre><code>cd ~/odoo-dev
+python3 odoo/odoo-bin scaffold vinc_course custom-addons</code></pre>
+                <p>The result is the <code>custom-addons/vinc_course</code> directory with the default structure:</p>
+<pre><code>vinc_course/
+├── __init__.py
+├── __manifest__.py
+├── controllers/
+│   ├── __init__.py
+│   └── controllers.py
+├── demo/
+│   └── demo.xml
+├── models/
+│   ├── __init__.py
+│   └── models.py
+├── security/
+│   └── ir.model.access.csv
+└── views/
+    ├── templates.xml
+    └── views.xml</code></pre>
+                <p>Note that most of the content inside the sample files is commented out, so the generated module is a hint-filled skeleton, not a working feature. You will uncomment or rewrite it as needed.</p>
+
+                <h2 id="structure">What each file and folder is for</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Item</th><th>Role</th><th>Covered in</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__init__.py</code> (root)</td><td>Imports <code>controllers</code> and <code>models</code> so Python loads the module's code</td><td>This part</td></tr>
+                            <tr><td><code>__manifest__.py</code></td><td>Declares name, version, dependencies and the list of data files</td><td>This part</td></tr>
+                            <tr><td><code>models/</code></td><td>Python classes that define models and fields, mapped to PostgreSQL tables</td><td>Part 4</td></tr>
+                            <tr><td><code>security/ir.model.access.csv</code></td><td>Access rights per model for each user group</td><td>Part 5</td></tr>
+                            <tr><td><code>views/views.xml</code></td><td>Views, actions and menus for the backend interface</td><td>Part 6</td></tr>
+                            <tr><td><code>views/templates.xml</code></td><td>QWeb templates, used by web pages returned from controllers</td><td>Parts 10, 12</td></tr>
+                            <tr><td><code>controllers/</code></td><td>HTTP routes of the module</td><td>Part 12</td></tr>
+                            <tr><td><code>demo/demo.xml</code></td><td>Sample data, loaded only when the database is in demo mode</td><td>When needed</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Notice one detail in the generated skeleton: the <code>security/ir.model.access.csv</code> line in the manifest's <code>data</code> list is commented out. When you declare your first model, remember to uncomment it, otherwise the access file will not be loaded.</p>
+
+                <h2 id="manifest">Key fields of __manifest__.py</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Key</th><th>Type</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>name</code></td><td>str, <strong>required</strong></td><td>Module name shown to users</td></tr>
+                            <tr><td><code>version</code></td><td>str</td><td>Release number of the module; use semantic versioning</td></tr>
+                            <tr><td><code>summary</code> / <code>description</code></td><td>str</td><td>Short / long description (long one in reStructuredText)</td></tr>
+                            <tr><td><code>author</code>, <code>website</code>, <code>maintainer</code></td><td>str</td><td>Authorship info; if <code>maintainer</code> is omitted, the author is assumed to maintain the module</td></tr>
+                            <tr><td><code>category</code></td><td>str, default <code>Uncategorized</code></td><td>Business area. Category names are free text and a new name creates the category automatically; use <code>/</code> to create child levels</td></tr>
+                            <tr><td><code>license</code></td><td>str, default <code>LGPL-3</code></td><td>Distribution license: GPL-2/3, AGPL-3, LGPL-3, OEEL-1, OPL-1, Other OSI approved licence, Other proprietary</td></tr>
+                            <tr><td><code>depends</code></td><td>list[str]</td><td>Modules Odoo has to load ahead of yours</td></tr>
+                            <tr><td><code>data</code></td><td>list[str]</td><td>Files always loaded on install or upgrade, written as paths relative to the module folder</td></tr>
+                            <tr><td><code>demo</code></td><td>list[str]</td><td>Files loaded only in demo mode</td></tr>
+                            <tr><td><code>application</code></td><td>bool, default <code>False</code></td><td><code>True</code> for a full application; <code>False</code> for a technical module that supports another app</td></tr>
+                            <tr><td><code>installable</code></td><td>bool, default <code>True</code></td><td>Controls whether users can add the module through the web interface</td></tr>
+                            <tr><td><code>auto_install</code></td><td>bool or list, default <code>False</code></td><td>Installs itself once its dependencies are installed. Often used for "glue modules", e.g. <code>sale_crm</code> linking <code>sale</code> and <code>crm</code></td></tr>
+                            <tr><td><code>external_dependencies</code></td><td>dict</td><td>Python libraries (key <code>python</code>) or executables (key <code>bin</code>) that must exist on the machine; if missing, the module cannot be installed</td></tr>
+                            <tr><td><code>assets</code></td><td>dict</td><td>How static files (JS, CSS) are added to bundles; we will meet it again in the OWL part</td></tr>
+                            <tr><td><code>pre_init_hook</code>, <code>post_init_hook</code>, <code>uninstall_hook</code></td><td>str</td><td>Names of functions in <code>__init__.py</code>, each receiving <code>env</code>, run before install, after install and after uninstall. Use only when the normal way is not possible</td></tr>
+                            <tr><td><code>sequence</code></td><td>int, default 100</td><td>Position in the Apps list, lower numbers come first</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The easiest way to understand <code>depends</code> is to compare it with a package manager such as <code>apt</code>: when your module is installed, Odoo first installs everything it depends on; when a base module is removed, every module depending on it is removed too. <code>base</code> exists in every database, yet you should still list it in <code>depends</code> so your module is upgraded whenever <code>base</code> is.</p>
+
+                <div class="callout">
+                    <p class="callout-title">About the version key</p>
+                    <p>Odoo's reference only asks you to follow semantic versioning. Vinc Academy recommends adding the Odoo series as a prefix, such as <code>20.0.1.0.0</code>, so you can tell at a glance that a module targets Odoo 20 and which release it is. This is our convention, not a framework requirement.</p>
+                </div>
+
+                <h2 id="write-manifest">Hands-on: a manifest for vinc_course</h2>
+                <p>Open <code>custom-addons/vinc_course/__manifest__.py</code> and replace its content with the compact version below. We have no views or models yet, so <code>data</code> stays empty for now:</p>
+                <p class="code-title">custom-addons/vinc_course/__manifest__.py</p>
+<pre><code>{
+    'name': "Vinc Course",
+    'version': '20.0.1.0.0',
+    'summary': "Manage courses and students",
+    'author': "Vinc Academy",
+    'website': "https://vinc-academy.vercel.app",
+    'category': 'Education',
+    'license': 'LGPL-3',
+    'depends': ['base'],
+    'data': [],
+    'application': True,
+}</code></pre>
+                <p>Because <code>application</code> is <code>True</code>, the module shows up in Apps even while the default <em>Apps</em> filter is on. With <code>False</code> you would have to remove that filter to see it.</p>
+                <p>You can leave the generated <code>controllers</code> folder alone even if you do not use it yet. If you want a leaner module, delete the line <code>from . import controllers</code> in <code>__init__.py</code> first rather than the folder, to avoid import errors.</p>
+
+                <h2 id="install-upgrade">Installing and upgrading a module</h2>
+                <h3 id="install-ui">From the interface</h3>
+                <ol>
+                    <li>Restart the server so Odoo sees the new files, with the folder containing <code>custom-addons</code> in <code>--addons-path</code>.</li>
+                    <li>Enable developer mode (covered in part 2). Without it you will not see the button needed in the next step.</li>
+                    <li>Go to Apps, choose <em>Update Apps List</em> and confirm.</li>
+                    <li>Search for <em>Vinc Course</em> and click install.</li>
+                </ol>
+                <h3 id="install-cli">From the command line</h3>
+                <p>For everyday development the command line beats clicking. Both parameters go together with <code>-d</code> (database name):</p>
+<pre><code># first install
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -i vinc_course
+
+# after changing code or XML/CSV files, upgrade the module
+python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -u vinc_course</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Option</th><th>Use it when</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>-i vinc_course</code></td><td>Installing a module for the first time; separate several modules with commas</td></tr>
+                            <tr><td><code>-u vinc_course</code></td><td>Updating a module after changes; <code>-u all</code> updates everything</td></tr>
+                            <tr><td><code>--reinit vinc_course</code></td><td>Reloads like an upgrade but skips upgrade scripts, and also affects data flagged <code>noupdate</code></td></tr>
+                            <tr><td><code>--dev=xml</code></td><td>Reads views straight from the XML files, so you need not upgrade after tweaking the UI</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A quick rule: change Python code, restart the server (or use <code>--dev=reload</code>); change files listed in <code>data</code>, upgrade the module with <code>-u</code>. Never use <code>--dev</code> in production.</p>
+
+                <h2 id="troubleshooting">Module missing or will not install?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Symptom</th><th>What to check</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Module not listed in Apps</td><td>Did you remove the <em>Apps</em> filter (or set <code>application: True</code>)? Is developer mode on and did you click <em>Update Apps List</em>?</td></tr>
+                            <tr><td>No Update Apps List button</td><td>Developer mode is not enabled</td></tr>
+                            <tr><td>Odoo cannot find the module folder</td><td>The folder containing modules must be in <code>--addons-path</code>; the module root needs both <code>__init__.py</code> and <code>__manifest__.py</code></td></tr>
+                            <tr><td>Edited a file in <code>data</code> but nothing changed</td><td>You have not upgraded with <code>-u</code></td></tr>
+                            <tr><td>Module will not install because of a missing library</td><td>Check <code>external_dependencies</code>: the Python library or executable listed there must exist on the machine</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Two mistakes beginners often make</p>
+                    <ul>
+                        <li><strong>Creating a new XML/CSV file but forgetting to list it in <code>data</code>.</strong> Only files in the <code>data</code> list are loaded on install or upgrade. Add its path (relative to the module root, e.g. <code>views/course_views.xml</code>) and upgrade with <code>-u</code>.</li>
+                        <li><strong>Using an external Python library without declaring it.</strong> List the library in <code>external_dependencies</code>; if it is missing on the machine, Odoo refuses to install the module, so you learn the cause at once instead of hitting an error later at runtime.</li>
+                    </ul>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Want to build a complete module with a mentor?</h3>
+                    <p>The Odoo Developer Foundation course takes you from the module skeleton to models, views and access control, with code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the minimum a module needs?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Two files: __init__.py and __manifest__.py. The manifest only requires the name key, but you should also declare a version, author, dependencies and the list of data files.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does my new module not show up in Apps?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">There are three common causes: the Apps filter is switched on while the module does not set application to True, developer mode is off or you did not click Update Apps List, or the module folder is not on --addons-path.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between -i and -u in odoo-bin?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">-i installs a module for the first time, -u updates an installed module after you change code or data files. Both must be used together with -d to name the database.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Do I have to list base in depends?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo always installs base, but the documentation recommends declaring it in depends anyway so that your module is upgraded whenever base is upgraded.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/02_newapp.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: A new application</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                    <li><a href="https://github.com/odoo/odoo/tree/20.0/odoo/cli/templates/default" target="_blank" rel="noopener">Odoo 20 – Scaffold template (GitHub)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Ffirst-odoo-module.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Ffirst-odoo-module.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="install-odoo-20.html"><small>← Previous</small>Install Odoo 20</a>
+                    <a class="next" href="models-fields-orm.html"><small>Next →</small>Models, fields &amp; ORM</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#minimal-module">Minimal module</a></li>
+                        <li><a href="#scaffold">Scaffold a skeleton</a></li>
+                        <li><a href="#structure">What each file does</a></li>
+                        <li><a href="#manifest">Manifest fields</a></li>
+                        <li><a href="#write-manifest">Hands-on vinc_course</a></li>
+                        <li><a href="#install-upgrade">Install and upgrade</a></li>
+                        <li><a href="#troubleshooting">Module missing?</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Inheritance: _inherit, xpath and Method Overrides</title>
+    <meta name="description" content="Odoo 20 inheritance: override create with super, @api.ondelete, extend models with _inherit and _inherits, and inherit views with inherit_id and xpath." />
+    <meta name="keywords" content="odoo _inherit, odoo model inheritance, odoo xpath, odoo inherit_id, odoo view inheritance, odoo api.ondelete" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/ke-thua-model-view-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Inheritance: _inherit, xpath and Method Overrides" />
+    <meta property="og:description" content="Extend models and views of other modules in Odoo 20 with _inherit, xpath and properly overridden methods." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-inheritance-model-view.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Inheritance: _inherit, xpath and Method Overrides",
+                "description": "Extend models and views of other modules in Odoo 20 with _inherit, xpath and properly overridden methods.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-inheritance-model-view.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-inheritance-model-view.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Inheritance in Odoo"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How does _inherit differ from _inherits?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "_inherit applies Python-style inheritance, either to build on a model that already exists or to define a new model sharing its structure. _inherits is delegation: the new model shows the parent fields while the values stay on the linked parent record."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Must I call super when overriding create or write?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Almost always. Skipping super breaks Odoo's processing chain, and what you return must have the same shape as the parent result (a dict in, a dict out)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why prefer @api.ondelete over overriding unlink?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A method decorated with @api.ondelete runs during deletion yet stays compatible with module uninstallation. An overridden unlink that raises errors can make uninstalling leave orphaned tables or records."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does xpath select elements in an inherited view?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The expr attribute holds an XPath expression that has to hit exactly one element of the parent view; zero or several hits raise an error. The position attribute (inside, before, after, replace, attributes) says what to do with it."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"ke-thua-model-view-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Inheritance in Odoo</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 9 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Inheritance: _inherit, xpath and Method Overrides</h1>
+            <p class="post-lead">Odoo is designed to be extended without touching original source. This guide covers three levels of inheritance: overriding CRUD methods, extending models with _inherit and adjusting existing views with xpath, plus common mistakes.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo lets you extend another module's models and views without touching its source.</strong> For models, use <code>_inherit</code> to add fields, add methods or override methods; for views, create a child view pointing at the original through <code>inherit_id</code> and use <code>xpath</code> to add, replace or remove elements. When overriding a method, always call <code>super()</code>.</p>
+                </div>
+
+                <h2 id="why-inheritance">Why is inheritance central to Odoo?</h2>
+                <p>Odoo's strength is modularity: each module serves one business need, yet modules can interact and extend each other. The right approach is to <em>layer changes on top</em> rather than edit the original module's files, because direct edits are lost at the next version upgrade. This part walks through three levels of inheritance, from plain to Odoo-specific: Python inheritance (overriding methods), model inheritance and view inheritance.</p>
+
+                <h2 id="python-inheritance">Python inheritance: overriding CRUD methods</h2>
+                <p>Your model derives from <code>models.Model</code> through ordinary Python class inheritance, so the four basic operations (<code>read()</code>, <code>write()</code>, <code>create()</code>, <code>unlink()</code>) are already inherited. Those methods (and every other method of <code>Model</code>) can be overridden to add business logic. The usual skeleton for overriding <code>create()</code>:</p>
+<pre><code>@api.model
+def create(self, vals_list):
+    # run your logic, adjust vals_list if needed ...
+    courses = super().create(vals_list)
+    # ... then hand back what the parent method produced
+    return courses</code></pre>
+                <ul>
+                    <li><code>@api.model</code> is needed on <code>create()</code> because the content of <code>self</code> means nothing while creating; the other CRUD methods do not need it.</li>
+                    <li><strong>Always call <code>super()</code></strong> so you do not break the processing chain. Only a handful of very particular cases justify skipping it.</li>
+                    <li>Return the same kind of value as the parent does: a parent giving back a <code>dict</code> means your override has to give back a <code>dict</code> as well.</li>
+                </ul>
+                <h3 id="ondelete">Blocking deletion with @api.ondelete</h3>
+                <p>For <code>unlink()</code>, you will rarely want to override it directly. Write a dedicated method decorated with <code>@api.ondelete(at_uninstall=False)</code> instead: it is called during deletion and avoids trouble when the module is uninstalled (an overridden <code>unlink</code> that raises errors can leave orphaned tables or records behind). Example: forbid deleting a published course:</p>
+<pre><code>from odoo.exceptions import UserError
+
+@api.ondelete(at_uninstall=False)
+def _unlink_except_published(self):
+    if any(course.is_published for course in self):
+        raise UserError("A published course cannot be deleted.")</code></pre>
+                <p>Remember that <code>self</code> may hold several records, hence the <code>any(...)</code> check or a loop.</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 250" role="img" aria-labelledby="dg-en-09">
+                        <title id="dg-en-09">Three ways to inherit models and the view inheritance chain</title>
+                        <rect class="dg-box" x="20" y="10" width="290" height="230" rx="12" />
+                        <text class="dg-title" x="36" y="38">Model inheritance</text>
+                        <text class="dg-text" x="36" y="64">_inherit = 'res.users'</text><text class="dg-text" x="36" y="84">→ extends in place</text>
+                        <text class="dg-text" x="36" y="120">_name = 'x' + _inherit = 'y'</text><text class="dg-text" x="36" y="140">→ new model copying the structure</text>
+                        <text class="dg-text" x="36" y="176">_inherits = {'a.model': 'a_id'}</text><text class="dg-text" x="36" y="196">→ delegation: shows parent fields,</text><text class="dg-text" x="36" y="216">values stay on the parent record</text>
+                        <rect class="dg-box" x="340" y="10" width="280" height="70" rx="12" />
+                        <text class="dg-title" x="356" y="38">Parent view</text>
+                        <text class="dg-text" x="356" y="64">base.view_users_form</text>
+                        <path class="dg-arrow" d="M480 130 v-44 m-6 8 l6 -8 l6 8" /><text class="dg-text" x="494" y="112">inherit_id</text>
+                        <rect class="dg-accent" x="340" y="130" width="280" height="110" rx="12" />
+                        <text class="dg-title" x="356" y="158">Child view</text>
+                        <text class="dg-text" x="356" y="186">xpath expr="//notebook"</text><text class="dg-text" x="356" y="206">position="inside"</text><text class="dg-text" x="356" y="226">adds a "Courses" tab</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the Odoo 20 documentation.</figcaption>
+                </figure>
+
+                <h2 id="model-inheritance">Model inheritance: adding to an existing model</h2>
+                <p>Odoo has two model inheritance mechanisms. The first, by far the most common, lets a module alter a model defined elsewhere by: adding fields, redefining fields, adding constraints, adding methods or overriding existing ones. The second is <em>delegation</em>: each record is linked to a record of a parent model and transparently exposes that parent's fields.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Declaration</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_inherit = 'res.users'</code> (no <code>_name</code>)</td><td>Extends the existing model in place</td></tr>
+                            <tr><td><code>_name = 'x'</code> plus <code>_inherit = 'y'</code></td><td>Creates a new model <code>x</code> that inherits its structure from <code>y</code></td></tr>
+                            <tr><td><code>_inherits = {'a.model': 'a_id'}</code></td><td>Delegation: the new model shows every field of the parent while the values stay on the linked record</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Example: show the published courses a user is in charge of directly in the user form. We add a field to <code>res.users</code>. Following convention, keep each extended model in a separate file:</p>
+                <p class="code-title">custom-addons/vinc_course/models/res_users.py</p>
+<pre><code>from odoo import fields, models
+
+
+class ResUsers(models.Model):
+    _inherit = 'res.users'
+
+    course_ids = fields.One2many(
+        'vinc.course', 'instructor_id', string="Courses in charge",
+        domain=[('is_published', '=', True)])</code></pre>
+                <p>Remember to import the file in <code>models/__init__.py</code>. The <code>domain</code> on the field limits the list to published courses.</p>
+
+                <h2 id="view-inheritance">View inheritance with inherit_id and xpath</h2>
+                <p>Rather than editing the original view in place, Odoo stacks "extension" views on top of it. A child view names its parent through <code>inherit_id</code>; instead of a full layout, its <code>arch</code> holds <code>xpath</code> elements that pick spots in the parent and alter them. Example: add a tab to the user form (<code>base.view_users_form</code>):</p>
+                <p class="code-title">custom-addons/vinc_course/views/res_users_views.xml</p>
+<pre><code>&lt;odoo&gt;
+    &lt;record id="res_users_view_form_inherit_vinc_course" model="ir.ui.view"&gt;
+        &lt;field name="name"&gt;res.users.form.inherit.vinc_course&lt;/field&gt;
+        &lt;field name="model"&gt;res.users&lt;/field&gt;
+        &lt;field name="inherit_id" ref="base.view_users_form"/&gt;
+        &lt;field name="arch" type="xml"&gt;
+            &lt;xpath expr="//notebook" position="inside"&gt;
+                &lt;page string="Courses"&gt;
+                    &lt;field name="course_ids"/&gt;
+                &lt;/page&gt;
+            &lt;/xpath&gt;
+        &lt;/field&gt;
+    &lt;/record&gt;
+&lt;/odoo&gt;</code></pre>
+                <p><code>expr</code> is an XPath expression that must pick exactly <strong>one</strong> element of the parent view; <code>position</code> says what to do with it:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th><code>position</code></th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>inside</code></td><td>Appends the content at the end of the selected element</td></tr>
+                            <tr><td><code>before</code> / <code>after</code></td><td>Inserts the content as a sibling right before / after the selected element</td></tr>
+                            <tr><td><code>replace</code></td><td>Swaps the selected element for the new content</td></tr>
+                            <tr><td><code>attributes</code></td><td>Changes attributes of the selected element</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>When only one element is targeted you can shorten it by placing <code>position</code> on the target element itself, e.g. <code>&lt;field name="description" position="after"&gt;...&lt;/field&gt;</code>; the result equals using <code>xpath</code>. Finally, since this view extends one from the <code>base</code> module, make sure your module lists <code>base</code> in <code>depends</code> and declares the file in <code>data</code>.</p>
+
+                <h2 id="position-examples">Examples for each position value</h2>
+<pre><code>&lt;!-- add a field after the name field --&gt;
+&lt;xpath expr="//field[@name='name']" position="after"&gt;
+    &lt;field name="level"/&gt;
+&lt;/xpath&gt;
+
+&lt;!-- insert ahead of an element --&gt;
+&lt;xpath expr="//field[@name='price']" position="before"&gt;
+    &lt;field name="duration_hours"/&gt;
+&lt;/xpath&gt;
+
+&lt;!-- change an element's attributes --&gt;
+&lt;xpath expr="//field[@name='name']" position="attributes"&gt;
+    &lt;attribute name="string"&gt;Course title&lt;/attribute&gt;
+&lt;/xpath&gt;
+
+&lt;!-- swap an element for new content --&gt;
+&lt;xpath expr="//field[@name='description']" position="replace"&gt;
+    &lt;field name="description" placeholder="Short description..."/&gt;
+&lt;/xpath&gt;</code></pre>
+                <p>With <code>replace</code>, a <code>$0</code> node inside the new content is substituted by the original element, letting you wrap the old element instead of discarding it. With <code>attributes</code>, the <code>&lt;attribute name="..."&gt;</code> elements inside the <code>xpath</code> body name the attributes to change.</p>
+
+                <h2 id="inheritance-notes">A few notes on model inheritance</h2>
+                <ul>
+                    <li><code>_inherit</code> takes one model name or a list. When <code>_name</code> <strong>is</strong> set, the entries of <code>_inherit</code> are the parents the new model derives from; when <code>_name</code> is <strong>not</strong> set, it names the <em>single</em> model being extended in place.</li>
+                    <li>Delegation with <code>_inherits</code> is "compositional": the new model shows every parent field but persists none, because values live on the linked record. When several parents declare a field under one name, the one from the last parent in the list wins.</li>
+                    <li>In <code>@api.ondelete</code>, leave <code>at_uninstall</code> at <code>False</code> in nearly every case, so removing a module never raises business-rule errors.</li>
+                    <li>Keep each inherited model in its own file named after the model (for example <code>models/res_users.py</code>).</li>
+                </ul>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes with inheritance</p>
+                    <ul>
+                        <li><strong>Overriding <code>create</code>, <code>write</code>… but forgetting <code>super()</code> or returning the wrong type.</strong> Skipping <code>super()</code> breaks Odoo's processing chain (fields are not saved, other modules cannot run their logic). Always call <code>super()</code> and hand back the same kind of data as the parent.</li>
+                        <li><strong>An <code>xpath</code> that finds nothing, or finds several elements.</strong> The documentation says both cases raise an error when the view loads. Make the expression specific enough (for example with <code>@name</code>) and double-check it against the original view in developer mode.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>When overriding CRUD methods, always call <code>super()</code> and return the same kind of value; use <code>@api.ondelete</code> instead of overriding <code>unlink</code>.</li>
+                    <li><code>_inherit</code> extends a model, <code>_inherits</code> delegates to a parent model.</li>
+                    <li>A child view points at its parent with <code>inherit_id</code> and selects exactly one element via <code>xpath</code>.</li>
+                    <li>Your module must list the original module in <code>depends</code>.</li>
+                </ul>
+                <p>The next part turns to output: PDF reports with QWeb.</p>
+
+                <div class="cta-box">
+                    <h3>Want to extend existing Odoo modules without breaking upgrades?</h3>
+                    <p>The Odoo Advanced Developer course goes deep into model and view inheritance and safe extension patterns, with code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-A">See Odoo Advanced Developer</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does _inherit differ from _inherits?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">_inherit applies Python-style inheritance, either to build on a model that already exists or to define a new model sharing its structure. _inherits is delegation: the new model shows the parent fields while the values stay on the linked parent record.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Must I call super when overriding create or write?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Almost always. Skipping super breaks Odoo's processing chain, and what you return must have the same shape as the parent result (a dict in, a dict out).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why prefer @api.ondelete over overriding unlink?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A method decorated with @api.ondelete runs during deletion yet stays compatible with module uninstallation. An overridden unlink that raises errors can make uninstalling leave orphaned tables or records.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does xpath select elements in an inherited view?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The expr attribute holds an XPath expression that has to hit exactly one element of the parent view; zero or several hits raise an error. The position attribute (inside, before, after, replace, attributes) says what to do with it.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/12_inheritance.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Inheritance</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (_inherit, _inherits, ondelete)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-inheritance-model-view.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-inheritance-model-view.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-computed-field-onchange-constraints.html"><small>← Previous</small>Odoo 20 Computed Fields, Onchange and Constraints</a>
+                    <span class="next"><small>Next · Coming soon</small>PDF reports with QWeb</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#why-inheritance">Why is inheritance central to Odoo?</a></li>
+                        <li><a href="#python-inheritance">Python inheritance: overriding CRUD methods</a></li>
+                        <li><a href="#model-inheritance">Model inheritance: adding to an existing model</a></li>
+                        <li><a href="#view-inheritance">View inheritance with inherit_id and xpath</a></li>
+                        <li><a href="#position-examples">Examples for each position value</a></li>
+                        <li><a href="#inheritance-notes">A few notes on model inheritance</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

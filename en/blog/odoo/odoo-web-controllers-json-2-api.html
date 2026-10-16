@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 Web Controllers and the JSON-2 API Guide</title>
+    <meta name="description" content="Create endpoints with @route controllers in Odoo 20 and integrate through the JSON-2 API: auth, type, API keys, bearer, transactions and pitfalls." />
+    <meta name="keywords" content="odoo controller, odoo http.route, odoo json-2 api, odoo api key, odoo bearer, odoo external api, odoo jsonrpc" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/web-controller-json-2-api-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 Web Controllers and the JSON-2 API Guide" />
+    <meta property="og:description" content="Write controllers with @route, understand auth and type, then call models externally through the JSON-2 API safely in Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-web-controllers-json-2-api.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 Web Controllers and the JSON-2 API Guide",
+                "description": "Write controllers with @route, understand auth and type, then call models externally through the JSON-2 API safely in Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-web-controllers-json-2-api.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-web-controllers-json-2-api.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Web controllers & JSON-2 API"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between type http and jsonrpc in @route?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The type decides where request parameters are read and how the response is serialized. Routes of type http have CSRF protection on by default, while type jsonrpc (named json up to Odoo 18) has it off."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do auth public, user, bearer and none differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "user requires a login; bearer authenticates through an API key in the Authorization header; public allows anonymous access and runs under the common Public account; none is always active even without a database and is mainly for the framework."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I call the JSON-2 API?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Send a POST to /json/2/<model>/<method> with an Authorization bearer header carrying the API key, Content-Type application/json and a JSON body with ids, context and the method's parameters."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Where do I create an API key and how long does it last?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Generate it from your user preferences in the account-security section. Its value is displayed a single time and its lifetime is capped at three months, so long-lived keys need regular rotation."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"web-controller-json-2-api-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Web controllers & JSON-2 API</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 12 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 Web Controllers and the JSON-2 API</h1>
+            <p class="post-lead">Letting Odoo talk to a website, a mobile app or other software takes endpoints. This guide shows how to write controllers with @route and how to use the built-in JSON-2 API with API keys, access rights and transactions.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo offers two ways to expose data to the outside world: write your own controller with <code>@route</code>, or use the built-in JSON-2 API.</strong> A controller extends <code>http.Controller</code>, and each route declares its <code>auth</code> (<code>public</code>, <code>user</code>, <code>bearer</code>, <code>none</code>) and <code>type</code> (<code>http</code> or <code>jsonrpc</code>). The JSON-2 API accepts <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code> with an API key in the <code>Authorization: bearer</code> header, and always respects the permissions of the key's owner.</p>
+                </div>
+
+                <h2 id="controller">Web controllers: creating endpoints for a module</h2>
+                <p>Models have their own inheritance system, and controllers have theirs, because when a request arrives the database and modules may not be ready yet (no database created or selected). You create a controller by extending <code>Controller</code> and declare routes with methods decorated by <code>route()</code>.</p>
+                <p>The scaffold from part 3 already has a <code>controllers/</code> folder. Create <code>controllers/main.py</code> with an endpoint returning published courses as JSON:</p>
+                <p class="code-title">custom-addons/vinc_course/controllers/main.py</p>
+<pre><code>from odoo import http
+from odoo.http import request
+
+
+class VincCourseController(http.Controller):
+
+    @http.route('/vinc_course/courses', auth='public', type='http', methods=['GET'])
+    def courses(self, **kw):
+        courses = request.env['vinc.course'].sudo().search([('is_published', '=', True)])
+        data = [{'id': c.id, 'name': c.name, 'level': c.level} for c in courses]
+        return request.make_json_response(data)</code></pre>
+                <p>Replace the import line in <code>controllers/__init__.py</code> with <code>from . import main</code>, upgrade the module and open <code>http://localhost:8069/vinc_course/courses</code>. A few points to understand:</p>
+                <ul>
+                    <li><code>request</code> is the current request object; <code>request.env</code> gives you the ORM environment, <code>request.make_json_response()</code> serializes data to JSON with a matching <code>Content-Type</code>, and <code>request.render()</code> renders a QWeb template.</li>
+                    <li>For <code>public</code> routes the request runs as the shared Public user. In part 5 we granted rights only to internal users, so the example uses <code>sudo()</code> deliberately, filtering on published records and returning only safe fields. Do not scatter <code>sudo()</code> everywhere.</li>
+                </ul>
+
+                <h3 id="route-options">@route options</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Parameter</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>route</code></td><td>The path(s) the method serves, in werkzeug's route format</td></tr>
+                            <tr><td><code>type</code></td><td><code>'http'</code> or <code>'jsonrpc'</code> (called <code>'json'</code> up to Odoo 18); decides where parameters are read and how the response is serialized</td></tr>
+                            <tr><td><code>auth</code></td><td><code>'user'</code>: login required; <code>'bearer'</code>: authenticated by an API key in the <code>Authorization</code> header; <code>'public'</code>: may be anonymous (runs as the Public user); <code>'none'</code>: always active even with no database, mainly for the framework</td></tr>
+                            <tr><td><code>bearer_scope</code></td><td>Scope of the token; required for <code>auth='bearer'</code> routes and forbidden on every other auth mode</td></tr>
+                            <tr><td><code>methods</code></td><td>Allowed HTTP verbs; every verb is allowed when omitted</td></tr>
+                            <tr><td><code>csrf</code></td><td>CSRF protection; on by default for <code>type='http'</code>, off for <code>type='jsonrpc'</code></td></tr>
+                            <tr><td><code>cors</code></td><td>Content of the CORS header <code>Access-Control-Allow-Origin</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="request-helpers">The request object and its helpers</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Helper</th><th>Purpose</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>request.get_http_params()</code></td><td>Merges key/value pairs from the query string and from body forms (both <code>application/x-www-form-urlencoded</code> and <code>multipart/form-data</code>)</td></tr>
+                            <tr><td><code>request.make_response(data, headers, cookies, status)</code></td><td>Builds a non-HTML response, or an HTML one with custom headers or cookies. Returning non-HTML data without a complete response object leaves clients unable to interpret it correctly</td></tr>
+                            <tr><td><code>request.make_json_response(data, ...)</code></td><td>Serializes data to JSON and sets <code>Content-Type</code> unless you already did</td></tr>
+                            <tr><td><code>request.not_found()</code></td><td>Shortcut for an HTTP 404 response</td></tr>
+                            <tr><td><code>request.render(template, qcontext)</code></td><td>Renders a QWeb template lazily: the work happens at the very end of dispatch, so the template or <code>qcontext</code> can still be altered before then</td></tr>
+                            <tr><td><code>request.reroute(path)</code></td><td>Rewrites the current URL, like a light redirect that returns no 3xx code to the browser</td></tr>
+                            <tr><td><code>request.update_env(user, context, su)</code></td><td>Changes the user, context or superuser mode of the request's environment</td></tr>
+                            <tr><td><code>request.csrf_token()</code> / <code>validate_csrf()</code></td><td>Generates and checks CSRF tokens; by default a token is valid for 48 hours</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 id="jsonrpc-route">The jsonrpc route type</h3>
+                <p>A <code>type='jsonrpc'</code> route carries JSON-RPC 2 over HTTP but deviates from the standard twice: the payload's <code>method</code> entry is disregarded (the URL already picks the controller), and <code>params</code> has to be a JSON object with named keys instead of an array. You may also send <code>context</code> to replace the session context; it is stripped before the endpoint is called:</p>
+<pre><code>--&gt; {"jsonrpc": "2.0", "method": "call", "params": {"arg1": "val1"}, "id": null}
+&lt;-- {"jsonrpc": "2.0", "result": {"res1": "val1"}, "id": null}</code></pre>
+
+                <h3 id="override-controller">Extending another module's controller</h3>
+                <p>To override, subclass the original controller and redefine the method. You must decorate it again with <code>@route()</code> (arguments may be left out), otherwise the method drops out of the routing table. Arguments in the new decorator are merged over the old ones:</p>
+                <pre><code>class Restrict(VincCourseController):
+
+    @http.route(auth='user')
+    def courses(self, **kw):
+        return super().courses(**kw)</code></pre>
+                <p>The snippet switches the route from <code>public</code> to <code>user</code>, meaning a login is now required.</p>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 165" role="img" aria-labelledby="dg-en-12">
+                        <title id="dg-en-12">Flow of one JSON-2 API call</title>
+                        <rect class="dg-box" x="10" y="15" width="180" height="96" rx="12" />
+                        <text class="dg-title" x="26" y="43">External software</text>
+                        <text class="dg-text" x="26" y="95">POST /json/2/model/method</text>
+                        <path class="dg-arrow" d="M192 63 h26 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="220" y="15" width="200" height="96" rx="12" />
+                        <text class="dg-title" x="236" y="43">Odoo</text>
+                        <text class="dg-text" x="236" y="76">1. Check the bearer API key</text><text class="dg-text" x="236" y="96">2. Apply the key owner's rights</text>
+                        <path class="dg-arrow" d="M422 63 h26 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="450" y="15" width="180" height="96" rx="12" />
+                        <text class="dg-title" x="466" y="43">Model + method</text>
+                        <text class="dg-text" x="466" y="95">one transaction per call</text>
+                        <path class="dg-arrow" d="M540 113 v22 m-6 -8 l6 8 l6 -8" />
+                        <text class="dg-text" x="220" y="152">Success: HTTP 200 + JSON. Failure: 4xx/5xx + JSON error object (rollback)</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the Odoo 20 documentation.</figcaption>
+                </figure>
+
+                <h2 id="json2-api">The JSON-2 API: calling models from external software</h2>
+                <p>Besides hand-written controllers, Odoo makes part of its Models API reachable over HTTP at the <code>/json/2</code> endpoint (available since Odoo 19). No extra module code is needed: just send a POST to <code>/json/2/&lt;model&gt;/&lt;method&gt;</code>.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Availability</p>
+                    <p>According to the documentation, access to data through the external API exists only on Odoo's Custom pricing plans; One App Free and Standard plans do not include it. Check your plan before designing an integration.</p>
+                </div>
+                <h3 id="json2-request">Request layout</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Part</th><th>Content</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>Authorization</code> header</td><td>Mandatory: the word <code>bearer</code>, a space, then your API key</td></tr>
+                            <tr><td><code>Content-Type</code> header</td><td>Mandatory: <code>application/json</code>, preferably with a charset</td></tr>
+                            <tr><td><code>X-Odoo-Database</code> header</td><td>Optional database name; needed when one server hosts several databases and <code>dbfilter</code> does not use the <code>Host</code> header</td></tr>
+                            <tr><td>URL path</td><td><code>model</code> carries the technical model name and <code>method</code> the method to execute</td></tr>
+                            <tr><td>JSON body</td><td><code>ids</code> (record ids; leave empty for <code>@api.model</code> methods), optional <code>context</code>, and the method's own parameters</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Example: reading published courses from Python:</p>
+                <pre><code>import requests
+
+BASE_URL = "https://mycompany.example.com/json/2"
+headers = {
+    "Authorization": "bearer " + API_KEY,   # load the key from a safe place
+    "X-Odoo-Database": "mycompany",
+}
+res = requests.post(
+    f"{BASE_URL}/vinc.course/search_read",
+    headers=headers,
+    json={"domain": [["is_published", "=", True]], "fields": ["name", "level"]},
+)
+res.raise_for_status()
+print(res.json())</code></pre>
+                <p>Success returns HTTP 200 with the method's return value as JSON. On failure the server answers 4xx/5xx with a JSON object with the keys <code>name</code>, <code>message</code>, <code>arguments</code>, <code>context</code> and <code>debug</code>.</p>
+
+                <h3 id="api-key">Creating and managing API keys</h3>
+                <ul>
+                    <li>Generate a key from the user preferences, in the account-security area, using the new-key button. You must give it a label and a lifetime, and its value appears <strong>a single time</strong>, so copy it and keep it somewhere safe.</li>
+                    <li>A key can live at most three months, so long-running keys must be replaced at least every three months. For interactive use prefer a short lifetime, typically one day.</li>
+                    <li>When rotating, create the new key first, confirm every service uses it, and only then revoke the old one.</li>
+                </ul>
+                <h3 id="api-key-rpc">Managing API keys programmatically</h3>
+                <p>Odoo exposes RPC methods to generate and revoke keys. By default only users with the Settings administration right may use them; to allow others, set the system parameter <code>base.enable_programmatic_api_keys</code> to <code>True</code> (under <em>Settings → Technical → System Parameters</em>).</p>
+                <ul>
+                    <li><code>res.users.apikeys.generate()</code> takes <code>key</code> (a valid existing key), <code>scope</code> (a string or <code>null</code>), <code>name</code> (a readable label) and <code>expiration_date</code> (ISO 8601). It returns the new key as a string that cannot be fetched again.</li>
+                    <li>A <code>scope</code> limits where a key may be used. The <code>rpc</code> scope is the generic one for RPC through controllers with <code>auth='bearer'</code>. Unscoped keys use <code>null</code>.</li>
+                    <li>A user may generate up to 10 keys programmatically by default (change it with <code>base.programmatic_api_keys_limit</code>); exceeding it fails with HTTP 422. The expiration date is checked against the longest lifetime allowed by the user's roles.</li>
+                    <li><code>res.users.apikeys.revoke()</code> invalidates a key immediately; a wrong key yields HTTP 403. The key being revoked need not be the one in the <code>Authorization</code> header, so during rotation authenticate with the new key to revoke the old one.</li>
+                </ul>
+
+                <h3 id="json2-security">Security and transactions</h3>
+                <ul>
+                    <li>The API follows standard Odoo security: each operation is verified against the key owner's model rights, per-record rules and field restrictions (the subject of part 5).</li>
+                    <li>For long-term automated integrations, create a dedicated <strong>bot user</strong> with minimal rights and an empty password so password login is disabled.</li>
+                    <li>Each call runs in its own SQL transaction: committed on success, discarded on error. Several calls cannot share one transaction, so related operations must be wrapped in <strong>a single server-side method</strong> (often named starting with <code>action_</code>).</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Leaving the old RPC endpoints behind</p>
+                    <p>Older integrations that talk to <code>/xmlrpc</code>, <code>/xmlrpc/2</code> or <code>/jsonrpc</code> should be migrated, since those endpoints are deprecated: Odoo 20 already dropped their <code>db</code> service, and the <code>common</code> and <code>object</code> ones are planned to disappear with Odoo 22. Your own <code>@route(type='jsonrpc')</code> controllers are not affected.</p>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when building APIs</p>
+                    <ul>
+                        <li><strong>A JSON-2 call returns 401 "Invalid apikey".</strong> The header must read <code>Authorization: bearer &lt;key&gt;</code>, and the key must be unexpired and not revoked. Remember a key is shown only once when created.</li>
+                        <li><strong>A controller override makes the route vanish.</strong> You forgot to decorate with <code>@route()</code> again; without it the method is removed from the routing table.</li>
+                        <li><strong>Several consecutive JSON-2 calls leave inconsistent data.</strong> Each call is its own transaction, so other users can slip in between. Combine the steps into one method on the model.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Controllers extend <code>http.Controller</code>; <code>@route</code> declares <code>auth</code>, <code>type</code> and <code>methods</code>.</li>
+                    <li>When overriding a controller you must decorate with <code>@route()</code> again.</li>
+                    <li>JSON-2: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code>, bearer API key, the key owner's rights, one transaction per call.</li>
+                    <li>Wrap related operations in a single method to keep data consistent.</li>
+                </ul>
+                <p>The next part adds automated tests to protect everything you have just written.</p>
+
+                <div class="cta-box">
+                    <h3>Need to integrate Odoo with other systems?</h3>
+                    <p>The Odoo Advanced Developer course covers controllers, API authentication and safe integration patterns, with code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-A">See Odoo Advanced Developer</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between type http and jsonrpc in @route?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The type decides where request parameters are read and how the response is serialized. Routes of type http have CSRF protection on by default, while type jsonrpc (named json up to Odoo 18) has it off.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do auth public, user, bearer and none differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">user requires a login; bearer authenticates through an API key in the Authorization header; public allows anonymous access and runs under the common Public account; none is always active even without a database and is mainly for the framework.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I call the JSON-2 API?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Send a POST to /json/2/&lt;model&gt;/&lt;method&gt; with an Authorization bearer header carrying the API key, Content-Type application/json and a JSON body with ids, context and the method's parameters.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Where do I create an API key and how long does it last?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Generate it from your user preferences in the account-security section. Its value is displayed a single time and its lifetime is capped at three months, so long-lived keys need regular rotation.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/http.html" target="_blank" rel="noopener">Odoo 20 – Web controllers</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/security.html" target="_blank" rel="noopener">Odoo 20 – Security in Odoo</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-web-controllers-json-2-api.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-web-controllers-json-2-api.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-owl-framework-basics.html"><small>← Previous</small>Odoo 20 OWL Basics</a>
+                    <span class="next"><small>Next · Coming soon</small>Unit tests in Odoo</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#controller">Web controllers: creating endpoints for a module</a></li>
+                        <li><a href="#json2-api">The JSON-2 API: calling models from external software</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

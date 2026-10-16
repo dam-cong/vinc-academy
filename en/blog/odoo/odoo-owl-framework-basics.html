@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo 20 OWL Basics: Components, Hooks and Assets</title>
+    <meta name="description" content="Get started with OWL in Odoo 20: components, useState, setup(), XML templates, declaring assets, registries, services and hooks for the web UI." />
+    <meta name="keywords" content="odoo owl, owl component odoo, odoo useState, odoo assets_backend, odoo javascript, odoo owl tutorial" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/owl-framework-odoo-co-ban.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Odoo 20 OWL Basics: Components, Hooks and Assets" />
+    <meta property="og:description" content="Understand OWL, write your first component, declare asset bundles and learn registries, services and hooks in Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-owl-framework-basics.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Odoo 20 OWL Basics: Components, Hooks and Assets",
+                "description": "Understand OWL, write your first component, declare asset bundles and learn registries, services and hooks in Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-owl-framework-basics.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-owl-framework-basics.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "OWL framework basics"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is OWL in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "OWL is a declarative component framework, in the spirit of Vue and React, used to build the Odoo web client interface. Components are defined with QWeb templates extended by a few OWL-specific directives."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why use setup() instead of the constructor?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A JavaScript constructor cannot be overridden the way Odoo needs, so the documentation requires all initialization to go in the setup() method and forbids components from using the constructor directly."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How are a component's JavaScript and template files loaded?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "You declare them under the manifest's assets key, usually in the web.assets_backend bundle for the web client. The framework then loads the JavaScript, CSS and templates into OWL."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do registries, services and hooks differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A registry is a key/value map holding extensible objects. A service is long-lived code providing a feature such as notifications or server calls. A hook is a reusable function tied to the component lifecycle."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"owl-framework-odoo-co-ban.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">OWL framework basics</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 11 · Odoo 20 Development Series</span>
+            <h1>Odoo 20 OWL Basics: Components, Hooks and Assets</h1>
+            <p class="post-lead">OWL underpins the Odoo web interface. This guide helps you understand OWL components, write your first one, add files to asset bundles and grasp the web client building blocks: registries, services and hooks.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo's web interface is built with OWL, a declarative component framework whose templates are written in QWeb.</strong> A component usually consists of a JavaScript file and an XML template, added to the <code>web.assets_backend</code> bundle through the manifest's <code>assets</code> key. Inside a component, initialize state in <code>setup()</code> (never the constructor) with hooks such as <code>useState</code>.</p>
+                </div>
+
+                <h2 id="what-is-owl">What is OWL and where does it sit in Odoo?</h2>
+                <p>What you see at /odoo is one long-running page rather than a series of full page loads: each click fetches just the data required, redraws the affected part and updates the address bar. This client is written with <strong>OWL</strong>, a declarative component system in the spirit of Vue and React. A component's markup is a QWeb template, enriched with a handful of OWL directives. The Odoo documentation stresses that <em>all new development should use OWL whenever possible</em>. OWL's source is maintained in its own GitHub repository, and every Odoo version from 14 onwards shares the same OWL version.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Two meanings of "frontend"</p>
+                    <p>In the Odoo ecosystem, <em>frontend</em> usually means the public website and <em>backend</em> the web client, which differs from the common browser-versus-server meaning. In the docs, "component" always means an OWL component, while "widget" is the older approach.</p>
+                </div>
+
+                <h2 id="first-component">Your first OWL component</h2>
+                <p>As a rule, a component should be made of 2-3 files kept together: a JavaScript file, an XML template and optionally an SCSS/CSS file. Here is a simple counter for the <code>vinc_course</code> module:</p>
+                <p class="code-title">vinc_course/static/src/components/course_counter/course_counter.js</p>
+<pre><code>import { Component, useState } from "@odoo/owl";
+
+export class CourseCounter extends Component {
+    static template = "vinc_course.CourseCounter";
+
+    setup() {
+        this.state = useState({ value: 0 });
+    }
+
+    increment() {
+        this.state.value++;
+    }
+}</code></pre>
+                <p class="code-title">vinc_course/static/src/components/course_counter/course_counter.xml</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;templates xml:space="preserve"&gt;
+    &lt;t t-name="vinc_course.CourseCounter"&gt;
+        &lt;button class="btn btn-primary" t-on-click="increment"&gt;
+            Viewed: &lt;t t-out="state.value"/&gt;
+        &lt;/button&gt;
+    &lt;/t&gt;
+&lt;/templates&gt;</code></pre>
+                <ul>
+                    <li><code>useState</code> creates reactive state: when <code>state.value</code> changes, the interface updates by itself.</li>
+                    <li><code>t-on-click="increment"</code> is an OWL directive that binds an event to a component method.</li>
+                    <li>Keep templates in XML files so translation works, and let the component merely name its template. Defining the template inside JavaScript via the <code>xml</code> helper suits first experiments only.</li>
+                    <li>The template naming convention is <code>addon_name.ComponentName</code>, which prevents clashes between modules.</li>
+                </ul>
+
+                <h3 id="setup-constructor">Use setup(), not the constructor</h3>
+                <p>Components are classes and so have constructors, but a JavaScript constructor cannot be overridden the way Odoo needs. Therefore do all initialization inside the <code>setup()</code> method. No component in Odoo may use <code>constructor(parent, props)</code> directly.</p>
+
+                <h2 id="assets">Adding files to an assets bundle</h2>
+                <p>JavaScript, CSS and templates are not loaded on their own. You declare them under the manifest's <code>assets</code> key: a dictionary mapping bundle names to lists of files, with glob support so one line can cover many files:</p>
+                <pre><code>'assets': {
+    'web.assets_backend': [
+        'vinc_course/static/src/components/**/*',
+    ],
+},</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Bundle</th><th>Contents</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>web.assets_backend</code></td><td>Everything tied to the backend client: actions, views, static XML templates</td></tr>
+                            <tr><td><code>web.assets_frontend</code></td><td>Everything tied to the public site: shop, portal, forum, blog</td></tr>
+                            <tr><td><code>web.assets_common</code></td><td>Low-level pieces shared by the backend client, the website and Point of Sale; foundations of the framework</td></tr>
+                            <tr><td><code>web.assets_unit_tests</code></td><td>All JavaScript test code</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Standard JavaScript modules stored below <code>/static/src</code> or <code>/static/tests</code> are turned into Odoo's own module format with no action from you. Files are then merged, minified (unless <code>debug=assets</code> is on) and sent to the browser; when debugging, use <code>?debug=assets</code> to load the unminified versions.</p>
+
+                <h2 id="building-blocks">Building blocks of the web client</h2>
+                <p>Four concepts do most of the work in the client: registries, services, components and hooks.</p>
+                <ul>
+                    <li><strong>Registry:</strong> a lookup table for one family of objects. Whatever you add becomes available everywhere else; the <code>fields</code> registry, for example, lists the field components views may display. Registries are the main way to extend the UI.</li>
+                    <li><strong>Service:</strong> long-lived code providing a feature, much like a dependency-injection system. The <code>notification</code> service shows notifications, the <code>rpc</code> service is how code talks to the server. Components obtain services through the <code>useService</code> hook.</li>
+                    <li><strong>Component:</strong> the OWL components that belong to the web client.</li>
+                    <li><strong>Hook:</strong> a reusable function tied to the component lifecycle, a functional take on mixins. <code>useState</code> is a hook, and you can write your own using <code>onWillStart</code>, <code>onWillUnmount</code> and friends.</li>
+                </ul>
+                <p>A component reaches the environment (<code>this.env</code>) for services, the <code>debug</code> flag, the translation function and the <code>isSmall</code> flag (true when the screen is 767px wide or less).</p>
+
+                <h2 id="next-step">Plugging a component into the interface</h2>
+                <p>How a component is attached to Odoo depends on the extension point you choose: a field, a view, a client action screen or a main component of the web client (via the <code>main_components</code> registry). Each has its own API, so continue with the official tutorial <em>Discover the web framework</em> (chapters <em>Owl components</em> and <em>Build a dashboard</em>), which ships a sample repository for Odoo 20. It assumes you already know models, controllers and QWeb, exactly what this series has covered.</p>
+
+                <h2 id="code-layout">Where does the web client's JavaScript live?</h2>
+                <p>All JavaScript (plus CSS and templates) of the <code>web</code> module sits in <code>web/static/src</code>. Anything inside can be imported using the <code>@web</code> prefix, e.g. <code>import { memoize } from "@web/core/utils/functions"</code>. The main folders:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Folder</th><th>Contents</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>core/</code></td><td>Most low-level features</td></tr>
+                            <tr><td><code>fields/</code></td><td>All field components</td></tr>
+                            <tr><td><code>views/</code></td><td>The JavaScript view components (form, list…)</td></tr>
+                            <tr><td><code>search/</code></td><td>Control panel, search bar, search panel</td></tr>
+                            <tr><td><code>webclient/</code></td><td>Code specific to the web client: navbar, user menu, action service…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The web client itself is an OWL application. Its (simplified) template holds a <code>NavBar</code>, an <code>ActionContainer</code> (which shows whatever controller the current action needs, be it a client action or a view of an <code>act_window</code> action) and a <code>MainComponentsContainer</code> (which renders everything registered under <code>main_components</code>, the route other parts take to extend the web client). The action service keeps a stack of active actions in memory, which are the breadcrumb entries.</p>
+
+                <h2 id="env">The this.env object</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Key</th><th>Value</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>qweb</code></td><td>Needed by OWL; holds every template</td></tr>
+                            <tr><td><code>bus</code></td><td>The main bus, coordinating some generic events</td></tr>
+                            <tr><td><code>services</code></td><td>All deployed services (best reached through the <code>useService</code> hook)</td></tr>
+                            <tr><td><code>debug</code></td><td>A string; non-empty means the web client is in debug mode</td></tr>
+                            <tr><td><code>_t</code></td><td>The string translation function</td></tr>
+                            <tr><td><code>isSmall</code></td><td>A boolean; true in mobile mode (screen 767px wide or less)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Templates are translated automatically, so <code>_t</code> is only needed to translate strings inside JavaScript code.</p>
+
+                <h2 id="asset-operations">Asset operations</h2>
+                <p>Usually you just add files to a popular bundle. For special needs the manifest also supports the operations below (the four that target one particular file, <code>before</code>, <code>after</code>, <code>replace</code> and <code>remove</code>, only work if that file was declared earlier, whether in a manifest further up the dependency chain or in an <code>ir.asset</code> record having a smaller sequence):</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Operation</th><th>Syntax</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>append</td><td><code>'path'</code></td><td>Adds a file at the end of the bundle (the default)</td></tr>
+                            <tr><td>prepend</td><td><code>('prepend', path)</code></td><td>Adds a file at the start of the bundle</td></tr>
+                            <tr><td>before</td><td><code>('before', target, path)</code></td><td>Adds a file just ahead of the target</td></tr>
+                            <tr><td>after</td><td><code>('after', target, path)</code></td><td>Adds a file just behind the target</td></tr>
+                            <tr><td>include</td><td><code>('include', bundle)</code></td><td>Nests another bundle (sub-bundles conventionally start with an underscore)</td></tr>
+                            <tr><td>remove</td><td><code>('remove', target)</code></td><td>Takes a file out of the bundle</td></tr>
+                            <tr><td>replace</td><td><code>('replace', target, path)</code></td><td>Swaps a file for your version, at the very same position</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Order matters for CSS and bootstrap scripts. Odoo's procedure: start from an empty list; apply <code>ir.asset</code> records with a sequence below 16; then apply each module's manifest operations in dependency order (the <code>web</code> module before <code>website</code>); and last of all apply the leftover <code>ir.asset</code> records. A file already in the list is not added again, so only its first occurrence counts.</p>
+
+                <h2 id="js-file-kinds">Three kinds of JavaScript files</h2>
+                <ul>
+                    <li><strong>Native JavaScript modules:</strong> for every new file. files below <code>/static/src</code> and <code>/static/tests</code> are converted into Odoo modules for you; in other folders a file is converted only if its first line carries an <code>@odoo-module</code> comment.</li>
+                    <li><strong>Odoo modules (the custom module system):</strong> useful only for old files not yet converted.</li>
+                    <li><strong>Plain JavaScript files:</strong> reserved for external libraries and a few very low-level jobs, ideally written as an IIFE so variables do not leak into the global scope. Every external library loads this way. To make Odoo skip a file, make its first line <code>/** @odoo-module ignore **/</code>.</li>
+                </ul>
+
+                <h2 id="ready-made">Ready-made components</h2>
+                <p>The web client ships a set of generic components for reuse: <code>ActionSwiper</code> (an action on horizontal swipe), <code>CheckBox</code>, <code>ColorList</code>, <code>Dropdown</code>, <code>Notebook</code> (page switching through tabs), <code>Pager</code> (pagination), <code>SelectMenu</code> (a dropdown to choose one option) and <code>TagsList</code> (tags shown as pills). Each has its own import location, for instance <code>@web/core/action_swiper/action_swiper</code>; check the Owl components page of the documentation before rebuilding any of these yourself.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when learning OWL</p>
+                    <ul>
+                        <li><strong>Putting initialization in the <code>constructor</code>.</strong> Use <code>setup()</code>; Odoo's documentation states that no component may use the constructor directly.</li>
+                        <li><strong>Creating the JS and XML files but the interface does not change.</strong> Usually the files are not in a bundle: check the manifest's <code>assets</code> key and the path glob, upgrade with <code>-u</code>, then open <code>?debug=assets</code> to see whether the files load.</li>
+                        <li><strong>Naming a template something generic such as <code>MyComponent</code>.</strong> Follow <code>addon_name.ComponentName</code> so it cannot collide with another module.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>The Odoo web interface is a single-page app built on OWL; new development should use OWL.</li>
+                    <li>A component = a JavaScript class + an XML template (<code>addon_name.ComponentName</code>), initialized in <code>setup()</code>.</li>
+                    <li>Files must be in a bundle declared under the <code>assets</code> key; <code>?debug=assets</code> helps verify.</li>
+                    <li>Registries, services, hooks and <code>this.env</code> are the four concepts to master.</li>
+                </ul>
+                <p>The next part returns to the server side: writing controllers and using the JSON-2 API to integrate Odoo with other systems.</p>
+
+                <div class="cta-box">
+                    <h3>Want to build modern Odoo interfaces with OWL?</h3>
+                    <p>The Odoo Advanced Developer course practices OWL, services and asset bundles on a real module, with code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-A">See Odoo Advanced Developer</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is OWL in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">OWL is a declarative component framework, in the spirit of Vue and React, used to build the Odoo web client interface. Components are defined with QWeb templates extended by a few OWL-specific directives.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why use setup() instead of the constructor?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A JavaScript constructor cannot be overridden the way Odoo needs, so the documentation requires all initialization to go in the setup() method and forbids components from using the constructor directly.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How are a component's JavaScript and template files loaded?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">You declare them under the manifest's assets key, usually in the web.assets_backend bundle for the web client. The framework then loads the JavaScript, CSS and templates into OWL.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do registries, services and hooks differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A registry is a key/value map holding extensible objects. A service is long-lived code providing a feature such as notifications or server calls. A hook is a reusable function tied to the component lifecycle.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/owl_components.html" target="_blank" rel="noopener">Odoo 20 – Owl components</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/framework_overview.html" target="_blank" rel="noopener">Odoo 20 – Framework overview</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/assets.html" target="_blank" rel="noopener">Odoo 20 – Assets</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/frontend/javascript_modules.html" target="_blank" rel="noopener">Odoo 20 – Javascript modules</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/discover_js_framework.html" target="_blank" rel="noopener">Odoo 20 – Discover the web framework</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-owl-framework-basics.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-owl-framework-basics.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-qweb-pdf-reports.html"><small>← Previous</small>Odoo 20 PDF Reports with QWeb</a>
+                    <span class="next"><small>Next · Coming soon</small>Web controllers &amp; JSON-2 API</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#what-is-owl">What is OWL and where does it sit in Odoo?</a></li>
+                        <li><a href="#first-component">Your first OWL component</a></li>
+                        <li><a href="#assets">Adding files to an assets bundle</a></li>
+                        <li><a href="#building-blocks">Building blocks of the web client</a></li>
+                        <li><a href="#next-step">Plugging a component into the interface</a></li>
+                        <li><a href="#code-layout">Where does the web client's JavaScript live?</a></li>
+                        <li><a href="#env">The this.env object</a></li>
+                        <li><a href="#asset-operations">Asset operations</a></li>
+                        <li><a href="#js-file-kinds">Three kinds of JavaScript files</a></li>
+                        <li><a href="#ready-made">Ready-made components</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

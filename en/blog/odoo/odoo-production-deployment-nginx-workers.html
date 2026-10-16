@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deploy Odoo 20 to Production: Nginx, HTTPS, Workers</title>
+    <meta name="description" content="Take Odoo 20 to production: odoo.conf, dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode, live chat and a security checklist." />
+    <meta name="keywords" content="odoo production deployment, odoo nginx https, odoo workers, odoo dbfilter, odoo proxy_mode, odoo.conf, odoo security" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Deploy Odoo 20 to Production: Nginx, HTTPS, Workers" />
+    <meta property="og:description" content="Configure Odoo 20 for production: dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode and a security checklist." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/odoo-production-deployment-nginx-workers.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Deploy Odoo 20 to Production: Nginx, HTTPS, Workers",
+                "description": "Configure Odoo 20 for production: dbfilter, PostgreSQL, workers, Nginx HTTPS, proxy_mode and a security checklist.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/odoo-production-deployment-nginx-workers.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html",
+                "proficiencyLevel": "Advanced",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/en/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Deploying Odoo to production"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Should production Odoo run multi-threaded or multi-process?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Run multi-process by setting workers to a non-zero integer. Multi-threaded is the default, simple and fine for development or demos, but it makes poor use of hardware because of Python's GIL."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I estimate the number of workers?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The rule of thumb for the maximum is CPU count times 2 plus 1, and roughly one worker serves 6 concurrent users. Cron workers also use CPU, so count them too."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is proxy_mode for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When Odoo runs behind a reverse proxy such as Nginx, proxy_mode makes it use the visitor's real headers (hostname, scheme, IP) instead of the proxy's. Enable it only when Odoo truly sits behind a proxy."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why set dbfilter and list_db?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "dbfilter tells Odoo which database serves which domain, and it is required when one server holds several databases. Once each domain matches a single database, set list_db to False so databases are not listed and the management screens are blocked."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/odoo/"trien-khai-odoo-production-nginx-workers.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Deploying Odoo to production</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 14 · Odoo 20 Development Series</span>
+            <h1>Deploy Odoo 20 to Production: Nginx, HTTPS, Workers</h1>
+            <p class="post-lead">Going from a development box to a real server takes more than running odoo-bin. This guide gathers the production setup: odoo.conf, dbfilter, PostgreSQL, workers, Nginx with HTTPS and a security checklist before going public.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 17 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>To deploy Odoo 20 to production, switch from multi-threaded to multi-process mode (<code>workers</code>), put Odoo behind a reverse proxy such as Nginx with HTTPS and enable <code>proxy_mode</code>, restrict databases with <code>dbfilter</code>, set a strong <code>admin_passwd</code>, hide the database list and install no demo data.</strong> Use a dedicated, non-superuser PostgreSQL account.</p>
+                </div>
+
+                <h2 id="dev-vs-prod">How production differs from a development machine</h2>
+                <p>A development box only has to run. A server facing the Internet also needs system-level setup: which database gets served, how PostgreSQL is reached, how many processes handle requests, HTTPS for the traffic and some baseline hardening. Odoo's documentation covers these steps on its system-configuration page, to be applied <em>after</em> an installation like the one in part 2. What follows is a suggested order of work.</p>
+
+                <h2 id="install-options">Choosing an installation method</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Prebuilt packages (deb, rpm)</td><td>Installs Odoo as a service and creates the PostgreSQL user. The Odoo 20 deb targets Ubuntu Noble (24.04 LTS) and the rpm targets Fedora 42. Update with <code>apt-get upgrade</code></td></tr>
+                            <tr><td>From source (Git)</td><td>Flexible when you need several versions or custom modules; see part 2</td></tr>
+                            <tr><td>Docker</td><td>The official <code>odoo:20.0</code> image; it runs multi-threaded unless you configure <code>workers</code></td></tr>
+                            <tr><td>Windows</td><td>Fine for trials or a single-user local setup; the documentation discourages it for production</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Even with packages you still install <strong>wkhtmltopdf 0.12.6</strong> by hand (not via pip) so PDFs get headers and footers, as noted in the reports part.</p>
+
+                <h2 id="config-file">The odoo.conf file</h2>
+                <p>Rather than typing many command-line flags, keep settings in a file. Here is a template for a server with its own PostgreSQL connection:</p>
+                <pre><code>[options]
+admin_passwd = &lt;long random string&gt;
+db_host = 127.0.0.1
+db_port = 5432
+db_user = odoo
+db_password = &lt;password&gt;
+dbfilter = ^mycompany$
+list_db = False
+proxy_mode = True
+workers = 5
+max_cron_threads = 1
+limit_memory_soft = 629145600
+limit_memory_hard = 1677721600
+limit_time_cpu = 600
+limit_time_real = 1200</code></pre>
+                <p>The key entries are explained below.</p>
+
+                <h2 id="dbfilter">dbfilter: picking the database from the domain</h2>
+                <p>Odoo is multi-tenant: one server can serve several databases. A logged-in backend user picks the database at login, but anonymous visitors (website, portal) are not tied to one, so Odoo needs a rule. <code>dbfilter</code> is a regular expression that decides based on the requested domain, and it may contain <code>%h</code> (hostname) or <code>%d</code> (first subdomain). On a server holding several databases, especially with the website in use, setting <code>dbfilter</code> is mandatory.</p>
+                <p>Once each domain matches a single database, also set <code>list_db = False</code> (equivalent to the <code>--no-database-list</code> flag) so that no database is listed and the management pages stay closed.</p>
+
+                <h2 id="postgresql">PostgreSQL in production</h2>
+                <ul>
+                    <li>By default PostgreSQL accepts only UNIX-socket and loopback connections. If Odoo and PostgreSQL live on different machines, PostgreSQL must listen on the network (or you use an SSH tunnel), and you set <code>db_host</code>, <code>db_port</code>, <code>db_user</code>, <code>db_password</code> in Odoo.</li>
+                    <li>Give Odoo a PostgreSQL account that is <strong>not a superuser</strong>, and preferably let another account own the databases.</li>
+                    <li>Encrypting the Odoo-to-PostgreSQL link is possible with <code>db_sslmode</code>, which takes one of six levels from <code>disable</code> up to <code>verify-full</code>.</li>
+                    <li>The screens that manage databases are protected by <code>admin_passwd</code>, a setting available only in the configuration file. Make it a long random value.</li>
+                </ul>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 185" role="img" aria-labelledby="dg-en-14">
+                        <title id="dg-en-14">Odoo production deployment architecture with Nginx</title>
+                        <rect class="dg-box" x="10" y="15" width="130" height="90" rx="12" />
+                        <text class="dg-title" x="26" y="43">Browser</text>
+                        <text class="dg-text" x="26" y="89">HTTPS :443</text>
+                        <path class="dg-arrow" d="M142 60 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-accent" x="166" y="15" width="150" height="90" rx="12" />
+                        <text class="dg-title" x="182" y="43">Nginx</text>
+                        <text class="dg-text" x="182" y="89">SSL, proxy, static files</text>
+                        <path class="dg-arrow" d="M318 42 h22 m-8 -6 l8 6 l-8 6" /><path class="dg-arrow" d="M318 80 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="342" y="5" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="33">HTTP workers :8069</text>
+                        <rect class="dg-box" x="342" y="65" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="93">Live chat :8072 (/websocket)</text>
+                        <rect class="dg-box" x="342" y="125" width="160" height="50" rx="12" />
+                        <text class="dg-title" x="358" y="153">Cron workers</text>
+                        <path class="dg-arrow" d="M504 90 h22 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="528" y="35" width="102" height="110" rx="12" />
+                        <text class="dg-title" x="544" y="63">PostgreSQL</text>
+                        <text class="dg-text" x="544" y="129">own user</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the Odoo 20 documentation.</figcaption>
+                </figure>
+
+                <h2 id="workers">Workers: multi-process instead of multi-thread</h2>
+                <p>Odoo ships two built-in server modes. The <strong>multi-threaded</strong> one is simple, meant for development and demos and works on Windows too, but Python's GIL keeps it from using hardware well; it is the default (omit <code>--workers</code> or give it the value 0). The <strong>multi-process</strong> one is for production: it spawns a pool of workers at startup, new requests wait in a queue for a free worker, dedicated cron workers exist, and a resource monitor can kill and restart misbehaving workers. It is switched on by giving <code>workers</code> any value other than zero, and it is unavailable on Windows.</p>
+                <h3 id="sizing">Estimating workers and RAM</h3>
+                <ul>
+                    <li>Rule of thumb for the maximum worker count: <code>(CPU count × 2) + 1</code>; cron workers consume CPU as well.</li>
+                    <li>Roughly one worker serves about 6 concurrent users.</li>
+                    <li>Assume 20% heavy and 80% light requests; a heavy worker takes around 1GB of RAM and a light one about 150MB (when computed fields and SQL are well designed). RAM needed = workers × (0.8 × 150MB + 0.2 × 1GB).</li>
+                </ul>
+                <p>The documentation's example: a 4-CPU server with 60 concurrent users. Theory suggests 10 workers (60/6) with a cap of 9 from the CPU rule; they choose 8 workers plus 1 for cron, about 3GB of RAM for Odoo, and a monitoring system to watch CPU load.</p>
+
+                <h3 id="worker-limits">Worker limits and recycling</h3>
+                <p>The multi-process monitor relies on the following limits (memory is in bytes; the configuration template above uses values different from the defaults to suit a small server):</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Setting</th><th>Default</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>limit_memory_soft</code></td><td>2048 MiB</td><td>Maximum virtual memory per worker; past it the worker is killed and recycled at the end of the current request</td></tr>
+                            <tr><td><code>limit_memory_hard</code></td><td>2560 MiB</td><td>Hard cap; a worker above it is killed at once without waiting for the request to finish</td></tr>
+                            <tr><td><code>limit_time_cpu</code></td><td>60</td><td>CPU seconds allowed per request; beyond it the worker is killed</td></tr>
+                            <tr><td><code>limit_time_real</code></td><td>120</td><td>"Wall-clock" limit per request (SQL waiting included); beyond it the worker is killed</td></tr>
+                            <tr><td><code>limit_request</code></td><td>8196</td><td>Requests one worker serves before being recycled and restarted</td></tr>
+                            <tr><td><code>max_cron_threads</code></td><td>2</td><td>Workers reserved for cron; in multi-process mode they come on top of the HTTP workers</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The live-chat port <code>--gevent-port</code> defaults to 8072 and is used only in multi-process or gevent mode.</p>
+
+                <h2 id="https-nginx">HTTPS with Nginx and proxy_mode</h2>
+                <p>Odoo sends credentials in clear text, so a secure deployment must use HTTPS. The usual way is placing Odoo behind an SSL-terminating reverse proxy such as Nginx, which involves enabling <code>proxy_mode</code> (only when Odoo really sits behind a proxy), configuring SSL termination, configuring request forwarding, and redirecting plain HTTP to HTTPS. A trimmed template:</p>
+                <pre><code>upstream odoo     { server 127.0.0.1:8069; }
+upstream odoochat { server 127.0.0.1:8072; }
+
+map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+
+server {
+    listen 80;
+    server_name odoo.example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name odoo.example.com;
+    ssl_certificate     /etc/ssl/nginx/server.crt;
+    ssl_certificate_key /etc/ssl/nginx/server.key;
+    proxy_read_timeout 720s;
+
+    location /websocket {
+        proxy_pass http://odoochat;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        proxy_pass http://odoo;
+        proxy_redirect off;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+    }
+}</code></pre>
+                <ul>
+                    <li>In multi-process mode a dedicated live-chat worker listens on <code>--gevent-port</code> (8072 in the template). The proxy has to forward every request under the <code>/websocket/</code> path to that worker.</li>
+                    <li>The <code>Strict-Transport-Security</code> response header makes browsers insist on HTTPS; from then on you must keep valid HTTPS running permanently, or users will meet warnings or be locked out.</li>
+                    <li>Static files (paths like <code>/&lt;module&gt;/static/...</code>) can be served directly by Nginx to relieve Odoo; <code>root</code> and <code>try_files</code> depend on your <code>--addons-path</code>.</li>
+                </ul>
+
+                <h3 id="proxy-mode-detail">How proxy_mode behaves</h3>
+                <p><code>proxy_mode</code> makes Odoo honor the <code>X-Forwarded-*</code> headers by way of Werkzeug's proxy handling. Two details are easy to miss: Odoo <strong>ignores every <code>X-Forwarded-*</code> header when the request lacks <code>X-Forwarded-Host</code></strong>, and the real IP is always taken from the last entry of the <code>X-Forwarded-For</code> chain. So your web server must send all the headers shown in the Nginx template above. If you accidentally open Odoo directly (bypassing Nginx) while <code>proxy_mode</code> is on, Odoo logs a warning that includes the configuration you need.</p>
+
+                <h2 id="wsgi-cron">Running Odoo as a WSGI application</h2>
+                <p>Odoo can be mounted as a standard WSGI application. It supplies a sample script, <code>odoo-wsgi.example.py</code>, to customize, with configuration set directly in <code>odoo.tools.config</code> rather than on the command line or in a file. Keep in mind that a WSGI server exposes only the main HTTP endpoint (web client, website, web service); since Odoo no longer controls worker creation, it cannot start cron or live-chat workers by itself:</p>
+                <ul>
+                    <li><strong>Cron:</strong> run one of Odoo's built-in servers next to the WSGI one, configured to process only cron through <code>--no-http</code> (or <code>http_enable = False</code>). On Linux prefer multi-process, for example <code>--workers=-1</code> together with <code>--max-cron-threads=n</code>.</li>
+                    <li><strong>Live chat:</strong> needs a gevent-compatible WSGI server, able to hold many simultaneous long connections without much processing power. Every request whose path starts with <code>/websocket/</code> must be sent to it, while other requests go to the regular WSGI server. The cron server can double as the live-chat server if you drop <code>--no-http</code>.</li>
+                </ul>
+
+                <h2 id="security">Security checklist before going public</h2>
+                <ul>
+                    <li>Choose a strong <code>admin_passwd</code>, and shut the database administration pages right after the system goes live.</li>
+                    <li>Avoid <code>admin</code> as a login name, and keep administrator accounts out of daily work. Never keep default passwords such as admin/admin, even on test or staging databases.</li>
+                    <li><strong>Skip demo data</strong> on public servers: demo databases come with stock logins and passwords that attackers can abuse.</li>
+                    <li>Apply <code>dbfilter</code> and <code>list_db = False</code>, and keep the PostgreSQL account unprivileged.</li>
+                    <li>Keep up with new builds; run multi-process with sensible limits (memory, CPU, time).</li>
+                    <li>Front Odoo with an HTTPS web server holding a valid certificate, limit request size, configure timeouts, then switch on proxy mode.</li>
+                    <li>For SSH use public keys only, consider a VPN, firewall rules for trusted IPs and a brute-force blocker such as fail2ban; add rate limiting at the proxy or firewall.</li>
+                    <li>Run demo, test and staging copies on other hosts than production, secured just as carefully.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">About backups</p>
+                    <p>Odoo's data consists of the PostgreSQL database and the filestore (in the official Docker image that is <code>/var/lib/odoo</code>, the volume from part 2). This part does not go deep into backup and monitoring options because they depend on your infrastructure; plan for both components before go-live and rehearse restores regularly.</p>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when deploying</p>
+                    <ul>
+                        <li><strong>Putting Nginx in front but forgetting <code>proxy_mode</code>.</strong> Odoo then trusts the details of the proxy rather than those of the real visitor (hostname, scheme, IP address). Start Odoo with proxy mode so it reads the <code>X-Forwarded-*</code> headers the proxy sends. Enable it only when Odoo truly sits behind a reverse proxy.</li>
+                        <li><strong>Exposing a server whose database has demo data or an admin/admin password.</strong> The documentation warns that such default credentials can be exploited even on staging. Create a fresh database without demo data and change the administrator's login and password.</li>
+                        <li><strong>Forgetting to route <code>/websocket/</code> to the live-chat worker.</strong> In multi-process mode, requests keep going to the ordinary HTTP workers by default. Configure the proxy to send paths starting with <code>/websocket/</code> to the <code>--gevent-port</code> port and run Odoo in proxy mode.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Production: multi-process (<code>workers</code>), Nginx + HTTPS, <code>proxy_mode</code>, <code>dbfilter</code>, <code>list_db = False</code>.</li>
+                    <li>Dedicated non-superuser PostgreSQL account; no demo data; no default passwords.</li>
+                    <li>Estimate workers with (CPU × 2) + 1 and ~6 users per worker; set memory and time limits.</li>
+                    <li>Route <code>/websocket/</code> to the live-chat worker; rehearse a backup restore before go-live.</li>
+                </ul>
+                <p>You have now walked through the whole life cycle of an Odoo 20 module: concepts, installation, code, interface, integration, testing and real deployment. Pick the course that fits you to keep practicing with a mentor.</p>
+
+                <div class="cta-box">
+                    <h3>Need help deploying Odoo to production?</h3>
+                    <p>The DevOps for Odoo course covers server setup, Nginx, SSL, worker tuning and deployment workflows, with mentor review of your configuration.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-D">See DevOps for Odoo</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should production Odoo run multi-threaded or multi-process?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Run multi-process by setting workers to a non-zero integer. Multi-threaded is the default, simple and fine for development or demos, but it makes poor use of hardware because of Python's GIL.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I estimate the number of workers?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The rule of thumb for the maximum is CPU count times 2 plus 1, and roughly one worker serves 6 concurrent users. Cron workers also use CPU, so count them too.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is proxy_mode for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When Odoo runs behind a reverse proxy such as Nginx, proxy_mode makes it use the visitor's real headers (hostname, scheme, IP) instead of the proxy's. Enable it only when Odoo truly sits behind a proxy.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why set dbfilter and list_db?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">dbfilter tells Odoo which database serves which domain, and it is required when one server holds several databases. Once each domain matches a single database, set list_db to False so databases are not listed and the management screens are blocked.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/deploy.html" target="_blank" rel="noopener">Odoo 20 – Deploying Odoo (system configuration)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/packages.html" target="_blank" rel="noopener">Odoo 20 – Packaged installers</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-production-deployment-nginx-workers.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fodoo%2Fodoo-production-deployment-nginx-workers.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="odoo-unit-tests-transactioncase.html"><small>← Previous</small>Odoo 20 Unit Tests</a>
+                    <a class="next" href="index.html"><small>Back to series →</small>Odoo 20 Development A–Z</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#dev-vs-prod">How production differs from a development machine</a></li>
+                        <li><a href="#install-options">Choosing an installation method</a></li>
+                        <li><a href="#config-file">The odoo.conf file</a></li>
+                        <li><a href="#dbfilter">dbfilter: picking the database from the domain</a></li>
+                        <li><a href="#postgresql">PostgreSQL in production</a></li>
+                        <li><a href="#workers">Workers: multi-process instead of multi-thread</a></li>
+                        <li><a href="#https-nginx">HTTPS with Nginx and proxy_mode</a></li>
+                        <li><a href="#wsgi-cron">Running Odoo as a WSGI application</a></li>
+                        <li><a href="#security">Security checklist before going public</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

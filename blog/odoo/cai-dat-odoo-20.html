@@ -10,17 +10,17 @@
     <meta name="author" content="Vinc Academy" />
     <meta name="copyright" content="Vinc Academy" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
-    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
-    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/odoo/install-odoo-20.html" />
-    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/install-odoo-20.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html" />
 
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Vinc Academy" />
     <meta property="og:locale" content="vi_VN" />
     <meta property="og:title" content="Cài đặt Odoo 20: hướng dẫn từ source và Docker cho Developer" />
     <meta property="og:description" content="Cài Odoo 20 từ source hoặc Docker, chạy odoo-bin, bật developer mode và tạo module đầu tiên." />
-    <meta property="og:url" content="https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html" />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html" />
     <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/cai-dat-odoo-20.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -28,10 +28,10 @@
     <meta property="article:modified_time" content="2026-10-16" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="../image/vinc-academy.png" />
+    <link rel="icon" href="../../image/vinc-academy.png" />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="../blog.css" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <script type="application/ld+json">
@@ -46,7 +46,7 @@
                 "datePublished": "2026-10-16",
                 "dateModified": "2026-10-16",
                 "image": "https://vinc-academy.vercel.app/image/og/cai-dat-odoo-20.png",
-                "mainEntityOfPage": "https://vinc-academy.vercel.app/odoo/cai-dat-odoo-20.html",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/cai-dat-odoo-20.html",
                 "proficiencyLevel": "Beginner",
                 "dependencies": "Python 3.12+, PostgreSQL 16+, Git",
                 "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
@@ -62,8 +62,9 @@
                 "@type": "BreadcrumbList",
                 "itemListElement": [
                     { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
-                    { "@type": "ListItem", "position": 2, "name": "Lập trình Odoo", "item": "https://vinc-academy.vercel.app/odoo/" },
-                    { "@type": "ListItem", "position": 3, "name": "Cài đặt Odoo 20" }
+                    { "@type": "ListItem", "position": 2, "name": "Kiến thức", "item": "https://vinc-academy.vercel.app/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "Odoo", "item": "https://vinc-academy.vercel.app/blog/odoo/" },
+                    { "@type": "ListItem", "position": 4, "name": "Cài đặt Odoo 20" }
                 ]
             },
             {
@@ -100,22 +101,22 @@
 
     <!-- NAV -->
     <nav>
-        <a href="../index.html" class="nav-logo">
+        <a href="../../index.html" class="nav-logo">
             <div class="nav-logo-icon">
-                <img src="../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
                     style="border-radius: 8px; object-fit: cover;" />
             </div>
             <span class="nav-logo-text">Vinc <span>Academy</span></span>
         </a>
         <div class="nav-links">
-            <a href="../index.html#about" data-i18n="nav.about">Giới thiệu</a>
-            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
-            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
-            <a href="index.html" class="active" data-i18n="nav.blog">Lập trình Odoo</a>
-            <a href="../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
         </div>
-        <button class="btn-nav" onclick="location.href='../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
-        <button class="lang-toggle" onclick="toggleLang()" data-alt="../en/odoo/install-odoo-20.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/install-odoo-20.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5" />
                 <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
@@ -134,8 +135,9 @@
 
     <main class="blog-wrap">
         <ol class="breadcrumb">
-            <li><a href="../index.html">Trang chủ</a></li>
-            <li><a href="index.html">Lập trình Odoo</a></li>
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
             <li aria-current="page">Cài đặt Odoo 20</li>
         </ol>
 
@@ -146,6 +148,7 @@
             <div class="post-meta">
                 <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
                 <span><i class="fa-regular fa-clock"></i> 12 phút đọc</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="cai-dat-odoo-20" data-view-hit>–</b> lượt xem</span>
                 <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
             </div>
         </header>
@@ -321,6 +324,14 @@ python3 odoo-bin --addons-path=addons,../custom-addons \
                     <li><strong>Odoo shell:</strong> <code>python3 odoo-bin shell -c ~/odoo-dev/odoo20.conf</code> mở console Python có sẵn biến <code>env</code> để thử ORM. Thay đổi chỉ được lưu khi bạn gọi <code>env.cr.commit()</code>.</li>
                 </ul>
 
+                <div class="callout">
+                    <p class="callout-title">Hai lỗi người mới hay vấp</p>
+                    <ul>
+                        <li><strong>Chạy <code>-i</code> hoặc <code>-u</code> mà quên <code>-d</code>.</strong> Theo tài liệu CLI, hai tham số này cần đi kèm tên database. Hãy tập thói quen luôn viết đủ: <code>-d odoo20_dev -u tên_module</code>.</li>
+                        <li><strong>Sửa dữ liệu trong <code>odoo shell</code> rồi thoát, mở lại thấy chưa đổi.</strong> Shell chỉ lưu thay đổi khi bạn gọi <code>env.cr.commit()</code>. Đây là chủ ý để bạn thử thoải mái mà không làm hỏng database.</li>
+                    </ul>
+                </div>
+
                 <h2 id="loi-thuong-gap">Lỗi thường gặp và cách xử lý</h2>
                 <div class="table-wrap">
                     <table>
@@ -343,8 +354,8 @@ python3 odoo-bin --addons-path=addons,../custom-addons \
                     <h3>Cài mãi chưa chạy? Để mentor hỗ trợ bạn</h3>
                     <p>Ở buổi đầu khóa Odoo Developer Foundation, học viên được hướng dẫn dựng môi trường 1-1 và review cấu hình.</p>
                     <div class="cta-actions">
-                        <a href="../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
-                        <a href="../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                     </div>
                 </div>
 
@@ -379,13 +390,13 @@ python3 odoo-bin --addons-path=addons,../custom-addons \
 
                 <div class="share-row">
                     <span>Chia sẻ:</span>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fcai-dat-odoo-20.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
                 </div>
 
                 <div class="series-nav" role="navigation" aria-label="Điều hướng series">
                     <a href="odoo-la-gi.html"><small>← Bài trước</small>Odoo là gì? Kiến thức nền tảng</a>
-                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Tạo module đầu tiên &amp; manifest</span>
+                    <a class="next" href="tao-module-odoo-dau-tien.html"><small>Bài tiếp theo →</small>Tạo module đầu tiên &amp; manifest</a>
                 </div>
 
                 <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
@@ -415,10 +426,10 @@ python3 odoo-bin --addons-path=addons,../custom-addons \
     <footer>
         <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
         <div class="footer-links">
-            <a href="../index.html#programs" data-i18n="nav.programs">Chương trình</a>
-            <a href="../index.html#register" data-i18n="nav.pricing">Học phí</a>
-            <a href="index.html" data-i18n="nav.blog">Lập trình Odoo</a>
-            <a href="../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
             <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
             <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
         </div>
@@ -431,7 +442,7 @@ python3 odoo-bin --addons-path=addons,../custom-addons \
         <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
     </div>
 
-    <script src="../script.js"></script>
+    <script src="../../script.js"></script>
 </body>
 
 </html>

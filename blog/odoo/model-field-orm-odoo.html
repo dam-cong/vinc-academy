@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model, field và ORM trong Odoo 20: tạo model đầu tiên</title>
+    <meta name="description" content="Hướng dẫn Odoo 20 ORM: khai báo model bằng _name, các kiểu field, thuộc tính required/default, trường tự động và thao tác create, search, write, unlink." />
+    <meta name="keywords" content="odoo orm, odoo model, odoo fields, odoo 20 tạo model, recordset odoo, odoo create search write unlink" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/models-fields-orm.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Model, field và ORM trong Odoo 20: tạo model đầu tiên" />
+    <meta property="og:description" content="Tạo model đầu tiên, hiểu các kiểu field và dùng ORM Odoo 20 để thêm, tìm, sửa, xóa dữ liệu." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/model-field-orm-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Model, field và ORM trong Odoo 20: tạo model đầu tiên",
+                "description": "Tạo model đầu tiên, hiểu các kiểu field và dùng ORM Odoo 20 để thêm, tìm, sửa, xóa dữ liệu.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/model-field-orm-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/odoo/model-field-orm-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Odoo 20, Python 3.12+, PostgreSQL 16+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Odoo",
+                        "item": "https://vinc-academy.vercel.app/blog/odoo/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Model, field và ORM"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Tên bảng trong PostgreSQL được đặt thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo lấy giá trị _name của model và đổi dấu chấm thành dấu gạch dưới. Ví dụ model vinc.course tạo bảng vinc_course."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao thêm field mới mà database chưa có cột?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Bạn cần khởi động lại server và chạy với -d và -u kèm tên module để ORM áp dụng thay đổi cấu trúc. Chỉ lưu file Python hoặc tải lại trình duyệt là chưa đủ."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Trường id, create_date, write_date từ đâu ra?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Đây là các trường tự động Odoo thêm vào mọi model: id, create_date, create_uid, write_date, write_uid. Bạn chỉ đọc được, không ghi được."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Dùng search hay browse khi truy vấn bản ghi?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "search lọc bản ghi theo một domain, còn browse lấy bản ghi theo danh sách id bạn đã biết. Cả hai đều trả về recordset."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/odoo/models-fields-orm.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Odoo</a></li>
+            <li aria-current="page">Model, field và ORM</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 4 · Series Lập trình Odoo 20</span>
+            <h1>Model, field và ORM trong Odoo 20: tạo model đầu tiên</h1>
+            <p class="post-lead">Model là trái tim của mọi module Odoo. Bài này hướng dẫn khai báo model bằng Python, chọn kiểu field phù hợp, và dùng recordset để thêm, tìm, sửa, xóa dữ liệu mà không phải viết SQL.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Trong Odoo 20, mỗi bảng dữ liệu được khai báo bằng một class Python kế thừa <code>models.Model</code>, trong đó <code>_name</code> là thuộc tính bắt buộc.</strong> Các cột là những <code>fields.*</code> (Char, Integer, Selection…). Sau khi sửa file Python, khởi động lại server kèm <code>-d</code> và <code>-u</code> để ORM tạo bảng và cột trong PostgreSQL. Đọc ghi dữ liệu thông qua recordset với <code>create</code>, <code>search</code>, <code>write</code>, <code>unlink</code>.</p>
+                </div>
+
+                <h2 id="model-orm">Model và ORM là gì?</h2>
+                <p>ORM (Object-Relational Mapping) là lớp trung gian giúp bạn làm việc với dữ liệu bằng đối tượng Python thay vì tự viết phần lớn câu lệnh SQL. Mỗi <strong>model</strong> là một class kế thừa <code>models.Model</code>; Odoo đọc khai báo đó và tự tạo bảng tương ứng trong PostgreSQL, đồng thời cung cấp sẵn các dịch vụ về phân quyền và mở rộng.</p>
+                <p>Định nghĩa nhỏ nhất của một model chỉ gồm <code>_name</code>, tên model theo kiểu có dấu chấm. Tài liệu Odoo cho biết chỉ với bấy nhiêu, ORM đã đủ thông tin để tạo bảng; tên bảng lấy từ <code>_name</code> với dấu chấm đổi thành dấu gạch dưới, ví dụ <code>vinc.course</code> sinh ra bảng <code>vinc_course</code>.</p>
+                <div class="callout tip">
+                    <p class="callout-title">Quy ước đặt file</p>
+                    <p>Đặt mọi model trong thư mục <code>models/</code>, mỗi model một file Python. File đó được import trong <code>models/__init__.py</code>, còn thư mục <code>models</code> được import trong <code>__init__.py</code> ở gốc module (khung scaffold ở bài 3 đã làm sẵn bước này).</p>
+                </div>
+
+                <h2 id="model-dau-tien">Tạo model đầu tiên: vinc.course</h2>
+                <p>Chúng ta tiếp tục module <code>vinc_course</code> của bài trước và thêm model khóa học. Tạo file <code>models/course.py</code>:</p>
+                <p class="code-title">custom-addons/vinc_course/models/course.py</p>
+<pre><code>from odoo import fields, models
+
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = "Khóa học"
+
+    name = fields.Char(string="Tên khóa học", required=True)
+    description = fields.Text()
+    start_date = fields.Date()
+    duration_hours = fields.Integer(help="Tổng số giờ học")
+    price = fields.Float()
+    is_published = fields.Boolean(default=False)
+    level = fields.Selection(
+        [('beginner', "Cơ bản"), ('intermediate', "Trung cấp"), ('advanced', "Nâng cao")],
+        default='beginner',
+    )</code></pre>
+                <p class="code-title">custom-addons/vinc_course/models/__init__.py</p>
+<pre><code>from . import course</code></pre>
+                <p>File <code>__init__.py</code> do scaffold sinh ra đang import file mẫu <code>models.py</code>; hãy thay dòng đó bằng dòng import <code>course</code> như trên.</p>
+                <p>Mọi thay đổi trong file Python đều cần khởi động lại server. Vì ta vừa thêm model mới nên cần nâng cấp module để ORM áp dụng thay đổi cấu trúc database. Hãy nhớ <code>-u</code> luôn đi kèm <code>-d</code>:</p>
+<pre><code>python3 odoo-bin --addons-path=addons,../custom-addons \
+    -d odoo20_dev -u vinc_course</code></pre>
+                <p>Khi khởi động, log có thể cảnh báo model chưa có quyền truy cập (<em>no access rules</em>). Đó là chuyện bình thường ở bước này và sẽ được giải quyết ở bài 5. Hãy kiểm tra bảng đã được tạo bằng <code>psql</code>:</p>
+<pre><code>psql -d odoo20_dev -c "\d vinc_course"</code></pre>
+                <p>Trong kết quả, ngoài các cột bạn khai báo còn có thêm vài cột bạn chưa viết. Đó là các trường tự động ở mục sau.</p>
+
+                <h3 id="thuoc-tinh-model">Thuộc tính cấu hình của model</h3>
+                <p>Ngoài <code>_name</code> và <code>_description</code>, model còn nhiều thuộc tính tùy chọn bắt đầu bằng dấu gạch dưới:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thuộc tính</th><th>Mặc định</th><th>Ý nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_name</code></td><td>Không có</td><td>Tên model theo kiểu có dấu chấm; bắt buộc với model mới</td></tr>
+                            <tr><td><code>_description</code></td><td>Không có</td><td>Tên thông thường của model; thiếu sẽ có cảnh báo trong log</td></tr>
+                            <tr><td><code>_order</code></td><td><code>'id'</code></td><td>Thứ tự mặc định của kết quả tìm kiếm</td></tr>
+                            <tr><td><code>_rec_name</code></td><td><code>name</code></td><td>Field dùng làm nhãn của bản ghi</td></tr>
+                            <tr><td><code>_table</code></td><td>Suy ra từ <code>_name</code></td><td>Tên bảng SQL khi model có bảng</td></tr>
+                            <tr><td><code>_auto</code></td><td><code>True</code> với <code>Model</code></td><td>Có tạo bảng trong database hay không</td></tr>
+                            <tr><td><code>_log_access</code></td><td>Theo <code>_auto</code></td><td>Có tự sinh và cập nhật các field nhật ký truy cập (<code>create_date</code>, <code>write_uid</code>...)</td></tr>
+                            <tr><td><code>_inherit</code>, <code>_inherits</code></td><td>Rỗng</td><td>Kế thừa model; xem bài 9</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Có ba lớp cha để tạo model: <code>Model</code> (lưu trong database, dùng hầu hết thời gian), <code>TransientModel</code> (dữ liệu tạm thời, dùng cho wizard) và <code>AbstractModel</code> (không có bảng; làm lớp cơ sở để các model khác kế thừa).</p>
+
+                <h2 id="kieu-field">Các kiểu field cơ bản</h2>
+                <p>Field được khai báo như thuộc tính của class và quyết định model lưu được gì, lưu ở đâu. Có hai nhóm: field <em>đơn giản</em> (giá trị đơn lẻ lưu trực tiếp trong bảng) và field <em>quan hệ</em> (nối các bản ghi với nhau, học ở bài 7).</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Field</th><th>Kiểu Python</th><th>Cột PostgreSQL</th><th>Dùng cho</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>Char</code></td><td>str</td><td>character varying</td><td>Chuỗi một dòng: tên, mã, mã bưu chính</td></tr>
+                            <tr><td><code>Text</code></td><td>str</td><td>text</td><td>Văn bản dài, nhiều dòng</td></tr>
+                            <tr><td><code>Integer</code></td><td>int</td><td>integer</td><td>Số nguyên: số giờ, số phòng</td></tr>
+                            <tr><td><code>Float</code></td><td>float</td><td>double precision</td><td>Số thực: giá, diện tích</td></tr>
+                            <tr><td><code>Boolean</code></td><td>bool</td><td>boolean</td><td>Đúng/sai: đã xuất bản, có gara</td></tr>
+                            <tr><td><code>Date</code></td><td>date</td><td>date</td><td>Ngày (không có giờ)</td></tr>
+                            <tr><td><code>Selection</code></td><td>str</td><td>character varying</td><td>Chọn một trong danh sách cố định các cặp (giá trị, nhãn)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Với <code>Selection</code>, thuộc tính <code>selection</code> là bắt buộc (trừ field kế thừa hoặc <code>related</code>). Giá trị lưu xuống database là phần tử đầu của mỗi cặp, còn phần tử thứ hai là nhãn hiển thị cho người dùng.</p>
+
+                <h2 id="thuoc-tinh-field">Thuộc tính thường dùng của field</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thuộc tính</th><th>Mặc định</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>string</code></td><td>Tên field viết hoa chữ đầu</td><td>Nhãn hiển thị trên giao diện</td></tr>
+                            <tr><td><code>required</code></td><td><code>False</code></td><td>Bắt buộc có giá trị; phải có <code>default</code> hoặc luôn được truyền khi tạo bản ghi. Cột trong database trở thành <em>not null</em></td></tr>
+                            <tr><td><code>help</code></td><td>Rỗng</td><td>Tooltip giải thích cho người dùng</td></tr>
+                            <tr><td><code>default</code></td><td>Không có</td><td>Giá trị mặc định: một giá trị cố định hoặc một hàm</td></tr>
+                            <tr><td><code>readonly</code></td><td><code>False</code></td><td>Chỉ ảnh hưởng giao diện; gán giá trị bằng code vẫn hoạt động</td></tr>
+                            <tr><td><code>index</code></td><td><code>False</code></td><td>Yêu cầu tạo chỉ mục trong database cho cột này</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="thuoc-tinh-nang-cao">Thêm vài thuộc tính field hữu ích</h3>
+                <ul>
+                    <li><code>copy</code>: có sao chép giá trị khi nhân đôi bản ghi hay không (mặc định <code>True</code> với field thường). Field tên <code>name</code> kiểu Char mặc định được đánh dấu để khi sao chép có nhãn "(copy)".</li>
+                    <li><code>groups</code>: chuỗi các nhóm (cách nhau bởi dấu phẩy) được phép truy cập field; chi tiết ở bài 5.</li>
+                    <li><code>index</code>: ngoài <code>True</code>/<code>False</code>, có thể là <code>"btree"</code> (chỉ mục chuẩn, hợp cho Many2one), <code>"btree_not_null"</code> (bỏ qua giá trị NULL) hoặc <code>"trigram"</code> (chỉ mục GIN, hợp cho tìm kiếm văn bản).</li>
+                    <li><code>translate</code> (Char, Text): cho phép dịch giá trị của field; <code>size</code> giới hạn độ dài của Char.</li>
+                    <li><code>digits</code> của Float là cặp (tổng số chữ số, số chữ số thập phân). Với số lượng gắn đơn vị đo, hãy dùng <code>Float.round()</code>, <code>is_zero()</code>, <code>compare()</code> để so sánh đúng độ chính xác.</li>
+                </ul>
+
+                <h2 id="truong-tu-dong">Các trường tự động</h2>
+                <p>Odoo tự thêm vài field vào mọi model, do hệ thống quản lý, bạn chỉ đọc được chứ không ghi được:</p>
+                <ul>
+                    <li><code>id</code>: định danh duy nhất của bản ghi.</li>
+                    <li><code>create_date</code> và <code>create_uid</code>: thời điểm tạo và người tạo.</li>
+                    <li><code>write_date</code> và <code>write_uid</code>: thời điểm và người sửa gần nhất.</li>
+                </ul>
+                <p>Nhờ đó bạn không cần tự thiết kế cột "ngày tạo", "người tạo" cho mỗi bảng.</p>
+
+                <h2 id="recordset-crud">Recordset và thao tác CRUD với ORM</h2>
+                <p>Mọi thao tác với model đi qua <strong>recordset</strong>: một tập có thứ tự các bản ghi của cùng một model, có thể chứa từ 0 đến toàn bộ bản ghi. Duyệt recordset bằng vòng <code>for</code> sẽ trả từng bản ghi đơn lẻ. Cách dễ nhất để thử là <code>odoo shell</code>, trong đó <code>env</code> có sẵn:</p>
+<pre><code>python3 odoo-bin shell -c ~/odoo-dev/odoo20.conf -d odoo20_dev</code></pre>
+<pre><code>Course = env['vinc.course']
+
+# Create: tạo bản ghi từ dict
+course = Course.create({'name': "Odoo Developer Foundation", 'duration_hours': 24})
+
+# Read: đọc field như thuộc tính
+course.name            # 'Odoo Developer Foundation'
+course.level           # 'beginner' (giá trị default)
+
+# Search: lọc theo domain, danh sách các điều kiện
+Course.search([('level', '=', 'beginner')])
+Course.search_count([])          # đếm bản ghi
+Course.browse(course.id)         # lấy theo id
+
+# Update: gán trực tiếp hoặc write
+course.duration_hours = 32
+course.write({'is_published': True})
+
+# Delete
+course.unlink()
+
+env.cr.commit()        # chỉ khi muốn lưu thật xuống database</code></pre>
+                <p>Một vài điều đáng nhớ về cách dùng recordset:</p>
+                <ul>
+                    <li>Domain truyền vào <code>search</code> là danh sách các bộ ba <code>(tên field, toán tử, giá trị)</code>; danh sách rỗng nghĩa là lấy tất cả. Có thể giới hạn bằng <code>limit</code>, <code>offset</code> và sắp xếp bằng <code>order</code>.</li>
+                    <li>Truy cập field quan hệ luôn trả về recordset, rỗng nếu chưa có giá trị.</li>
+                    <li>Muốn cộng dồn một field trên nhiều bản ghi, dùng <code>mapped()</code>, ví dụ <code>sum(courses.mapped('duration_hours'))</code>.</li>
+                    <li>Khi hàm của bạn chỉ chấp nhận một bản ghi, gọi <code>self.ensure_one()</code> ở đầu hàm để báo lỗi sớm nếu nhận nhiều bản ghi.</li>
+                    <li>Odoo lưu cache và đọc trước (prefetch) dữ liệu để tránh truy vấn lặp, nên duyệt qua recordset thường nhanh hơn truy vấn từng bản ghi.</li>
+                </ul>
+
+                <h3 id="tham-so-search">Tham số của search</h3>
+<pre><code>Course.search([('is_published', '=', True)], order='start_date desc', limit=10, offset=20)</code></pre>
+                <p><code>order</code> là chuỗi sắp xếp, <code>limit</code> là số bản ghi tối đa trả về (mặc định là tất cả) và <code>offset</code> là số bản ghi bỏ qua (mặc định không bỏ qua), rất hữu ích để phân trang. Nếu người dùng không có quyền đọc, <code>search</code> ném <code>AccessError</code>. Đây là method cấp cao, không nên ghi đè; muốn đếm hãy dùng <code>search_count()</code>.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học ORM</p>
+                    <ul>
+                        <li><strong>Thêm field vào code nhưng trên giao diện hoặc database vẫn chưa thấy.</strong> Với file Python, chỉ tải lại trình duyệt là không đủ: bạn cần khởi động lại server, và để ORM thêm cột mới vào bảng thì phải chạy với <code>-d tên_db -u tên_module</code>.</li>
+                        <li><strong>Đọc <code>records.name</code> trên recordset nhiều bản ghi.</strong> Với field không phải quan hệ, tài liệu cho biết việc này gây lỗi vì ORM không biết lấy giá trị của bản ghi nào. Hãy duyệt <code>for record in records</code>, hoặc dùng <code>mapped('name')</code> nếu bạn cần danh sách giá trị.</li>
+                        <li><strong>Đặt tên field trùng tên một method trong cùng class.</strong> Tài liệu cảnh báo cái khai báo sau sẽ ghi đè cái trước mà không có thông báo nào. Hãy đặt tên method bắt đầu bằng <code>_compute_</code>, <code>action_</code>... để tránh trùng.</li>
+                    </ul>
+                </div>
+
+                <div class="callout tip">
+                    <p class="callout-title">Đừng dùng biến toàn cục có thể thay đổi</p>
+                    <p>Một tiến trình Odoo có thể chạy nhiều database cùng lúc, mỗi database cài các module khác nhau. Vì vậy không nên lưu trạng thái trong biến global của Python, nó sẽ bị dùng chung giữa các database.</p>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Model là class kế thừa <code>models.Model</code> với <code>_name</code> bắt buộc; ORM sinh bảng tương ứng.</li>
+                    <li>Field khai báo cột; thuộc tính như <code>required</code>, <code>default</code>, <code>copy</code>, <code>index</code> tinh chỉnh hành vi.</li>
+                    <li>Mọi thao tác dữ liệu đi qua recordset: <code>create</code>, <code>search</code>, <code>browse</code>, <code>write</code>, <code>unlink</code>.</li>
+                    <li>Sửa Python phải khởi động lại; thêm cột phải chạy <code>-u</code> với <code>-d</code>.</li>
+                </ul>
+                <p>Bài tiếp theo cấp quyền cho model vừa tạo: access rights và record rules.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn thành thạo ORM qua dự án thực tế?</h3>
+                    <p>Khóa Odoo Developer Foundation có bài tập xây module hoàn chỉnh, được mentor review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tên bảng trong PostgreSQL được đặt thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo lấy giá trị _name của model và đổi dấu chấm thành dấu gạch dưới. Ví dụ model vinc.course tạo bảng vinc_course.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao thêm field mới mà database chưa có cột?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Bạn cần khởi động lại server và chạy với -d và -u kèm tên module để ORM áp dụng thay đổi cấu trúc. Chỉ lưu file Python hoặc tải lại trình duyệt là chưa đủ.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Trường id, create_date, write_date từ đâu ra?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Đây là các trường tự động Odoo thêm vào mọi model: id, create_date, create_uid, write_date, write_uid. Bạn chỉ đọc được, không ghi được.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Dùng search hay browse khi truy vấn bản ghi?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">search lọc bản ghi theo một domain, còn browse lấy bản ghi theo danh sách id bạn đã biết. Cả hai đều trả về recordset.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fmodel-field-orm-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fodoo%2Fmodel-field-orm-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="tao-module-odoo-dau-tien.html"><small>← Bài trước</small>Tạo module đầu tiên &amp; manifest</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Security: access rights &amp; record rules</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#model-orm">Model và ORM</a></li>
+                        <li><a href="#model-dau-tien">Model đầu tiên</a></li>
+                        <li><a href="#kieu-field">Kiểu field cơ bản</a></li>
+                        <li><a href="#thuoc-tinh-field">Thuộc tính field</a></li>
+                        <li><a href="#truong-tu-dong">Trường tự động</a></li>
+                        <li><a href="#recordset-crud">Recordset và CRUD</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>
