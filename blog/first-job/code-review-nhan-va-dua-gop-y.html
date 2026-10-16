@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code review cho người mới: chuẩn bị, nhận và đưa góp ý</title>
+    <meta name="description" content="Chuẩn bị merge request nhỏ và dễ review, viết mô tả rõ ràng, xử lý góp ý không tự ái và tự tin review code của người khác, theo thực hành của Google." />
+    <meta name="keywords" content="code review là gì, merge request, pull request, cách nhận góp ý code review, viết comment review, nit code review, fresher code review" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/first-job/code-review-nhan-va-dua-gop-y.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/code-review-nhan-va-dua-gop-y.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/code-review-receiving-giving-feedback.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/code-review-nhan-va-dua-gop-y.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Code review cho người mới: chuẩn bị, nhận và đưa góp ý" />
+    <meta property="og:description" content="Merge request nhỏ, mô tả rõ ràng, xử lý góp ý không tự ái và viết comment review hiệu quả." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/first-job/code-review-nhan-va-dua-gop-y.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/code-review-nhan-va-dua-gop-y.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "headline": "Code review cho người mới: chuẩn bị, nhận và đưa góp ý",
+                "description": "Merge request nhỏ, mô tả rõ ràng, xử lý góp ý không tự ái và viết comment review hiệu quả.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/code-review-nhan-va-dua-gop-y.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/first-job/code-review-nhan-va-dua-gop-y.html",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Kiến thức", "item": "https://vinc-academy.vercel.app/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "Kỹ năng đi làm đầu tiên", "item": "https://vinc-academy.vercel.app/blog/first-job/" },
+                    { "@type": "ListItem", "position": 4, "name": "Code review" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Merge request bao nhiêu dòng là vừa?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không có con số cứng. Hướng dẫn code review của Google gợi ý khoảng 100 dòng thường là hợp lý và khoảng 1.000 dòng thường là quá lớn, nhưng tiêu chí chính là mỗi thay đổi chỉ làm một việc trọn vẹn, kèm test liên quan. Khi phân vân, hãy chia nhỏ hơn." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Bị góp ý nhiều có phải mình code kém không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không. Với người mới, nhiều góp ý là bình thường và là cách nhanh nhất để học quy ước của đội. Code review nhằm giữ chất lượng của codebase, không phải để đánh giá con người; điều quan trọng là bạn sửa có hệ thống và không lặp lại cùng một lỗi." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Không đồng ý với góp ý thì phải làm sao?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Trước hết hãy chắc rằng bạn hiểu đúng ý người review, nếu chưa thì hỏi lại. Sau đó trình bày lý do, ưu nhược điểm của cách bạn chọn và hỏi đề xuất của họ. Tìm đồng thuận dựa trên dữ kiện kỹ thuật thay vì tranh cãi; nếu vẫn chưa thống nhất, nhờ trưởng nhóm cho ý kiến." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Người mới có nên review code của người khác không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nên, nếu đội cho phép. Đọc code của người khác là cách học codebase rất nhanh. Bạn có thể bắt đầu bằng câu hỏi để hiểu, góp ý về tính dễ đọc và test, và ghi rõ mức độ góp ý; quyết định phê duyệt cuối cùng thường vẫn thuộc người có kinh nghiệm hơn." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nit trong code review nghĩa là gì?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Nit là góp ý nhỏ, thường về trình bày hoặc cách đặt tên, không bắt buộc phải sửa để được duyệt. Gắn nhãn như Nit, Optional hay FYI giúp người viết code biết góp ý nào cần sửa ngay và góp ý nào chỉ để tham khảo." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/first-job/code-review-receiving-giving-feedback.html"getting-started-python-venv-pip.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Kỹ năng đi làm đầu tiên</a></li>
+            <li aria-current="page">Code review</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 2 · Kỹ năng đi làm đầu tiên</span>
+            <h1>Code review cho người mới: chuẩn bị, nhận và đưa góp ý</h1>
+            <p class="post-lead">Merge request đầu tiên của bạn vừa nhận về hai mươi bình luận. Đó không phải tin xấu: code review là nơi người mới học nhanh nhất. Bài này hướng dẫn chuẩn bị một thay đổi dễ review, đọc và xử lý góp ý bình tĩnh, và tự tin góp ý cho code của người khác.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="code-review-nhan-va-dua-gop-y" data-view-hit>–</b> lượt xem</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/code-review-nhan-va-dua-gop-y.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Code review là để code tốt hơn, không phải để chấm điểm người viết.</strong> Gửi thay đổi nhỏ, làm đúng một việc, có test và mô tả rõ "làm gì, vì sao". Khi nhận góp ý: đừng coi là chỉ trích cá nhân, sửa code cho rõ thay vì chỉ giải thích trong bình luận, và khi không đồng ý thì nêu lý do bằng dữ kiện. Khi review người khác: góp ý về code, giải thích lý do và gắn nhãn mức độ.</p>
+                </div>
+
+                <h2 id="muc-dich">Code review để làm gì?</h2>
+                <p>Trong tài liệu thực hành kỹ thuật công khai của Google, mục tiêu của code review là <strong>cải thiện sức khỏe tổng thể của codebase theo thời gian</strong>. Từ đó có một nguyên tắc quan trọng: người review nên chấp thuận khi thay đổi làm code tốt hơn, dù chưa hoàn hảo, vì không có code hoàn hảo, chỉ có code tốt hơn.</p>
+                <p>Tài liệu này cũng nhấn mạnh code review là một kênh <strong>truyền đạt kiến thức</strong> về ngôn ngữ, framework và thiết kế. Với người mới, đây là lợi ích lớn nhất: mỗi lượt review là một buổi học một-một miễn phí về quy ước của đội và những lỗi bạn chưa từng biết mình mắc.</p>
+                <p>Trên GitLab, đơn vị được review gọi là <strong>merge request</strong>; trên GitHub là <strong>pull request</strong>; tài liệu của Google dùng từ CL (changelist). Trong bài, mình gọi chung là merge request (MR).</p>
+
+                <h2 id="chuan-bi-mr">Chuẩn bị một merge request dễ review</h2>
+
+                <h3 id="mr-nho">1. Nhỏ và làm đúng một việc</h3>
+                <p>Google khuyên gửi thay đổi nhỏ vì chúng được review <strong>nhanh hơn, kỹ hơn và ít lọt lỗi hơn</strong>; nếu hướng đi bị từ chối thì công sức bỏ đi cũng ít. Tiêu chí chính là một thay đổi <strong>tự trọn vẹn</strong>: giải quyết một việc, kèm test liên quan, người review hiểu được mà không cần ngữ cảnh bên ngoài. Tài liệu gợi ý khoảng 100 dòng thường là hợp lý, khoảng 1.000 dòng thường là quá lớn, nhưng đó chỉ là tham khảo.</p>
+                <ul>
+                    <li><strong>Tách refactor ra MR riêng:</strong> đổi tên, sắp xếp lại code nên tách khỏi thay đổi tính năng hay sửa lỗi.</li>
+                    <li><strong>Test đi cùng code:</strong> test cho phần mới viết nằm trong cùng MR.</li>
+                    <li><strong>Mỗi MR không làm hỏng hệ thống:</strong> sau khi merge, dự án vẫn chạy và test vẫn qua.</li>
+                </ul>
+
+                <h3 id="mo-ta-mr">2. Mô tả rõ "làm gì" và "vì sao"</h3>
+                <p>Theo Google, dòng đầu của mô tả là một câu tóm tắt ngắn, cụ thể, đọc riêng vẫn hiểu; phần thân giải thích vấn đề, vì sao chọn cách làm này và hạn chế nếu có. Những mô tả như "Fix bug" hay "Update" không cho người đọc biết gì.</p>
+                <p class="code-title">Mô tả chưa tốt</p>
+<pre><code>Fix VC-128</code></pre>
+                <p class="code-title">Mô tả tốt hơn</p>
+<pre><code>Thêm tab "Cần chú ý" liệt kê học viên vắng quá 3 buổi (VC-128)
+
+Giảng viên cần phát hiện sớm học viên có nguy cơ bỏ học.
+- Thêm trường tính toán số buổi vắng (không tính buổi vắng có phép,
+  theo trao đổi với chị Lan trong ticket).
+- Thêm tab trên màn hình khóa học, chỉ hiện với giảng viên của khóa
+  và quản lý đào tạo.
+- Loại học viên có trạng thái "Đã rút".
+
+Kiểm thử: thêm 3 test cho các trường hợp vắng 3 buổi, 4 buổi, đã rút.
+Chưa làm: gửi email cảnh báo (sẽ tách ticket riêng).</code></pre>
+
+                <h3 id="tu-review">3. Tự review trước khi nhờ người khác</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Kiểm tra</th><th>Vì sao</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Đọc lại toàn bộ diff như người lạ đọc</td><td>Phát hiện code thừa, log gỡ lỗi, đoạn comment quên xóa</td></tr>
+                            <tr><td>Chạy test và tự thử theo tiêu chí chấp nhận</td><td>Người review không phải là người kiểm thử thay bạn</td></tr>
+                            <tr><td>Đúng quy ước đặt tên, format của đội</td><td>Tránh để buổi review chỉ toàn góp ý trình bày</td></tr>
+                            <tr><td>Không có mật khẩu, khóa, dữ liệu thật trong diff</td><td>Đã lên lịch sử Git thì rất khó gỡ (xem <a href="../career/cv-portfolio-github-cho-fresher-it.html">bài CV và portfolio</a>)</td></tr>
+                            <tr><td>Mô tả MR đủ "làm gì, vì sao, kiểm thử thế nào"</td><td>Người review hiểu nhanh, phản hồi nhanh</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: một merge request khổng lồ "làm hết VC-128"</p>
+                    <p><strong>Tình huống:</strong> bạn làm ticket một tuần, tiện tay đổi tên biến và sắp xếp lại vài file, rồi gửi một MR 1.500 dòng trải trên 30 file. Ba ngày sau vẫn chưa ai review xong, và khi review thì lỗi phân quyền vẫn lọt qua.</p>
+                    <p><strong>Nguyên nhân:</strong> thay đổi lớn khó đọc kỹ, nên vừa chậm vừa dễ lọt lỗi; trộn refactor với tính năng khiến người review không phân biệt được dòng nào thay đổi hành vi.</p>
+                    <p><strong>Cách phòng tránh:</strong> chia thành nhiều MR nhỏ theo thứ tự (ví dụ: model và test trước, giao diện sau), tách refactor thành MR riêng, và gửi MR đầu tiên sớm thay vì đợi làm xong toàn bộ.</p>
+                </div>
+
+                <h2 id="nhan-gop-y">Đọc và xử lý góp ý</h2>
+                <p>Tài liệu của Google dành riêng một phần cho người viết code khi nhận góp ý. Các nguyên tắc chính:</p>
+                <ul>
+                    <li><strong>Đừng coi là chỉ trích cá nhân:</strong> hãy tự hỏi người review đang muốn nói điều gì mang tính xây dựng.</li>
+                    <li><strong>Đừng trả lời khi đang bực:</strong> rời máy, làm việc khác, quay lại khi bình tĩnh.</li>
+                    <li><strong>Sửa code thay vì chỉ giải thích:</strong> nếu người review không hiểu một đoạn code, hãy viết lại cho rõ hoặc thêm comment trong code. Giải thích chỉ nằm trong bình luận review thì người đọc code sau này không thấy.</li>
+                    <li><strong>Khi không đồng ý:</strong> chắc chắn mình hiểu đúng góp ý, nêu lý do và đánh đổi của cách mình chọn, hỏi đề xuất của họ, tìm đồng thuận dựa trên dữ kiện kỹ thuật.</li>
+                </ul>
+                <p>Nhiều đội gắn <strong>nhãn mức độ</strong> cho góp ý. Biết đọc nhãn giúp bạn ưu tiên đúng:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Loại góp ý</th><th>Ví dụ</th><th>Cách phản hồi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Bắt buộc (lỗi, bảo mật, sai yêu cầu)</td><td>"Học viên đã rút vẫn hiện trong danh sách"</td><td>Sửa, thêm test cho trường hợp đó, trả lời "Đã sửa ở commit…"</td></tr>
+                            <tr><td>Câu hỏi</td><td>"Vì sao không dùng trường có sẵn?"</td><td>Trả lời ngắn; nếu câu trả lời cần thiết cho người đọc sau, đưa vào comment trong code</td></tr>
+                            <tr><td>Nit</td><td>"Nit: tên biến nên rõ nghĩa hơn"</td><td>Sửa nếu nhanh; không bắt buộc để được duyệt</td></tr>
+                            <tr><td>Optional / Consider</td><td>"Consider: có thể tách hàm này"</td><td>Cân nhắc; nếu không làm, nói ngắn gọn lý do</td></tr>
+                            <tr><td>FYI</td><td>"FYI: đội có hàm tiện ích cho việc này"</td><td>Ghi nhận cho lần sau, không cần sửa trong MR này</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: tranh luận trong bình luận thay vì làm code rõ ràng hơn</p>
+                    <p><strong>Tình huống:</strong> người review hỏi "đoạn này làm gì vậy?", bạn trả lời một đoạn dài giải thích rằng code chạy đúng. Hai bên trao đổi qua lại năm lượt, MR vẫn chưa được duyệt.</p>
+                    <p><strong>Nguyên nhân:</strong> câu hỏi của người review là tín hiệu code chưa tự giải thích được. Theo hướng dẫn của Google, cách xử lý đúng là làm cho code rõ hơn (đặt tên lại, tách hàm, thêm comment trong code), vì người đọc code sau này sẽ gặp đúng câu hỏi đó mà không có bình luận review để xem.</p>
+                    <p><strong>Cách phòng tránh:</strong> với câu hỏi "đoạn này làm gì", ưu tiên sửa code rồi trả lời "Em đã đổi tên hàm và thêm comment, anh/chị xem lại giúp em". Nếu bất đồng thật sự về cách làm, trao đổi trực tiếp vài phút thường nhanh hơn mười bình luận.</p>
+                </div>
+
+                <h2 id="review-nguoi-khac">Khi bạn là người review</h2>
+                <p>Nhiều đội để người mới cùng review từ sớm, vì đọc code của người khác là cách học codebase nhanh nhất. Hướng dẫn của Google cho người review:</p>
+                <ul>
+                    <li><strong>Lịch sự, góp ý về code chứ không về người.</strong></li>
+                    <li><strong>Giải thích lý do</strong> của góp ý, không chỉ ra lệnh.</li>
+                    <li><strong>Gắn nhãn mức độ</strong> (Nit, Optional, FYI) để người viết biết điều nào cần sửa ngay.</li>
+                    <li><strong>Khen điều làm tốt</strong> kèm lý do.</li>
+                    <li><strong>Phản hồi nhanh:</strong> tối đa một ngày làm việc. Google nhấn mạnh review chậm làm chậm cả đội, không chỉ một người.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Chưa tốt</th><th>Tốt hơn</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>"Sao lại viết thế này?"</td><td>"Đoạn này lặp truy vấn trong vòng lặp nên sẽ chậm khi nhiều học viên. Mình có thể lấy dữ liệu một lần trước vòng lặp không?"</td></tr>
+                            <tr><td>"Đặt tên tệ quá."</td><td>"Nit: <code>x</code> đổi thành <code>absent_count</code> sẽ dễ đọc hơn."</td></tr>
+                            <tr><td>(Không nói gì về phần tốt)</td><td>"Bộ test cho trường hợp học viên đã rút rất rõ ràng, cảm ơn bạn."</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Khi chưa chắc góp ý của mình đúng, hãy viết dưới dạng câu hỏi: "Mình chưa rõ, trường hợp danh sách rỗng thì đoạn này xử lý thế nào?". Câu hỏi vừa giúp bạn học, vừa không tạo áp lực cho người viết.</p>
+
+                <h2 id="ai-review">AI trong code review</h2>
+                <p>Nhiều đội dùng công cụ AI để rà soát trước các lỗi dễ thấy. Với người mới, cách dùng hợp lý là <strong>nhờ AI soát MR của chính mình trước khi gửi</strong>, rồi tự đánh giá từng gợi ý. Hai nguyên tắc từ bài <a href="tuan-dau-di-lam-it-onboarding-ticket.html#dung-ai">Tuần đầu đi làm</a> vẫn giữ nguyên: chỉ dùng công cụ được công ty cho phép, và bạn vẫn là người chịu trách nhiệm về code mình gửi.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn quen code review trước khi đi làm?</h3>
+                    <p>Trong khóa Odoo Developer Foundation, mỗi bài tập được mentor review như một merge request thật: góp ý có nhãn, có lý do và có vòng sửa lại.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Code review nhằm làm codebase tốt hơn theo thời gian và là kênh học nhanh nhất của người mới.</li>
+                    <li>Gửi MR nhỏ, làm một việc, có test, tách refactor; mô tả rõ "làm gì, vì sao, kiểm thử thế nào".</li>
+                    <li>Tự review diff trước khi nhờ người khác, đặc biệt kiểm tra không lộ mật khẩu.</li>
+                    <li>Nhận góp ý bình tĩnh, sửa code cho rõ thay vì chỉ giải thích, đọc nhãn Nit/Optional/FYI để ưu tiên.</li>
+                    <li>Khi review: góp ý về code, giải thích lý do, gắn nhãn, khen điều tốt và phản hồi trong một ngày làm việc.</li>
+                </ul>
+                <p>Bài cuối của chủ đề: làm việc theo Agile/Scrum, ước lượng công việc và báo cáo tiến độ.</p>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Merge request bao nhiêu dòng là vừa?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không có con số cứng. Hướng dẫn code review của Google gợi ý khoảng 100 dòng thường là hợp lý và khoảng 1.000 dòng thường là quá lớn, nhưng tiêu chí chính là mỗi thay đổi chỉ làm một việc trọn vẹn, kèm test liên quan. Khi phân vân, hãy chia nhỏ hơn.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Bị góp ý nhiều có phải mình code kém không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Với người mới, nhiều góp ý là bình thường và là cách nhanh nhất để học quy ước của đội. Code review nhằm giữ chất lượng của codebase, không phải để đánh giá con người; điều quan trọng là bạn sửa có hệ thống và không lặp lại cùng một lỗi.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Không đồng ý với góp ý thì phải làm sao?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Trước hết hãy chắc rằng bạn hiểu đúng ý người review, nếu chưa thì hỏi lại. Sau đó trình bày lý do, ưu nhược điểm của cách bạn chọn và hỏi đề xuất của họ. Tìm đồng thuận dựa trên dữ kiện kỹ thuật thay vì tranh cãi; nếu vẫn chưa thống nhất, nhờ trưởng nhóm cho ý kiến.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Người mới có nên review code của người khác không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nên, nếu đội cho phép. Đọc code của người khác là cách học codebase rất nhanh. Bạn có thể bắt đầu bằng câu hỏi để hiểu, góp ý về tính dễ đọc và test, và ghi rõ mức độ góp ý; quyết định phê duyệt cuối cùng thường vẫn thuộc người có kinh nghiệm hơn.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nit trong code review nghĩa là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nit là góp ý nhỏ, thường về trình bày hoặc cách đặt tên, không bắt buộc phải sửa để được duyệt. Gắn nhãn như Nit, Optional hay FYI giúp người viết code biết góp ý nào cần sửa ngay và góp ý nào chỉ để tham khảo.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://google.github.io/eng-practices/review/reviewer/standard.html" target="_blank" rel="noopener">Google Engineering Practices – The Standard of Code Review</a></li>
+                    <li><a href="https://google.github.io/eng-practices/review/developer/small-cls.html" target="_blank" rel="noopener">Google Engineering Practices – Small CLs</a></li>
+                    <li><a href="https://google.github.io/eng-practices/review/developer/cl-descriptions.html" target="_blank" rel="noopener">Google Engineering Practices – Writing good CL descriptions</a></li>
+                    <li><a href="https://google.github.io/eng-practices/review/developer/handling-comments.html" target="_blank" rel="noopener">Google Engineering Practices – How to handle reviewer comments</a></li>
+                    <li><a href="https://google.github.io/eng-practices/review/reviewer/comments.html" target="_blank" rel="noopener">Google Engineering Practices – How to write code review comments</a></li>
+                    <li><a href="https://google.github.io/eng-practices/review/reviewer/speed.html" target="_blank" rel="noopener">Google Engineering Practices – Speed of Code Reviews</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Fcode-review-nhan-va-dua-gop-y.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Fcode-review-nhan-va-dua-gop-y.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng chủ đề">
+                    <a href="tuan-dau-di-lam-it-onboarding-ticket.html"><small>← Bài trước</small>Tuần đầu đi làm IT</a>
+                    <a class="next" href="agile-scrum-uoc-luong-bao-cao-tien-do.html"><small>Bài tiếp theo →</small>Agile/Scrum, ước lượng và báo cáo tiến độ</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Nội dung tham khảo tài liệu Google Engineering Practices (giấy phép CC-BY 3.0) và được Vinc Academy viết lại; Google, GitHub, GitLab là nhãn hiệu của chủ sở hữu tương ứng. Mô tả và bình luận mẫu do Vinc Academy soạn để minh họa.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#muc-dich">Code review để làm gì?</a></li>
+                        <li><a href="#chuan-bi-mr">Chuẩn bị merge request</a></li>
+                        <li><a href="#nhan-gop-y">Đọc và xử lý góp ý</a></li>
+                        <li><a href="#review-nguoi-khac">Khi bạn là người review</a></li>
+                        <li><a href="#ai-review">AI trong code review</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

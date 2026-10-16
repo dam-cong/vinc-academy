@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your First Week in an IT Job: Onboarding, Tickets, Questions</title>
+    <meta name="description" content="A 30-day plan for new developers: onboarding, reading tickets and user stories, asking clear questions, avoiding the XY problem and reporting progress." />
+    <meta name="keywords" content="first week it job, developer onboarding, reading jira tickets, user story acceptance criteria, how to ask questions, xy problem, junior developer" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Your First Week in an IT Job: Onboarding, Tickets, Questions" />
+    <meta property="og:description" content="A 30-day plan, an onboarding checklist, reading tickets and user stories, asking clear questions and avoiding the XY problem." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/first-week-it-job-onboarding-tickets.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "headline": "Your First Week in an IT Job: Onboarding, Tickets, Questions",
+                "description": "A 30-day plan, an onboarding checklist, reading tickets and user stories, asking clear questions and avoiding the XY problem.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/first-week-it-job-onboarding-tickets.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Knowledge", "item": "https://vinc-academy.vercel.app/en/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "First-job skills", "item": "https://vinc-academy.vercel.app/en/blog/first-job/" },
+                    { "@type": "ListItem", "position": 4, "name": "Your first week" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What should I focus on in my first week at an IT job?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Prioritise three things: getting the project running on your machine, learning the team's workflow (Git branches, reviews, how tickets are picked up) and knowing who is responsible for what. You don't need to ship many features yet; a working environment and the right workflow make the following weeks much faster." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Will asking lots of questions make me look weak?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Not if your questions are well prepared. Newcomers are expected to ask; what gets judged poorly is asking without trying first, asking the same thing repeatedly, or hiding that you're stuck. A question with context, what you've tried and a specific ask shows you work seriously." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How long should I stay stuck before asking?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "There's no universal number. A common approach is to set yourself a time limit, for example 30–60 minutes of investigating on your own, and ask if you still have no direction. Ask your mentor in the first week what your team expects." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What if I don't understand a ticket?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Read the description and acceptance criteria carefully, write down what's unclear and ask the ticket's author before you start coding. Restate the requirement in your own words to confirm your understanding; fixing a misunderstanding at the start is far cheaper than redoing work after it's coded." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should I use AI to understand the company's codebase?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "You can, but follow your company's rules about putting source code into AI tools. Many companies only allow approved tools. Even with AI, read and verify things yourself, because AI can misexplain business logic that is specific to your project." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html"lam-quen-python-cai-dat-venv-pip.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">First-job skills</a></li>
+            <li aria-current="page">Your first week</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 1 · First-job skills</span>
+            <h1>Your First Week in an IT Job: Onboarding, Tickets, Questions</h1>
+            <p class="post-lead">On day one you get a laptop, a pile of accounts, a codebase of hundreds of thousands of lines and your first ticket. This guide helps you get through the first 30 days with a plan: tidy onboarding, understanding a ticket before coding, and asking questions in a way that makes people want to help.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 min read</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket" data-view-hit>–</b> views</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/first-week-it-job-onboarding-tickets.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick answer</p>
+                    <p><strong>Your first week isn't about proving you code fast; it's about laying the foundation for your whole probation.</strong> Get the project running, learn the team's workflow, read tickets and acceptance criteria before coding, and when you ask, state your goal, what you've tried and a specific question. Flagging early that you're stuck always beats silence until the deadline.</p>
+                </div>
+
+                <h2 id="30-ngay-dau">The first 30 days: realistic expectations</h2>
+                <p>In Vietnam, roles requiring college-level qualifications have a probation of at most 60 days (see the <a href="../career/it-internship-fresher-interview-prep.html#offer-thu-viec">internship and fresher interviews article</a>), so your first month matters a lot. Below is the pace Vinc Academy usually suggests students aim for; every team may move faster or slower:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>When</th><th>Goal</th><th>Signs you're on track</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Week 1</td><td>A working environment and understanding of the team's workflow</td><td>Project runs locally, you can create a branch and open a test merge request</td></tr>
+                            <tr><td>Week 2</td><td>Finish 1–2 small tickets (bug fixes, UI tweaks)</td><td>Code reviewed and merged, you know how to handle feedback</td></tr>
+                            <tr><td>Weeks 3–4</td><td>Own a full ticket, understand the business side of one product area</td><td>Fewer basic questions, you can estimate small tasks</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The most important step: ask your mentor or lead in week one, "<strong>what do you expect me to be able to do after the first month?</strong>". With a clear goal, you know whether you're moving fast or slow.</p>
+
+                <h2 id="checklist-onboarding">First-week onboarding checklist</h2>
+                <ul>
+                    <li><strong>Accounts and access:</strong> email, chat, ticket tracker, source repository (Git), test environments. Note what's missing and report it once instead of asking piecemeal.</li>
+                    <li><strong>Run the project locally:</strong> follow the README or internal docs. If the team builds on Odoo, the process is close to <a href="../odoo/install-odoo-20.html">Setting up an Odoo 20 environment</a>. Note any step the docs are missing.</li>
+                    <li><strong>Team conventions:</strong> branch naming, commit messages, opening merge requests, who reviews, how tests are run. Revisit the <a href="../git/index.html">Practical Git series</a> if needed.</li>
+                    <li><strong>Who's who:</strong> mentor, team lead, requirement owner (PO/BA), tester. Knowing whom to ask about what saves a lot of time.</li>
+                    <li><strong>Team rhythm:</strong> recurring meetings, reporting channels, the team's core hours.</li>
+                    <li><strong>Personal notebook:</strong> one file for commands, links, terms and the answers you've received. It is the most valuable asset of your first month.</li>
+                </ul>
+
+                <h2 id="doc-ticket">Understanding a ticket before you code</h2>
+                <p>A ticket (issue, task) is the unit of work in tools like Jira or GitLab Issues. Many tickets are written as <strong>user stories</strong>. According to Atlassian's Agile guide, a user story usually follows the template "<em>As a [user], I want [goal] so that [reason]</em>", together with <strong>acceptance criteria</strong> stating when the work counts as done.</p>
+                <p class="code-title">Example ticket in the vinc_course project</p>
+<pre><code>[VC-128] Alert for students with many absences
+
+User story:
+As a lecturer, I want to see the students who have missed more than 3 sessions
+so that I can contact them before they drop out.
+
+Acceptance criteria:
+1. The course screen has a "Needs attention" tab listing students with > 3 absences.
+2. The list shows name, number of absences and the latest absence.
+3. Only the course's lecturers and training managers can see this tab.
+4. Withdrawn students (status "Withdrawn") are not shown.
+
+Priority: High · Linked to: Epic "Attendance tracking"</code></pre>
+                <p>Atlassian describes user stories with the <strong>3 C's</strong>: <em>Card</em> (the written description), <em>Conversation</em> (discussion to clarify details) and <em>Confirmation</em> (the acceptance criteria). Newcomers skip the second C most often: a written ticket is never complete, the rest lives in the conversation.</p>
+
+                <h3 id="5-cau-tu-hoi">5 questions to ask yourself before starting</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Question</th><th>Applied to ticket VC-128</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>What does the user really want to achieve?</td><td>Lecturers want early warning about students at risk of dropping out</td></tr>
+                            <tr><td>What does "done" mean?</td><td>All 4 acceptance criteria, including permissions and excluding withdrawn students</td></tr>
+                            <tr><td>Which parts of the system are affected?</td><td>The attendance model, the course screen, access rights</td></tr>
+                            <tr><td>How will I test it?</td><td>Test data: student with 3 absences (hidden), 4 absences (shown), withdrawn (hidden)</td></tr>
+                            <tr><td>What's still unclear?</td><td>Do excused absences count? Ask the ticket's author</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The last question is where the value is. Asking "do excused absences count?" before coding saves the whole team a round of rework.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistake: coding right after reading the ticket title</p>
+                    <p><strong>Situation:</strong> you see "Alert for students with many absences" and build a list visible to everyone, counting excused absences too. At review time, the ticket's author points out two unmet criteria.</p>
+                    <p><strong>Cause:</strong> the acceptance criteria define "done", not the title. Skipping the conversation (the second C) leaves you guessing wherever the ticket is silent.</p>
+                    <p><strong>Prevention:</strong> read the whole ticket, answer the 5 questions above, and message the author in your own words, "My understanding is… is that right?", before writing the first line of code.</p>
+                </div>
+
+                <h2 id="hoi-dung-cach">Asking good questions: making people want to help</h2>
+                <p>Newcomers will certainly ask a lot. The issue isn't how many questions you ask, but whether each one helps the other person help you quickly.</p>
+
+                <h3 id="tu-tim-truoc">Try first, but time-box it</h3>
+                <p>Before asking, read the error message, search internal docs, ticket history and related code. But don't struggle all day: many teams advise newcomers to set a limit, for example <strong>30–60 minutes</strong>, and ask if there's still no direction. The right number depends on the team, so ask your mentor in week one.</p>
+
+                <h3 id="mau-cau-hoi">A 4-part question template</h3>
+<pre><code>Goal: I'm working on VC-128 and need the list of students with > 3 absences.
+
+Problem: After editing the view XML, the "Needs attention" tab still doesn't
+appear on the course screen. There's no error in the log.
+
+Tried: reloading the page, clearing the browser cache, restarting the server.
+
+Question: How does our team usually apply view changes after editing them?
+Do I need to run an extra command?</code></pre>
+                <p>These four parts mean the other person doesn't have to ask you back: they know what you're trying to achieve, what's happening and which directions you've ruled out. When there's an error message, paste it <strong>verbatim</strong> instead of summarising "it errors".</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistake: asking about your approach instead of your goal (the XY problem)</p>
+                    <p><strong>Situation:</strong> instead of the question above, you ask "How do I clear the whole browser cache from code?". Your colleague spends half an hour helping you clear caches, while the real problem is that the view was never updated in the database.</p>
+                    <p><strong>Cause:</strong> this is the XY problem: you need to solve X (the new view doesn't show) but ask about Y (clearing the cache), the approach you guessed would fix X. In Odoo, an edited XML file only takes effect after the module is updated, for example by restarting with <code>-u module_name</code> as in <a href="../odoo/install-odoo-20.html">Setting up Odoo 20</a>.</p>
+                    <p><strong>Prevention:</strong> always state the original goal first, with the approach you're trying and why. If your guess is wrong, the other person will point it out straight away.</p>
+                </div>
+
+                <h3 id="hoi-o-dau">Where and how to ask</h3>
+                <ul>
+                    <li><strong>Prefer the team channel</strong> for technical questions: others learn too and whoever is free can answer. Message privately when only one person would know.</li>
+                    <li><strong>Batch non-urgent questions</strong> and ask once, instead of interrupting people ten times a day.</li>
+                    <li><strong>Write down answers</strong> in your notebook; don't ask the same question twice.</li>
+                    <li><strong>Close the loop:</strong> once solved, briefly share how. People who helped you like knowing the outcome.</li>
+                </ul>
+
+                <h2 id="bao-tien-do">Reporting progress and flagging blockers early</h2>
+                <p>In your first month, what worries a team lead most isn't that you're slow, but <strong>not knowing where you are</strong>. Three simple habits:</p>
+                <ol>
+                    <li><strong>Update the ticket status</strong> when you start, when waiting for review and when done.</li>
+                    <li><strong>Flag blockers early</strong> (missing access, waiting for information, depending on someone), with what you'll do meanwhile.</li>
+                    <li><strong>Say early if you won't make it</strong>: two days' notice gives the team room to adjust; telling them on the last day doesn't.</li>
+                </ol>
+                <p>Reporting in daily meetings and estimating time are covered in detail in part 3 of this topic.</p>
+
+                <h2 id="dung-ai">Using AI to explore the codebase</h2>
+                <p>AI can help you read unfamiliar code, explain an error or suggest where to look. At a company, remember two things:</p>
+                <ul>
+                    <li><strong>Follow security rules:</strong> company code and data often may not go into unapproved AI tools. Ask about the policy in your first week.</li>
+                    <li><strong>Verify it yourself:</strong> AI doesn't know your project's business rules, so an explanation can sound plausible and be wrong. Check against the code and docs, and ask teammates when needed.</li>
+                </ul>
+
+                <div class="cta-box">
+                    <h3>Want to know the workflow before you start working?</h3>
+                    <p>In Vinc Academy courses, students work with tickets, Git branches and code reviews like a real dev team, so day one isn't a shock.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>Use the first month to build foundations: a working environment, the workflow, who does what; ask what's expected after 30 days.</li>
+                    <li>Read the whole ticket and its acceptance criteria, answer the 5 questions, confirm the requirement before coding.</li>
+                    <li>Ask with the 4-part template: goal, problem (verbatim error), what you tried, a specific question; always state the original goal to avoid the XY problem.</li>
+                    <li>Keep ticket statuses current and flag blockers or missed deadlines early.</li>
+                    <li>Use AI to explore faster, but follow security rules and verify everything.</li>
+                </ul>
+                <p>Next: code review, reading feedback, responding without taking it personally and preparing a merge request that's easy to review.</p>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What should I focus on in my first week at an IT job?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Prioritise three things: getting the project running on your machine, learning the team's workflow (Git branches, reviews, how tickets are picked up) and knowing who is responsible for what. You don't need to ship many features yet; a working environment and the right workflow make the following weeks much faster.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Will asking lots of questions make me look weak?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Not if your questions are well prepared. Newcomers are expected to ask; what gets judged poorly is asking without trying first, asking the same thing repeatedly, or hiding that you're stuck. A question with context, what you've tried and a specific ask shows you work seriously.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How long should I stay stuck before asking?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">There's no universal number. A common approach is to set yourself a time limit, for example 30–60 minutes of investigating on your own, and ask if you still have no direction. Ask your mentor in the first week what your team expects.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What if I don't understand a ticket?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Read the description and acceptance criteria carefully, write down what's unclear and ask the ticket's author before you start coding. Restate the requirement in your own words to confirm your understanding; fixing a misunderstanding at the start is far cheaper than redoing work after it's coded.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I use AI to understand the company's codebase?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">You can, but follow your company's rules about putting source code into AI tools. Many companies only allow approved tools. Even with AI, read and verify things yourself, because AI can misexplain business logic that is specific to your project.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://www.atlassian.com/agile/project-management/user-stories" target="_blank" rel="noopener">Atlassian – User stories with examples and a template</a></li>
+                    <li><a href="https://xyproblem.info/" target="_blank" rel="noopener">The XY Problem (xyproblem.info)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (the -u option)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Ffirst-job%2Ffirst-week-it-job-onboarding-tickets.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Ffirst-job%2Ffirst-week-it-job-onboarding-tickets.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Topic navigation">
+                    <a href="index.html"><small>← Back to topic</small>First-job skills</a>
+                    <a class="next" href="code-review-receiving-giving-feedback.html"><small>Next →</small>Code review: receiving and giving feedback</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Jira is a trademark of Atlassian; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations. The sample ticket and questions were written by Vinc Academy for illustration.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#30-ngay-dau">The first 30 days</a></li>
+                        <li><a href="#checklist-onboarding">Onboarding checklist</a></li>
+                        <li><a href="#doc-ticket">Understanding a ticket</a></li>
+                        <li><a href="#hoi-dung-cach">Asking good questions</a></li>
+                        <li><a href="#bao-tien-do">Reporting progress</a></li>
+                        <li><a href="#dung-ai">AI and the codebase</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

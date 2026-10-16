@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agile/Scrum cho người mới: ước lượng và báo cáo tiến độ</title>
+    <meta name="description" content="Scrum theo Scrum Guide 2020: vai trò, sự kiện, Definition of Done; cách nói ở Daily Scrum, ước lượng công việc và báo cáo tiến độ, rủi ro cho người mới." />
+    <meta name="keywords" content="scrum là gì, agile scrum cho người mới, daily scrum, sprint planning, ước lượng công việc, story point, definition of done, báo cáo tiến độ" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Agile/Scrum cho người mới: ước lượng và báo cáo tiến độ" />
+    <meta property="og:description" content="Scrum theo Scrum Guide 2020, cách nói ở Daily Scrum, ước lượng công việc và báo cáo tiến độ cho người mới." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/agile-scrum-uoc-luong-bao-cao-tien-do.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "headline": "Agile/Scrum cho người mới: ước lượng và báo cáo tiến độ",
+                "description": "Scrum theo Scrum Guide 2020, cách nói ở Daily Scrum, ước lượng công việc và báo cáo tiến độ cho người mới.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/agile-scrum-uoc-luong-bao-cao-tien-do.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Kiến thức", "item": "https://vinc-academy.vercel.app/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "Kỹ năng đi làm đầu tiên", "item": "https://vinc-academy.vercel.app/blog/first-job/" },
+                    { "@type": "ListItem", "position": 4, "name": "Agile/Scrum và ước lượng" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Daily Scrum có bắt buộc trả lời 3 câu hỏi không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không. Scrum Guide 2020 để Developers tự chọn cách tổ chức Daily Scrum, miễn là buổi họp 15 phút tập trung vào tiến độ hướng tới Sprint Goal và tạo ra kế hoạch cho ngày tiếp theo. Mẫu hôm qua, hôm nay, vướng mắc là cách phổ biến chứ không phải quy định." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Story point là gì, có bắt buộc trong Scrum không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Story point là một cách ước lượng độ lớn tương đối của công việc. Scrum Guide không quy định kỹ thuật ước lượng nào, chỉ nêu Developers là người chịu trách nhiệm định kích thước công việc. Các đội có thể dùng story point, cỡ áo (S, M, L), dãy Fibonacci, planning poker hoặc ước lượng theo giờ, ngày." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Một sprint kéo dài bao lâu?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Theo Scrum Guide 2020, sprint có độ dài cố định tối đa một tháng. Nhiều đội chọn sprint một hoặc hai tuần; độ dài cụ thể do đội quyết định và giữ ổn định để dễ lập kế hoạch." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Người mới nên ước lượng thế nào để không bị trễ?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Chia việc thành các phần nhỏ, mỗi phần khoảng một ngày trở xuống, ước lượng từng phần rồi cộng lại, và nhớ tính cả thời gian làm rõ yêu cầu, viết test, tự review và sửa góp ý. Nêu rõ giả định và rủi ro kèm con số ước lượng, và báo sớm nếu thấy lệch." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Definition of Done là gì?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Definition of Done là mô tả chung của đội về trạng thái một phần công việc phải đạt để được coi là xong, ví dụ đã review, đã có test và đạt yêu cầu chất lượng. Trong Scrum Guide 2020, đó là cam kết gắn với Increment; công việc chưa đạt Definition of Done thì chưa được tính là xong." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/first-job/agile-scrum-estimating-reporting-progress.html"getting-started-python-venv-pip.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Kỹ năng đi làm đầu tiên</a></li>
+            <li aria-current="page">Agile/Scrum và ước lượng</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 3 · Kỹ năng đi làm đầu tiên</span>
+            <h1>Agile/Scrum cho người mới: ước lượng và báo cáo tiến độ</h1>
+            <p class="post-lead">Ngày đầu đi làm, bạn nghe toàn những từ lạ: sprint, backlog, daily, story point, "done chưa em?". Bài này giải thích Scrum đúng theo Scrum Guide 2020, rồi đi vào ba kỹ năng người mới cần nhất: nói ngắn gọn ở Daily Scrum, ước lượng công việc sát thực tế, và báo cáo tiến độ, rủi ro đúng lúc.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 12 phút đọc</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do" data-view-hit>–</b> lượt xem</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/agile-scrum-uoc-luong-bao-cao-tien-do.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Scrum là khung làm việc theo sprint ngắn (tối đa một tháng), với ba vai trò, năm sự kiện và ba artifact.</strong> Người mới là một Developer: ở Daily Scrum, nói ngắn gọn về tiến độ hướng tới Sprint Goal và điều đang cản trở; khi ước lượng, chia việc nhỏ và tính cả test, review; khi báo cáo, "xong" nghĩa là đạt Definition of Done, và rủi ro phải được báo sớm.</p>
+                </div>
+
+                <h2 id="scrum-5-phut">Scrum trong 5 phút, theo Scrum Guide 2020</h2>
+                <p>Scrum Guide là tài liệu gốc định nghĩa Scrum, do Ken Schwaber và Jeff Sutherland viết, bản mới nhất năm 2020. Tài liệu khá ngắn, và nhiều điều người ta hay nói về Scrum thực ra không nằm trong đó. Phần cốt lõi gồm:</p>
+                <ul>
+                    <li><strong>Ba vai trò:</strong> Product Owner (sắp xếp thứ tự ưu tiên công việc để tối đa giá trị sản phẩm), Scrum Master (giúp đội áp dụng Scrum hiệu quả) và Developers (những người làm ra sản phẩm, trong đó có bạn). Một Scrum Team thường từ 10 người trở xuống.</li>
+                    <li><strong>Ba artifact và cam kết đi kèm:</strong> Product Backlog gắn với Product Goal, Sprint Backlog gắn với Sprint Goal, Increment gắn với Definition of Done.</li>
+                    <li><strong>Năm sự kiện</strong> có giới hạn thời gian, như bảng dưới.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Sự kiện</th><th>Mục đích</th><th>Thời lượng tối đa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sprint</td><td>Khoảng thời gian cố định chứa mọi sự kiện khác</td><td>Một tháng</td></tr>
+                            <tr><td>Sprint Planning</td><td>Chọn việc cho sprint và đặt Sprint Goal</td><td>8 giờ (với sprint một tháng)</td></tr>
+                            <tr><td>Daily Scrum</td><td>Kiểm tra tiến độ hướng tới Sprint Goal, điều chỉnh kế hoạch</td><td>15 phút</td></tr>
+                            <tr><td>Sprint Review</td><td>Trình bày kết quả, nhận phản hồi, điều chỉnh hướng đi</td><td>4 giờ (với sprint một tháng)</td></tr>
+                            <tr><td>Sprint Retrospective</td><td>Nhìn lại cách làm việc để cải tiến</td><td>3 giờ (với sprint một tháng)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 400 750" style="max-width:460px" role="img" aria-labelledby="dg-scrum-vi">
+                        <title id="dg-scrum-vi">Chu trình một sprint theo Scrum Guide 2020</title>
+                        <rect class="dg-box" x="10" y="10" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="38">1 · Product Backlog</text>
+                        <text class="dg-text" x="26" y="60">Danh sách việc do Product Owner sắp</text>
+                        <text class="dg-text" x="26" y="78">theo thứ tự ưu tiên</text>
+                        <text class="dg-text" x="26" y="98">→ Cam kết: Product Goal</text>
+                        <path class="dg-arrow" d="M200 112 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="136" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="164">2 · Sprint Planning</text>
+                        <text class="dg-text" x="26" y="186">Chọn việc cho sprint, đặt Sprint Goal;</text>
+                        <text class="dg-text" x="26" y="204">tối đa 8 giờ với sprint 1 tháng</text>
+                        <text class="dg-text" x="26" y="224">→ Kết quả: Sprint Backlog</text>
+                        <path class="dg-arrow" d="M200 238 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="10" y="262" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="290">3 · Sprint và Daily Scrum</text>
+                        <text class="dg-text" x="26" y="312">Sprint tối đa 1 tháng; Daily Scrum</text>
+                        <text class="dg-text" x="26" y="330">15 phút mỗi ngày, bám Sprint Goal</text>
+                        <text class="dg-text" x="26" y="350">→ Developers điều chỉnh kế hoạch</text>
+                        <path class="dg-arrow" d="M200 364 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="388" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="416">4 · Increment</text>
+                        <text class="dg-text" x="26" y="438">Phần sản phẩm dùng được,</text>
+                        <text class="dg-text" x="26" y="456">đạt tiêu chí chung của đội</text>
+                        <text class="dg-text" x="26" y="476">→ Cam kết: Definition of Done</text>
+                        <path class="dg-arrow" d="M200 490 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="514" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="542">5 · Sprint Review</text>
+                        <text class="dg-text" x="26" y="564">Trình bày kết quả, nhận phản hồi;</text>
+                        <text class="dg-text" x="26" y="582">tối đa 4 giờ với sprint 1 tháng</text>
+                        <text class="dg-text" x="26" y="602">→ Điều chỉnh Product Backlog</text>
+                        <path class="dg-arrow" d="M200 616 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="640" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="668">6 · Sprint Retrospective</text>
+                        <text class="dg-text" x="26" y="690">Nhìn lại cách làm việc của đội;</text>
+                        <text class="dg-text" x="26" y="708">tối đa 3 giờ với sprint 1 tháng</text>
+                        <text class="dg-text" x="26" y="728">→ Cải tiến cho sprint sau</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy vẽ dựa trên Scrum Guide 2020; thời lượng là mức tối đa cho sprint một tháng, sprint ngắn hơn thì các sự kiện thường ngắn hơn.</figcaption>
+                </figure>
+
+                <h2 id="vai-tro-cua-ban">Bạn làm gì trong từng sự kiện?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Sự kiện</th><th>Việc của người mới</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sprint Planning</td><td>Đọc trước các ticket dự kiến, hỏi điểm chưa rõ, góp ý kiến khi ước lượng; đừng ngại nói "phần này em cần thêm thời gian tìm hiểu"</td></tr>
+                            <tr><td>Daily Scrum</td><td>Cập nhật ngắn gọn tiến độ và điều đang cản trở, nghe xem việc của mình có phụ thuộc ai không</td></tr>
+                            <tr><td>Trong sprint</td><td>Cập nhật trạng thái ticket, gửi merge request sớm (xem <a href="code-review-nhan-va-dua-gop-y.html">bài Code review</a>), báo sớm khi bị chặn</td></tr>
+                            <tr><td>Sprint Review</td><td>Có thể được nhờ demo phần mình làm: chuẩn bị dữ liệu thử và kịch bản ngắn</td></tr>
+                            <tr><td>Retrospective</td><td>Góp ít nhất một điều đội làm tốt và một điều có thể cải thiện, nói về quy trình chứ không về cá nhân</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="daily-scrum">Nói gì ở Daily Scrum?</h2>
+                <p>Theo Scrum Guide 2020, mục đích của Daily Scrum là kiểm tra tiến độ hướng tới Sprint Goal và điều chỉnh kế hoạch cho ngày làm việc tiếp theo. Điều nhiều người không biết: hướng dẫn <strong>không bắt buộc</strong> mẫu ba câu hỏi "hôm qua làm gì, hôm nay làm gì, có vướng gì không". Developers được tự chọn cách tổ chức, miễn là buổi họp tập trung vào Sprint Goal.</p>
+                <p>Dù vậy, với người mới, một khung ngắn giúp bạn nói gọn trong 30–60 giây:</p>
+<pre><code>VC-128 (tab "Cần chú ý"): đã xong phần tính số buổi vắng và 3 test,
+hôm nay làm phần giao diện và phân quyền, dự kiến gửi MR chiều mai.
+Vướng: em chưa có quyền vào môi trường staging để thử với dữ liệu mẫu,
+anh Minh giúp em sau buổi họp được không ạ?</code></pre>
+                <p>Ba điểm làm nên một cập nhật tốt: <strong>gắn với ticket và mục tiêu</strong> (không chỉ liệt kê việc), <strong>có mốc dự kiến</strong>, và <strong>nêu điều cản trở kèm người có thể giúp</strong>.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: "em vẫn đang làm ạ" ba ngày liền</p>
+                    <p><strong>Tình huống:</strong> ba buổi Daily Scrum liên tiếp, bạn đều nói "em vẫn đang làm VC-128". Đến ngày thứ tư, bạn mới cho biết bị kẹt ở phần phân quyền từ hôm đầu.</p>
+                    <p><strong>Nguyên nhân:</strong> Daily Scrum tồn tại để đội phát hiện sớm việc lệch khỏi Sprint Goal và điều chỉnh. Một cập nhật không có tiến độ cụ thể và không nêu vướng mắc khiến cả đội mất cơ hội giúp bạn đúng lúc.</p>
+                    <p><strong>Cách phòng tránh:</strong> luôn nói phần nào đã xong, phần nào tiếp theo và mốc dự kiến; nếu một việc không tiến triển sau một ngày, nói rõ đang kẹt ở đâu. Nếu cần thảo luận sâu, hẹn trao đổi riêng ngay sau buổi họp để giữ Daily Scrum trong 15 phút.</p>
+                </div>
+
+                <h2 id="uoc-luong">Ước lượng công việc</h2>
+                <p>Scrum Guide nêu Developers là người chịu trách nhiệm định kích thước công việc, nhưng <strong>không quy định kỹ thuật ước lượng nào</strong>. Theo hướng dẫn Agile của Atlassian, các đội thường dùng cỡ áo (S, M, L), dãy Fibonacci (1, 2, 3, 5, 8…) hoặc planning poker, và mỗi user story nên đủ nhỏ để hoàn thành trong một sprint. Nhiều đội dùng <strong>story point</strong> để đo độ lớn tương đối thay vì giờ; một số đội khác ước lượng thẳng bằng giờ hoặc ngày.</p>
+                <p>Dù đội dùng cách nào, người mới nên tự làm một bước: <strong>chia nhỏ việc và ước lượng từng phần</strong>. Ví dụ với ticket VC-128 ở <a href="tuan-dau-di-lam-it-onboarding-ticket.html#doc-ticket">bài 1</a>:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Phần việc</th><th>Ước lượng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Đọc ticket, hỏi làm rõ "vắng có phép có tính không"</td><td>0,5 ngày</td></tr>
+                            <tr><td>Trường tính số buổi vắng và test</td><td>1 ngày</td></tr>
+                            <tr><td>Tab "Cần chú ý" trên màn hình khóa học</td><td>0,5 ngày</td></tr>
+                            <tr><td>Phân quyền giảng viên, quản lý và test</td><td>0,5 ngày</td></tr>
+                            <tr><td>Tự review, gửi MR, sửa theo góp ý</td><td>0,5–1 ngày</td></tr>
+                            <tr><td><strong>Tổng</strong></td><td><strong>3–3,5 ngày</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Con số trong bảng chỉ để minh họa. Điều quan trọng là cách làm: mỗi phần đủ nhỏ để ước lượng (khoảng một ngày trở xuống), và có dòng riêng cho làm rõ yêu cầu, test, review. Khi báo ước lượng, kèm <strong>giả định</strong> ("nếu không cần gửi email cảnh báo") và <strong>rủi ro</strong> ("phần phân quyền em chưa làm bao giờ").</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: chỉ ước lượng thời gian gõ code</p>
+                    <p><strong>Tình huống:</strong> bạn nghĩ "phần này code một ngày là xong" và báo 1 ngày. Thực tế mất thêm nửa ngày hỏi lại yêu cầu, nửa ngày viết test và một ngày sửa theo góp ý review; ticket trễ gấp ba ước lượng.</p>
+                    <p><strong>Nguyên nhân:</strong> một công việc chỉ được tính là xong khi đạt Definition of Done của đội, thường bao gồm cả test và review, không phải khi code chạy trên máy bạn. Ước lượng chỉ phần gõ code bỏ sót phần lớn công sức.</p>
+                    <p><strong>Cách phòng tránh:</strong> chia việc như bảng trên, luôn có dòng cho test và review; so sánh với những việc tương tự đã làm; và khi chưa chắc, đưa ra một khoảng ("2–3 ngày") kèm rủi ro thay vì một con số lạc quan.</p>
+                </div>
+
+                <h2 id="bao-cao-tien-do">Báo cáo tiến độ và rủi ro</h2>
+                <h3 id="definition-of-done">"Xong" nghĩa là đạt Definition of Done</h3>
+                <p>Trong Scrum Guide 2020, Definition of Done là cam kết gắn với Increment: mô tả chung của đội về trạng thái một phần việc phải đạt để được coi là xong. Hãy hỏi đội bạn Definition of Done gồm những gì (đã review? đã có test? đã kiểm thử trên staging?). Khi ai hỏi "xong chưa em?", câu trả lời đúng là theo định nghĩa đó, không phải "code xong rồi ạ".</p>
+
+                <h3 id="mau-bao-cao">Mẫu báo khi có nguy cơ trễ</h3>
+<pre><code>[VC-128] Có nguy cơ trễ 1 ngày so với dự kiến (thứ Năm → thứ Sáu)
+Lý do: phần phân quyền cần thêm nhóm người dùng mới, em chưa lường trước.
+Đã làm: số buổi vắng + test xong, tab giao diện xong.
+Phương án: em làm phân quyền hôm nay, gửi MR sáng thứ Sáu;
+nếu cần giữ thứ Năm, có thể tách phân quyền sang ticket riêng.
+Em cần: anh/chị xác nhận phương án nào phù hợp ạ.</code></pre>
+                <p>Một thông báo tốt có đủ năm ý: <strong>mức lệch, lý do, đã làm được gì, phương án, và điều bạn cần</strong>. Báo khi còn thời gian xoay xở luôn được đánh giá cao hơn báo vào ngày cuối.</p>
+
+                <h2 id="retrospective">Đóng góp ở Retrospective</h2>
+                <p>Retrospective là lúc đội nhìn lại cách làm việc để cải tiến. Người mới thường im lặng vì nghĩ mình chưa đủ kinh nghiệm, nhưng góc nhìn của người mới lại rất giá trị: bạn thấy rõ tài liệu nào thiếu, bước onboarding nào khó. Hãy góp ý về <strong>quy trình</strong> ("README thiếu bước tạo dữ liệu mẫu, em mất nửa ngày") thay vì về cá nhân, và đề xuất một việc cụ thể bạn có thể làm (ví dụ tự bổ sung bước đó vào README).</p>
+
+                <div class="cta-box">
+                    <h3>Muốn tập làm việc theo sprint trước khi đi làm?</h3>
+                    <p>Các khóa của Vinc Academy chia dự án theo ticket và mốc như một đội phát triển thật: lập kế hoạch, ước lượng, review và nhìn lại sau mỗi chặng.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Scrum Guide 2020 định nghĩa ba vai trò, năm sự kiện có giới hạn thời gian và ba artifact gắn với Product Goal, Sprint Goal và Definition of Done.</li>
+                    <li>Daily Scrum không bắt buộc mẫu ba câu hỏi; hãy nói ngắn, gắn với ticket, có mốc và nêu rõ điều cản trở.</li>
+                    <li>Scrum không quy định kỹ thuật ước lượng; người mới nên chia việc nhỏ, tính cả làm rõ yêu cầu, test, review, kèm giả định và rủi ro.</li>
+                    <li>"Xong" nghĩa là đạt Definition of Done của đội; khi có nguy cơ trễ, báo sớm với mức lệch, lý do, phương án và điều cần hỗ trợ.</li>
+                    <li>Góp ý về quy trình ở Retrospective; góc nhìn của người mới rất có giá trị.</li>
+                </ul>
+                <p>Đây là bài cuối của chủ đề Kỹ năng đi làm đầu tiên. Để củng cố nền tảng kỹ thuật song song, bạn có thể tiếp tục với <a href="../git/index.html">Git thực chiến</a> hoặc <a href="../python/index.html">Python thực chiến</a>.</p>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Daily Scrum có bắt buộc trả lời 3 câu hỏi không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Scrum Guide 2020 để Developers tự chọn cách tổ chức Daily Scrum, miễn là buổi họp 15 phút tập trung vào tiến độ hướng tới Sprint Goal và tạo ra kế hoạch cho ngày tiếp theo. Mẫu hôm qua, hôm nay, vướng mắc là cách phổ biến chứ không phải quy định.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Story point là gì, có bắt buộc trong Scrum không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Story point là một cách ước lượng độ lớn tương đối của công việc. Scrum Guide không quy định kỹ thuật ước lượng nào, chỉ nêu Developers là người chịu trách nhiệm định kích thước công việc. Các đội có thể dùng story point, cỡ áo (S, M, L), dãy Fibonacci, planning poker hoặc ước lượng theo giờ, ngày.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Một sprint kéo dài bao lâu?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo Scrum Guide 2020, sprint có độ dài cố định tối đa một tháng. Nhiều đội chọn sprint một hoặc hai tuần; độ dài cụ thể do đội quyết định và giữ ổn định để dễ lập kế hoạch.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Người mới nên ước lượng thế nào để không bị trễ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Chia việc thành các phần nhỏ, mỗi phần khoảng một ngày trở xuống, ước lượng từng phần rồi cộng lại, và nhớ tính cả thời gian làm rõ yêu cầu, viết test, tự review và sửa góp ý. Nêu rõ giả định và rủi ro kèm con số ước lượng, và báo sớm nếu thấy lệch.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Definition of Done là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Definition of Done là mô tả chung của đội về trạng thái một phần công việc phải đạt để được coi là xong, ví dụ đã review, đã có test và đạt yêu cầu chất lượng. Trong Scrum Guide 2020, đó là cam kết gắn với Increment; công việc chưa đạt Definition of Done thì chưa được tính là xong.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://scrumguides.org/scrum-guide.html" target="_blank" rel="noopener">The Scrum Guide 2020 – Ken Schwaber &amp; Jeff Sutherland</a></li>
+                    <li><a href="https://www.atlassian.com/agile/project-management/user-stories" target="_blank" rel="noopener">Atlassian – User stories (ước lượng và kích thước story)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Fagile-scrum-uoc-luong-bao-cao-tien-do.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Fagile-scrum-uoc-luong-bao-cao-tien-do.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng chủ đề">
+                    <a href="code-review-nhan-va-dua-gop-y.html"><small>← Bài trước</small>Code review</a>
+                    <a class="next" href="index.html"><small>Về chủ đề →</small>Kỹ năng đi làm đầu tiên</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Nội dung về Scrum tham khảo The Scrum Guide 2020 (giấy phép CC BY-SA 4.0) và được Vinc Academy viết lại; Atlassian là nhãn hiệu của Atlassian. Ước lượng và mẫu báo cáo trong bài là ví dụ minh họa do Vinc Academy soạn.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#scrum-5-phut">Scrum trong 5 phút</a></li>
+                        <li><a href="#vai-tro-cua-ban">Bạn làm gì trong từng sự kiện</a></li>
+                        <li><a href="#daily-scrum">Nói gì ở Daily Scrum</a></li>
+                        <li><a href="#uoc-luong">Ước lượng công việc</a></li>
+                        <li><a href="#bao-cao-tien-do">Báo cáo tiến độ và rủi ro</a></li>
+                        <li><a href="#retrospective">Đóng góp ở Retrospective</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

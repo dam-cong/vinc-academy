@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tuần đầu đi làm IT: onboarding, đọc ticket và hỏi đúng cách</title>
+    <meta name="description" content="Kế hoạch 30 ngày đầu cho lập trình viên mới: checklist onboarding, đọc ticket và user story, cách đặt câu hỏi, tránh XY problem và báo tiến độ." />
+    <meta name="keywords" content="tuần đầu đi làm it, onboarding lập trình viên, đọc ticket jira, user story acceptance criteria, cách đặt câu hỏi, xy problem, fresher đi làm" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Tuần đầu đi làm IT: onboarding, đọc ticket và hỏi đúng cách" />
+    <meta property="og:description" content="Kế hoạch 30 ngày đầu, checklist onboarding, đọc hiểu ticket và user story, cách hỏi rõ ràng và tránh XY problem." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/tuan-dau-di-lam-it-onboarding-ticket.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "headline": "Tuần đầu đi làm IT: onboarding, đọc ticket và hỏi đúng cách",
+                "description": "Kế hoạch 30 ngày đầu, checklist onboarding, đọc hiểu ticket và user story, cách hỏi rõ ràng và tránh XY problem.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/tuan-dau-di-lam-it-onboarding-ticket.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/first-job/tuan-dau-di-lam-it-onboarding-ticket.html",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Kiến thức", "item": "https://vinc-academy.vercel.app/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "Kỹ năng đi làm đầu tiên", "item": "https://vinc-academy.vercel.app/blog/first-job/" },
+                    { "@type": "ListItem", "position": 4, "name": "Tuần đầu đi làm" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Tuần đầu đi làm IT nên tập trung vào việc gì?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Ưu tiên ba việc: chạy được dự án trên máy của mình, nắm quy trình làm việc của đội (nhánh Git, review, cách nhận ticket) và biết ai phụ trách việc gì. Chưa cần làm nhiều tính năng; một môi trường chạy được và hiểu đúng quy trình giúp các tuần sau nhanh hơn nhiều." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Hỏi nhiều có bị đánh giá là kém không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không, nếu câu hỏi được chuẩn bị kỹ. Người mới hỏi là bình thường; điều bị đánh giá thấp là hỏi khi chưa tự tìm hiểu, hỏi lại cùng một câu nhiều lần, hoặc giấu việc mình đang bị kẹt. Một câu hỏi có bối cảnh, những gì đã thử và câu hỏi cụ thể cho thấy bạn làm việc nghiêm túc." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Bị kẹt bao lâu thì nên hỏi?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Không có con số chung cho mọi đội. Một cách làm phổ biến là tự đặt giới hạn thời gian, ví dụ 30–60 phút tự tìm hiểu, nếu chưa có hướng đi thì hỏi. Hãy hỏi mentor xem đội bạn kỳ vọng thế nào ngay trong tuần đầu." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Không hiểu ticket thì làm thế nào?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Đọc kỹ mô tả và tiêu chí chấp nhận, ghi ra những điểm chưa rõ rồi hỏi người tạo ticket trước khi bắt đầu code. Nhắc lại yêu cầu bằng lời của bạn để xác nhận đã hiểu đúng; sửa hiểu lầm lúc đầu rẻ hơn rất nhiều so với làm lại sau khi đã code xong." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Có nên dùng AI để hiểu codebase của công ty không?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Có thể, nhưng phải tuân thủ quy định của công ty về việc đưa mã nguồn vào công cụ AI. Nhiều công ty chỉ cho dùng công cụ đã được phê duyệt. Dù dùng AI, hãy tự đọc và kiểm chứng lại, vì AI có thể giải thích sai logic nghiệp vụ riêng của dự án." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/first-job/first-week-it-job-onboarding-tickets.html"getting-started-python-venv-pip.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Kỹ năng đi làm đầu tiên</a></li>
+            <li aria-current="page">Tuần đầu đi làm</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 1 · Kỹ năng đi làm đầu tiên</span>
+            <h1>Tuần đầu đi làm IT: onboarding, đọc ticket và hỏi đúng cách</h1>
+            <p class="post-lead">Ngày đầu đi làm, bạn nhận laptop, một đống tài khoản, một codebase hàng trăm nghìn dòng và một ticket đầu tiên. Bài này giúp bạn đi qua 30 ngày đầu có kế hoạch: onboarding gọn gàng, đọc hiểu ticket trước khi code, và đặt câu hỏi sao cho người khác muốn giúp bạn.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket" data-view-hit>–</b> lượt xem</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../image/cover/tuan-dau-di-lam-it-onboarding-ticket.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Tuần đầu đi làm không phải để chứng minh bạn code nhanh, mà để dựng nền cho cả kỳ thử việc.</strong> Hãy chạy được dự án trên máy, hiểu quy trình của đội, đọc kỹ ticket và tiêu chí chấp nhận trước khi code, và khi hỏi thì nêu rõ mục tiêu, những gì đã thử và câu hỏi cụ thể. Báo sớm khi bị kẹt luôn tốt hơn im lặng đến hạn chót.</p>
+                </div>
+
+                <h2 id="30-ngay-dau">30 ngày đầu: kỳ vọng thực tế</h2>
+                <p>Với vị trí cần trình độ từ cao đẳng trở lên, thời gian thử việc tối đa là 60 ngày (xem <a href="../career/phong-van-thuc-tap-fresher-it.html#offer-thu-viec">bài Phỏng vấn thực tập và fresher</a>). Vì vậy tháng đầu tiên rất quan trọng. Dưới đây là nhịp mà Vinc Academy thường khuyên học viên đặt mục tiêu; mỗi đội có thể nhanh hoặc chậm hơn:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thời gian</th><th>Mục tiêu</th><th>Dấu hiệu bạn đang đúng hướng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Tuần 1</td><td>Môi trường chạy được, hiểu quy trình làm việc của đội</td><td>Chạy dự án trên máy, tạo được nhánh, mở được merge request thử</td></tr>
+                            <tr><td>Tuần 2</td><td>Hoàn thành 1–2 ticket nhỏ (sửa lỗi, chỉnh giao diện)</td><td>Code được review và merge, biết cách xử lý góp ý</td></tr>
+                            <tr><td>Tuần 3–4</td><td>Nhận ticket trọn vẹn, nắm nghiệp vụ một phần của sản phẩm</td><td>Ít phải hỏi những câu cơ bản, tự ước lượng được việc nhỏ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Điều quan trọng nhất: hỏi mentor hoặc trưởng nhóm ngay trong tuần đầu "<strong>sau tháng đầu, anh/chị kỳ vọng em làm được gì?</strong>". Có mục tiêu rõ, bạn mới biết mình đang đi nhanh hay chậm.</p>
+
+                <h2 id="checklist-onboarding">Checklist onboarding tuần đầu</h2>
+                <ul>
+                    <li><strong>Tài khoản và quyền truy cập:</strong> email, công cụ chat, hệ thống quản lý ticket, kho mã nguồn (Git), môi trường thử nghiệm. Ghi lại cái nào còn thiếu để báo một lần, thay vì hỏi rải rác.</li>
+                    <li><strong>Chạy dự án trên máy:</strong> làm theo README hoặc tài liệu nội bộ. Nếu đội làm Odoo, quy trình gần giống bài <a href="../odoo/cai-dat-odoo-20.html">Cài đặt môi trường Odoo 20</a>. Bước nào tài liệu thiếu, hãy ghi chú lại.</li>
+                    <li><strong>Quy ước của đội:</strong> cách đặt tên nhánh, viết commit, mở merge request, ai review, chạy test thế nào. Xem lại <a href="../git/index.html">series Git thực chiến</a> nếu cần.</li>
+                    <li><strong>Ai là ai:</strong> mentor, trưởng nhóm, người viết yêu cầu (PO/BA), tester. Biết hỏi ai về việc gì tiết kiệm rất nhiều thời gian.</li>
+                    <li><strong>Nhịp làm việc:</strong> các cuộc họp định kỳ, kênh báo cáo, giờ làm việc chung của đội.</li>
+                    <li><strong>Sổ tay cá nhân:</strong> một file ghi chú các lệnh, đường dẫn, thuật ngữ và câu trả lời bạn đã nhận được. Đây là tài sản quý nhất của tháng đầu.</li>
+                </ul>
+
+                <h2 id="doc-ticket">Đọc hiểu một ticket trước khi code</h2>
+                <p>Ticket (hay issue, task) là đơn vị công việc trong các công cụ như Jira, GitLab Issues. Nhiều ticket được viết dưới dạng <strong>user story</strong>. Theo hướng dẫn Agile của Atlassian, user story thường theo mẫu "<em>Là [người dùng], tôi muốn [mục tiêu] để [lý do]</em>", đi kèm <strong>tiêu chí chấp nhận</strong> (acceptance criteria) xác định khi nào công việc được coi là xong.</p>
+                <p class="code-title">Ví dụ một ticket trong dự án vinc_course</p>
+<pre><code>[VC-128] Cảnh báo học viên vắng nhiều buổi
+
+User story:
+Là giảng viên, tôi muốn thấy danh sách học viên đã vắng quá 3 buổi
+để kịp liên hệ trước khi họ bỏ học.
+
+Tiêu chí chấp nhận:
+1. Trên màn hình khóa học có tab "Cần chú ý" liệt kê học viên vắng > 3 buổi.
+2. Danh sách hiển thị tên, số buổi vắng, buổi vắng gần nhất.
+3. Chỉ giảng viên của khóa và quản lý đào tạo được xem tab này.
+4. Học viên đã nghỉ học (trạng thái "Đã rút") không xuất hiện.
+
+Ưu tiên: Cao · Liên kết: Epic "Theo dõi chuyên cần"</code></pre>
+                <p>Atlassian mô tả user story theo nguyên tắc <strong>3C</strong>: <em>Card</em> (phần mô tả được viết ra), <em>Conversation</em> (trao đổi để làm rõ chi tiết) và <em>Confirmation</em> (tiêu chí chấp nhận). Với người mới, chữ C thứ hai hay bị bỏ qua nhất: ticket viết ra chưa bao giờ đủ, phần còn lại nằm trong cuộc trao đổi.</p>
+
+                <h3 id="5-cau-tu-hoi">5 câu tự hỏi trước khi bắt đầu</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Câu hỏi</th><th>Áp vào ticket VC-128</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Người dùng thật sự muốn đạt điều gì?</td><td>Giảng viên muốn phát hiện sớm học viên có nguy cơ bỏ học</td></tr>
+                            <tr><td>Thế nào là "xong"?</td><td>Đủ 4 tiêu chí chấp nhận, kể cả phân quyền và loại học viên đã rút</td></tr>
+                            <tr><td>Phần nào của hệ thống bị ảnh hưởng?</td><td>Model điểm danh, màn hình khóa học, quyền truy cập</td></tr>
+                            <tr><td>Kiểm tra bằng cách nào?</td><td>Dữ liệu thử: học viên vắng 3 buổi (không hiện), 4 buổi (hiện), đã rút (không hiện)</td></tr>
+                            <tr><td>Còn điểm nào chưa rõ?</td><td>"Vắng" có tính buổi vắng có phép không? Cần hỏi người viết ticket</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Câu cuối cùng là chỗ đáng giá nhất. Một câu hỏi như "vắng có phép có tính không?" đặt ra trước khi code tiết kiệm cho cả đội một vòng sửa đi sửa lại.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: code ngay khi mới đọc tiêu đề ticket</p>
+                    <p><strong>Tình huống:</strong> thấy tiêu đề "Cảnh báo học viên vắng nhiều buổi", bạn làm luôn một danh sách cho tất cả mọi người xem, tính cả buổi vắng có phép. Đến lúc review, người viết ticket chỉ ra hai tiêu chí chưa đạt.</p>
+                    <p><strong>Nguyên nhân:</strong> tiêu chí chấp nhận mới là định nghĩa của "xong", không phải tiêu đề. Bỏ qua phần trao đổi (chữ C thứ hai) khiến bạn tự đoán những chỗ ticket chưa nói rõ.</p>
+                    <p><strong>Cách phòng tránh:</strong> đọc hết ticket, trả lời 5 câu hỏi ở trên, và nhắn lại người viết ticket bằng lời của bạn: "Em hiểu là… đúng không ạ?" trước khi viết dòng code đầu tiên.</p>
+                </div>
+
+                <h2 id="hoi-dung-cach">Hỏi đúng cách: để người khác muốn giúp bạn</h2>
+                <p>Người mới chắc chắn phải hỏi nhiều. Vấn đề không phải hỏi nhiều hay ít, mà là câu hỏi có giúp người trả lời giúp bạn nhanh hay không.</p>
+
+                <h3 id="tu-tim-truoc">Tự tìm trước, nhưng có giới hạn thời gian</h3>
+                <p>Trước khi hỏi, hãy đọc thông báo lỗi, tìm trong tài liệu nội bộ, lịch sử ticket và code liên quan. Nhưng đừng loay hoay cả ngày: nhiều đội khuyên người mới tự đặt giới hạn, ví dụ <strong>30–60 phút</strong>, chưa có hướng đi thì hỏi. Con số phù hợp tùy đội, hãy hỏi mentor ngay tuần đầu.</p>
+
+                <h3 id="mau-cau-hoi">Mẫu câu hỏi 4 phần</h3>
+<pre><code>Mục tiêu: Em đang làm VC-128, cần lấy danh sách học viên vắng > 3 buổi.
+
+Vấn đề: Sau khi sửa file view XML, tab "Cần chú ý" vẫn không hiện
+trên màn hình khóa học. Không có thông báo lỗi nào trong log.
+
+Đã thử: Tải lại trang, xóa cache trình duyệt, khởi động lại server.
+
+Câu hỏi: Anh/chị cho em hỏi đội mình thường cập nhật view sau khi sửa
+bằng cách nào ạ? Em có cần chạy lệnh gì thêm không?</code></pre>
+                <p>Bốn phần này giúp người trả lời không phải hỏi ngược lại: họ biết bạn muốn đạt điều gì, chuyện gì đang xảy ra, những hướng nào đã bị loại. Khi có thông báo lỗi, hãy dán <strong>nguyên văn</strong> thay vì tóm tắt "nó báo lỗi".</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp: hỏi về cách làm thay vì hỏi về mục tiêu (XY problem)</p>
+                    <p><strong>Tình huống:</strong> thay vì hỏi như mẫu trên, bạn hỏi "Làm sao để xóa hết cache trình duyệt bằng code ạ?". Người được hỏi mất nửa tiếng giúp bạn tìm cách xóa cache, trong khi vấn đề thật là view chưa được cập nhật vào database.</p>
+                    <p><strong>Nguyên nhân:</strong> đây là kiểu XY problem: bạn cần giải quyết X (view mới không hiện) nhưng lại hỏi về Y (xóa cache), cách mà bạn đoán sẽ giải quyết được X. Với Odoo, file XML đã sửa chỉ có hiệu lực sau khi cập nhật module, ví dụ chạy lại với tham số <code>-u tên_module</code> như trong bài <a href="../odoo/cai-dat-odoo-20.html">Cài đặt Odoo 20</a>.</p>
+                    <p><strong>Cách phòng tránh:</strong> luôn nêu mục tiêu gốc trước, kèm cách bạn đang thử và lý do. Nếu hướng đoán của bạn sai, người trả lời sẽ chỉ ra ngay.</p>
+                </div>
+
+                <h3 id="hoi-o-dau">Hỏi ở đâu, hỏi thế nào</h3>
+                <ul>
+                    <li><strong>Ưu tiên kênh chung của đội</strong> cho câu hỏi kỹ thuật: người khác cũng học được và ai rảnh sẽ trả lời. Nhắn riêng khi câu hỏi chỉ một người biết.</li>
+                    <li><strong>Gom câu hỏi</strong> không gấp lại và hỏi một lần, thay vì làm gián đoạn người khác mười lần một ngày.</li>
+                    <li><strong>Ghi lại câu trả lời</strong> vào sổ tay; không hỏi lại cùng một câu.</li>
+                    <li><strong>Đóng vòng:</strong> khi đã giải quyết được, báo lại ngắn gọn cách giải quyết. Người giúp bạn sẽ rất vui khi biết kết quả.</li>
+                </ul>
+
+                <h2 id="bao-tien-do">Báo tiến độ và báo sớm khi bị kẹt</h2>
+                <p>Trong tháng đầu, điều làm trưởng nhóm lo nhất không phải là bạn làm chậm, mà là <strong>không biết bạn đang ở đâu</strong>. Ba thói quen đơn giản:</p>
+                <ol>
+                    <li><strong>Cập nhật trạng thái ticket</strong> khi bắt đầu, khi chờ review, khi xong.</li>
+                    <li><strong>Báo sớm khi bị chặn</strong> (thiếu quyền, chờ thông tin, phụ thuộc người khác), kèm việc bạn sẽ làm trong lúc chờ.</li>
+                    <li><strong>Nói sớm nếu thấy không kịp</strong>: báo trước hai ngày cho đội thời gian xoay xở; báo vào ngày cuối thì không.</li>
+                </ol>
+                <p>Cách báo cáo trong các cuộc họp hằng ngày và cách ước lượng thời gian sẽ được nói kỹ ở bài 3 của chủ đề này.</p>
+
+                <h2 id="dung-ai">Dùng AI khi tìm hiểu codebase</h2>
+                <p>AI có thể giúp bạn đọc nhanh một đoạn code lạ, giải thích một thông báo lỗi hay gợi ý nơi cần tìm. Nhưng ở công ty, có hai điều phải nhớ:</p>
+                <ul>
+                    <li><strong>Tuân thủ quy định bảo mật:</strong> mã nguồn và dữ liệu của công ty thường không được đưa vào công cụ AI chưa được phê duyệt. Hãy hỏi rõ quy định trong tuần đầu.</li>
+                    <li><strong>Tự kiểm chứng:</strong> AI không biết nghiệp vụ riêng của dự án, nên lời giải thích có thể nghe hợp lý mà sai. Đối chiếu với code, tài liệu và hỏi người trong đội khi cần.</li>
+                </ul>
+
+                <div class="cta-box">
+                    <h3>Muốn quen quy trình làm việc từ trước khi đi làm?</h3>
+                    <p>Ở các khóa của Vinc Academy, học viên làm việc theo ticket, nhánh Git và review code như một đội phát triển thật, nên ngày đầu đi làm không còn bỡ ngỡ.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Tháng đầu tập trung dựng nền: môi trường chạy được, hiểu quy trình, biết ai làm gì; hỏi rõ kỳ vọng sau 30 ngày.</li>
+                    <li>Đọc hết ticket và tiêu chí chấp nhận, trả lời 5 câu tự hỏi, xác nhận lại yêu cầu trước khi code.</li>
+                    <li>Hỏi theo mẫu 4 phần: mục tiêu, vấn đề (lỗi nguyên văn), đã thử gì, câu hỏi cụ thể; luôn nêu mục tiêu gốc để tránh XY problem.</li>
+                    <li>Cập nhật trạng thái ticket, báo sớm khi bị chặn hoặc không kịp hạn.</li>
+                    <li>Dùng AI để tìm hiểu nhanh nhưng tuân thủ quy định bảo mật và tự kiểm chứng.</li>
+                </ul>
+                <p>Bài tiếp theo: code review, cách đọc góp ý, phản hồi không tự ái và chuẩn bị một merge request dễ review.</p>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Tuần đầu đi làm IT nên tập trung vào việc gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Ưu tiên ba việc: chạy được dự án trên máy của mình, nắm quy trình làm việc của đội (nhánh Git, review, cách nhận ticket) và biết ai phụ trách việc gì. Chưa cần làm nhiều tính năng; một môi trường chạy được và hiểu đúng quy trình giúp các tuần sau nhanh hơn nhiều.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Hỏi nhiều có bị đánh giá là kém không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không, nếu câu hỏi được chuẩn bị kỹ. Người mới hỏi là bình thường; điều bị đánh giá thấp là hỏi khi chưa tự tìm hiểu, hỏi lại cùng một câu nhiều lần, hoặc giấu việc mình đang bị kẹt. Một câu hỏi có bối cảnh, những gì đã thử và câu hỏi cụ thể cho thấy bạn làm việc nghiêm túc.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Bị kẹt bao lâu thì nên hỏi?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không có con số chung cho mọi đội. Một cách làm phổ biến là tự đặt giới hạn thời gian, ví dụ 30–60 phút tự tìm hiểu, nếu chưa có hướng đi thì hỏi. Hãy hỏi mentor xem đội bạn kỳ vọng thế nào ngay trong tuần đầu.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Không hiểu ticket thì làm thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Đọc kỹ mô tả và tiêu chí chấp nhận, ghi ra những điểm chưa rõ rồi hỏi người tạo ticket trước khi bắt đầu code. Nhắc lại yêu cầu bằng lời của bạn để xác nhận đã hiểu đúng; sửa hiểu lầm lúc đầu rẻ hơn rất nhiều so với làm lại sau khi đã code xong.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Có nên dùng AI để hiểu codebase của công ty không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Có thể, nhưng phải tuân thủ quy định của công ty về việc đưa mã nguồn vào công cụ AI. Nhiều công ty chỉ cho dùng công cụ đã được phê duyệt. Dù dùng AI, hãy tự đọc và kiểm chứng lại, vì AI có thể giải thích sai logic nghiệp vụ riêng của dự án.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://www.atlassian.com/agile/project-management/user-stories" target="_blank" rel="noopener">Atlassian – User stories with examples and a template</a></li>
+                    <li><a href="https://xyproblem.info/" target="_blank" rel="noopener">The XY Problem (xyproblem.info)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (tham số -u)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Ftuan-dau-di-lam-it-onboarding-ticket.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Ffirst-job%2Ftuan-dau-di-lam-it-onboarding-ticket.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng chủ đề">
+                    <a href="index.html"><small>← Về chủ đề</small>Kỹ năng đi làm đầu tiên</a>
+                    <a class="next" href="code-review-nhan-va-dua-gop-y.html"><small>Bài tiếp theo →</small>Code review: nhận và đưa góp ý</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Jira là nhãn hiệu của Atlassian; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này. Ticket và câu hỏi mẫu do Vinc Academy soạn để minh họa.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#30-ngay-dau">30 ngày đầu</a></li>
+                        <li><a href="#checklist-onboarding">Checklist onboarding</a></li>
+                        <li><a href="#doc-ticket">Đọc hiểu ticket</a></li>
+                        <li><a href="#hoi-dung-cach">Hỏi đúng cách</a></li>
+                        <li><a href="#bao-tien-do">Báo tiến độ</a></li>
+                        <li><a href="#dung-ai">Dùng AI với codebase</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

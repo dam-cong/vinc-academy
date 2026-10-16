@@ -23,7 +23,7 @@ Xem `.claude/agents/`: `blog-writer`, `translator`, `seo-reviewer`, `frontend-qa
 
 ## Thứ tự và nhóm trên hub `/blog/`
 Hub chia 4 nhóm theo lộ trình học (thẻ nằm trong `<section class="blog-group">`; bộ lọc `initPostFilter` tự ẩn nhóm rỗng). Nhãn cấp độ ghi ở `post-num` (Người mới / Trung cấp).
-1. **Định hướng cho sinh viên và người mới**: `career` (Lộ trình & nghề IT), `first-job` (Kỹ năng đi làm đầu tiên): sắp ra mắt.
+1. **Định hướng cho sinh viên và người mới**: `career` (Lộ trình & nghề IT, đã xuất bản); `first-job` (Kỹ năng đi làm đầu tiên, đã xuất bản).
 2. **Nền tảng kỹ thuật**: `python`, `linux`, `git` (đã xuất bản); `sql`, `web-api` (Web & API cơ bản), `algorithms` (Giải thuật & cấu trúc dữ liệu): sắp ra mắt.
 3. **Kỹ thuật nâng cao**: `clean-code`, `ai-coding`, `devops`: sắp ra mắt.
 4. **Odoo: lập trình ERP**: `odoo` (đã xuất bản).
@@ -34,6 +34,8 @@ Khi xuất bản một chủ đề mới, đổi thẻ `post-card soon` thành l
 - `python`: series "Python thực chiến cho lập trình viên Odoo" (14 bài) — xem `docs/python-series-handoff.md`.
 - `git`: series "Git thực chiến cho nhóm phát triển" (12 bài) — xem `docs/git-series-handoff.md`.
 - `linux`: hub "Linux & Shell" (chưa có bài).
+- `career`: hub "Lộ trình & nghề IT" — bài 1 `lo-trinh-nghe-it-2026-sinh-vien-thoi-ai.html` (EN `it-career-roadmap-2026-students-ai-era.html`), bài 2 `cv-portfolio-github-cho-fresher-it.html` (EN `it-fresher-cv-github-portfolio.html`), bài 3 `phong-van-thuc-tap-fresher-it.html` (EN `it-internship-fresher-interview-prep.html`). Đủ 3/3 bài; phần thử việc dẫn Bộ luật Lao động 2019 (Điều 25–27), cập nhật nếu luật thay đổi. Bài định hướng dùng số liệu từ báo cáo tuyển dụng công khai (TopCV, ITviec, Stack Overflow), ghi nguồn cạnh số liệu; nhận định riêng ghi rõ "góc nhìn Vinc"; cập nhật số liệu khi có báo cáo năm mới.
+- `first-job`: hub "Kỹ năng đi làm đầu tiên" — bài 1 `tuan-dau-di-lam-it-onboarding-ticket.html` (EN `first-week-it-job-onboarding-tickets.html`), bài 2 `code-review-nhan-va-dua-gop-y.html` (EN `code-review-receiving-giving-feedback.html`), bài 3 `agile-scrum-uoc-luong-bao-cao-tien-do.html` (EN `agile-scrum-estimating-reporting-progress.html`). Đủ 3/3 bài; nguồn chính: Google Engineering Practices (CC-BY 3.0) và Scrum Guide 2020 (CC BY-SA 4.0), ghi công trong disclaimer.
 - Sơ đồ SVG: chữ không được cắt khung / tràn viewBox; kiểm tra bằng mắt ở 1366px và 390px.
 - Ảnh bìa bài: `image/cover/<slug>.webp` (960×504, ~17 KB, thu nhỏ từ ảnh OG) chèn bằng `<figure class="post-cover">` ngay sau `</header>` của bài. Ảnh OG PNG vẫn giữ cho mạng xã hội.
 - Bài mới dựng thủ công theo checklist trong `docs/odoo-series-handoff.md` §5.

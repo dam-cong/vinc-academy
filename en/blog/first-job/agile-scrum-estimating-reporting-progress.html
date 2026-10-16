@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agile/Scrum for Newcomers: Estimating and Reporting Progress</title>
+    <meta name="description" content="Scrum per the 2020 Scrum Guide: roles, events, Definition of Done; what to say at the Daily Scrum, estimating work and reporting progress and risks." />
+    <meta name="keywords" content="what is scrum, agile scrum for beginners, daily scrum, sprint planning, estimating work, story points, definition of done, progress reporting" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Agile/Scrum for Newcomers: Estimating and Reporting Progress" />
+    <meta property="og:description" content="Scrum per the 2020 Scrum Guide, what to say at the Daily Scrum, estimating work and reporting progress for newcomers." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/agile-scrum-estimating-reporting-progress.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "headline": "Agile/Scrum for Newcomers: Estimating and Reporting Progress",
+                "description": "Scrum per the 2020 Scrum Guide, what to say at the Daily Scrum, estimating work and reporting progress for newcomers.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/agile-scrum-estimating-reporting-progress.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html",
+                "author": { "@type": "Organization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": { "@type": "ImageObject", "url": "https://vinc-academy.vercel.app/image/vinc-academy.png" }
+                },
+                "copyrightHolder": { "@type": "Organization", "name": "Vinc Academy" },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://vinc-academy.vercel.app/" },
+                    { "@type": "ListItem", "position": 2, "name": "Knowledge", "item": "https://vinc-academy.vercel.app/en/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "First-job skills", "item": "https://vinc-academy.vercel.app/en/blog/first-job/" },
+                    { "@type": "ListItem", "position": 4, "name": "Agile/Scrum and estimating" }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Does the Daily Scrum require answering 3 questions?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "No. The 2020 Scrum Guide lets Developers choose how to run the Daily Scrum, as long as the 15-minute event stays centred on the Sprint Goal and ends with a plan for the coming day. Yesterday, today, blockers is a common format, not a rule." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What are story points, and are they required in Scrum?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Story points are a way to estimate the relative size of work. The Scrum Guide doesn't prescribe any estimation technique; it only says Developers are responsible for sizing work. Teams may use story points, t-shirt sizes (S, M, L), the Fibonacci sequence, planning poker or estimates in hours and days." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How long is a sprint?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "According to the 2020 Scrum Guide, a sprint has a fixed length of one month or less. Many teams choose one- or two-week sprints; the exact length is the team's choice and is kept stable to make planning easier." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How should a newcomer estimate to avoid running late?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "Break the work into pieces of about a day or less, estimate each and add them up, and remember to include clarifying requirements, writing tests, self-review and addressing review comments. State your assumptions and risks with the estimate, and flag early if it starts slipping." }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the Definition of Done?",
+                        "acceptedAnswer": { "@type": "Answer", "text": "It's the team's shared description of the state work must reach to count as done, for example reviewed, tested and meeting quality standards. In the 2020 Scrum Guide it is the commitment tied to the Increment; work that doesn't meet it isn't done yet." }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/first-job/agile-scrum-uoc-luong-bao-cao-tien-do.html"lam-quen-python-cai-dat-venv-pip.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">First-job skills</a></li>
+            <li aria-current="page">Agile/Scrum and estimating</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 3 · First-job skills</span>
+            <h1>Agile/Scrum for Newcomers: Estimating and Reporting Progress</h1>
+            <p class="post-lead">On day one you hear a flood of new words: sprint, backlog, daily, story points, "is it done yet?". This guide explains Scrum as the 2020 Scrum Guide actually defines it, then covers the three skills newcomers need most: speaking briefly at the Daily Scrum, estimating work realistically, and reporting progress and risks at the right time.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-regular fa-eye"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do" data-view-hit>–</b> views</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+        <figure class="post-cover"><img src="../../../image/cover/agile-scrum-estimating-reporting-progress.webp" alt="" width="960" height="504" decoding="async"></figure>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick answer</p>
+                    <p><strong>Scrum is a framework built on short sprints (one month or less), with three accountabilities, five events and three artifacts.</strong> As a newcomer you're a Developer: at the Daily Scrum, speak briefly about how you're tracking against the Sprint Goal and what's blocking you; when estimating, break work down and include testing and review; when reporting, "done" means meeting the Definition of Done, and risks must be raised early.</p>
+                </div>
+
+                <h2 id="scrum-5-phut">Scrum in 5 minutes, per the 2020 Scrum Guide</h2>
+                <p>The Scrum Guide is the original document defining Scrum, written by Ken Schwaber and Jeff Sutherland, with the latest edition from 2020. It's short, and many things people say about Scrum aren't actually in it. The core:</p>
+                <ul>
+                    <li><strong>Three accountabilities:</strong> the Product Owner (orders the work to maximise product value), the Scrum Master (helps the team apply Scrum effectively) and the Developers (the people who build the product, including you). A Scrum Team is typically 10 people or fewer.</li>
+                    <li><strong>Three artifacts and their commitments:</strong> the Product Backlog with the Product Goal, the Sprint Backlog with the Sprint Goal, the Increment with the Definition of Done.</li>
+                    <li><strong>Five time-boxed events</strong>, as in the table below.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Event</th><th>Purpose</th><th>Maximum length</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sprint</td><td>A fixed period that contains all the other events</td><td>One month</td></tr>
+                            <tr><td>Sprint Planning</td><td>Select work for the sprint and set the Sprint Goal</td><td>8 hours (one-month sprint)</td></tr>
+                            <tr><td>Daily Scrum</td><td>Check how the team is tracking against the Sprint Goal and adjust the plan</td><td>15 minutes</td></tr>
+                            <tr><td>Sprint Review</td><td>Present results, gather feedback, adjust direction</td><td>4 hours (one-month sprint)</td></tr>
+                            <tr><td>Sprint Retrospective</td><td>Look back at how the team works to improve</td><td>3 hours (one-month sprint)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <figure class="diagram">
+                    <svg viewBox="0 0 400 750" style="max-width:460px" role="img" aria-labelledby="dg-scrum-en">
+                        <title id="dg-scrum-en">One sprint cycle per the 2020 Scrum Guide</title>
+                        <rect class="dg-box" x="10" y="10" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="38">1 · Product Backlog</text>
+                        <text class="dg-text" x="26" y="60">Work ordered by the Product Owner</text>
+                        <text class="dg-text" x="26" y="78">by priority</text>
+                        <text class="dg-text" x="26" y="98">→ Commitment: Product Goal</text>
+                        <path class="dg-arrow" d="M200 112 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="136" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="164">2 · Sprint Planning</text>
+                        <text class="dg-text" x="26" y="186">Select work, set the Sprint Goal;</text>
+                        <text class="dg-text" x="26" y="204">up to 8 hours for a 1-month sprint</text>
+                        <text class="dg-text" x="26" y="224">→ Result: Sprint Backlog</text>
+                        <path class="dg-arrow" d="M200 238 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="10" y="262" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="290">3 · Sprint and Daily Scrum</text>
+                        <text class="dg-text" x="26" y="312">Sprint up to 1 month; Daily Scrum</text>
+                        <text class="dg-text" x="26" y="330">15 minutes a day, on the Sprint Goal</text>
+                        <text class="dg-text" x="26" y="350">→ Developers adapt the plan</text>
+                        <path class="dg-arrow" d="M200 364 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="388" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="416">4 · Increment</text>
+                        <text class="dg-text" x="26" y="438">A usable piece of the product</text>
+                        <text class="dg-text" x="26" y="456">meeting the team's shared standard</text>
+                        <text class="dg-text" x="26" y="476">→ Commitment: Definition of Done</text>
+                        <path class="dg-arrow" d="M200 490 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="514" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="542">5 · Sprint Review</text>
+                        <text class="dg-text" x="26" y="564">Present results, gather feedback;</text>
+                        <text class="dg-text" x="26" y="582">up to 4 hours for a 1-month sprint</text>
+                        <text class="dg-text" x="26" y="602">→ Adapt the Product Backlog</text>
+                        <path class="dg-arrow" d="M200 616 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="10" y="640" width="380" height="100" rx="12" />
+                        <text class="dg-title" x="26" y="668">6 · Sprint Retrospective</text>
+                        <text class="dg-text" x="26" y="690">Review how the team works;</text>
+                        <text class="dg-text" x="26" y="708">up to 3 hours for a 1-month sprint</text>
+                        <text class="dg-text" x="26" y="728">→ Improvements for the next sprint</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy based on the 2020 Scrum Guide; durations are maximums for a one-month sprint, and events are usually shorter for shorter sprints.</figcaption>
+                </figure>
+
+                <h2 id="vai-tro-cua-ban">What do you do in each event?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Event</th><th>The newcomer's job</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sprint Planning</td><td>Read the planned tickets beforehand, ask about unclear points, contribute to estimates; don't hesitate to say "I'll need extra time to learn this part"</td></tr>
+                            <tr><td>Daily Scrum</td><td>Give a brief update on progress and blockers, and listen for dependencies on your work</td></tr>
+                            <tr><td>During the sprint</td><td>Keep ticket statuses current, send merge requests early (see the <a href="code-review-receiving-giving-feedback.html">code review article</a>), flag blockers early</td></tr>
+                            <tr><td>Sprint Review</td><td>You may be asked to demo your part: prepare test data and a short script</td></tr>
+                            <tr><td>Retrospective</td><td>Share at least one thing the team did well and one to improve, about the process rather than individuals</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="daily-scrum">What to say at the Daily Scrum</h2>
+                <p>Per the 2020 Scrum Guide, the Daily Scrum is for checking how the team is tracking against the Sprint Goal and adjusting the coming day's plan. What many people don't know: the guide <strong>does not require</strong> the three-question format "what I did yesterday, what I'll do today, any blockers". Developers can choose any structure, as long as the event focuses on the Sprint Goal.</p>
+                <p>Even so, a short frame helps newcomers stay within 30–60 seconds:</p>
+<pre><code>VC-128 ("Needs attention" tab): absence count and 3 tests are done,
+today I'm on the UI and permissions, aiming to send the MR tomorrow afternoon.
+Blocker: I don't have access to staging to try it with sample data yet,
+Minh, could you help me right after the meeting?</code></pre>
+                <p>Three things make a good update: <strong>tied to the ticket and goal</strong> (not just a list of activities), <strong>an expected milestone</strong>, and <strong>blockers with someone who can help</strong>.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistake: "still working on it" three days in a row</p>
+                    <p><strong>Situation:</strong> at three Daily Scrums in a row you say "still working on VC-128". On day four you mention you've been stuck on permissions since the first day.</p>
+                    <p><strong>Cause:</strong> the Daily Scrum exists so the team spots drift from the Sprint Goal early and adapts. An update with no concrete progress and no blockers takes away the team's chance to help you in time.</p>
+                    <p><strong>Prevention:</strong> always say what's done, what's next and the expected milestone; if something hasn't moved in a day, say exactly where you're stuck. If it needs deeper discussion, agree to talk right after the meeting to keep the Daily Scrum within 15 minutes.</p>
+                </div>
+
+                <h2 id="uoc-luong">Estimating work</h2>
+                <p>The Scrum Guide says Developers are responsible for sizing work, but it <strong>doesn't prescribe any estimation technique</strong>. Atlassian's Agile guide notes that teams commonly use t-shirt sizes (S, M, L), the Fibonacci sequence (1, 2, 3, 5, 8…) or planning poker, and that each user story should be small enough to finish within one sprint. Many teams use <strong>story points</strong> to measure relative size instead of hours; others estimate directly in hours or days.</p>
+                <p>Whatever your team uses, newcomers should do one step themselves: <strong>break the work down and estimate each part</strong>. For example, ticket VC-128 from <a href="first-week-it-job-onboarding-tickets.html#doc-ticket">part 1</a>:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Piece of work</th><th>Estimate</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Read the ticket, clarify "do excused absences count?"</td><td>0.5 day</td></tr>
+                            <tr><td>Absence count field and tests</td><td>1 day</td></tr>
+                            <tr><td>"Needs attention" tab on the course screen</td><td>0.5 day</td></tr>
+                            <tr><td>Lecturer and manager permissions plus tests</td><td>0.5 day</td></tr>
+                            <tr><td>Self-review, send the MR, address review comments</td><td>0.5–1 day</td></tr>
+                            <tr><td><strong>Total</strong></td><td><strong>3–3.5 days</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The numbers are only an illustration. What matters is the method: each piece small enough to estimate (about a day or less), with separate lines for clarifying requirements, testing and review. When you give an estimate, add your <strong>assumptions</strong> ("if no email alerts are needed") and <strong>risks</strong> ("I've never done permissions before").</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistake: estimating only the typing time</p>
+                    <p><strong>Situation:</strong> you think "this is a day of coding" and say 1 day. In reality it takes another half day to clarify requirements, half a day for tests and a day for review fixes; the ticket ends up three times over the estimate.</p>
+                    <p><strong>Cause:</strong> work only counts as done when it meets the team's Definition of Done, which usually includes tests and review, not when the code runs on your machine. Estimating only the coding misses most of the effort.</p>
+                    <p><strong>Prevention:</strong> break the work down as above, always with lines for testing and review; compare with similar work you've done; and when unsure, give a range ("2–3 days") plus risks instead of an optimistic single number.</p>
+                </div>
+
+                <h2 id="bao-cao-tien-do">Reporting progress and risks</h2>
+                <h3 id="definition-of-done">"Done" means meeting the Definition of Done</h3>
+                <p>In the 2020 Scrum Guide, this definition is the commitment tied to the Increment: the team's shared description of the state work must reach to count as done. Ask your team what it includes (reviewed? tested? verified on staging?). When someone asks "is it done?", answer against that definition, not "the code is written".</p>
+
+                <h3 id="mau-bao-cao">Template for flagging a possible delay</h3>
+<pre><code>[VC-128] Risk of a 1-day delay (Thursday → Friday)
+Reason: permissions need a new user group I didn't anticipate.
+Done so far: absence count + tests, UI tab.
+Options: I do permissions today and send the MR Friday morning;
+or, to keep Thursday, we split permissions into a separate ticket.
+I need: your call on which option works best.</code></pre>
+                <p>A good update covers five points: <strong>how much it slips, why, what's done, the options, and what you need</strong>. Raising it while there's still room to adjust is always valued more than raising it on the last day.</p>
+
+                <h2 id="retrospective">Contributing at the Retrospective</h2>
+                <p>The Retrospective is where the team reviews how it works in order to improve. Newcomers often stay quiet because they feel inexperienced, yet a newcomer's perspective is very valuable: you see clearly which docs are missing and which onboarding steps are hard. Comment on the <strong>process</strong> ("the README is missing the sample-data step, it cost me half a day") rather than people, and propose something concrete you can do (such as adding that step to the README yourself).</p>
+
+                <div class="cta-box">
+                    <h3>Want to practise working in sprints before your first job?</h3>
+                    <p>Vinc Academy courses split projects into tickets and milestones like a real dev team: planning, estimating, reviewing and looking back after each stage.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="tong-ket">Summary</h2>
+                <ul>
+                    <li>The 2020 Scrum Guide defines three accountabilities, five time-boxed events and three artifacts tied to the Product Goal, Sprint Goal and Definition of Done.</li>
+                    <li>The Daily Scrum doesn't require the three-question format; keep it short, tied to the ticket, with a milestone and clear blockers.</li>
+                    <li>Scrum doesn't prescribe estimation techniques; newcomers should break work down and include clarification, testing and review, with assumptions and risks.</li>
+                    <li>"Done" means meeting the team's Definition of Done; when a delay looms, flag it early with the slip, reason, options and what you need.</li>
+                    <li>Comment on the process at the Retrospective; a newcomer's view is genuinely valuable.</li>
+                </ul>
+                <p>This is the last article in the First-job skills topic. To strengthen your technical foundations in parallel, continue with <a href="../git/index.html">Practical Git</a> or <a href="../python/index.html">Practical Python</a>.</p>
+
+                <h2 id="faq">Frequently asked questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Does the Daily Scrum require answering 3 questions?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">No. The 2020 Scrum Guide lets Developers choose how to run the Daily Scrum, as long as the 15-minute event stays centred on the Sprint Goal and ends with a plan for the coming day. Yesterday, today, blockers is a common format, not a rule.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What are story points, and are they required in Scrum?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Story points are a way to estimate the relative size of work. The Scrum Guide doesn't prescribe any estimation technique; it only says Developers are responsible for sizing work. Teams may use story points, t-shirt sizes (S, M, L), the Fibonacci sequence, planning poker or estimates in hours and days.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How long is a sprint?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">According to the 2020 Scrum Guide, a sprint has a fixed length of one month or less. Many teams choose one- or two-week sprints; the exact length is the team's choice and is kept stable to make planning easier.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How should a newcomer estimate to avoid running late?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Break the work into pieces of about a day or less, estimate each and add them up, and remember to include clarifying requirements, writing tests, self-review and addressing review comments. State your assumptions and risks with the estimate, and flag early if it starts slipping.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the Definition of Done?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It's the team's shared description of the state work must reach to count as done, for example reviewed, tested and meeting quality standards. In the 2020 Scrum Guide it is the commitment tied to the Increment; work that doesn't meet it isn't done yet.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">References</h2>
+                <ul class="sources">
+                    <li><a href="https://scrumguides.org/scrum-guide.html" target="_blank" rel="noopener">The Scrum Guide 2020 – Ken Schwaber &amp; Jeff Sutherland</a></li>
+                    <li><a href="https://www.atlassian.com/agile/project-management/user-stories" target="_blank" rel="noopener">Atlassian – User stories (estimating and story size)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Ffirst-job%2Fagile-scrum-estimating-reporting-progress.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Ffirst-job%2Fagile-scrum-estimating-reporting-progress.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Topic navigation">
+                    <a href="code-review-receiving-giving-feedback.html"><small>← Previous</small>Code review</a>
+                    <a class="next" href="index.html"><small>Back to topic →</small>First-job skills</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. The Scrum content draws on The Scrum Guide 2020 (CC BY-SA 4.0 licence), rewritten by Vinc Academy; Atlassian is a trademark of Atlassian. The estimates and report templates are illustrations written by Vinc Academy.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#scrum-5-phut">Scrum in 5 minutes</a></li>
+                        <li><a href="#vai-tro-cua-ban">What you do in each event</a></li>
+                        <li><a href="#daily-scrum">The Daily Scrum</a></li>
+                        <li><a href="#uoc-luong">Estimating work</a></li>
+                        <li><a href="#bao-cao-tien-do">Reporting progress and risks</a></li>
+                        <li><a href="#retrospective">The Retrospective</a></li>
+                        <li><a href="#tong-ket">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>First-Job Skills for New Developers | Vinc Academy</title>
+    <meta name="description" content="Skills for your first developer job: onboarding, reading tickets, asking good questions, code review, estimation, progress reports and Agile/Scrum." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/first-job/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/first-job/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/first-job/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/first-job/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="First-job skills" />
+    <meta property="og:description" content="Skills for your first developer job: onboarding, reading tickets, asking good questions, code review, estimation, progress reports and Agile/Scrum." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/first-job/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/first-job-hub-en.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "First-job skills",
+        "description": "Skills for your first developer job: onboarding, reading tickets, asking good questions, code review, estimation, progress reports and Agile/Scrum.",
+        "url": "https://vinc-academy.vercel.app/en/blog/first-job/",
+        "inLanguage": "en",
+        "publisher": { "@type": "EducationalOrganization", "name": "Vinc Academy", "url": "https://vinc-academy.vercel.app/" },
+        "hasPart": [
+            { "@type": "Article", "headline": "Your First Week in an IT Job: Onboarding, Tickets, Questions", "url": "https://vinc-academy.vercel.app/en/blog/first-job/first-week-it-job-onboarding-tickets.html" },
+            { "@type": "Article", "headline": "Code Review for Newcomers: Giving and Receiving Feedback", "url": "https://vinc-academy.vercel.app/en/blog/first-job/code-review-receiving-giving-feedback.html" },
+            { "@type": "Article", "headline": "Agile/Scrum for Newcomers: Estimating and Reporting Progress", "url": "https://vinc-academy.vercel.app/en/blog/first-job/agile-scrum-estimating-reporting-progress.html" }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/first-job/index.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li aria-current="page">First-job skills</li>
+        </ol>
+
+        <header class="hub-hero">
+            <span class="section-tag">Topic · Students and newcomers</span>
+            <h1>First-job skills</h1>
+            <p class="post-lead">The things nobody teaches at university but every team expects from day one: settling in, understanding tickets, asking well, taking code review and working in an Agile/Scrum rhythm.</p>
+        </header>
+
+        <div class="chips post-sort" role="group" aria-label="Sort">
+            <button type="button" class="chip active" data-sort="new">Newest</button>
+            <button type="button" class="chip" data-sort="top">Most read</button>
+        </div>
+        <ol class="post-grid">
+            <li><a class="post-card" href="first-week-it-job-onboarding-tickets.html"><span class="post-num">Beginner</span><h2>Your first week: onboarding, tickets and good questions</h2><p>A 30-day plan, an onboarding checklist, reading user stories and acceptance criteria, asking clear questions.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket">–</b> views</span><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="code-review-receiving-giving-feedback.html"><span class="post-num">Beginner</span><h2>Code review: receiving and giving feedback</h2><p>Small merge requests, clear descriptions, handling feedback calmly and writing effective review comments.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="code-review-nhan-va-dua-gop-y">–</b> views</span><span class="post-status">Published</span></a></li>
+            <li><a class="post-card" href="agile-scrum-estimating-reporting-progress.html"><span class="post-num">Beginner</span><h2>Agile/Scrum, estimating and reporting progress</h2><p>Scrum per the 2020 Scrum Guide, the Daily Scrum, estimating work and flagging risks early.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do">–</b> views</span><span class="post-status">Published</span></a></li>
+        </ol>
+
+        <div class="prose" style="max-width:none">
+            <div class="cta-box">
+                <h3>Want to practise a real team workflow?</h3>
+                <p>Vinc Academy courses run on tickets, Git branches and code reviews like a real development team.</p>
+                <div class="cta-actions">
+                    <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
+                    <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">This content is copyrighted by Vinc Academy. Tool names mentioned in articles are trademarks of their respective owners.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>
