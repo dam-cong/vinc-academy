@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting Started with Python for Odoo Devs: venv and pip</title>
+    <meta name="description" content="Install Python 3.12, run scripts, create a virtual environment, use pip and requirements.txt for Odoo projects. Practical, easy-to-follow examples." />
+    <meta name="keywords" content="python for odoo, install python 3.12, python venv, pip requirements.txt, python virtual environment, learn python basics" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Getting Started with Python for Odoo Devs: venv and pip" />
+    <meta property="og:description" content="Install Python 3.12, create a venv, use pip and requirements.txt: the foundation for running and developing Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/getting-started-python-venv-pip.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Getting Started with Python for Odoo Devs: venv and pip",
+                "description": "Install Python 3.12, create a venv, use pip and requirements.txt: the foundation for running and developing Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/getting-started-python-venv-pip.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Getting started with Python"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Which Python version does Odoo 20 need?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo 20 requires Python 3.12 or later. Check it with python3 --version, or run python3 -c with a comparison on sys.version_info to print True when the version is recent enough."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why should every project have its own virtual environment?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Each virtual environment is a separate folder holding one Python plus its own packages, so one project can need library 1.0 while another needs 2.0 without conflict."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Should the venv folder go into Git?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "No. A virtual environment is disposable, easy to delete and recreate, and must not be copied elsewhere. Add it to .gitignore and rebuild it from requirements.txt."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between pip install and python -m pip install?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Both install packages, but python -m pip guarantees the package is installed for the exact Python you are running, which is safer when a machine has several versions."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"lam-quen-python-cai-dat-venv-pip.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Getting started with Python</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 1 · Practical Python Series</span>
+            <h1>Getting Started with Python for Odoo Devs: venv and pip</h1>
+            <p class="post-lead">Before writing Odoo code you need a clean Python environment with the right version. This guide covers installing Python 3.12, running scripts, creating a virtual environment and managing libraries with pip, using examples from a course management project.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 9 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Odoo 20 runs on Python 3.12 or newer. Give every project its own virtual environment (<code>venv</code>) and keep its libraries listed in <code>requirements.txt</code>.</strong> Check the version with <code>python3 --version</code>, create the environment with <code>python3 -m venv .venv</code>, activate it with <code>source .venv/bin/activate</code>, then install libraries using <code>python -m pip install -r requirements.txt</code>. This is the first step of the practical Python series: every example comes from the familiar <code>vinc_course</code> course-management project.</p>
+                </div>
+
+                <h2 id="python-in-odoo">Where will you write Python in Odoo work?</h2>
+                <p>If you followed the Odoo series you know almost everything on the business tier is Python: models, the ORM, constraints, controllers, tests and integration scripts. This series does not teach Python as "memorize all the syntax first, build later". It follows the order in which you actually need things on the job, and each part points to where the concept sits inside Odoo code.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>What you do</th><th>Python you use</th><th>Covered in</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Set up an environment to run Odoo</td><td>Install Python, <code>venv</code>, <code>pip</code></td><td>This part</td></tr>
+                            <tr><td>Write models and fields</td><td>Variables, data types, classes</td><td>Parts 2, 8</td></tr>
+                            <tr><td>Write logic inside methods</td><td>Conditions, loops, functions, comprehensions</td><td>Parts 3, 5, 6</td></tr>
+                            <tr><td>Organize an Odoo module</td><td><code>import</code>, packages, <code>__init__.py</code></td><td>Part 7</td></tr>
+                            <tr><td>Override methods, use decorators</td><td>Inheritance, <code>super()</code>, decorators</td><td>Part 9</td></tr>
+                            <tr><td>Report problems to users</td><td><code>try/except</code>, <code>raise</code></td><td>Part 10</td></tr>
+                            <tr><td>Import/export data, call APIs</td><td>Files, JSON, CSV, <code>requests</code></td><td>Parts 11, 13</td></tr>
+                            <tr><td>Write tests, debug</td><td><code>unittest</code>, <code>logging</code>, <code>pdb</code></td><td>Part 14</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="install-python">Installing Python and checking the version</h2>
+                <p>Odoo 20 needs Python 3.12 or later (see part 2 of the Odoo series). After installing, verify with:</p>
+<pre><code>python3 --version
+python3 -c "import sys; print(sys.version_info &gt;= (3, 12))"</code></pre>
+                <p>The second command prints <code>True</code> when the version is recent enough, handy inside an environment-check script. The interpreter usually lives at a path like <code>/usr/local/bin/python3.12</code>, so on a machine with several versions you can call <code>python3.12</code> by name. On Windows, a Microsoft Store install provides the <code>python3.12</code> command, and if the <code>py.exe</code> launcher is present you can use <code>py</code>.</p>
+
+                <h2 id="run-python">Four ways to run Python</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Way</th><th>Command</th><th>Use it when</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Interactive mode</td><td><code>python3</code></td><td>Trying an expression quickly; the prompt is <code>&gt;&gt;&gt;</code>, leave with <code>Ctrl+D</code> or <code>quit()</code></td></tr>
+                            <tr><td>Run a script file</td><td><code>python3 course_info.py</code></td><td>Running a complete program; <code>odoo-bin</code> is such a file too</td></tr>
+                            <tr><td>Run one line</td><td><code>python3 -c "print('hello')"</code></td><td>A quick check from the shell</td></tr>
+                            <tr><td>Run a module as a script</td><td><code>python3 -m venv .venv</code></td><td>Using the tools that ship with Python</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>When you run a file, the file name and everything after it end up as a list of strings in <code>sys.argv</code>. Try it with the small script below:</p>
+                <p class="code-title">course_info.py</p>
+<pre><code>import sys
+
+course = "Odoo Developer Foundation"
+hours = 24
+print(f"Course: {course} - {hours} hours")
+print("Command-line arguments:", sys.argv[1:])</code></pre>
+<pre><code>$ python3 course_info.py abc 123
+Course: Odoo Developer Foundation - 24 hours
+Command-line arguments: ['abc', '123']</code></pre>
+                <p>The same mechanism lets <code>odoo-bin</code> receive options such as <code>-d</code>, <code>-u</code> and <code>--addons-path</code>, which you typed many times in the Odoo series.</p>
+
+                <h2 id="venv">Virtual environments: one compartment per project</h2>
+                <p>Python programs often rely on libraries beyond the standard one, and sometimes on one exact version. If program A wants library 1.0 while program B wants 2.0, installing either breaks the other. The fix is a <strong>virtual environment</strong>: a self-contained folder holding one Python plus the packages of a single project. For Odoo this lets Odoo 20 and an older project live side by side without interfering.</p>
+<pre><code>cd ~/odoo-dev
+python3 -m venv .venv            # create the environment
+source .venv/bin/activate        # activate (Linux/macOS)
+# Windows: .venv\Scripts\activate
+(.venv) $ python --version       # the prompt now shows (.venv)
+(.venv) $ deactivate             # leave when finished</code></pre>
+                <ul>
+                    <li>The <code>venv</code> command builds the environment with the very Python that ran it. Run it with <code>python3.12</code> and you get 3.12.</li>
+                    <li>A popular folder name is <code>.venv</code>: the leading dot keeps it tucked away in the shell and avoids a clash with <code>.env</code> files that hold environment variables.</li>
+                    <li>A virtual environment does <strong>not</strong> belong in Git; treat it as disposable, easy to delete and recreate, never copied elsewhere. Add <code>.venv/</code> to <code>.gitignore</code>.</li>
+                    <li>Keep project code out of the environment folder.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">What happens on Debian/Ubuntu</p>
+                    <p>On some Debian/Ubuntu releases, <code>python3 -m venv</code> reports that the environment could not be created because <code>ensurepip</code> is missing and asks for the <code>python3-venv</code> package (for example <code>sudo apt install python3-venv</code>). Install it, create the environment again, and you are done.</p>
+                </div>
+
+                <h2 id="pip">Managing libraries with pip</h2>
+                <p>With the environment active, use <code>python -m pip</code> to install libraries from the Python Package Index. Writing <code>python -m pip</code> instead of plain <code>pip</code> guarantees the package goes to the Python you are actually running.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Command</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>python -m pip install requests</code></td><td>Installs the latest release of a package</td></tr>
+                            <tr><td><code>python -m pip install requests==2.6.0</code></td><td>Installs one exact version</td></tr>
+                            <tr><td><code>python -m pip install --upgrade requests</code></td><td>Upgrades to the newest release</td></tr>
+                            <tr><td><code>python -m pip uninstall requests</code></td><td>Removes the package</td></tr>
+                            <tr><td><code>python -m pip list</code> / <code>show requests</code></td><td>Lists installed packages / shows details of one</td></tr>
+                            <tr><td><code>python -m pip freeze &gt; requirements.txt</code></td><td>Writes the package list with versions to a file</td></tr>
+                            <tr><td><code>python -m pip install -r requirements.txt</code></td><td>Installs everything in that file</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The <code>requirements.txt</code> convention is exactly what you used when installing Odoo from source: the Odoo repository ships this file, and the "install dependencies" step in part 2 was just <code>pip install -r requirements.txt</code> inside a virtual environment. When a module you write needs an extra library, you also declare it in the manifest's <code>external_dependencies</code> (part 3).</p>
+
+                <h2 id="practice">Practice: set up the environment for vinc_course tooling</h2>
+                <ol>
+                    <li>Create a project folder and environment: <code>mkdir vinc-tools &amp;&amp; cd vinc-tools &amp;&amp; python3 -m venv .venv</code>.</li>
+                    <li>Activate it: <code>source .venv/bin/activate</code> and confirm the prompt shows <code>(.venv)</code>.</li>
+                    <li>Install a library: <code>python -m pip install requests</code> (used in part 13).</li>
+                    <li>Record it: <code>python -m pip freeze &gt; requirements.txt</code>.</li>
+                    <li>Save the <code>course_info.py</code> script above and run <code>python course_info.py abc</code>.</li>
+                </ol>
+                <p>Expected result: the prompt shows <code>(.venv)</code>, <code>pip list</code> includes <code>requests</code>, <code>requirements.txt</code> holds a few lines shaped like <code>name==version</code>, and the script prints two lines like the sample.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Installing libraries before activating the environment.</strong> Once activated, <code>python</code> and <code>pip</code> point into that environment; if you skip it you install into the system Python and the Odoo venv still lacks the library. Look for <code>(.venv)</code> in the prompt before running <code>pip</code>.</li>
+                        <li><strong>Creating the venv with the wrong Python.</strong> A venv uses the version of the command that created it. If the machine's default is Python 3.10 and you run <code>python3 -m venv</code>, Odoo 20 will not qualify. Run <code>python3.12 -m venv .venv</code> (or newer) and confirm with <code>python --version</code>.</li>
+                        <li><strong>Copying the whole venv folder to another machine.</strong> Environments are not meant to move. Create a fresh one and install from <code>requirements.txt</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>Odoo 20 needs Python 3.12+; check with <code>python3 --version</code>.</li>
+                    <li>Run Python interactively, as a script file, with <code>-c</code> or with <code>-m</code>; arguments arrive in <code>sys.argv</code>.</li>
+                    <li>One <code>.venv</code> per project (kept out of Git), libraries installed with <code>python -m pip</code>.</li>
+                    <li><code>requirements.txt</code> lets you rebuild the environment elsewhere.</li>
+                </ul>
+                <p>The next part starts writing real code: variables, data types and strings, using course codes and log messages as examples.</p>
+
+                <div class="cta-box">
+                    <h3>Want to learn Python properly with a mentor?</h3>
+                    <p>The Developer Foundation course includes a Python Fundamentals module with real exercises and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Which Python version does Odoo 20 need?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo 20 requires Python 3.12 or later. Check it with python3 --version, or run python3 -c with a comparison on sys.version_info to print True when the version is recent enough.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why should every project have its own virtual environment?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Each virtual environment is a separate folder holding one Python plus its own packages, so one project can need library 1.0 while another needs 2.0 without conflict.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should the venv folder go into Git?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">No. A virtual environment is disposable, easy to delete and recreate, and must not be copied elsewhere. Add it to .gitignore and rebuild it from requirements.txt.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between pip install and python -m pip install?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Both install packages, but python -m pip guarantees the package is installed for the exact Python you are running, which is safer when a machine has several versions.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/interpreter.html" target="_blank" rel="noopener">Python 3.12 – Using the Python Interpreter</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/venv.html" target="_blank" rel="noopener">Python 3.12 – Virtual Environments and Packages</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/venv.html" target="_blank" rel="noopener">Python 3.12 – venv module</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fgetting-started-python-venv-pip.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fgetting-started-python-venv-pip.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="index.html"><small>← Previous</small>← Back to series</a>
+                    <a class="next" href="python-variables-data-types-strings-f-strings.html"><small>Next →</small>Variables, data types and strings</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#python-in-odoo">Where will you write Python in Odoo work?</a></li>
+                        <li><a href="#install-python">Installing Python and checking the version</a></li>
+                        <li><a href="#run-python">Four ways to run Python</a></li>
+                        <li><a href="#venv">Virtual environments: one compartment per project</a></li>
+                        <li><a href="#pip">Managing libraries with pip</a></li>
+                        <li><a href="#practice">Practice: set up the environment for vinc_course tooling</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

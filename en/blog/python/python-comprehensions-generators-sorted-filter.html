@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Comprehensions, Generators, sorted and filter</title>
+    <meta name="description" content="Write list/dict comprehensions, generators, sorted, filter, map, any and all in Python and compare them with Odoo recordset mapped, filtered, sorted." />
+    <meta name="keywords" content="python list comprehension, python generator yield, python sorted filter map, odoo mapped filtered, python any all sum" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Comprehensions, Generators, sorted and filter" />
+    <meta property="og:description" content="Comprehensions, generators, sorted, filter and map in Python with their Odoo recordset counterparts mapped, filtered, sorted and grouped." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-comprehensions-generators-sorted-filter.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Comprehensions, Generators, sorted and filter",
+                "description": "Comprehensions, generators, sorted, filter and map in Python with their Odoo recordset counterparts mapped, filtered, sorted and grouped.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-comprehensions-generators-sorted-filter.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Comprehensions, generators and sorted/filter"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How does a list comprehension differ from a for loop?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A comprehension is an expression that builds a new list from an old one at once, shorter than a for loop with append. Use it for plain transforming or filtering; if the loop has several steps or side effects keep an ordinary for loop."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does a generator differ from a list?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A generator does not build the whole list in memory but produces each value when asked, saving memory on large data, but it can be consumed only once."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How are Odoo's mapped and filtered like plain Python?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "mapped resembles a transforming comprehension and filtered a comprehension with an if condition. The difference is that recordset methods accept field names and return recordsets, while a comprehension returns a list."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I get the first item that matches a condition?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Use next with a generator and a default, for example next((c for c in courses if c[\"hours\"] < 10), None). It stops as soon as it finds one and returns None when nothing matches."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"comprehension-generator-sorted-filter-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Comprehensions, generators and sorted/filter</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 6 · Practical Python Series</span>
+            <h1>Python Comprehensions, Generators, sorted, filter and Odoo mapped</h1>
+            <p class="post-lead">Processing lists tidily is an everyday skill in Odoo code. This guide walks through comprehensions, generators, sorted, filter, map, any and all, and shows how they correspond to a recordset's mapped, filtered, sorted and grouped.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A comprehension turns a <code>for</code> loop into one expression: <code>[c["code"] for c in courses if c["published"]]</code>.</strong> There are four forms (list, dict, set, generator), differing only in the brackets. A generator produces values on demand, saving memory but usable only once. Together with <code>sorted</code>, <code>filter</code>, <code>map</code>, <code>sum</code>, <code>any</code> and <code>all</code>, this is the list-processing toolkit that Odoo's recordset <code>mapped</code>, <code>filtered</code> and <code>sorted</code> imitate.</p>
+                </div>
+
+                <h2 id="list-comprehension">List comprehension: a for loop in one line</h2>
+                <p>The syntax is <code>[expression for item in collection if condition]</code>, where the <code>if</code> part is optional. Reusing the course list from earlier parts:</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "name": "Odoo basics", "hours": 24, "published": True},
+    {"code": "PY-F", "name": "Python basics", "hours": 16, "published": True},
+    {"code": "GIT-T", "name": "Git for teams", "hours": 8, "published": False},
+]
+
+codes = [c["code"] for c in courses]
+print(codes)          # ['ODO-F', 'PY-F', 'GIT-T']
+
+long_codes = [c["code"] for c in courses if c["hours"] &gt;= 16]
+print(long_codes)     # ['ODO-F', 'PY-F']
+
+labels = [f'{c["code"]} ({c["hours"]}h)' for c in courses]
+print(labels)         # ['ODO-F (24h)', 'PY-F (16h)', 'GIT-T (8h)']</code></pre>
+                <p>Read it left to right like a sentence: "take <code>c["code"]</code> for each <code>c</code> in <code>courses</code> if <code>c["hours"] &gt;= 16</code>". It equals the loop you wrote in part 3, shorter and yielding the result list directly:</p>
+<pre><code>result = []
+for c in courses:
+    if c["published"]:
+        result.append(c["code"])
+print(result)         # ['ODO-F', 'PY-F']
+
+# same result, one line
+print([c["code"] for c in courses if c["published"]])</code></pre>
+                <p>When to use it? When you are <strong>building a new list</strong> from an old one by transforming or filtering. If the loop has several steps or side effects (writing files, calling an API), keep the plain <code>for</code> loop for readability.</p>
+
+                <h2 id="dict-set-comprehension">Dict and set comprehensions</h2>
+                <p>Just change the brackets: braces with a <code>key: value</code> pair give a dict, braces with a single value give a set (for example to drop duplicates):</p>
+<pre><code>by_code = {c["code"]: c["hours"] for c in courses}
+print(by_code)        # {'ODO-F': 24, 'PY-F': 16, 'GIT-T': 8}
+
+hour_set = {c["hours"] // 8 for c in courses}
+print(sorted(hour_set))   # [1, 2, 3]</code></pre>
+                <p>A dict comprehension is great for building a lookup table from a list: here <code>by_code["PY-F"]</code> yields the hours instantly instead of scanning the list each time.</p>
+
+                <h3 id="nested">Nested loops</h3>
+<pre><code>pairs = [(c["code"], t) for c in courses for t in ("A", "B") if c["published"]]
+print(pairs)
+# [('ODO-F', 'A'), ('ODO-F', 'B'), ('PY-F', 'A'), ('PY-F', 'B')]</code></pre>
+                <p>The <code>for</code> clauses are listed in the same nesting order as when you write ordinary loops. But if a comprehension needs two <code>for</code> levels plus a complex condition, split it into a plain loop: readable code matters more than short code.</p>
+
+                <h2 id="sorted-filter-map">sorted, filter, map and the aggregate functions</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Function</th><th>What it does</th><th>Returns</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>sorted(items, key=..., reverse=...)</code></td><td>Sorts by a key</td><td>a new list</td></tr>
+                            <tr><td><code>filter(func, items)</code></td><td>Keeps items for which func is true</td><td>an iterator (wrap in <code>list()</code>)</td></tr>
+                            <tr><td><code>map(func, items)</code></td><td>Applies func to each item</td><td>an iterator</td></tr>
+                            <tr><td><code>sum</code>, <code>min</code>, <code>max</code></td><td>Total, smallest, largest</td><td>one value</td></tr>
+                            <tr><td><code>any</code>, <code>all</code></td><td>At least one / every item is true</td><td><code>True</code>/<code>False</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>print(sorted(courses, key=lambda c: c["hours"], reverse=True)[0]["code"])   # ODO-F
+print(list(filter(lambda c: c["published"], courses))[0]["code"])           # ODO-F
+print(list(map(lambda c: c["hours"] * 60, courses)))                        # [1440, 960, 480]
+
+print(sum(c["hours"] for c in courses), max(c["hours"] for c in courses), min(c["hours"] for c in courses))
+# 48 24 8
+print(any(c["hours"] &gt; 20 for c in courses), all(c["published"] for c in courses))
+# True False</code></pre>
+                <p><code>filter</code> and <code>map</code> return an iterator object rather than a list, so printing one directly shows <code>&lt;filter object ...&gt;</code>. In practice many people prefer comprehensions over <code>filter/map</code> for readability and keep only <code>sorted</code>, <code>sum</code>, <code>any</code> and <code>all</code>.</p>
+
+                <h2 id="conditional-transform">Conditional transforms, enumerate and zip</h2>
+                <p>There are two places to put a condition in a comprehension and they differ. An <code>if</code> placed <em>after</em> the <code>for</code> <strong>drops</strong> items; <code>x if cond else y</code> placed <em>before</em> the <code>for</code> <strong>transforms</strong> every item depending on the condition. You may also use <code>enumerate</code> and <code>zip</code> inside to get an index or walk two lists side by side:</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+# if-else goes BEFORE for: transform by condition
+print([c["code"] if c["published"] else c["code"].lower() for c in courses])
+# ['ODO-F', 'PY-F', 'git-t', 'SQL-B']
+
+# enumerate and zip inside a comprehension
+print([f"{i}. {c['code']}" for i, c in enumerate(courses, start=1)])
+# ['1. ODO-F', '2. PY-F', '3. GIT-T', '4. SQL-B']
+print({n: h for n, h in zip(["a", "b"], [1, 2])})   # {'a': 1, 'b': 2}</code></pre>
+
+                <h2 id="advanced-sorting">Advanced sorting</h2>
+                <p>The <code>key</code> parameter takes a function returning a "comparison key" for each item. To sort by several criteria, return a tuple; a minus sign reverses a number. The <code>operator</code> module offers <code>itemgetter</code> to do this more tersely than a lambda. Python's sort is <strong>stable</strong>: items with equal keys keep their original order, so you can sort repeatedly by one criterion at a time.</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+from operator import itemgetter
+
+# several keys: hours descending, then code ascending
+print([c["code"] for c in sorted(courses, key=lambda c: (-c["hours"], c["code"]))])
+# ['ODO-F', 'PY-F', 'SQL-B', 'GIT-T']
+
+print([c["code"] for c in sorted(courses, key=itemgetter("hours", "code"))])
+# ['GIT-T', 'PY-F', 'SQL-B', 'ODO-F']
+
+# stable sort: the two 16-hour courses keep their original order
+print([c["code"] for c in sorted(courses, key=lambda c: c["hours"])])
+# ['GIT-T', 'PY-F', 'SQL-B', 'ODO-F']
+
+print(max(courses, key=lambda c: c["hours"])["code"])   # ODO-F</code></pre>
+
+                <h2 id="grouping-counting">Grouping and counting</h2>
+                <p>In part 4 you grouped with <code>setdefault</code>. The standard library has more specialized tools: <code>defaultdict(list)</code> creates an empty list for each new key, <code>Counter</code> tallies occurrences, and <code>itertools.groupby</code> groups adjacent items. Beware of the last one: <code>groupby</code> only groups items that <strong>sit next to each other</strong>, so the data must first be sorted by the same key.</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+from collections import defaultdict, Counter
+from itertools import groupby
+from operator import itemgetter
+
+groups = defaultdict(list)
+for c in courses:
+    groups[c["hours"]].append(c["code"])
+print(dict(groups))   # {24: ['ODO-F'], 16: ['PY-F', 'SQL-B'], 8: ['GIT-T']}
+
+print(Counter(c["hours"] for c in courses))   # Counter({16: 2, 24: 1, 8: 1})
+
+# groupby only groups ADJACENT items: sort first
+srt = sorted(courses, key=itemgetter("hours"))
+print({h: [c["code"] for c in g] for h, g in groupby(srt, key=itemgetter("hours"))})
+# {8: ['GIT-T'], 16: ['PY-F', 'SQL-B'], 24: ['ODO-F']}
+print({h: [c["code"] for c in g] for h, g in groupby(courses, key=itemgetter("hours"))})
+# {24: ['ODO-F'], 16: ['SQL-B'], 8: ['GIT-T']}   &lt;- wrong: 'PY-F' is lost!</code></pre>
+                <p>In Odoo, <code>records.grouped(key)</code> does this grouping and returns a dict from key to recordset, so you rarely need to write <code>groupby</code> yourself.</p>
+
+                <h2 id="generator">Generators: values produced on demand</h2>
+                <p>Swap a list comprehension's square brackets for round ones and you get a <em>generator expression</em>: it does not build the whole list in memory but produces each value when asked. A function using <code>yield</code> instead of <code>return</code> also makes a generator: each time it is resumed it continues from where it stopped, remembering variable values and the last statement executed.</p>
+<pre><code>gen = (c["hours"] for c in courses)    # generator expression: round brackets
+print(type(gen))                        # &lt;class 'generator'&gt;
+print(next(gen), next(gen), list(gen))  # 24 16 [8]
+
+def hours_gen(items):
+    for c in items:
+        yield c["hours"]                # yield: hands back one value, remembers its place
+
+g = hours_gen(courses)
+print(next(g), sum(g))                  # 24 24</code></pre>
+                <p>The big win is memory. With a million records a list holds them all while a generator keeps one item at a time. Feeding a generator straight into <code>sum</code>, <code>max</code> or <code>any</code>, as in <code>sum(c["hours"] for c in courses)</code>, is a good habit, and you have seen this style in the <code>any(course.is_published for course in self)</code> example of the Odoo series.</p>
+<pre><code>import sys
+big_list = [i for i in range(100000)]
+big_gen = (i for i in range(100000))
+print(sys.getsizeof(big_list) &gt; sys.getsizeof(big_gen))    # True
+print(sum(i for i in range(10)))                          # 45</code></pre>
+                <h3 id="first-match">The "find the first match" pattern</h3>
+<pre><code>first = next((c for c in courses if c["hours"] &lt; 10), None)
+print(first["code"])                                          # GIT-T
+print(next((c for c in courses if c["hours"] &gt; 100), None))   # None</code></pre>
+                <p><code>next(generator, default)</code> returns the first item and stops, without scanning the whole list; if nothing matches it returns the default instead of raising an error.</p>
+
+                <h2 id="in-odoo">The Odoo counterparts: mapped, filtered, sorted</h2>
+                <p>Odoo recordsets ship methods doing exactly these jobs, accepting both functions and field names. The ORM documentation describes:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Recordset method</th><th>Plain-Python equivalent</th><th>Notes from the documentation</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>records.mapped('name')</code></td><td><code>[r.name for r in records]</code></td><td>Takes a function or a dotted field path (<code>'partner_id.bank_ids'</code>); returns a list, or a recordset when the result is a recordset (order not guaranteed)</td></tr>
+                            <tr><td><code>records.filtered(f)</code></td><td><code>[r for r in records if f(r)]</code></td><td>Takes a function, a domain or a field-path string such as <code>"partner_id.vat"</code>; returns a recordset</td></tr>
+                            <tr><td><code>records.sorted(key)</code></td><td><code>sorted(records, key=key)</code></td><td><code>key</code> is a function or a string like <code>'name DESC, id'</code>; without it the model's default order applies</td></tr>
+                            <tr><td><code>records.grouped(key)</code></td><td>a grouping dict</td><td>Returns a dict from the result of <code>key</code> to recordsets</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code># list of names (plain Python ~ recordset)
+names = [c.name for c in courses]            # same as courses.mapped('name')
+
+# filter
+published = [c for c in courses if c.is_published]   # same as courses.filtered('is_published')
+
+# sort
+ordered = sorted(courses, key=lambda c: c.start_date)   # same as courses.sorted('start_date')
+
+# total the hours
+total = sum(c.duration_hours for c in courses)          # same as sum(courses.mapped('duration_hours'))</code></pre>
+                <p>One important difference: recordset methods return a <strong>recordset</strong> (you can keep chaining <code>.write()</code> or <code>.mapped()</code>), whereas a comprehension returns a plain list.</p>
+
+                <h2 id="practice">Practice: group courses by status</h2>
+<pre><code>groups = {}
+for c in courses:
+    groups.setdefault(c["published"], []).append(c["code"])
+print(groups)          # {True: ['ODO-F', 'PY-F'], False: ['GIT-T']}
+
+# rewritten with a comprehension + sorted
+published_codes = sorted(c["code"] for c in courses if c["published"])
+unpublished_codes = sorted(c["code"] for c in courses if not c["published"])
+print(published_codes, unpublished_codes)   # ['ODO-F', 'PY-F'] ['GIT-T']</code></pre>
+                <p>Try writing one more comprehension that builds a <code>{code: name}</code> dict of published courses only, then use <code>next(...)</code> to find the first course longer than 20 hours.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Reusing an exhausted generator.</strong> After it has been consumed a generator is empty; a second pass gives <code>[]</code>. Build a list if you need several passes.</li>
+                        <li><strong>Forgetting <code>list()</code> around <code>filter</code>/<code>map</code>.</strong> You print <code>&lt;filter object at ...&gt;</code> instead of the result.</li>
+                        <li><strong>An overly complicated comprehension.</strong> Two <code>for</code> levels plus several conditions force the reader to decode it. Split it into a plain loop or a named function.</li>
+                        <li><strong>Mixing up brackets.</strong> <code>[...]</code> is a list, <code>{...}</code> a set or dict, <code>(...)</code> a generator, not a tuple comprehension.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A comprehension builds a new list/dict/set from old data with one expression; use it only while it stays readable.</li>
+                    <li>A generator (<code>( ... )</code> or <code>yield</code>) produces values on demand, saves memory and works once.</li>
+                    <li><code>sorted</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>any</code>, <code>all</code> and <code>next(..., default)</code> are everyday tools.</li>
+                    <li>Odoo's <code>mapped</code>, <code>filtered</code>, <code>sorted</code> and <code>grouped</code> do the same jobs but return recordsets.</li>
+                </ul>
+                <p>The next part explains how Python organizes code into modules and packages, and why Odoo modules have an <code>__init__.py</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Want to write tighter Python and read Odoo code faster?</h3>
+                    <p>The Developer Foundation course has exercises on comprehensions and recordset handling, with code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does a list comprehension differ from a for loop?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A comprehension is an expression that builds a new list from an old one at once, shorter than a for loop with append. Use it for plain transforming or filtering; if the loop has several steps or side effects keep an ordinary for loop.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does a generator differ from a list?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A generator does not build the whole list in memory but produces each value when asked, saving memory on large data, but it can be consumed only once.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How are Odoo's mapped and filtered like plain Python?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">mapped resembles a transforming comprehension and filtered a comprehension with an if condition. The difference is that recordset methods accept field names and return recordsets, while a comprehension returns a list.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I get the first item that matches a condition?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Use next with a generator and a default, for example next((c for c in courses if c["hours"] &lt; 10), None). It stops as soon as it finds one and returns None when nothing matches.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/datastructures.html" target="_blank" rel="noopener">Python 3.12 – Data Structures (list comprehensions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes (generators, generator expressions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functions.html" target="_blank" rel="noopener">Python 3.12 – Built-in Functions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (mapped, filtered, sorted, grouped)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-comprehensions-generators-sorted-filter.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-comprehensions-generators-sorted-filter.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-functions-args-kwargs-lambda.html"><small>← Previous</small>Functions: parameters, **kwargs and lambda</a>
+                    <a class="next" href="python-modules-packages-imports-odoo.html"><small>Next →</small>Modules, packages and imports</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#list-comprehension">List comprehension: a for loop in one line</a></li>
+                        <li><a href="#dict-set-comprehension">Dict and set comprehensions</a></li>
+                        <li><a href="#sorted-filter-map">sorted, filter, map and the aggregate functions</a></li>
+                        <li><a href="#conditional-transform">Conditional transforms, enumerate and zip</a></li>
+                        <li><a href="#advanced-sorting">Advanced sorting</a></li>
+                        <li><a href="#grouping-counting">Grouping and counting</a></li>
+                        <li><a href="#generator">Generators: values produced on demand</a></li>
+                        <li><a href="#in-odoo">The Odoo counterparts: mapped, filtered, sorted</a></li>
+                        <li><a href="#practice">Practice: group courses by status</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

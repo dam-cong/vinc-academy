@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python: điều kiện và vòng lặp if, for, while, match</title>
+    <meta name="description" content="Học if/elif/else, for, while, break, continue và match trong Python qua ví dụ danh sách khóa học, nền tảng của for record in self trong Odoo." />
+    <meta name="keywords" content="python if else, python vòng lặp for, python while, python match case, for record in self odoo, enumerate zip" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python: điều kiện và vòng lặp if, for, while, match" />
+    <meta property="og:description" content="if/elif/else, for, while, break, continue và match trong Python, kèm ví dụ thực tế và liên hệ for record in self của Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/dieu-kien-vong-lap-if-for-while-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python: điều kiện và vòng lặp if, for, while, match",
+                "description": "if/elif/else, for, while, break, continue và match trong Python, kèm ví dụ thực tế và liên hệ for record in self của Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/dieu-kien-vong-lap-if-for-while-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Điều kiện và vòng lặp"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "for record in self trong Odoo là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "self là một recordset, tức tập hợp các bản ghi. Vòng lặp for duyệt qua từng bản ghi và gán vào biến record, nên bạn xử lý được cả khi method được gọi trên nhiều bản ghi cùng lúc."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa break và continue?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "continue bỏ qua phần còn lại của vòng lặp hiện tại và chuyển sang phần tử kế tiếp, còn break thoát hẳn khỏi vòng lặp."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Nhánh else của vòng lặp for chạy khi nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nhánh else chạy khi vòng lặp kết thúc bình thường, tức không bị break. Nó rất hợp cho bài toán tìm kiếm: nếu không tìm thấy thì chạy else."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào dùng match thay cho if/elif?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi một giá trị có nhiều nhánh xử lý rõ ràng, ví dụ mã trạng thái HTTP. match có từ Python 3.10, nên dùng được trong module Odoo 20 chạy Python 3.12 trở lên."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-conditions-loops-if-for-while-match.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Điều kiện và vòng lặp</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 3 · Series Python thực chiến</span>
+            <h1>Python: điều kiện và vòng lặp if, for, while, match</h1>
+            <p class="post-lead">Điều kiện và vòng lặp là cách chương trình đưa ra quyết định và xử lý hàng loạt dữ liệu. Bài này đi qua if, for, while, match bằng danh sách khóa học, và chỉ ra vì sao for record in self trong Odoo chính là vòng lặp for quen thuộc.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Điều kiện (<code>if/elif/else</code>) quyết định đoạn code nào chạy, vòng lặp (<code>for</code>, <code>while</code>) lặp lại một khối code. Python dùng thụt dòng và dấu hai chấm để đánh dấu khối.</strong> Vòng lặp bạn dùng nhiều nhất là <code>for item in danh_sach</code>, và đó chính là hình dạng của <code>for record in self</code> trong mọi method của model Odoo. <code>match</code> (từ Python 3.10) hữu ích khi một giá trị có nhiều nhánh xử lý.</p>
+                </div>
+
+                <h2 id="if">Điều kiện: if, elif, else</h2>
+                <p>Mỗi nhánh có một dấu hai chấm, và khối code bên dưới phải thụt vào (quy ước 4 dấu cách). Python kiểm tra lần lượt từ trên xuống và chạy nhánh đầu tiên đúng. Ví dụ phân loại độ dài khóa học theo số giờ:</p>
+<pre><code>def level_of(hours):
+    if hours &gt;= 24:
+        return "dài"
+    elif hours &gt;= 12:
+        return "vừa"
+    else:
+        return "ngắn"
+
+print(level_of(24), level_of(16), level_of(8))
+# dài vừa ngắn</code></pre>
+                <p>Bạn đã biết các phép so sánh và <code>and/or/not</code> ở bài trước. Với danh sách, chuỗi hay số 0, bạn có thể viết thẳng <code>if danh_sach:</code> để kiểm tra "có phần tử" mà không cần so sánh độ dài.</p>
+
+                <h3 id="bieu-thuc-mot-dong">Điều kiện một dòng và kiểm tra sớm</h3>
+                <p>Khi chỉ cần chọn giữa hai giá trị, dùng biểu thức điều kiện thay cho cả khối <code>if/else</code>. Cách viết này xuất hiện rất nhiều trong compute method của Odoo, đặc biệt để tránh chia cho 0:</p>
+<pre><code>hours = 24
+label = "dài" if hours &gt;= 24 else "ngắn"          # dài
+
+price, duration = 4500000.0, 0
+price_per_hour = price / duration if duration else 0.0   # 0.0, không lỗi chia cho 0</code></pre>
+                <p>Với logic kiểm tra dữ liệu, thói quen tốt là <strong>kiểm tra sớm và thoát sớm</strong> thay vì lồng nhiều tầng <code>if</code>. Mỗi điều kiện lỗi trả về ngay, và đường chạy thành công nằm cuối cùng, thẳng hàng:</p>
+<pre><code>def check(course):
+    if not course["name"]:
+        return "Thiếu tên"
+    if course["hours"] &lt;= 0:
+        return "Giờ học phải lớn hơn 0"
+    if not course["published"]:
+        return "Chưa xuất bản"
+    return "OK"
+
+print(check({"name": "", "hours": 8, "published": True}))     # Thiếu tên
+print(check({"name": "Git", "hours": 0, "published": True}))  # Giờ học phải lớn hơn 0
+print(check({"name": "Git", "hours": 8, "published": True}))  # OK</code></pre>
+                <p>Cấu trúc này giống hệt một method constraint trong Odoo, chỉ khác ở chỗ thay vì <code>return</code> chuỗi, Odoo <code>raise ValidationError(...)</code> (bài 10). Một mẫu khác bạn sẽ gặp là kiểm tra quyền trước khi làm việc nhạy cảm, như ví dụ trong tài liệu bảo mật Odoo: <code>if self.state == "draft" and self.env.user.has_group('base.manager'):</code>.</p>
+
+                <h2 id="for">Vòng lặp for: duyệt từng phần tử</h2>
+                <p>Chúng ta dùng danh sách các khóa học làm dữ liệu mẫu (mỗi khóa là một dict, sẽ học kỹ ở bài 4):</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "name": "Odoo cơ bản", "hours": 24, "published": True},
+    {"code": "PY-F", "name": "Python cơ bản", "hours": 16, "published": True},
+    {"code": "GIT-T", "name": "Git cho nhóm", "hours": 8, "published": False},
+]
+
+total = 0
+for course in courses:
+    if not course["published"]:
+        continue
+    total += course["hours"]
+print("Tổng giờ đã xuất bản:", total)
+# Tổng giờ đã xuất bản: 40</code></pre>
+                <p>Mỗi vòng, biến <code>course</code> nhận một phần tử. <code>continue</code> bỏ qua phần còn lại của vòng hiện tại, <code>break</code> thoát hẳn vòng lặp. Trong Odoo, cùng hình dạng đó xuất hiện ở bài computed field:</p>
+<pre><code>for course in self:
+    course.session_count = len(course.session_ids)</code></pre>
+                <p>Ở đây <code>self</code> là recordset (một tập bản ghi) và vòng lặp trao từng bản ghi vào <code>course</code>. Vì vậy bạn luôn thấy <code>for record in self</code> ở đầu các method compute, constraint hay <code>action_*</code>.</p>
+
+                <h3 id="vong-lap-huu-ich">Ba trợ thủ của vòng lặp</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hàm</th><th>Dùng khi</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>range(n)</code></td><td>Lặp theo số lần</td><td><code>list(range(3))</code> là <code>[0, 1, 2]</code>; <code>range(1, 10, 4)</code> cho <code>1, 5, 9</code></td></tr>
+                            <tr><td><code>enumerate(ds, start=1)</code></td><td>Cần cả số thứ tự lẫn phần tử</td><td><code>for i, course in enumerate(courses, start=1):</code></td></tr>
+                            <tr><td><code>zip(a, b)</code></td><td>Duyệt song song hai danh sách</td><td><code>for name, h in zip(names, hours):</code></td></tr>
+                            <tr><td><code>d.items()</code></td><td>Duyệt dict theo cặp khóa - giá trị</td><td><code>for k, v in {"ODO-F": 24}.items():</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>for i, course in enumerate(courses, start=1):
+    print(i, course["name"])
+# 1 Odoo cơ bản
+# 2 Python cơ bản
+# 3 Git cho nhóm
+
+names = ["Odoo cơ bản", "Python cơ bản"]
+hours = [24, 16]
+for name, h in zip(names, hours):
+    print(f"{name}: {h} giờ")
+# Odoo cơ bản: 24 giờ
+# Python cơ bản: 16 giờ</code></pre>
+
+                <h3 id="pham-vi-vong-lap">Một vài chi tiết hay bị bỏ sót</h3>
+                <ul>
+                    <li><strong>Biến vòng lặp vẫn tồn tại sau vòng lặp.</strong> Sau <code>for course in courses: pass</code>, <code>course</code> vẫn giữ phần tử cuối cùng. Tránh phụ thuộc vào điều này, và đặt tên biến vòng lặp khác với biến bên ngoài để khỏi vô tình ghi đè.</li>
+                    <li><strong><code>pass</code> là lệnh "không làm gì"</strong>, dùng khi cú pháp đòi một khối nhưng bạn chưa viết nội dung (ví dụ method khung đang chờ viết).</li>
+                    <li><strong>Không dùng <code>range(len(ds))</code> để lấy chỉ số.</strong> Nó chạy đúng nhưng dài dòng, hãy dùng <code>enumerate</code> như bảng trên.</li>
+                    <li><strong><code>any()</code> và <code>all()</code> thay cho vòng lặp kiểm tra.</strong> <code>any(c["hours"] &gt; 20 for c in courses)</code> trả <code>True</code> nếu có ít nhất một khóa dài hơn 20 giờ; <code>all(...)</code> chỉ trả <code>True</code> khi mọi khóa đều thỏa. Bạn đã thấy <code>any(course.is_published for course in self)</code> trong ví dụ chặn xóa ở series Odoo.</li>
+                    <li><strong><code>while True</code> kết hợp <code>break</code></strong> là mẫu quen thuộc khi bạn cần chạy ít nhất một lần rồi mới biết có tiếp tục hay không.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mẫu điều kiện/vòng lặp</th><th>Ví dụ trong Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>for record in self:</code></td><td>Mọi compute method, constraint, <code>action_*</code></td></tr>
+                            <tr><td><code>if not record.field:</code></td><td>Bắt buộc có giá trị trước khi xử lý</td></tr>
+                            <tr><td><code>x if cond else y</code></td><td><code>course.price / course.duration_hours if course.duration_hours else 0.0</code></td></tr>
+                            <tr><td><code>any(...)</code> / <code>all(...)</code></td><td>Chặn xóa khi có bản ghi đã xuất bản</td></tr>
+                            <tr><td><code>raise</code> trong nhánh <code>if</code></td><td>Constraint báo <code>ValidationError</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="while-break-else">while, break và else của vòng lặp</h2>
+                <p><code>while</code> lặp khi điều kiện còn đúng, hợp với trường hợp không biết trước số lần (ví dụ thử gọi API lại cho tới khi thành công):</p>
+<pre><code>n = 3
+while n &gt; 0:
+    print("còn", n)
+    n -= 1
+# còn 3
+# còn 2
+# còn 1</code></pre>
+                <p>Python còn có một đặc điểm thú vị: vòng lặp có thể có nhánh <code>else</code>, chạy khi vòng lặp kết thúc bình thường (không bị <code>break</code>). Rất hợp để tìm kiếm:</p>
+<pre><code>for code in ("ODO-F", "XYZ"):
+    for course in courses:
+        if course["code"] == code:
+            print("Tìm thấy", code)
+            break
+    else:
+        print("Không thấy", code)
+# Tìm thấy ODO-F
+# Không thấy XYZ</code></pre>
+
+                <h2 id="match">match: nhiều nhánh theo giá trị</h2>
+                <p>Từ Python 3.10, lệnh <code>match</code> so khớp một giá trị với các mẫu <code>case</code>. Dấu <code>|</code> gộp nhiều giá trị, <code>_</code> là nhánh mặc định. Ví dụ đổi mã trạng thái HTTP của API (bài 13) thành thông báo:</p>
+<pre><code>def status_message(code):
+    match code:
+        case 200:
+            return "OK"
+        case 401 | 403:
+            return "Không có quyền"
+        case 404:
+            return "Không tìm thấy"
+        case _:
+            return "Lỗi khác"
+
+print([status_message(c) for c in (200, 403, 404, 500)])
+# ['OK', 'Không có quyền', 'Không tìm thấy', 'Lỗi khác']</code></pre>
+                <p>Odoo 20 chạy Python 3.12+ nên bạn dùng được <code>match</code> trong module mới. Tuy vậy, trong code Odoo hiện có bạn vẫn gặp chủ yếu chuỗi <code>if/elif</code>, nên cần đọc được cả hai.</p>
+
+                <h2 id="thuc-hanh">Thực hành: báo cáo nhanh danh sách khóa học</h2>
+                <p>Viết đoạn code in từng khóa kèm độ dài, bỏ qua khóa chưa xuất bản, rồi in tổng:</p>
+<pre><code>total = 0
+for course in courses:
+    if not course["published"]:
+        continue
+    print(course["code"], level_of(course["hours"]))
+    total += course["hours"]
+print("Tổng:", total)
+# ODO-F dài
+# PY-F vừa
+# Tổng: 40</code></pre>
+                <p>Thử thay <code>continue</code> bằng <code>break</code> để thấy sự khác biệt: vòng lặp dừng hẳn ngay ở khóa chưa xuất bản đầu tiên.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Thụt dòng sai hoặc thiếu.</strong> Quên thụt khối sau <code>if</code> báo <code>IndentationError: expected an indented block after 'if' statement on line 2</code>. Hãy dùng 4 dấu cách và đừng trộn tab với dấu cách.</li>
+                        <li><strong>Quên dấu hai chấm.</strong> <code>if hours &gt; 20</code> thiếu <code>:</code> báo <code>SyntaxError: expected ':'</code>.</li>
+                        <li><strong>Sửa danh sách khi đang duyệt nó.</strong> Tài liệu Python cảnh báo việc thay đổi tập hợp trong lúc lặp rất khó làm đúng. Hãy duyệt trên bản sao (<code>for x in nums[:]:</code>) hoặc tạo danh sách mới. Với danh sách <code>[1, 2, 3, 4]</code>, xóa số chẵn trên bản sao cho đúng kết quả <code>[1, 3]</code>.</li>
+                        <li><strong>Vòng <code>while</code> không bao giờ dừng.</strong> Luôn có điều kiện thay đổi trong thân vòng lặp (như <code>n -= 1</code>), hoặc một <code>break</code> rõ ràng.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>if/elif/else</code> chạy nhánh đầu tiên đúng; khối code nhận biết bằng dấu hai chấm và thụt dòng.</li>
+                    <li><code>for item in iterable</code> là vòng lặp chính; <code>enumerate</code>, <code>zip</code>, <code>.items()</code> giúp lặp gọn hơn.</li>
+                    <li><code>break</code>, <code>continue</code>, <code>else</code> của vòng lặp điều khiển luồng; <code>match</code> xử lý nhiều nhánh theo giá trị.</li>
+                    <li><code>for record in self</code> của Odoo chính là vòng lặp <code>for</code> trên recordset.</li>
+                </ul>
+                <p>Bài tiếp theo giới thiệu bốn cấu trúc dữ liệu bạn dùng liên tục: list, tuple, set và dict.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn luyện tư duy lập trình với mentor?</h3>
+                    <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập về điều kiện, vòng lặp và review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>for record in self trong Odoo là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">self là một recordset, tức tập hợp các bản ghi. Vòng lặp for duyệt qua từng bản ghi và gán vào biến record, nên bạn xử lý được cả khi method được gọi trên nhiều bản ghi cùng lúc.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa break và continue?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">continue bỏ qua phần còn lại của vòng lặp hiện tại và chuyển sang phần tử kế tiếp, còn break thoát hẳn khỏi vòng lặp.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nhánh else của vòng lặp for chạy khi nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nhánh else chạy khi vòng lặp kết thúc bình thường, tức không bị break. Nó rất hợp cho bài toán tìm kiếm: nếu không tìm thấy thì chạy else.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào dùng match thay cho if/elif?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi một giá trị có nhiều nhánh xử lý rõ ràng, ví dụ mã trạng thái HTTP. match có từ Python 3.10, nên dùng được trong module Odoo 20 chạy Python 3.12 trở lên.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/controlflow.html" target="_blank" rel="noopener">Python 3.12 – More Control Flow Tools</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Compound statements</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (recordsets)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fdieu-kien-vong-lap-if-for-while-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fdieu-kien-vong-lap-if-for-while-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="bien-kieu-du-lieu-chuoi-f-string-python.html"><small>← Bài trước</small>Biến, kiểu dữ liệu và chuỗi</a>
+                    <a class="next" href="list-tuple-set-dict-python.html"><small>Bài tiếp theo →</small>List, tuple, set và dict</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#if">Điều kiện: if, elif, else</a></li>
+                        <li><a href="#for">Vòng lặp for: duyệt từng phần tử</a></li>
+                        <li><a href="#while-break-else">while, break và else của vòng lặp</a></li>
+                        <li><a href="#match">match: nhiều nhánh theo giá trị</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: báo cáo nhanh danh sách khóa học</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

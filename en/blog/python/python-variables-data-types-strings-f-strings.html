@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Variables, Data Types, Strings and f-strings (Odoo)</title>
+    <meta name="description" content="Understand variables, int, float, str, bool, None, string handling and f-strings in Python, with course-code examples mapped to Odoo fields." />
+    <meta name="keywords" content="python variables data types, python f-string, python string methods, python int float str, python for odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Variables, Data Types, Strings and f-strings (Odoo)" />
+    <meta property="og:description" content="Variables, data types, strings and f-strings in Python through course-code examples, mapped to Odoo fields." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-variables-data-types-strings-f-strings.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Variables, Data Types, Strings and f-strings (Odoo)",
+                "description": "Variables, data types, strings and f-strings in Python through course-code examples, mapped to Odoo fields.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-variables-data-types-strings-f-strings.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Variables, data types and strings"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How do Python variables differ from other languages?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Python needs no type declaration; a variable is just a name bound to a value and can later be rebound to a value of another type. The type function shows the current value's type."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is an f-string and why use it?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "An f-string is a string prefixed with f that embeds expressions in braces and accepts a format after a colon, such as f\"{seq:03d}\". It is shorter and easier to read than the % operator or format."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why is 0.1 + 0.2 not equal to 0.3?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Floats are stored in binary so small errors appear. Compare with math.isclose in Python, or float_compare and float_is_zero in Odoo, instead of a double equals sign."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Is an empty Char field in Odoo None or False?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "According to Odoo's data-files reference, when no value is given for a field an implicit False is set. Test with if not value rather than is None."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"bien-kieu-du-lieu-chuoi-f-string-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Variables, data types and strings</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 2 · Practical Python Series</span>
+            <h1>Python Variables, Data Types, Strings and f-strings for Odoo Devs</h1>
+            <p class="post-lead">Every line of code starts with values and the names you give them. This guide explains variables, basic data types and string handling through a course-code generator, and shows where they appear in Odoo fields.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A Python variable is just a name pointing at a value; the type belongs to the value, not the variable.</strong> The four basic types you use daily are <code>int</code>, <code>float</code>, <code>str</code> and <code>bool</code>, plus <code>None</code> for "no value yet". The modern way to build strings is the f-string: <code>f"{code}-{year}"</code>. In Odoo these types map straight onto <code>fields.Integer</code>, <code>Float</code>, <code>Char</code> and <code>Boolean</code>.</p>
+                </div>
+
+                <h2 id="variables">Variables: naming a value</h2>
+                <p>You create a variable by assigning to it, with no type declaration. The same name can later be bound to a value of another type, and the <code>type()</code> function tells you what the current value is:</p>
+<pre><code>course_name = "Odoo Developer Foundation"
+hours = 24
+price = 4500000.0
+is_published = True
+description = None
+
+print(type(course_name), type(hours), type(price), type(is_published), type(description))
+# &lt;class 'str'&gt; &lt;class 'int'&gt; &lt;class 'float'&gt; &lt;class 'bool'&gt; &lt;class 'NoneType'&gt;</code></pre>
+                <p>The Python (and Odoo) community convention is <code>snake_case</code> for variables and functions and <code>CamelCase</code> for classes. Names are case-sensitive and cannot start with a digit. That is why you see <code>is_published</code> and <code>duration_hours</code> on the <code>vinc.course</code> model: every model field is, in effect, a "variable" of the record.</p>
+
+                <h2 id="data-types">Basic data types and their Odoo fields</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Python type</th><th>Example</th><th>Odoo field</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>int</code></td><td><code>24</code></td><td><code>fields.Integer</code></td><td>Whole numbers</td></tr>
+                            <tr><td><code>float</code></td><td><code>4500000.0</code></td><td><code>fields.Float</code></td><td>Decimals, with rounding error</td></tr>
+                            <tr><td><code>str</code></td><td><code>"ODO-F"</code></td><td><code>fields.Char</code>, <code>Text</code></td><td>Text, cannot be changed in place</td></tr>
+                            <tr><td><code>bool</code></td><td><code>True</code></td><td><code>fields.Boolean</code></td><td><code>True</code> / <code>False</code></td></tr>
+                            <tr><td><code>None</code></td><td><code>None</code></td><td>(an empty field)</td><td>"No value"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">An empty Odoo field is False, not None</p>
+                    <p>On the Odoo side, the data-files reference says that when no value is supplied for a field, an implicit <code>False</code> is set. So when you read a Char field nobody filled in, do not test it with <code>is None</code>; use a "has a value" check such as <code>if not course.name:</code>.</p>
+                </div>
+                <p>Python treats these values as "false" in conditions: <code>False</code>, <code>None</code>, the number 0, the empty string and the empty list. Everything else is "true". That is why <code>if description:</code> screens out both <code>None</code> and an empty string:</p>
+<pre><code>print(bool(""), bool("a"), bool(0), bool([]), bool(None))
+# False True False False False</code></pre>
+
+                <h2 id="numbers">Numbers and arithmetic</h2>
+<pre><code>print(7 / 2, 7 // 2, 7 % 2, 2 ** 10)
+# 3.5 3 1 1024</code></pre>
+                <p><code>/</code> always gives a float, <code>//</code> divides and drops the fraction, <code>%</code> returns the remainder and <code>**</code> is the power. For converting hours into 8-hour sessions: <code>hours // 8</code> is the number of full sessions and <code>hours % 8</code> the leftover hours.</p>
+                <p>Floats are stored in binary, so tiny errors appear; this is true of every language, not just Python:</p>
+<pre><code>print(0.1 + 0.2, 0.1 + 0.2 == 0.3)
+# 0.30000000000000004 False
+
+import math
+print(math.isclose(0.1 + 0.2, 0.3))
+# True</code></pre>
+                <p>That is why Odoo's documentation tells you to compare floats with <code>float_compare()</code> and <code>float_is_zero()</code> rather than <code>==</code> (part 8 of the Odoo series). For money, use a <code>Monetary</code> field or round to the proper precision.</p>
+
+                <h2 id="strings">Strings: what you handle most</h2>
+                <p>Strings go in single or double quotes; multi-line text uses triple quotes. Strings are <strong>immutable</strong>: processing functions always return a new string and never modify the old one.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Operation</th><th>Example</th><th>Result</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Trim surrounding spaces</td><td><code>"  Odoo  ".strip()</code></td><td><code>'Odoo'</code></td></tr>
+                            <tr><td>Lower / upper case</td><td><code>"Odoo".lower()</code> / <code>.upper()</code></td><td><code>'odoo'</code> / <code>'ODOO'</code></td></tr>
+                            <tr><td>Replace</td><td><code>"a b".replace(" ", "-")</code></td><td><code>'a-b'</code></td></tr>
+                            <tr><td>Split into a list</td><td><code>"odoo,python".split(",")</code></td><td><code>['odoo', 'python']</code></td></tr>
+                            <tr><td>Join a list</td><td><code>" | ".join(["odoo", "python"])</code></td><td><code>'odoo | python'</code></td></tr>
+                            <tr><td>Starts with</td><td><code>"ODO-F".startswith("ODO")</code></td><td><code>True</code></td></tr>
+                            <tr><td>Length, slicing</td><td><code>len(s)</code>, <code>s[:4]</code>, <code>s[-10:]</code></td><td>length, first 4 characters, last 10</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 id="f-string">Formatting: f-strings, %, format()</h3>
+                <p>An f-string (a string prefixed with <code>f</code>) lets you embed expressions in braces and add a format after a colon:</p>
+<pre><code>prefix, year, seq = "ODO", 2026, 7
+print(f"{prefix}-{year}-{seq:03d}")        # ODO-2026-007
+price, hours = 4500000.0, 24
+print(f"{price:,.0f} VND", f"{hours / 8:.1f} days")   # 4,500,000 VND 3.0 days</code></pre>
+                <p>Two older styles still appear in Odoo code: the <code>%</code> operator (Odoo's docs contain <code>self.message = "Dear %s" % (self.partner_id.name or "")</code>) and <code>"{} - {}".format(...)</code>. They give the same results:</p>
+<pre><code>print("Dear %s" % "Hien", "%d hours" % 24)    # Dear Hien 24 hours
+print("{} - {}".format("ODO-F", hours))        # ODO-F - 24</code></pre>
+
+                <h2 id="comparison">Comparison and logical operators</h2>
+                <p>Conditions (next part) are built from comparisons and <code>and</code>, <code>or</code>, <code>not</code>. The result is always <code>True</code> or <code>False</code>:</p>
+<pre><code>hours = 24
+level = "beginner"
+print(hours &gt; 20, hours == 24, hours != 24, 10 &lt;= hours &lt; 30)
+# True True False True
+print(level == "beginner" and hours &gt;= 24, level == "advanced" or hours &gt; 100, not hours &gt; 100)
+# True False True
+print("odoo" in "odoo developer", "Odoo" in ["odoo", "python"], 24 in [8, 24])
+# True False True</code></pre>
+                <ul>
+                    <li>Comparisons can be chained like <code>10 &lt;= hours &lt; 30</code>, exactly as you would write them in maths.</li>
+                    <li><code>in</code> tests whether a substring sits inside a string or an item sits inside a list. Note that string comparison is <strong>case-sensitive</strong>: <code>"python" == "Python"</code> is <code>False</code>, so people normalize with <code>.lower()</code> before comparing.</li>
+                    <li>For <code>None</code>, write <code>is None</code> / <code>is not None</code> instead of <code>== None</code>. Both usually agree, but <code>is</code> is the standard, clearer idiom.</li>
+                </ul>
+                <p>These comparisons underpin Odoo <em>domains</em>: <code>[('hours', '&gt;', 20), ('level', '=', 'beginner')]</code> is the "data" spelling of the same condition, which the ORM translates into SQL.</p>
+
+                <h2 id="in-odoo">Where do you meet these types in an Odoo module?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Odoo code</th><th>Python value</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_name = 'vinc.course'</code></td><td>a string (<code>str</code>)</td></tr>
+                            <tr><td><code>'version': '20.0.1.0.0'</code> in the manifest</td><td>a string</td></tr>
+                            <tr><td><code>'application': True</code></td><td>a boolean</td></tr>
+                            <tr><td><code>limit=10</code> in <code>search()</code></td><td>an integer</td></tr>
+                            <tr><td><code>price = fields.Float()</code></td><td>a float</td></tr>
+                            <tr><td><code>raise ValidationError("Teaching hours must be greater than 0.")</code></td><td>a message string shown to the user</td></tr>
+                            <tr><td><code>"Dear %s" % partner.name</code></td><td><code>%</code>-style string formatting</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="casting">Converting between types</h2>
+<pre><code>print(int("12") + 1, str(12) + "h", float("3.5"))
+# 13 12h 3.5</code></pre>
+                <p>Data read from CSV files or forms usually arrives as text, so you need <code>int()</code> or <code>float()</code> before computing. A string that is not a valid number raises <code>ValueError</code> (part 10 handles that).</p>
+
+                <h2 id="practice">Practice: generate a code and slug for a course</h2>
+                <p>Write a script that takes a raw course name and a sequence number and returns a course code plus a URL-friendly slug:</p>
+<pre><code>def make_code(prefix, year, seq):
+    return f"{prefix.upper()}-{year}-{seq:03d}"
+
+def make_slug(name):
+    return name.strip().lower().replace(" ", "-")
+
+print(make_code("odo", 2026, 7))
+print(make_slug("  Odoo Developer Foundation  "))
+# ODO-2026-007
+# odoo-developer-foundation</code></pre>
+                <p>Try extending it: add an <code>if not name:</code> check to complain about an empty name. This is exactly the sort of logic you would put in <code>create()</code> or a compute method to auto-generate course codes.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Adding a string and a number.</strong> <code>"5" + 3</code> raises <code>TypeError: can only concatenate str (not "int") to str</code>. Convert (<code>int("5") + 3</code>) or use an f-string (<code>f"{5}{3}"</code>).</li>
+                        <li><strong>Changing one character of a string.</strong> <code>course_name[0] = "x"</code> raises <code>TypeError: 'str' object does not support item assignment</code> because strings are immutable. Build a new string with <code>replace()</code> or slicing.</li>
+                        <li><strong>Comparing floats with <code>==</code>.</strong> <code>0.1 + 0.2 == 0.3</code> is <code>False</code>. Use <code>math.isclose()</code> in plain Python or <code>float_compare()</code> in Odoo.</li>
+                        <li><strong>Converting a non-numeric string.</strong> <code>int("abc")</code> raises <code>ValueError: invalid literal for int() with base 10: 'abc'</code>. Validate or catch the error before converting.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A variable is a name for a value; use <code>snake_case</code>; <code>type()</code> reveals the type.</li>
+                    <li>The basic types <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code> and <code>None</code> map onto Odoo fields.</li>
+                    <li>Strings are immutable; work with <code>strip</code>, <code>split</code>, <code>join</code>, <code>replace</code> and f-strings.</li>
+                    <li>Never compare floats with <code>==</code>; data read from outside is often text and needs converting.</li>
+                </ul>
+                <p>The next part gives your programs a "brain": conditions and loops, the groundwork for <code>for record in self</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Want to practice Python with real exercises?</h3>
+                    <p>The Developer Foundation course has a Python Fundamentals module with exercises close to real work, plus code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do Python variables differ from other languages?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Python needs no type declaration; a variable is just a name bound to a value and can later be rebound to a value of another type. The type function shows the current value's type.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is an f-string and why use it?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">An f-string is a string prefixed with f that embeds expressions in braces and accepts a format after a colon, such as f"{seq:03d}". It is shorter and easier to read than the % operator or format.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why is 0.1 + 0.2 not equal to 0.3?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Floats are stored in binary so small errors appear. Compare with math.isclose in Python, or float_compare and float_is_zero in Odoo, instead of a double equals sign.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Is an empty Char field in Odoo None or False?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">According to Odoo's data-files reference, when no value is given for a field an implicit False is set. Test with if not value rather than is None.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/introduction.html" target="_blank" rel="noopener">Python 3.12 – An Informal Introduction to Python</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/inputoutput.html" target="_blank" rel="noopener">Python 3.12 – Input and Output (formatting)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/stdtypes.html" target="_blank" rel="noopener">Python 3.12 – Built-in Types</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/data.html" target="_blank" rel="noopener">Odoo 20 – Data files</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-variables-data-types-strings-f-strings.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-variables-data-types-strings-f-strings.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="getting-started-python-venv-pip.html"><small>← Previous</small>Getting started with Python</a>
+                    <a class="next" href="python-conditions-loops-if-for-while-match.html"><small>Next →</small>Conditions and loops</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#variables">Variables: naming a value</a></li>
+                        <li><a href="#data-types">Basic data types and their Odoo fields</a></li>
+                        <li><a href="#numbers">Numbers and arithmetic</a></li>
+                        <li><a href="#strings">Strings: what you handle most</a></li>
+                        <li><a href="#comparison">Comparison and logical operators</a></li>
+                        <li><a href="#in-odoo">Where do you meet these types in an Odoo module?</a></li>
+                        <li><a href="#casting">Converting between types</a></li>
+                        <li><a href="#practice">Practice: generate a code and slug for a course</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

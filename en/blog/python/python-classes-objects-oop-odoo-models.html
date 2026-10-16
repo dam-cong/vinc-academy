@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Classes and Objects: From Basic OOP to Odoo Models</title>
+    <meta name="description" content="Learn classes, __init__, self, attributes, methods and @property in Python and see how a class becomes an Odoo model and self becomes a recordset." />
+    <meta name="keywords" content="python class, python oop, __init__ self python, python property, odoo model class, odoo recordset self" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Classes and Objects: From Basic OOP to Odoo Models" />
+    <meta property="og:description" content="Classes, __init__, self and @property in Python and how a Python class becomes an Odoo model with fields as attributes and self as a recordset." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-classes-objects-oop-odoo-models.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Classes and Objects: From Basic OOP to Odoo Models",
+                "description": "Classes, __init__, self and @property in Python and how a Python class becomes an Odoo model with fields as attributes and self as a recordset.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-classes-objects-oop-odoo-models.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Classes and objects"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is self in Python?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "self is a reference to the very object calling the method. It is always the first parameter of a method in a class and Python passes it for you, so c.publish() equals Course.publish(c)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between class and object attributes?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "An attribute declared in the class body is shared by all objects, while one assigned through self in __init__ belongs to each object. A class-level list or dict is shared, so initialize it in __init__."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is @property for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "It turns a method into a read-only attribute computed on demand, such as c.price_per_hour. To validate values on assignment, add a setter with @name.setter."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does self in an Odoo model method differ from ordinary self?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "In Odoo, self is a recordset that may hold 0, 1 or many records, so you loop for record in self to handle each record instead of treating it as a single object."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"class-doi-tuong-oop-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Classes and objects</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 8 · Practical Python Series</span>
+            <h1>Python Classes and Objects: From Basic OOP to Odoo Models</h1>
+            <p class="post-lead">Every Odoo model is a Python class. This guide teaches basic OOP through a plain-Python Course class, then compares it with the Odoo VincCourse class so you understand that fields are attributes, self is a recordset and why the naming conventions match.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A class is a mold and an object is a product made from it: <code>c = Course("Odoo", 24)</code>.</strong> Inside a class, <code>__init__</code> initializes data, <code>self</code> is the object currently in use, attributes store data and methods are functions bound to the object. An Odoo model is a class extending <code>models.Model</code>: fields are class attributes, <code>_name</code> names the model, and <code>self</code> in a method is a <em>recordset</em>, a set of objects rather than just one.</p>
+                </div>
+
+                <h2 id="class-basics">Classes and objects: the basics</h2>
+                <p>Let us build a plain-Python <code>Course</code> class that imitates a course in the <code>vinc_course</code> project:</p>
+<pre><code>class Course:
+    prefix = "ODO"                       # class attribute (shared)
+
+    def __init__(self, name, hours, price=0.0):
+        self.name = name                 # attribute of each object
+        self.hours = hours
+        self.price = price
+        self.published = False
+
+    @property
+    def price_per_hour(self):            # read like an attribute, computed on demand
+        return self.price / self.hours if self.hours else 0.0
+
+    def publish(self):
+        if self.hours &lt;= 0:
+            raise ValueError("Hours must be greater than 0")
+        self.published = True
+
+    def __repr__(self):
+        return f"Course({self.name!r}, {self.hours}h)"</code></pre>
+                <ul>
+                    <li><code>__init__</code> runs whenever an object is created. Its first parameter is always <code>self</code>, referring to that very object; Python passes it for you when you call <code>Course(...)</code>.</li>
+                    <li><code>self.name = name</code> creates an <strong>attribute</strong> of the object; each object has its own set of attributes.</li>
+                    <li>A method (such as <code>publish</code>) is a function declared in the class, whose first parameter is also <code>self</code>.</li>
+                    <li><code>__repr__</code> decides the string shown when you print an object or see it in a list; without it you only see an unreadable line like <code>&lt;Course object at 0x...&gt;</code>.</li>
+                </ul>
+<pre><code>c = Course("Odoo basics", 24, 4500000)
+print(c)                      # Course('Odoo basics', 24h)
+print(c.name, c.hours, c.published)   # Odoo basics 24 False
+c.publish()
+print(c.published, round(c.price_per_hour))   # True 187500
+
+other = Course("Python", 16)
+print([c, other])             # [Course('Odoo basics', 24h), Course('Python', 16h)]
+print(isinstance(c, Course), type(c).__name__)   # True Course</code></pre>
+                <p>Notice that <code>c.publish()</code> needs no <code>self</code> argument: Python slips <code>c</code> in. The <code>isinstance(c, Course)</code> function tests whether an object belongs to a class, and <code>vars(c)</code> gives you a dict of its attributes.</p>
+
+                <h2 id="attributes">Class attributes and object attributes</h2>
+                <p>An attribute declared directly in the class body (like <code>prefix</code>) belongs to the class and is shared by all objects; one assigned through <code>self.</code> belongs to each object. Reassigning through an object merely creates an own attribute on that object:</p>
+<pre><code>print(Course.prefix, c.prefix)     # ODO ODO
+c.prefix = "X"                     # creates an own attribute on c, class unchanged
+print(c.prefix, Course.prefix)     # X ODO
+
+class Bad:
+    tags = []                      # a class-level list: shared by EVERY object
+    def add(self, t):
+        self.tags.append(t)
+
+a, b = Bad(), Bad()
+a.add("x")
+print(b.tags)                      # ['x']   &lt;- b sees it too!
+
+class Good:
+    def __init__(self):
+        self.tags = []             # each object has its own list
+    def add(self, t):
+        self.tags.append(t)
+
+a, b = Good(), Good()
+a.add("x")
+print(a.tags, b.tags)              # ['x'] []</code></pre>
+                <p>This trap mirrors the changeable default value from part 5: a class-level list is shared. The rule: an object's own data is always initialized in <code>__init__</code>.</p>
+
+                <h2 id="dunder">Special (dunder) methods and comparing objects</h2>
+                <p>Methods named like <code>__name__</code> are called silently by Python when you use familiar syntax. You have met <code>__init__</code> and <code>__repr__</code>; here are a few more that come up often:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Called when</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__init__</code></td><td>An object is created</td><td><code>Course("Odoo", 24)</code></td></tr>
+                            <tr><td><code>__repr__</code></td><td>Showing an object in a list, debugging</td><td><code>[course]</code></td></tr>
+                            <tr><td><code>__str__</code></td><td><code>print</code>, f-strings</td><td><code>f"{course}"</code></td></tr>
+                            <tr><td><code>__eq__</code></td><td>The <code>==</code> operator</td><td><code>a == b</code></td></tr>
+                            <tr><td><code>__len__</code></td><td>The <code>len()</code> function</td><td><code>len(course)</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>class Course:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+    def __repr__(self):                 # for developers (debugging, lists)
+        return f"Course({self.name!r}, {self.hours})"
+    def __str__(self):                  # for users (print, f-strings)
+        return f"{self.name} ({self.hours}h)"
+    def __eq__(self, other):            # defines the == operator
+        return isinstance(other, Course) and (self.name, self.hours) == (other.name, other.hours)
+    def __len__(self):                  # len(course)
+        return self.hours
+
+a, b = Course("Odoo", 24), Course("Odoo", 24)
+print(a == b, a is b)                   # True False
+print(repr(a), str(a), len(a))          # Course('Odoo', 24) Odoo (24h) 24
+print(f"{a}", [a])                      # Odoo (24h) [Course('Odoo', 24)]</code></pre>
+                <p>Two points to remember. First, <code>==</code> compares <strong>identity</strong> by default (are they the same object?); to treat two objects holding the same data as equal you must write <code>__eq__</code> yourself. The <code>is</code> operator always tests for the same object. Second, <code>__repr__</code> targets developers (ideally rich enough to recreate the object) while <code>__str__</code> targets end users; if you write only one, make it <code>__repr__</code>.</p>
+
+                <h3 id="dataclass">@dataclass: a class that merely holds data</h3>
+                <p>For a class that mostly bundles data (like a CSV row or an API response), writing <code>__init__</code>, <code>__repr__</code> and <code>__eq__</code> by hand is repetitive. The standard library's <code>@dataclass</code> decorator generates them from a list of annotated attributes. For a list or dict default use <code>field(default_factory=list)</code> to dodge the sharing trap mentioned in part 5:</p>
+<pre><code>from dataclasses import dataclass, field
+
+@dataclass
+class CourseDC:
+    name: str
+    hours: int
+    price: float = 0.0
+    tags: list = field(default_factory=list)   # a safe list default
+
+d = CourseDC("Odoo", 24)
+print(d)                                  # CourseDC(name='Odoo', hours=24, price=0.0, tags=[])
+print(d == CourseDC("Odoo", 24))          # True
+print(CourseDC("X", 1).tags)              # []  (each object has its own list)</code></pre>
+                <p>You will use <code>@dataclass</code> in parts 13 and 14 to describe data read from files or APIs before sending it to Odoo.</p>
+
+                <h3 id="name-conventions">Naming conventions: _ and __</h3>
+                <p>Python has no truly "private" attributes. By convention a single leading underscore (<code>_internal</code>) signals "internal use". A double leading underscore (<code>__secret</code>) makes Python rename the attribute to <code>_ClassName__secret</code> to avoid clashes with subclasses, not to hide it completely:</p>
+<pre><code>class Acc:
+    def __init__(self):
+        self._internal = 1        # convention: internal, do not touch from outside
+        self.__secret = 2         # the name is mangled to _Acc__secret
+
+x = Acc()
+print(x._internal, hasattr(x, "__secret"), x._Acc__secret)   # 1 False 2</code></pre>
+                <p>In Odoo a single underscore carries even more weight: a method starting with <code>_</code> cannot be called from buttons or external APIs.</p>
+
+                <h2 id="property">@property: computed, yet used like an attribute</h2>
+                <p><code>@property</code> turns a method into a read-only attribute: <code>c.price_per_hour</code> needs no parentheses and is always computed from current data. Assigning to a property without a setter raises <code>AttributeError: property 'price_per_hour' of 'Course' object has no setter</code>. To validate values on assignment, add a setter:</p>
+<pre><code>class Timer:
+    def __init__(self):
+        self._h = 0
+    @property
+    def h(self):
+        return self._h
+    @h.setter
+    def h(self, v):
+        if v &lt; 0:
+            raise ValueError("h must be &gt;= 0")
+        self._h = v
+
+t = Timer()
+t.h = 5
+print(t.h)                         # 5
+t.h = -1
+# ValueError: h phải &gt;= 0</code></pre>
+                <p>Naming convention: a single leading underscore (<code>_h</code>) says "internal detail, do not touch from outside". Odoo uses the same convention for private methods such as <code>_compute_total</code>.</p>
+
+                <h2 id="objects-inside-objects">Objects holding objects</h2>
+<pre><code>class Session:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+
+class Course2:
+    def __init__(self, name):
+        self.name = name
+        self.sessions = []         # a course "has many" sessions
+
+    def add_session(self, s):
+        self.sessions.append(s)
+        return self
+
+    @property
+    def total_hours(self):
+        return sum(s.hours for s in self.sessions)
+
+cc = Course2("Odoo").add_session(Session("1", 3)).add_session(Session("2", 4))
+print(cc.total_hours, len(cc.sessions))     # 7 2</code></pre>
+                <p>A course "has many" sessions: that is the One2many relation of the Odoo series, imitated here with a list attribute. The expression <code>sum(s.hours for s in self.sessions)</code> is exactly how a compute method totals hours.</p>
+
+                <h2 id="in-odoo">How a Python class becomes an Odoo model</h2>
+<pre><code>from odoo import fields, models
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = "Course"
+
+    name = fields.Char(required=True)             # class attribute
+    duration_hours = fields.Integer()
+    session_ids = fields.One2many('vinc.course.session', 'course_id')
+
+    def action_publish(self):
+        for course in self:                       # self is a recordset, loop over each record
+            course.is_published = True</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Plain Python class</th><th>Odoo model</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>class Course:</code></td><td><code>class VincCourse(models.Model):</code> with <code>_name = 'vinc.course'</code></td></tr>
+                            <tr><td><code>self.name = name</code> in <code>__init__</code></td><td><code>name = fields.Char()</code> is a class attribute; the ORM handles creating the column and assigning values</td></tr>
+                            <tr><td>Each <code>Course(...)</code> is an object</td><td>Each table row is a record; <code>self</code> is a <strong>recordset</strong> that may hold 0, 1 or many records</td></tr>
+                            <tr><td><code>@property</code></td><td>A computed field (<code>compute='_compute_x'</code>)</td></tr>
+                            <tr><td><code>__repr__</code></td><td><code>_rec_name</code> names the field used as the record's label</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Two differences to remember. First, you normally do not write an <code>__init__</code> for a model like the one above: the ORM machinery of <code>models.Model</code> creates the objects (per the documentation the class is instantiated once per database where the module is installed) and you just declare fields. Second, inside a model method <code>self</code> is a recordset, so you loop <code>for course in self</code> to handle each record (part 3); on each pass <code>course</code> is a one-element recordset. The ORM documentation also warns you not to give a field and a method the same name in one model, because the later declaration silently overwrites the earlier one.</p>
+
+                <h2 id="practice">Practice: Session and Course classes</h2>
+                <ol>
+                    <li>Re-run the <code>Course2</code> and <code>Session</code> example above.</li>
+                    <li>Add an <code>end_hour</code> property or a <code>remove_session(name)</code> method to <code>Course2</code>.</li>
+                    <li>Add a check: <code>add_session</code> raises <code>ValueError</code> if <code>hours &lt;= 0</code>.</li>
+                </ol>
+                <p>The aim is to get used to putting logic into a class's methods rather than scattering it across functions: exactly the habit you need when writing Odoo model methods.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+<pre><code>Course()
+# TypeError: Course.__init__() missing 2 required positional arguments: 'name' and 'hours'
+
+c.price_per_hour = 5
+# AttributeError: property 'price_per_hour' of 'Course' object has no setter
+
+x = Course("A", 1)
+y = x                              # y is the same object, not a copy
+y.name = "B"
+print(x.name)                      # B</code></pre>
+                    <ul>
+                        <li><strong>Missing arguments when creating an object.</strong> A <code>TypeError</code> lists the required parameters still missing.</li>
+                        <li><strong>A list/dict at class level.</strong> Shared between all objects; initialize it in <code>__init__</code>.</li>
+                        <li><strong>Thinking assignment copies an object.</strong> <code>y = x</code> only adds a name for the same object; changing <code>y</code> changes <code>x</code>.</li>
+                        <li><strong>Forgetting <code>self</code>.</strong> Inside a method, reach attributes through <code>self.name</code>; writing just <code>name</code> refers to a different variable or fails.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A class is a mold, an object an instance; <code>__init__</code> initializes, <code>self</code> is the current object.</li>
+                    <li>Own data is initialized in <code>__init__</code>; class-level lists/dicts are shared.</li>
+                    <li><code>@property</code> gives computed values used like attributes; add a setter to validate assignment.</li>
+                    <li>An Odoo model is a class whose fields are attributes; <code>self</code> is a recordset so always loop with <code>for record in self</code>.</li>
+                </ul>
+                <p>The next part extends classes with inheritance, <code>super()</code> and decorators, the basis of overriding methods in Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Want solid OOP skills to write Odoo models with confidence?</h3>
+                    <p>The Developer Foundation course has a Python Fundamentals module with OOP exercises and code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is self in Python?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">self is a reference to the very object calling the method. It is always the first parameter of a method in a class and Python passes it for you, so c.publish() equals Course.publish(c).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between class and object attributes?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">An attribute declared in the class body is shared by all objects, while one assigned through self in __init__ belongs to each object. A class-level list or dict is shared, so initialize it in __init__.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is @property for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It turns a method into a read-only attribute computed on demand, such as c.price_per_hour. To validate values on assignment, add a setter with @name.setter.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does self in an Odoo model method differ from ordinary self?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">In Odoo, self is a recordset that may hold 0, 1 or many records, so you loop for record in self to handle each record instead of treating it as a single object.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functions.html#property" target="_blank" rel="noopener">Python 3.12 – property()</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (models, fields, recordsets)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-classes-objects-oop-odoo-models.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-classes-objects-oop-odoo-models.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-modules-packages-imports-odoo.html"><small>← Previous</small>Modules, packages and imports</a>
+                    <a class="next" href="python-inheritance-super-decorators-odoo.html"><small>Next →</small>Inheritance, super() and decorators</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#class-basics">Classes and objects: the basics</a></li>
+                        <li><a href="#attributes">Class attributes and object attributes</a></li>
+                        <li><a href="#dunder">Special (dunder) methods and comparing objects</a></li>
+                        <li><a href="#property">@property: computed, yet used like an attribute</a></li>
+                        <li><a href="#objects-inside-objects">Objects holding objects</a></li>
+                        <li><a href="#in-odoo">How a Python class becomes an Odoo model</a></li>
+                        <li><a href="#practice">Practice: Session and Course classes</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

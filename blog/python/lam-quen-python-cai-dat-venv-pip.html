@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Làm quen Python cho dev Odoo: cài đặt, venv và pip</title>
+    <meta name="description" content="Cài Python 3.12, chạy script, tạo môi trường ảo venv, dùng pip và requirements.txt cho dự án Odoo. Ví dụ thực tế, dễ làm theo." />
+    <meta name="keywords" content="python cho odoo, cài python 3.12, venv python, pip requirements.txt, môi trường ảo python, học python cơ bản" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Làm quen Python cho dev Odoo: cài đặt, venv và pip" />
+    <meta property="og:description" content="Cài Python 3.12, tạo venv, dùng pip và requirements.txt: nền tảng để chạy và phát triển Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/lam-quen-python-cai-dat-venv-pip.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Làm quen Python cho dev Odoo: cài đặt, venv và pip",
+                "description": "Cài Python 3.12, tạo venv, dùng pip và requirements.txt: nền tảng để chạy và phát triển Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/lam-quen-python-cai-dat-venv-pip.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Làm quen Python"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Odoo 20 cần phiên bản Python nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo 20 yêu cầu Python 3.12 trở lên. Bạn có thể kiểm tra bằng python3 --version, hoặc chạy python3 -c với biểu thức so sánh sys.version_info để in True khi phiên bản đủ mới."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao mỗi dự án nên có môi trường ảo riêng?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Mỗi môi trường ảo là một thư mục độc lập chứa một bản Python và các gói riêng, nên dự án này cần thư viện bản 1.0 còn dự án kia cần bản 2.0 vẫn không xung đột."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Có nên đưa thư mục venv vào Git không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không. Môi trường ảo là thứ dùng một lần, dễ xóa và tạo lại, không được sao chép sang nơi khác. Hãy thêm vào .gitignore và dùng requirements.txt để tái tạo."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa pip install và python -m pip install?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cả hai đều cài gói, nhưng python -m pip đảm bảo gói được cài cho đúng bản Python bạn đang chạy, nên an toàn hơn khi máy có nhiều phiên bản."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"getting-started-python-venv-pip.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Làm quen Python</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 1 · Series Python thực chiến</span>
+            <h1>Làm quen Python cho dev Odoo: cài đặt, venv và pip</h1>
+            <p class="post-lead">Trước khi viết code Odoo, bạn cần một môi trường Python sạch và đúng phiên bản. Bài này hướng dẫn cài Python 3.12, chạy script, tạo môi trường ảo và quản lý thư viện bằng pip, với ví dụ từ dự án quản lý khóa học.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 9 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Odoo 20 chạy trên Python 3.12 trở lên. Mỗi dự án nên có một môi trường ảo (<code>venv</code>) riêng và danh sách thư viện trong <code>requirements.txt</code>.</strong> Bạn kiểm tra phiên bản bằng <code>python3 --version</code>, tạo môi trường bằng <code>python3 -m venv .venv</code>, kích hoạt bằng <code>source .venv/bin/activate</code> rồi cài thư viện bằng <code>python -m pip install -r requirements.txt</code>. Bài này là bước đầu của series Python thực chiến: mọi ví dụ lấy từ dự án quản lý khóa học <code>vinc_course</code> quen thuộc.</p>
+                </div>
+
+                <h2 id="python-trong-odoo">Bạn sẽ viết Python ở đâu trong công việc Odoo?</h2>
+                <p>Nếu bạn đã đọc series Odoo, bạn biết gần như mọi thứ ở tầng nghiệp vụ đều là Python: model, ORM, ràng buộc, controller, test, script tích hợp. Series này không dạy Python theo kiểu "thuộc hết cú pháp rồi mới làm", mà đi theo thứ tự bạn cần dùng khi làm việc, và mỗi bài chỉ ra khái niệm đó nằm ở đâu trong code Odoo.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Việc bạn làm</th><th>Python bạn dùng</th><th>Học ở bài</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Dựng môi trường chạy Odoo</td><td>Cài Python, <code>venv</code>, <code>pip</code></td><td>Bài này</td></tr>
+                            <tr><td>Viết model và field</td><td>Biến, kiểu dữ liệu, class</td><td>Bài 2, 8</td></tr>
+                            <tr><td>Viết logic trong method</td><td>Điều kiện, vòng lặp, hàm, comprehension</td><td>Bài 3, 5, 6</td></tr>
+                            <tr><td>Tổ chức module Odoo</td><td><code>import</code>, package, <code>__init__.py</code></td><td>Bài 7</td></tr>
+                            <tr><td>Ghi đè method, decorator</td><td>Kế thừa, <code>super()</code>, decorator</td><td>Bài 9</td></tr>
+                            <tr><td>Báo lỗi cho người dùng</td><td><code>try/except</code>, <code>raise</code></td><td>Bài 10</td></tr>
+                            <tr><td>Nhập xuất dữ liệu, gọi API</td><td>File, JSON, CSV, <code>requests</code></td><td>Bài 11, 13</td></tr>
+                            <tr><td>Viết test, gỡ lỗi</td><td><code>unittest</code>, <code>logging</code>, <code>pdb</code></td><td>Bài 14</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="cai-python">Cài Python và kiểm tra phiên bản</h2>
+                <p>Odoo 20 yêu cầu Python 3.12 trở lên (xem lại bài 2). Sau khi cài, kiểm tra bằng:</p>
+<pre><code>python3 --version
+python3 -c "import sys; print(sys.version_info &gt;= (3, 12))"</code></pre>
+                <p>Lệnh thứ hai in <code>True</code> nếu phiên bản đủ mới, rất tiện để đặt trong script kiểm tra môi trường. Trình thông dịch thường nằm ở dạng <code>/usr/local/bin/python3.12</code>, nên bạn có thể gọi đích danh <code>python3.12</code> khi máy có nhiều phiên bản. Trên Windows cài từ Microsoft Store thì có lệnh <code>python3.12</code>, còn nếu có bộ khởi chạy <code>py.exe</code> thì dùng lệnh <code>py</code>.</p>
+
+                <h2 id="chay-python">Bốn cách chạy Python</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cách</th><th>Lệnh</th><th>Dùng khi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Chế độ tương tác</td><td><code>python3</code></td><td>Thử nhanh một biểu thức; dấu nhắc là <code>&gt;&gt;&gt;</code>, thoát bằng <code>Ctrl+D</code> hoặc <code>quit()</code></td></tr>
+                            <tr><td>Chạy file script</td><td><code>python3 course_info.py</code></td><td>Chạy chương trình hoàn chỉnh; <code>odoo-bin</code> cũng là một file như vậy</td></tr>
+                            <tr><td>Chạy một dòng</td><td><code>python3 -c "print('xin chào')"</code></td><td>Kiểm tra nhanh trong shell</td></tr>
+                            <tr><td>Chạy module như script</td><td><code>python3 -m venv .venv</code></td><td>Chạy công cụ có sẵn của Python</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Khi chạy một file, tên file và các tham số phía sau được gom thành danh sách chuỗi trong <code>sys.argv</code>. Hãy thử với script nhỏ dưới đây:</p>
+                <p class="code-title">course_info.py</p>
+<pre><code>import sys
+
+course = "Odoo Developer Foundation"
+hours = 24
+print(f"Khóa học: {course} - {hours} giờ")
+print("Tham số dòng lệnh:", sys.argv[1:])</code></pre>
+<pre><code>$ python3 course_info.py abc 123
+Khóa học: Odoo Developer Foundation - 24 giờ
+Tham số dòng lệnh: ['abc', '123']</code></pre>
+                <p>Đây chính là cơ chế <code>odoo-bin</code> dùng để đọc các tham số như <code>-d</code>, <code>-u</code>, <code>--addons-path</code> mà bạn đã gõ nhiều lần ở series Odoo.</p>
+
+                <h2 id="venv">Môi trường ảo (venv): mỗi dự án một "ngăn" riêng</h2>
+                <p>Ứng dụng Python thường dùng thư viện ngoài thư viện chuẩn, và đôi khi cần đúng một phiên bản cụ thể. Nếu ứng dụng A cần thư viện bản 1.0 còn ứng dụng B cần bản 2.0, cài một trong hai sẽ làm ứng dụng kia hỏng. Giải pháp là <strong>môi trường ảo</strong>: một thư mục độc lập chứa một bản Python và các gói riêng của dự án. Với Odoo, điều này cho phép bạn giữ Odoo 20 và một dự án cũ chạy song song mà không đụng nhau.</p>
+<pre><code>cd ~/odoo-dev
+python3 -m venv .venv            # tạo môi trường
+source .venv/bin/activate        # kích hoạt (Linux/macOS)
+# Windows: .venv\Scripts\activate
+(.venv) $ python --version       # dấu nhắc có thêm (.venv)
+(.venv) $ deactivate             # thoát khi xong</code></pre>
+                <ul>
+                    <li>Lệnh <code>venv</code> tạo môi trường bằng đúng phiên bản Python đã chạy lệnh đó. Chạy bằng <code>python3.12</code> thì môi trường là 3.12.</li>
+                    <li>Tên thư mục phổ biến là <code>.venv</code>: dấu chấm giúp thư mục nằm gọn trong shell và không đụng với các file <code>.env</code> chứa biến môi trường.</li>
+                    <li>Môi trường ảo <strong>không</strong> đưa vào Git, coi là thứ dùng một lần: dễ xóa và tạo lại, không sao chép sang chỗ khác. Hãy thêm <code>.venv/</code> vào <code>.gitignore</code>.</li>
+                    <li>Đừng đặt mã dự án bên trong thư mục môi trường ảo.</li>
+                </ul>
+                <div class="callout tip">
+                    <p class="callout-title">Thực tế trên Debian/Ubuntu</p>
+                    <p>Ở một số bản Debian/Ubuntu, lệnh <code>python3 -m venv</code> báo môi trường chưa tạo được vì thiếu <code>ensurepip</code> và yêu cầu cài gói <code>python3-venv</code> (ví dụ <code>sudo apt install python3-venv</code>). Cài gói đó rồi tạo lại môi trường là xong.</p>
+                </div>
+
+                <h2 id="pip">Quản lý thư viện bằng pip</h2>
+                <p>Khi môi trường ảo đã kích hoạt, dùng <code>python -m pip</code> để cài thư viện từ Python Package Index. Viết <code>python -m pip</code> thay vì <code>pip</code> để chắc chắn gói được cài cho đúng bản Python đang dùng.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>python -m pip install requests</code></td><td>Cài bản mới nhất của một gói</td></tr>
+                            <tr><td><code>python -m pip install requests==2.6.0</code></td><td>Cài đúng một phiên bản</td></tr>
+                            <tr><td><code>python -m pip install --upgrade requests</code></td><td>Nâng cấp lên bản mới nhất</td></tr>
+                            <tr><td><code>python -m pip uninstall requests</code></td><td>Gỡ gói</td></tr>
+                            <tr><td><code>python -m pip list</code> / <code>show requests</code></td><td>Liệt kê gói đã cài / xem thông tin một gói</td></tr>
+                            <tr><td><code>python -m pip freeze &gt; requirements.txt</code></td><td>Ghi danh sách gói kèm phiên bản ra file</td></tr>
+                            <tr><td><code>python -m pip install -r requirements.txt</code></td><td>Cài mọi gói trong file</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Quy ước <code>requirements.txt</code> chính là thứ bạn dùng khi cài Odoo từ source: mã nguồn Odoo kèm sẵn file này, và bước "cài thư viện phụ thuộc" ở bài 2 chỉ là <code>pip install -r requirements.txt</code> trong môi trường ảo. Với module tự viết cần thêm thư viện ngoài, bạn khai báo thêm trong <code>external_dependencies</code> của manifest (bài 3).</p>
+
+                <h2 id="thuc-hanh">Thực hành: thiết lập môi trường cho dự án vinc_course</h2>
+                <ol>
+                    <li>Tạo thư mục dự án và môi trường ảo: <code>mkdir vinc-tools &amp;&amp; cd vinc-tools &amp;&amp; python3 -m venv .venv</code>.</li>
+                    <li>Kích hoạt: <code>source .venv/bin/activate</code>, kiểm tra dấu nhắc có <code>(.venv)</code>.</li>
+                    <li>Cài thư viện: <code>python -m pip install requests</code> (dùng ở bài 13).</li>
+                    <li>Ghi lại: <code>python -m pip freeze &gt; requirements.txt</code>.</li>
+                    <li>Lưu file <code>course_info.py</code> ở trên và chạy <code>python course_info.py abc</code>.</li>
+                </ol>
+                <p>Kết quả mong đợi: dấu nhắc có <code>(.venv)</code>, <code>pip list</code> thấy <code>requests</code>, file <code>requirements.txt</code> có vài dòng dạng <code>tên==phiên_bản</code>, và script in hai dòng như ví dụ.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới bắt đầu</p>
+                    <ul>
+                        <li><strong>Quên kích hoạt môi trường ảo rồi mới cài thư viện.</strong> Khi môi trường được kích hoạt, <code>python</code> và <code>pip</code> sẽ trỏ vào môi trường đó; nếu chưa, bạn cài vào Python của hệ thống và Odoo trong venv vẫn thiếu thư viện. Hãy nhìn dấu nhắc có <code>(.venv)</code> trước khi chạy <code>pip</code>.</li>
+                        <li><strong>Tạo venv bằng sai phiên bản Python.</strong> venv dùng đúng phiên bản của lệnh đã tạo ra nó. Nếu máy có Python 3.10 làm mặc định mà bạn chạy <code>python3 -m venv</code>, Odoo 20 sẽ không đủ điều kiện. Hãy chạy <code>python3.12 -m venv .venv</code> (hoặc bản mới hơn) và kiểm tra bằng <code>python --version</code>.</li>
+                        <li><strong>Sao chép cả thư mục venv sang máy khác.</strong> Môi trường ảo không phải thứ để di chuyển. Hãy tạo mới và cài từ <code>requirements.txt</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Odoo 20 cần Python 3.12+; kiểm tra bằng <code>python3 --version</code>.</li>
+                    <li>Chạy Python qua chế độ tương tác, file script, <code>-c</code> hoặc <code>-m</code>; tham số nằm trong <code>sys.argv</code>.</li>
+                    <li>Mỗi dự án một <code>.venv</code> (không đưa vào Git), cài thư viện bằng <code>python -m pip</code>.</li>
+                    <li><code>requirements.txt</code> giúp tái tạo môi trường trên máy khác.</li>
+                </ul>
+                <p>Bài tiếp theo bắt đầu viết code thật: biến, kiểu dữ liệu và chuỗi, với mã khóa học và thông báo log làm ví dụ.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn học Python bài bản với mentor?</h3>
+                    <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập thực tế và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo 20 cần phiên bản Python nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo 20 yêu cầu Python 3.12 trở lên. Bạn có thể kiểm tra bằng python3 --version, hoặc chạy python3 -c với biểu thức so sánh sys.version_info để in True khi phiên bản đủ mới.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao mỗi dự án nên có môi trường ảo riêng?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Mỗi môi trường ảo là một thư mục độc lập chứa một bản Python và các gói riêng, nên dự án này cần thư viện bản 1.0 còn dự án kia cần bản 2.0 vẫn không xung đột.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Có nên đưa thư mục venv vào Git không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Môi trường ảo là thứ dùng một lần, dễ xóa và tạo lại, không được sao chép sang nơi khác. Hãy thêm vào .gitignore và dùng requirements.txt để tái tạo.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa pip install và python -m pip install?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cả hai đều cài gói, nhưng python -m pip đảm bảo gói được cài cho đúng bản Python bạn đang chạy, nên an toàn hơn khi máy có nhiều phiên bản.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/interpreter.html" target="_blank" rel="noopener">Python 3.12 – Using the Python Interpreter</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/venv.html" target="_blank" rel="noopener">Python 3.12 – Virtual Environments and Packages</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/venv.html" target="_blank" rel="noopener">Python 3.12 – venv module</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/source.html" target="_blank" rel="noopener">Odoo 20 – Source install</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Flam-quen-python-cai-dat-venv-pip.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Flam-quen-python-cai-dat-venv-pip.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="index.html"><small>← Bài trước</small>← Về series</a>
+                    <a class="next" href="bien-kieu-du-lieu-chuoi-f-string-python.html"><small>Bài tiếp theo →</small>Biến, kiểu dữ liệu và chuỗi</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#python-trong-odoo">Bạn sẽ viết Python ở đâu trong công việc Odoo?</a></li>
+                        <li><a href="#cai-python">Cài Python và kiểm tra phiên bản</a></li>
+                        <li><a href="#chay-python">Bốn cách chạy Python</a></li>
+                        <li><a href="#venv">Môi trường ảo (venv): mỗi dự án một "ngăn" riêng</a></li>
+                        <li><a href="#pip">Quản lý thư viện bằng pip</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: thiết lập môi trường cho dự án vinc_course</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

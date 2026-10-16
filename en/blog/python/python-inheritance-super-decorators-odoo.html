@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Inheritance, super() and Decorators for Odoo Devs</title>
+    <meta name="description" content="Learn class inheritance, super(), mixins and decorators in Python, then apply them to Odoo create/write overrides and @api.depends, @http.route." />
+    <meta name="keywords" content="python inheritance, python super(), python decorator, functools.wraps, override create odoo, api.depends decorator" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Inheritance, super() and Decorators for Odoo Devs" />
+    <meta property="og:description" content="Inheritance, super(), mixins and decorators in Python and how they appear in Odoo method overrides and @api decorators." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-inheritance-super-decorators-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Inheritance, super() and Decorators for Odoo Devs",
+                "description": "Inheritance, super(), mixins and decorators in Python and how they appear in Odoo method overrides and @api decorators.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-inheritance-super-decorators-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Inheritance, super() and decorators"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is super() for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "super() returns a bridge to the parent class so you can call the original method, for example super().create(vals_list). That lets you add logic before or after while keeping the parent's behavior."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why must I call super() when overriding a method in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo's documentation stresses always calling super() so you do not break the processing chain, and returning the same kind of data as the parent method; if the parent returns a dict, so must the override."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is a decorator?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A decorator is a function that takes a function and returns a new one with added behavior. The @name syntax above a def line is shorthand for func = name(func)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why do I need functools.wraps when writing a decorator?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "It copies the original function's name and docstring onto the wrapper. Without it the function is renamed wrapper and loses its docstring, which makes debugging harder."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"ke-thua-super-decorator-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Inheritance, super() and decorators</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 9 · Practical Python Series</span>
+            <h1>Python Inheritance, super() and Decorators for Odoo Devs</h1>
+            <p class="post-lead">Overriding create or writing @api.depends both rest on two Python techniques: inheritance with super() and decorators. This guide teaches them with runnable examples, then shows the golden rules when overriding methods in Odoo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Inheritance lets a child class reuse and extend a parent: <code>class OnlineCourse(Course)</code>. When overriding a method, call <code>super()</code> to run the parent's logic.</strong> A decorator is a function that wraps another to add behavior, written as <code>@name</code> on the line above <code>def</code>. Odoo uses both everywhere: <code>super().create(vals_list)</code> when overriding, <code>@api.depends</code>, <code>@api.model</code>, <code>@api.constrains</code> and <code>@http.route</code>.</p>
+                </div>
+
+                <h2 id="inheritance">Class inheritance and super()</h2>
+                <p>A child class names its parent in parentheses. It receives every attribute and method of the parent and may <strong>override</strong> any method it wants to change. The <code>super()</code> function returns a "bridge" to the parent class so you can call the original method:</p>
+<pre><code>class Course:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+
+    def describe(self):
+        return f"{self.name} - {self.hours}h"
+
+class OnlineCourse(Course):                  # inherits from Course
+    def __init__(self, name, hours, platform="Zoom"):
+        super().__init__(name, hours)        # call the parent class's __init__
+        self.platform = platform
+
+    def describe(self):                      # override the parent method
+        base = super().describe()            # reuse the parent's result
+        return f"{base} (online: {self.platform})"
+
+c = OnlineCourse("Odoo", 24)
+print(c.describe())     # Odoo - 24h (online: Zoom)
+print(isinstance(c, Course), issubclass(OnlineCourse, Course))   # True True
+print([k.__name__ for k in OnlineCourse.__mro__])   # ['OnlineCourse', 'Course', 'object']</code></pre>
+                <ul>
+                    <li><code>super().__init__(name, hours)</code> runs the parent's initialization, so the child need not repeat assigning <code>name</code> and <code>hours</code>.</li>
+                    <li><code>super().describe()</code> fetches the parent method's result and you add to it instead of rewriting from scratch.</li>
+                    <li><code>isinstance(c, Course)</code> is <code>True</code> for an object of the child class: an <code>OnlineCourse</code> "is also" a <code>Course</code>.</li>
+                    <li><code>__mro__</code> (method resolution order) shows the order in which Python searches for methods: the child first, then the parent, finally <code>object</code>.</li>
+                </ul>
+
+                <h2 id="mixin">Multiple inheritance and mixins</h2>
+                <p>A class may inherit from several classes. The most useful pattern is the <strong>mixin</strong>: a small class offering a single capability (logging, timestamps…) that is "mixed into" other classes:</p>
+<pre><code>class LogMixin:
+    def log(self, msg):
+        print(f"[{type(self).__name__}] {msg}")
+
+class Tracked(LogMixin, Course):
+    def describe(self):
+        self.log("describe was called")
+        return super().describe()
+
+print(Tracked("Git", 8).describe())
+# [Tracked] describe was called
+# Git - 8h
+print([k.__name__ for k in Tracked.__mro__])
+# ['Tracked', 'LogMixin', 'Course', 'object']</code></pre>
+                <p>Python searches methods along <code>__mro__</code> and <code>super()</code> follows the same order, so mixins and the main class cooperate. Odoo leans on this principle heavily: its documentation describes <code>_inherit</code> accepting a list of parent models when the new model has a <code>_name</code>, which is multiple inheritance at the model level.</p>
+
+                <h2 id="override-odoo">Overriding methods and the golden rules of super()</h2>
+                <p>Overriding <code>create</code> and <code>write</code> is a daily task for Odoo developers (part 9 of the Odoo series). The structure is always the same: prepare the input, call the parent, handle the result, return. A plain-Python imitation:</p>
+<pre><code>class Base:
+    @classmethod
+    def create(cls, vals):
+        print("Base.create", vals)
+        return vals
+
+class MyModel(Base):
+    @classmethod
+    def create(cls, vals):
+        vals = dict(vals)                 # work on a copy
+        vals.setdefault("code", "AUTO")   # your logic first
+        result = super().create(vals)     # call the parent: NEVER forget
+        print("after creating")
+        return result                     # return the same kind as the parent
+
+print(MyModel.create({"name": "x"}))
+# Base.create {'name': 'x', 'code': 'AUTO'}
+# after creating
+# {'name': 'x', 'code': 'AUTO'}</code></pre>
+                <p>Odoo's documentation stresses two things: <strong>always call <code>super()</code></strong> so you do not break the processing chain (only very rare cases justify skipping it), and <strong>return the same kind of data as the parent method</strong>: if the parent returns a <code>dict</code>, the override must too. Work on a copy of arguments (like <code>dict(vals)</code> from part 5) so you do not change the caller's data.</p>
+
+                <h3 id="mro-super">super() and MRO order in multiple inheritance</h3>
+                <p>With "diamond-shaped" multiple inheritance, <code>super()</code> is not simply "call the direct parent" but "call the next class in <code>__mro__</code>". That is how each class in the chain runs exactly once and classes overriding the same method cooperate:</p>
+<pre><code>class A:
+    def hello(self):
+        return ["A"]
+
+class B(A):
+    def hello(self):
+        return ["B"] + super().hello()
+
+class C(A):
+    def hello(self):
+        return ["C"] + super().hello()
+
+class D(B, C):
+    def hello(self):
+        return ["D"] + super().hello()
+
+print(D().hello())                       # ['D', 'B', 'C', 'A']
+print([k.__name__ for k in D.__mro__])   # ['D', 'B', 'C', 'A', 'object']</code></pre>
+                <p>That is why the rule "always call <code>super()</code>" matters: if one class in the chain skips it, every class after it in <code>__mro__</code> never runs. A similar model applies when several modules extend one Odoo model: each overrides the method and must call <code>super()</code> so the other modules' parts keep working.</p>
+
+                <h3 id="composition">Inheritance or composition?</h3>
+                <p>Inheritance expresses an "<strong>is a</strong>" relationship (an <code>OnlineCourse</code> is a <code>Course</code>). When the relationship is merely "<strong>has a</strong>", use <strong>composition</strong>: keep the other object as an attribute. Overusing inheritance builds deep, hard-to-follow class trees; composition is more flexible:</p>
+<pre><code>class Instructor:
+    def __init__(self, name):
+        self.name = name
+
+class Offering:                          # composition: "has a", not "is a"
+    def __init__(self, course, instructor):
+        self.course = course
+        self.instructor = instructor
+
+    def title(self):
+        return f"{self.course.name} - {self.instructor.name}"
+
+print(Offering(Course("Odoo", 24), Instructor("Hien")).title())   # Odoo - Hien</code></pre>
+                <p>In Odoo the "has a" relationship is a Many2one (<code>instructor_id</code>) and "has many" a One2many: models use composition through relational fields, while <code>_inherit</code> is for when you truly want to extend or reuse that model itself.</p>
+
+                <h2 id="decorator">Decorators: functions wrapping functions</h2>
+                <p>A decorator is a function that takes another function and returns a new one with added behavior. The <code>@timer</code> syntax above a <code>def</code> line is shorthand for <code>slow_sum = timer(slow_sum)</code>. It rests on the closures you met in part 5:</p>
+<pre><code>import functools
+
+def timer(func):
+    @functools.wraps(func)                # keep the original function's name and docstring
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} done")
+        return result
+    return wrapper
+
+@timer                                    # same as slow_sum = timer(slow_sum)
+def slow_sum(n):
+    """Sum 1..n"""
+    return sum(range(n + 1))
+
+print(slow_sum(10), slow_sum.__name__, slow_sum.__doc__)
+# slow_sum done
+# 55 slow_sum Sum 1..n</code></pre>
+                <p><code>functools.wraps</code> matters: it copies the original function's name and docstring onto the wrapper. Without it the function turns into <code>wrapper</code> and loses its docstring, which hurts debugging and any tool or framework that reads function names (logs, debuggers, route registries...):</p>
+<pre><code>def no_wraps(func):
+    def wrapper(*a, **k):
+        return func(*a, **k)
+    return wrapper
+
+@no_wraps
+def f():
+    "doc"
+
+print(f.__name__, f.__doc__)     # wrapper None   &lt;- name and docstring lost</code></pre>
+
+                <h3 id="decorator-args">Decorators with arguments</h3>
+                <p>To pass arguments as in <code>@retry(3)</code> you need one more function layer: <code>retry(3)</code> returns the real decorator. This is precisely the structure of <code>@api.depends('a', 'b')</code> and <code>@http.route('/x', auth='public')</code>:</p>
+<pre><code>def retry(times):
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            last = None
+            for i in range(1, times + 1):
+                try:
+                    return func(*args, **kwargs)
+                except ValueError as e:
+                    last = e
+                    print(f"try {i} failed: {e}")
+            raise last
+        return wrapper
+    return deco
+
+calls = {"n": 0}
+
+@retry(3)                                 # a decorator with arguments: retry(3) returns deco
+def flaky():
+    calls["n"] += 1
+    if calls["n"] &lt; 3:
+        raise ValueError("not yet")
+    return "ok"
+
+print(flaky())
+# try 1 failed: not yet
+# try 2 failed: not yet
+# ok</code></pre>
+                <h3 id="decorator-order">The order of several decorators</h3>
+<pre><code>def deco(tag):
+    def d(f):
+        def w():
+            return f"&lt;{tag}&gt;" + f() + f"&lt;/{tag}&gt;"
+        return w
+    return d
+
+@deco("a")
+@deco("b")
+def x():
+    return "x"
+
+print(x())    # &lt;a&gt;&lt;b&gt;x&lt;/b&gt;&lt;/a&gt;   (the decorator closest to the function applies first)</code></pre>
+
+                <h3 id="useful-decorators">Two useful decorators to write or reuse</h3>
+                <p>Besides logging, the most common decorators <strong>remember results</strong> (a cache) for slow functions and <strong>check arguments</strong> before running the function. The standard library ships <code>functools.cache</code> (and <code>lru_cache</code> with a size limit):</p>
+<pre><code>import functools
+
+@functools.cache                         # remembers results by argument
+def course_price(code):
+    print("looking up", code)              # printed only on the first call
+    return {"ODO-F": 100}.get(code, 0)
+
+print(course_price("ODO-F"), course_price("ODO-F"))
+# looking up ODO-F
+# 100 100
+
+def require_positive(func):              # a decorator that checks an argument
+    @functools.wraps(func)
+    def wrapper(hours, *args, **kwargs):
+        if hours &lt;= 0:
+            raise ValueError("hours must be &gt; 0")
+        return func(hours, *args, **kwargs)
+    return wrapper
+
+@require_positive
+def sessions(hours):
+    return hours // 8
+
+print(sessions(24))                      # 3
+sessions(0)
+# ValueError: hours must be &gt; 0</code></pre>
+                <p>Take care when caching a function with side effects or one that depends on changing data: stale results keep being returned even after the source data changed. Caching suits "pure" functions such as a fixed lookup table.</p>
+
+                <h2 id="classmethod-staticmethod">@classmethod and @staticmethod</h2>
+<pre><code>class Tool:
+    @staticmethod
+    def hours_to_days(h):                 # needs neither self nor cls
+        return h / 8
+
+    @classmethod
+    def from_string(cls, s):              # receives the class, often used as a second "constructor"
+        name, hours = s.split(":")
+        return Course(name, int(hours))
+
+print(Tool.hours_to_days(24))             # 3.0
+print(Tool.from_string("Odoo:24").describe())   # Odoo - 24h</code></pre>
+                <p><code>@staticmethod</code> is an ordinary function that happens to live in the class (taking neither <code>self</code> nor <code>cls</code>). <code>@classmethod</code> receives the class itself as the first parameter, commonly used as an "alternative constructor" such as <code>from_string</code>. Together with <code>@property</code> from part 8 these are the built-in decorators you meet most.</p>
+
+                <h2 id="in-odoo">Decorators you meet in Odoo code</h2>
+<pre><code># 1. a decorator with arguments: declares a computed field's dependencies
+@api.depends('price', 'duration_hours')
+def _compute_price_per_hour(self):
+    ...
+
+# 2. a decorator without arguments: create receives a list of vals
+@api.model
+def create(self, vals_list):
+    courses = super().create(vals_list)
+    return courses
+
+# 3. a data constraint
+@api.constrains('duration_hours')
+def _check_duration(self):
+    ...
+
+# 4. a controller route; an override must re-apply @route()
+@http.route('/vinc_course/courses', auth='public')
+def courses(self, **kw):
+    ...</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Decorator</th><th>Effect (per Odoo's documentation)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>@api.depends(...)</code></td><td>Declares the fields a compute method depends on; the ORM recomputes when they change</td></tr>
+                            <tr><td><code>@api.constrains(...)</code></td><td>A constraint-checking method, run when the named fields are edited</td></tr>
+                            <tr><td><code>@api.onchange(...)</code></td><td>Updates the form when a field changes, in the interface only</td></tr>
+                            <tr><td><code>@api.model</code></td><td>A method where the content of <code>self</code> does not matter, only the model</td></tr>
+                            <tr><td><code>@api.ondelete(at_uninstall=False)</code></td><td>Runs during deletion, letting you block deletes without affecting module uninstall</td></tr>
+                            <tr><td><code>@http.route(...)</code></td><td>Binds a method to a URL; overriding a controller must re-apply <code>@route()</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>You rarely write these decorators yourself; you just need to understand they are functions wrapping functions and place them right above the <code>def</code> line. That explains why Odoo's documentation notes that overriding a controller method and forgetting <code>@route()</code> makes the route vanish: the decorator is what registers the method with the system.</p>
+
+                <h2 id="practice">Practice: a logging and checking decorator</h2>
+                <ol>
+                    <li>Write a <code>log_call</code> decorator that prints the function name and arguments before running the original, using <code>functools.wraps</code>.</li>
+                    <li>Apply it to the price-per-hour function from part 5 and verify <code>__name__</code> is still the original name.</li>
+                    <li>Create the <code>OnlineCourse</code> class above and add a <code>describe</code> method using <code>super()</code>; try adding <code>LogMixin</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Forgetting <code>super().__init__(...)</code> in a child class.</strong> The parent's attributes are never created, and later you hit <code>AttributeError</code>.</li>
+                        <li><strong>Overriding a method but forgetting <code>return</code>.</strong> The function returns <code>None</code> instead of the parent's result, breaking every caller.</li>
+                        <li><strong>Writing a decorator without <code>functools.wraps</code>.</strong> The function loses its name and docstring (<code>f.__name__</code> becomes <code>wrapper</code>).</li>
+                        <li><strong>Forgetting to call <code>retry(3)</code> for a decorator with arguments.</strong> Writing <code>@retry</code> instead of <code>@retry(3)</code> passes the function into the argument slot.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A child class inherits, overrides and uses <code>super()</code> to reuse its parent; a mixin supplies one extra capability.</li>
+                    <li>When overriding Odoo methods: always call <code>super()</code>, work on a copy of arguments and return the same kind of value.</li>
+                    <li>A decorator is a function wrapping a function; use <code>functools.wraps</code>; decorators with arguments need one more layer.</li>
+                    <li>Recognize <code>@api.depends</code>, <code>@api.constrains</code>, <code>@api.model</code> and <code>@http.route</code> as decorators.</li>
+                </ul>
+                <p>The next part deals with when things go wrong: <code>try/except</code>, <code>raise</code> and Odoo's <code>ValidationError</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Want to override Odoo methods safely and write your own decorators?</h3>
+                    <p>The Odoo Advanced Developer course has exercises on inheritance and decorators, with code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is super() for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">super() returns a bridge to the parent class so you can call the original method, for example super().create(vals_list). That lets you add logic before or after while keeping the parent's behavior.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why must I call super() when overriding a method in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo's documentation stresses always calling super() so you do not break the processing chain, and returning the same kind of data as the parent method; if the parent returns a dict, so must the override.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is a decorator?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A decorator is a function that takes a function and returns a new one with added behavior. The @name syntax above a def line is shorthand for func = name(func).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why do I need functools.wraps when writing a decorator?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It copies the original function's name and docstring onto the wrapper. Without it the function is renamed wrapper and loses its docstring, which makes debugging harder.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes (inheritance, multiple inheritance)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functools.html" target="_blank" rel="noopener">Python 3.12 – functools (wraps)</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Function definitions (decorators)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/12_inheritance.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Inheritance</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (decorators)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-inheritance-super-decorators-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-inheritance-super-decorators-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-classes-objects-oop-odoo-models.html"><small>← Previous</small>Classes and objects</a>
+                    <a class="next" href="python-error-handling-try-except-with-odoo.html"><small>Next →</small>Error handling and the with statement</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#inheritance">Class inheritance and super()</a></li>
+                        <li><a href="#mixin">Multiple inheritance and mixins</a></li>
+                        <li><a href="#override-odoo">Overriding methods and the golden rules of super()</a></li>
+                        <li><a href="#decorator">Decorators: functions wrapping functions</a></li>
+                        <li><a href="#classmethod-staticmethod">@classmethod and @staticmethod</a></li>
+                        <li><a href="#in-odoo">Decorators you meet in Odoo code</a></li>
+                        <li><a href="#practice">Practice: a logging and checking decorator</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

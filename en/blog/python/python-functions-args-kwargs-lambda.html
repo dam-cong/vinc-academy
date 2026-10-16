@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Functions: Parameters, *args, **kwargs, lambda (Odoo)</title>
+    <meta name="description" content="Write Python functions properly: return, default parameters, *args, **kwargs, lambda, variable scope, and where they appear in Odoo such as default=lambda." />
+    <meta name="keywords" content="python functions, python *args **kwargs, python lambda, odoo default lambda, python default parameters, python variable scope" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Functions: Parameters, *args, **kwargs, lambda (Odoo)" />
+    <meta property="og:description" content="Python functions: return, default parameters, *args, **kwargs, lambda and the matching patterns in Odoo code." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-functions-args-kwargs-lambda.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Functions: Parameters, *args, **kwargs, lambda (Odoo)",
+                "description": "Python functions: return, default parameters, *args, **kwargs, lambda and the matching patterns in Odoo code.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-functions-args-kwargs-lambda.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Functions: parameters, **kwargs and lambda"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "How do *args and **kwargs differ?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "*args collects all positionally passed arguments into a tuple, while **kwargs collects all named arguments into a dict. Both let a function accept any number of arguments."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why should a list not be a default parameter value?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A default value is created only once when the function is defined, so every call shares the same list and results stick between calls. Use None and create a new list inside the function."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use lambda?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When you need a short, single-use function passed as an argument, such as the key of sorted, the function of filtered, or an Odoo field default like default=lambda self: self.env.user."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why avoid changeable global variables in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "One Odoo process can serve several databases at once, each with different modules installed, so state kept in a global would be shared by accident."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"ham-python-args-kwargs-lambda.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Functions: parameters, **kwargs and lambda</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 5 · Practical Python Series</span>
+            <h1>Python Functions: Parameters, *args, **kwargs, lambda for Odoo Devs</h1>
+            <p class="post-lead">An Odoo model method is just a Python function with an extra self. This guide teaches how to write functions, use default parameters, *args and **kwargs and lambda, and warns about the changeable-default trap that new developers often hit.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A function wraps a piece of logic into a named block you can reuse: <code>def name(parameters): ... return result</code>.</strong> You can give parameters defaults, pass them by name, and accept any number of arguments with <code>*args</code> and <code>**kwargs</code>. <code>lambda</code> is a nameless one-line function, very common as a field <code>default</code> and as an argument to <code>filtered</code> and <code>sorted</code>. An Odoo model method is just a function with an extra <code>self</code>.</p>
+                </div>
+
+                <h2 id="def">Defining a function and returning a value</h2>
+                <p>A function is declared with <code>def</code>, named in <code>snake_case</code>, with an indented body. The string right at the top of the body is the <em>docstring</em>, describing the function to readers and help tools. A function hands back a value with <code>return</code>; one with no <code>return</code> (or a bare <code>return</code>) gives back <code>None</code>.</p>
+<pre><code>def price_per_hour(price, hours=1):
+    """Price per hour; returns 0.0 when hours is 0."""
+    if not hours:
+        return 0.0
+    return price / hours
+
+print(price_per_hour(4500000, 24))      # 187500.0
+print(price_per_hour(price=100, hours=4))   # 25.0 (passed by name)
+print(price_per_hour(50))               # 50.0 (hours uses its default of 1)</code></pre>
+                <p>There are two ways to pass arguments: by position (<code>price_per_hour(4500000, 24)</code>) or by name (<code>price=100, hours=4</code>). A parameter with a default (<code>hours=1</code>) may be left out in a call, but it must come <strong>after</strong> the parameters without defaults, or Python raises <code>SyntaxError: parameter without a default follows parameter with a default</code>.</p>
+
+                <h2 id="parameters">Parameters: defaults, *args and **kwargs</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Syntax</th><th>Meaning</th><th>Example call</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>def f(a, b)</code></td><td>Required parameters</td><td><code>f(1, 2)</code></td></tr>
+                            <tr><td><code>def f(a, b=1)</code></td><td>A parameter with a default</td><td><code>f(1)</code> or <code>f(1, b=5)</code></td></tr>
+                            <tr><td><code>def f(*args)</code></td><td>Collects all positional arguments into a tuple</td><td><code>f(1, 2, 3)</code></td></tr>
+                            <tr><td><code>def f(**kwargs)</code></td><td>Collects all named arguments into a dict</td><td><code>f(name="x", hours=3)</code></td></tr>
+                            <tr><td><code>f(*list, **dict)</code></td><td>Unpacking at call time</td><td><code>f(*[1, 2], **{"b": 3})</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>def show(*args, **kwargs):
+    print(args, kwargs)
+
+show(1, 2, name="Odoo", hours=24)
+# (1, 2) {'name': 'Odoo', 'hours': 24}
+
+nums = [1, 2]
+opts = {"sep": "-"}
+print(*nums, **opts)    # 1-2   (unpack a list and a dict into arguments)</code></pre>
+                <p><code>**kwargs</code> (shortened to <code>**kw</code>) is something you meet constantly in Odoo controllers: the skeleton produced by <code>odoo-bin scaffold</code> already contains <code>def index(self, **kw)</code> to receive any query parameters from the URL without declaring each one.</p>
+
+                <h3 id="mutable-default">The biggest trap: a changeable default value</h3>
+                <p>A default value is created only <strong>once</strong>, when the function is defined. If it is a list or dict, every call shares that very object:</p>
+<pre><code>def add_tag(tag, tags=[]):
+    tags.append(tag)
+    return tags
+
+print(add_tag("a"), add_tag("b"))
+# ['a', 'b'] ['a', 'b']   &lt;- the same list is reused!
+
+def add_tag_ok(tag, tags=None):
+    if tags is None:
+        tags = []
+    tags.append(tag)
+    return tags
+
+print(add_tag_ok("a"), add_tag_ok("b"))
+# ['a'] ['b']</code></pre>
+                <p>The rule: use <code>None</code> as the default and build the new object inside the function.</p>
+
+                <h2 id="returning">Returning several values and checking early</h2>
+<pre><code>def stats(nums):
+    return min(nums), max(nums), sum(nums) / len(nums)
+
+lo, hi, avg = stats([24, 8, 16])
+print(lo, hi, avg)      # 8 24 16.0</code></pre>
+                <p>The function really returns a tuple, which you then unpack (part 4). For functions with many conditions, <code>return</code> early as in part 3 instead of nesting <code>if</code> levels. A function that returns nothing and only has side effects (writing a file, calling an API) is fine returning <code>None</code>. But if you forget <code>return</code> in a function that should produce a value, the result is also <code>None</code>:</p>
+<pre><code>def no_return(x):
+    y = x * 2        # forgot return
+
+print(no_return(2))  # None</code></pre>
+
+                <h2 id="args-mutated">Does a function change your arguments?</h2>
+                <p>Python passes arguments by giving the <em>name</em> to the very object you handed in, without copying. For immutable types (numbers, strings, tuples) that is harmless. But with lists and dicts a function can alter the caller's object without them noticing:</p>
+<pre><code>def add_default_hours(vals):
+    vals["duration_hours"] = vals.get("duration_hours", 8)   # edits the caller's dict directly
+    return vals
+
+v = {"name": "X"}
+add_default_hours(v)
+print(v)      # {'name': 'X', 'duration_hours': 8}  &lt;- v has been changed!
+
+def add_default_hours_safe(vals):
+    vals = dict(vals)                 # work on a copy
+    vals.setdefault("duration_hours", 8)
+    return vals
+
+w = {"name": "Y"}
+print(add_default_hours_safe(w), w)
+# {'name': 'Y', 'duration_hours': 8} {'name': 'Y'}</code></pre>
+                <p>This pattern is very realistic: when you override <code>create(self, vals_list)</code> from the Odoo series you receive a dict (or list of dicts) <code>vals</code> from the caller. If you edit it in place, the caller sees their data change. The rule: either state in the docstring that the function modifies its argument, or work on a copy (<code>dict(vals)</code>, <code>list(items)</code>).</p>
+
+                <h3 id="keyword-only">Keyword-only parameters</h3>
+                <p>A lone <code>*</code> in the parameter list forces every parameter after it to be passed by name. That keeps calls readable and prevents order mix-ups, especially with boolean parameters:</p>
+<pre><code>def search(name, *, published=True, limit=10):
+    return name, published, limit
+
+print(search("odoo", limit=5))     # ('odoo', True, 5)
+search("odoo", False)
+# TypeError: search() takes 1 positional argument but 2 were given</code></pre>
+                <p>Compare <code>search("odoo", False)</code> with <code>search("odoo", published=False)</code>: the second explains itself, while with the first nobody knows what <code>False</code> means.</p>
+
+                <h2 id="good-functions">Writing good functions: a few conventions</h2>
+                <ul>
+                    <li><strong>Each function does one thing</strong> and its name is a verb stating that thing (<code>make_code</code>, <code>calc_price_per_hour</code>). A function that grows long usually wants splitting.</li>
+                    <li><strong>Prefer pure functions</strong>: the same input gives the same result and no outside data changes. Pure functions are easy to test and reuse (part 14).</li>
+                    <li><strong>A one-line docstring</strong> stating what the function does, especially for shared helpers.</li>
+                    <li><strong>Few parameters</strong>: beyond three or four, consider bundling them into a dict or an object.</li>
+                </ul>
+                <p>Odoo also has method-naming conventions so readers can guess a method's role, and its documentation uses them consistently:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method name</th><th>Role</th><th>Example in the docs</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_compute_xxx</code></td><td>Computes a computed field's value</td><td><code>_compute_total</code></td></tr>
+                            <tr><td><code>_inverse_xxx</code></td><td>Writes back a computed field's value</td><td><code>_inverse_total</code></td></tr>
+                            <tr><td><code>_check_xxx</code></td><td>Data constraint</td><td><code>_check_description</code></td></tr>
+                            <tr><td><code>_onchange_xxx</code></td><td>Reacts when a field changes on a form</td><td><code>_onchange_partner_id</code></td></tr>
+                            <tr><td><code>_default_xxx</code></td><td>Computes a default value</td><td><code>_default_name</code></td></tr>
+                            <tr><td><code>action_xxx</code></td><td>A public action tied to a button</td><td><code>action_done</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A name starting with <code>_</code> is a private method, not callable from buttons or external APIs; a public name such as <code>action_done</code> can be called over RPC with arbitrary arguments, so it must verify conditions itself (part 5 of the Odoo series).</p>
+
+                <h2 id="scope">Variable scope: inside and outside a function</h2>
+                <p>A variable assigned inside a function is <em>local</em> and exists only there. Reading an outer variable works, but reassigning it requires a <code>global</code> declaration:</p>
+<pre><code>counter = 0
+
+def inc():
+    global counter     # declare use of the global (use sparingly)
+    counter += 1
+
+inc()
+print(counter)         # 1
+
+def bad():
+    total += 1         # total has not been assigned in this function
+
+bad()
+# UnboundLocalError: cannot access local variable 'total' where it is not associated with a value</code></pre>
+                <p>Use <code>global</code> sparingly. Odoo's documentation has its own warning: <strong>do not use mutable global variables</strong>, because one Odoo process can serve several databases at once, each with different modules installed, so global state would be shared by accident.</p>
+
+                <h2 id="lambda">Lambda: a one-line nameless function</h2>
+                <p><code>lambda parameters: expression</code> builds a small function that returns the expression's value. It is often passed as an argument:</p>
+<pre><code>courses = [{"code": "ODO-F", "hours": 24}, {"code": "GIT-T", "hours": 8}]
+
+print(sorted(courses, key=lambda c: c["hours"])[0]["code"])      # GIT-T
+print([c["code"] for c in filter(lambda c: c["hours"] &gt; 10, courses)])   # ['ODO-F']</code></pre>
+                <p>A function defined inside another function (a closure) also remembers the outer function's variables, which underlies the decorators of part 9:</p>
+<pre><code>def outer():
+    prefix = "ODO"
+    def make(seq):                 # a function inside a function that remembers prefix
+        return f"{prefix}-{seq:03d}"
+    return make
+
+mk = outer()
+print(mk(5))                       # ODO-005</code></pre>
+
+                <h2 id="in-odoo">Meeting them again in Odoo code</h2>
+<pre><code># 1. the default is a function: called each time a record is created
+instructor_id = fields.Many2one('res.users', default=lambda self: self.env.user)
+
+# 2. filter a recordset with a lambda
+published = courses.filtered(lambda c: c.is_published)
+
+# 3. a controller route accepting arbitrary parameters
+@http.route('/vinc_course/courses', auth='public')
+def courses(self, **kw):
+    ...</code></pre>
+                <p>The ORM documentation describes a field's <code>default</code> as either a fixed value or a function that takes a recordset and returns a value; and <code>filtered</code> accepts a function, for example <code>records.filtered(lambda r: r.company_id == user.company_id)</code>, or a field-path string such as <code>"partner_id.vat"</code>.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Function pattern</th><th>Example in Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>A function with <code>self</code></td><td>A model method; <code>self</code> is a recordset</td></tr>
+                            <tr><td><code>**kw</code></td><td>A controller route</td></tr>
+                            <tr><td>A function/lambda passed as a value</td><td><code>default=lambda self: ...</code></td></tr>
+                            <tr><td>A name starting with <code>_</code></td><td>A private method such as <code>_compute_total</code>, not callable from the interface</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="practice">Practice: a course summary function</h2>
+<pre><code>def summarize(courses, min_hours=0, **extra):
+    """Summarize courses lasting at least min_hours hours."""
+    selected = [c for c in courses if c["hours"] &gt;= min_hours]
+    total = sum(c["hours"] for c in selected)
+    return {"count": len(selected), "total_hours": total, **extra}
+
+courses = [{"code": "ODO-F", "hours": 24}, {"code": "PY-F", "hours": 16}, {"code": "GIT-T", "hours": 8}]
+print(summarize(courses))
+print(summarize(courses, min_hours=10, source="catalog"))
+# {'count': 3, 'total_hours': 48}
+# {'count': 2, 'total_hours': 40, 'source': 'catalog'}</code></pre>
+                <p>Try adding an <code>only_published=False</code> parameter to filter by status. This is exactly how you write a shared helper inside a module and call it from several methods.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Using a list/dict as a default value.</strong> Results "stick" between calls. Use <code>None</code> and create a fresh object inside.</li>
+                        <li><strong>Forgetting <code>return</code>.</strong> The function gives back <code>None</code> and a later line fails with a confusing error such as <code>'NoneType' object ...</code>. Check that every branch returns.</li>
+                        <li><strong>Calling with the wrong number of arguments.</strong> <code>price_per_hour()</code> raises <code>TypeError: price_per_hour() missing 1 required positional argument: 'price'</code>; too many gives <code>takes from 1 to 2 positional arguments but 3 were given</code>.</li>
+                        <li><strong>Reassigning an outer variable without <code>global</code>.</strong> Raises <code>UnboundLocalError</code>. A better route is to pass values in and return results out instead of using globals.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>def</code> + <code>return</code>; a function without <code>return</code> gives back <code>None</code>.</li>
+                    <li>Default parameters come after required ones; never use a list/dict as a default.</li>
+                    <li><code>*args</code> and <code>**kwargs</code> collect arguments; <code>*</code>/<code>**</code> at call time unpack them.</li>
+                    <li>Function variables are local; avoid changeable globals. <code>lambda</code> suits short functions.</li>
+                </ul>
+                <p>The next part turns loops into one tidy line: comprehensions, generators and the <code>sorted/filter/map</code> functions.</p>
+
+                <div class="cta-box">
+                    <h3>Want to write clean, testable functions?</h3>
+                    <p>The Developer Foundation course has exercises on writing functions and separating logic, with code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do *args and **kwargs differ?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">*args collects all positionally passed arguments into a tuple, while **kwargs collects all named arguments into a dict. Both let a function accept any number of arguments.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why should a list not be a default parameter value?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A default value is created only once when the function is defined, so every call shares the same list and results stick between calls. Use None and create a new list inside the function.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use lambda?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When you need a short, single-use function passed as an argument, such as the key of sorted, the function of filtered, or an Odoo field default like default=lambda self: self.env.user.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why avoid changeable global variables in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">One Odoo process can serve several databases at once, each with different modules installed, so state kept in a global would be shared by accident.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/controlflow.html" target="_blank" rel="noopener">Python 3.12 – More Control Flow Tools (defining functions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Function definitions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-functions-args-kwargs-lambda.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-functions-args-kwargs-lambda.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-lists-tuples-sets-dicts.html"><small>← Previous</small>Lists, tuples, sets and dicts</a>
+                    <a class="next" href="python-comprehensions-generators-sorted-filter.html"><small>Next →</small>Comprehensions, generators and sorted/filter</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#def">Defining a function and returning a value</a></li>
+                        <li><a href="#parameters">Parameters: defaults, *args and **kwargs</a></li>
+                        <li><a href="#returning">Returning several values and checking early</a></li>
+                        <li><a href="#args-mutated">Does a function change your arguments?</a></li>
+                        <li><a href="#good-functions">Writing good functions: a few conventions</a></li>
+                        <li><a href="#scope">Variable scope: inside and outside a function</a></li>
+                        <li><a href="#lambda">Lambda: a one-line nameless function</a></li>
+                        <li><a href="#in-odoo">Meeting them again in Odoo code</a></li>
+                        <li><a href="#practice">Practice: a course summary function</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

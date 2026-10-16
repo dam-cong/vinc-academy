@@ -12,6 +12,7 @@ Quy tắc cốt lõi:
 - Chỉ dùng sự kiện đã kiểm chứng trên tài liệu chính thức; viết lại bằng lời Vinc, không chép/dịch câu-đối-câu; code ví dụ tự viết; liệt kê "Nguồn tham khảo".
 - Mỗi bài có 1–2 ví dụ "lỗi hay gặp" của người mới/dev (khung `.callout`, tiêu đề "Lỗi hay gặp…") theo dạng: tình huống → nguyên nhân → cách sửa/phòng tránh, giọng gần gũi. Nguyên nhân phải có căn cứ trong tài liệu chính thức hoặc tự tái hiện được; không bịa nội dung thông báo lỗi nguyên văn.
 - Độ dài và độ sâu: bản VI tối thiểu ~1.500 từ (không tính code), có ít nhất 1 bảng tham chiếu ở phần lõi, ví dụ chạy được từng bước kèm kết quả mong đợi, mục "Tổng kết" (4–5 ý + câu dẫn sang bài sau); bài có luồng/kiến trúc cần sơ đồ SVG tự vẽ (lớp `.dg-*` trong `blog.css`, xem bài 1). Chỉ thêm dữ kiện có trong tài liệu chính thức.
+- Series Python: ví dụ lấy từ dự án `vinc_course`, mỗi đoạn code Python phải chạy được (kiểm tra bằng `python3`), thông báo lỗi trích từ lần chạy thật; chỉ tham khảo danh mục chủ đề của W3Schools/LearnPython, không chép câu chữ.
 - Nhân bản bài gần nhất trong cùng chủ đề, giữ nguyên nav/footer; mỗi bài có đủ bản VI (`blog/<chủ-đề>/`) và EN (`en/blog/<chủ-đề>/`).
 - Cập nhật: hub chủ đề, `sitemap.xml`, `series-nav` bài trước (nếu thuộc series).
 - Không commit/push. Không xóa file.

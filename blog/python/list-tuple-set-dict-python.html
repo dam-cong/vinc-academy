@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python: list, tuple, set và dict qua ví dụ vals, domain Odoo</title>
+    <meta name="description" content="Nắm list, tuple, set, dict trong Python và thấy chúng ở đâu trong Odoo: vals của create, domain, Command, manifest. Có ví dụ chạy được." />
+    <meta name="keywords" content="python list tuple set dict, python dictionary, vals_list odoo, domain odoo tuple, Command odoo, python cấu trúc dữ liệu" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python: list, tuple, set và dict qua ví dụ vals, domain Odoo" />
+    <meta property="og:description" content="list, tuple, set và dict trong Python, đối chiếu với vals, domain, Command và manifest của Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/list-tuple-set-dict-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python: list, tuple, set và dict qua ví dụ vals, domain Odoo",
+                "description": "list, tuple, set và dict trong Python, đối chiếu với vals, domain, Command và manifest của Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/list-tuple-set-dict-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "List, tuple, set và dict"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa list và tuple?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "List có thể thay đổi sau khi tạo, còn tuple thì không. Tuple hợp với bộ giá trị có cấu trúc cố định như một điều kiện domain (field, toán tử, giá trị) hay một lệnh Command."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao tránh KeyError khi đọc dict?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng d.get(key, mặc_định) thay cho d[key]. Phương thức get trả giá trị mặc định thay vì báo lỗi khi khóa không tồn tại."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao sửa b lại làm thay đổi a khi tôi đã gán b = a?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Phép gán không tạo bản sao mà chỉ thêm một cái tên cho cùng một list. Muốn bản sao độc lập hãy dùng a.copy() hoặc a[:]."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào nên dùng set?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi cần loại bỏ phần tử trùng hoặc kiểm tra thành viên nhanh, và thứ tự không quan trọng. Set cũng hỗ trợ các phép hợp, giao, hiệu bằng các toán tử |, & và -."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-lists-tuples-sets-dicts.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">List, tuple, set và dict</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 4 · Series Python thực chiến</span>
+            <h1>Python: list, tuple, set và dict qua ví dụ vals, domain Odoo</h1>
+            <p class="post-lead">Bốn cấu trúc dữ liệu này xuất hiện trong gần như mọi dòng code Odoo: vals của create là dict, domain là list các tuple, manifest cũng là một dict. Bài này giúp bạn chọn đúng cấu trúc và tránh các bẫy kinh điển.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Bốn cấu trúc dữ liệu dựng sẵn của Python bao phủ gần như mọi nhu cầu: <code>list</code> (danh sách có thứ tự, sửa được), <code>tuple</code> (bộ giá trị cố định), <code>set</code> (tập không trùng lặp) và <code>dict</code> (cặp khóa - giá trị).</strong> Trong Odoo bạn gặp cả bốn: dict là <code>vals</code> của <code>create()</code> và cả manifest, list các bộ ba là <code>domain</code>, tuple là <code>Command</code> và cặp của <code>Selection</code>, còn set là phép toán trên recordset.</p>
+                </div>
+
+                <h2 id="list">List: danh sách có thứ tự, sửa được</h2>
+                <p>List viết trong ngoặc vuông, phần tử đánh số từ 0 và có thể là bất kỳ kiểu nào. Đây là cấu trúc bạn dùng nhiều nhất để chứa "nhiều thứ cùng loại":</p>
+<pre><code>codes = ["ODO-F", "PY-F", "GIT-T"]
+codes.append("AI-O")           # thêm vào cuối
+codes.insert(1, "SQL-B")       # chèn vào vị trí 1
+print(codes)
+# ['ODO-F', 'SQL-B', 'PY-F', 'GIT-T', 'AI-O']
+
+codes.remove("SQL-B")          # xóa theo giá trị
+last = codes.pop()             # lấy và xóa phần tử cuối
+print(codes, last)
+# ['ODO-F', 'PY-F', 'GIT-T'] AI-O
+
+print(codes[0], codes[-1], codes[1:], len(codes), "PY-F" in codes)
+# ODO-F GIT-T ['PY-F', 'GIT-T'] 3 True</code></pre>
+                <ul>
+                    <li><code>append</code>, <code>insert</code>, <code>extend</code> thêm phần tử; <code>remove</code> xóa theo giá trị; <code>pop</code> lấy và xóa theo vị trí (mặc định phần tử cuối).</li>
+                    <li>Chỉ số âm đếm từ cuối (<code>codes[-1]</code> là phần tử cuối); cắt lát <code>codes[1:]</code> cho danh sách mới.</li>
+                    <li><code>sorted()</code> trả danh sách mới đã sắp xếp; tham số <code>key</code> cho phép sắp theo một trường:</li>
+                </ul>
+<pre><code>print(sorted([24, 8, 16]), sorted([24, 8, 16], reverse=True))
+# [8, 16, 24] [24, 16, 8]
+
+courses = [{"code": "ODO-F", "hours": 24}, {"code": "PY-F", "hours": 16}, {"code": "GIT-T", "hours": 8}]
+shortest = sorted(courses, key=lambda c: c["hours"])[0]
+print(shortest["code"])
+# GIT-T</code></pre>
+                <p>Trong Odoo, khi gọi <code>create()</code> với nhiều bản ghi, bạn truyền một list các dict gọi là <code>vals_list</code>: <code>env['vinc.course'].create([{...}, {...}])</code>. Tài liệu ORM mô tả đối số này là "danh sách các từ điển" và hàm trả về các bản ghi vừa tạo.</p>
+
+                <h3 id="phuong-thuc-list">Các phương thức của list</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Phương thức</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>append(x)</code> / <code>extend(ds)</code></td><td>Thêm một phần tử / thêm mọi phần tử của một danh sách khác vào cuối</td></tr>
+                            <tr><td><code>insert(i, x)</code></td><td>Chèn <code>x</code> vào vị trí <code>i</code></td></tr>
+                            <tr><td><code>remove(x)</code> / <code>pop(i)</code></td><td>Xóa theo giá trị / lấy và xóa theo vị trí</td></tr>
+                            <tr><td><code>index(x)</code> / <code>count(x)</code></td><td>Vị trí đầu tiên của <code>x</code> / số lần <code>x</code> xuất hiện</td></tr>
+                            <tr><td><code>sort()</code> / <code>reverse()</code></td><td>Sắp xếp / đảo ngược <strong>tại chỗ</strong> (khác <code>sorted()</code> luôn trả danh sách mới)</td></tr>
+                            <tr><td><code>copy()</code> / <code>clear()</code></td><td>Tạo bản sao / xóa hết phần tử</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>List cũng dùng được như một ngăn xếp (vào sau ra trước) chỉ với <code>append()</code> và <code>pop()</code>. Nếu cần hàng đợi (vào trước ra trước), tài liệu Python khuyên dùng <code>collections.deque</code> vì <code>popleft()</code> nhanh hơn nhiều so với xóa phần tử đầu của list:</p>
+<pre><code>from collections import deque
+q = deque(["a", "b"])
+q.append("c")
+print(q.popleft(), list(q))    # a ['b', 'c']</code></pre>
+                <p>Bạn cũng có thể tách phần tử đầu khỏi phần còn lại bằng cú pháp <code>first, *rest = [1, 2, 3]</code>, cho <code>first = 1</code> và <code>rest = [2, 3]</code>. Nó thường dùng khi xử lý dòng đầu (tiêu đề) của file CSV ở bài 11.</p>
+
+                <h3 id="list-copy">Bẫy kinh điển: gán danh sách không tạo bản sao</h3>
+<pre><code>a = [1, 2]
+b = a              # b và a là CÙNG một danh sách
+b.append(3)
+print(a)           # [1, 2, 3]
+
+c = a.copy()       # bản sao độc lập
+c.append(4)
+print(a, c)        # [1, 2, 3] [1, 2, 3, 4]</code></pre>
+                <p>Phép gán <code>b = a</code> chỉ cho danh sách thêm một cái tên. Muốn bản sao độc lập hãy dùng <code>a.copy()</code> hoặc <code>a[:]</code>.</p>
+
+                <h2 id="tuple">Tuple: bộ giá trị cố định</h2>
+                <p>Tuple viết trong ngoặc tròn và <strong>không sửa được</strong> sau khi tạo. Nó hợp với những thứ có cấu trúc cố định: một điều kiện, một tọa độ, hay giá trị trả về nhiều phần.</p>
+<pre><code>cond = ("level", "=", "beginner")
+field, op, value = cond            # tách (unpack) thành 3 biến
+print(field, op, value, cond[0])   # level = beginner level
+
+domain = [("is_published", "=", True), ("hours", "&gt;", 10)]   # danh sách các bộ ba
+
+def min_max(nums):
+    return min(nums), max(nums)    # trả về một tuple
+
+lo, hi = min_max([24, 8, 16])
+print(lo, hi)                      # 8 24
+
+print(type((1,)), type((1)))
+# &lt;class 'tuple'&gt; &lt;class 'int'&gt;</code></pre>
+                <p>Hai chi tiết cần nhớ: tuple một phần tử phải có dấu phẩy (<code>(1,)</code>), nếu không <code>(1)</code> chỉ là số 1 trong ngoặc; và gán lại phần tử báo <code>TypeError: 'tuple' object does not support item assignment</code>.</p>
+                <p>Bạn đã gặp tuple ở khắp nơi trong series Odoo: mỗi điều kiện của domain là bộ ba <code>(tên field, toán tử, giá trị)</code>; mỗi lựa chọn của <code>Selection</code> là cặp <code>(giá trị, nhãn)</code>; và mỗi lệnh <code>Command</code> thực chất là bộ ba mà phần tử đầu là mã số, ví dụ <code>Command.link(12)</code> tương ứng <code>(4, 12, 0)</code>.</p>
+
+                <h2 id="set">Set: tập hợp không trùng lặp</h2>
+                <p>Set viết trong ngoặc nhọn (hoặc <code>set(...)</code>), mỗi giá trị chỉ xuất hiện một lần và không có thứ tự cố định. Dùng khi cần loại trùng hoặc kiểm tra thành viên nhanh:</p>
+<pre><code>ids = {1, 2, 2, 3}
+print(ids, len(ids), 2 in ids)             # {1, 2, 3} 3 True
+
+x, y = {1, 2, 3}, {3, 4}
+print(x | y, x &amp; y, x - y, sorted(x ^ y))
+# {1, 2, 3, 4} {3} {1, 2} [1, 2, 4]
+
+print(sorted(set([3, 1, 3, 2])))           # [1, 2, 3]  (loại trùng)</code></pre>
+                <p>Các phép toán tập hợp: <code>|</code> hợp, <code>&amp;</code> giao, <code>-</code> hiệu, <code>^</code> khác biệt đối xứng. Odoo cố ý mượn cách viết này cho recordset: tài liệu ORM cho biết recordset hỗ trợ các phép tập hợp như <code>recs1 | recs2</code> để gộp hai tập bản ghi.</p>
+
+                <h2 id="dict">Dict: cặp khóa - giá trị</h2>
+                <p>Dict viết trong ngoặc nhọn với các cặp <code>khóa: giá trị</code>, tra cứu theo khóa rất nhanh. Đây là cấu trúc bạn dùng nhiều nhất khi làm việc với dữ liệu thực tế: JSON, <code>vals</code> của <code>create()</code>/<code>write()</code>, cấu hình, manifest:</p>
+<pre><code>vals = {"name": "Odoo cơ bản", "duration_hours": 24}
+print(vals["name"], vals.get("price"), vals.get("price", 0.0))
+# Odoo cơ bản None 0.0
+
+vals["price"] = 2000                       # thêm hoặc sửa khóa
+vals.update({"is_published": True})        # thêm nhiều khóa một lần
+for k, v in vals.items():
+    print(k, "=", v)
+# name = Odoo cơ bản
+# duration_hours = 24
+# price = 2000
+# is_published = True
+
+print(vals.pop("price"), "price" in vals)  # 2000 False
+
+d = {}
+d.setdefault("tags", []).append("odoo")    # tạo danh sách rỗng nếu chưa có
+print(d)                                   # {'tags': ['odoo']}</code></pre>
+                <ul>
+                    <li><code>d[key]</code> báo <code>KeyError</code> nếu khóa không có, còn <code>d.get(key, mặc_định)</code> trả giá trị mặc định thay vì lỗi.</li>
+                    <li>Khóa phải "băm được" (số, chuỗi, tuple), còn list thì không: <code>{[1]: 2}</code> báo <code>TypeError: unhashable type: 'list'</code>.</li>
+                    <li>Từ Python 3.7, dict giữ thứ tự thêm vào, nên vòng lặp <code>.items()</code> cho kết quả ổn định.</li>
+                </ul>
+
+                <h3 id="long-nhau">Cấu trúc lồng nhau: dữ liệu giống JSON</h3>
+                <p>Các cấu trúc có thể lồng vào nhau, và đó là hình dạng của hầu hết dữ liệu API và dữ liệu Odoo trả về. Ví dụ một khóa học có danh sách buổi học, mỗi buổi là một dict:</p>
+<pre><code>data = {"course": {"code": "ODO-F", "sessions": [
+    {"name": "Buổi 1", "hours": 3},
+    {"name": "Buổi 2", "hours": 3},
+]}}
+print(data["course"]["sessions"][1]["name"])                 # Buổi 2
+print(sum(s["hours"] for s in data["course"]["sessions"]))   # 6
+del data["course"]["code"]                                   # xóa một khóa</code></pre>
+                <p>Đọc từ ngoài vào trong: <code>data["course"]</code> là dict, <code>["sessions"]</code> là list, <code>[1]</code> chọn phần tử thứ hai, rồi <code>["name"]</code> lấy tên. Khi truy cập sâu như vậy, hãy cân nhắc dùng <code>.get()</code> ở từng tầng có thể vắng, hoặc kiểm tra bằng <code>if "sessions" in data["course"]:</code> trước khi duyệt. Đây cũng chính là cấu trúc bạn sẽ nhận khi gọi API JSON-2 của Odoo ở bài 13: kết quả <code>search_read</code> là list các dict.</p>
+
+                <h2 id="chon-cau-truc">Chọn cấu trúc nào?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cấu trúc</th><th>Sửa được</th><th>Thứ tự</th><th>Trùng lặp</th><th>Dùng cho</th><th>Trong Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>list</code></td><td>Có</td><td>Có</td><td>Cho phép</td><td>Nhiều thứ cùng loại</td><td><code>vals_list</code>, <code>depends</code>, <code>data</code></td></tr>
+                            <tr><td><code>tuple</code></td><td>Không</td><td>Có</td><td>Cho phép</td><td>Bộ cố định, trả nhiều giá trị</td><td>điều kiện domain, <code>Command</code>, cặp Selection</td></tr>
+                            <tr><td><code>set</code></td><td>Có</td><td>Không</td><td>Không</td><td>Loại trùng, tập hợp</td><td>phép <code>|</code> trên recordset</td></tr>
+                            <tr><td><code>dict</code></td><td>Có</td><td>Theo thứ tự thêm</td><td>Khóa duy nhất</td><td>Tra cứu theo khóa</td><td><code>vals</code>, manifest, context</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="trong-odoo">Gặp lại trong module Odoo</h2>
+<pre><code>manifest = {"name": "Vinc Course", "depends": ["base"], "application": True}
+print(manifest["depends"][0])              # base
+
+selection = [("beginner", "Cơ bản"), ("advanced", "Nâng cao")]
+print(dict(selection)["beginner"])         # Cơ bản
+
+import json
+print(json.dumps({"name": "Odoo cơ bản", "is_published": True}, ensure_ascii=False))
+# {"name": "Odoo cơ bản", "is_published": true}</code></pre>
+                <p>Manifest chính là một dict thuần Python: khóa <code>'depends'</code> chứa một list, <code>'application'</code> chứa boolean. Điều đó giải thích vì sao file <code>__manifest__.py</code> chỉ là một dict và Odoo đọc nó như một cấu trúc dữ liệu.</p>
+
+                <h2 id="thuc-hanh">Thực hành: gom khóa học theo mức độ</h2>
+                <p>Cho danh sách khóa học, tạo dict gom mã khóa theo độ dài ("dài" nếu từ 24 giờ, ngược lại "ngắn"):</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24},
+    {"code": "PY-F", "hours": 16},
+    {"code": "GIT-T", "hours": 8},
+]
+groups = {}
+for course in courses:
+    key = "dài" if course["hours"] &gt;= 24 else "ngắn"
+    groups.setdefault(key, []).append(course["code"])
+print(groups)
+# {'dài': ['ODO-F'], 'ngắn': ['PY-F', 'GIT-T']}</code></pre>
+                <p>Mẫu "dict của list" này gặp liên tục khi gom dữ liệu báo cáo. Bài 6 sẽ rút gọn nó bằng comprehension.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Truy cập khóa không tồn tại.</strong> <code>vals["price"]</code> báo <code>KeyError: 'price'</code>. Hãy dùng <code>vals.get("price", 0.0)</code> khi khóa có thể vắng.</li>
+                        <li><strong>Nhầm gán với sao chép.</strong> <code>b = a</code> làm hai tên cùng trỏ một list, sửa <code>b</code> là sửa luôn <code>a</code>. Dùng <code>a.copy()</code> khi cần bản sao.</li>
+                        <li><strong>Quên dấu phẩy của tuple một phần tử.</strong> <code>(1)</code> là số nguyên, <code>(1,)</code> mới là tuple.</li>
+                        <li><strong>Dùng list làm khóa dict hoặc phần tử set.</strong> Báo <code>TypeError: unhashable type: 'list'</code>; hãy đổi sang tuple.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>list</code> cho nhiều thứ cùng loại, sửa được; <code>tuple</code> cho bộ cố định; <code>set</code> loại trùng; <code>dict</code> tra cứu theo khóa.</li>
+                    <li>Gán không tạo bản sao; dùng <code>.copy()</code>.</li>
+                    <li><code>dict.get()</code> tránh <code>KeyError</code>; khóa dict phải băm được.</li>
+                    <li>Odoo dùng chính các cấu trúc này: <code>vals</code>, domain, <code>Command</code>, manifest.</li>
+                </ul>
+                <p>Bài tiếp theo đóng gói logic vào hàm: tham số, <code>**kwargs</code> và lambda.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn nắm chắc cấu trúc dữ liệu qua bài tập?</h3>
+                    <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập về list, dict và review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa list và tuple?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">List có thể thay đổi sau khi tạo, còn tuple thì không. Tuple hợp với bộ giá trị có cấu trúc cố định như một điều kiện domain (field, toán tử, giá trị) hay một lệnh Command.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao tránh KeyError khi đọc dict?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng d.get(key, mặc_định) thay cho d[key]. Phương thức get trả giá trị mặc định thay vì báo lỗi khi khóa không tồn tại.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao sửa b lại làm thay đổi a khi tôi đã gán b = a?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Phép gán không tạo bản sao mà chỉ thêm một cái tên cho cùng một list. Muốn bản sao độc lập hãy dùng a.copy() hoặc a[:].</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào nên dùng set?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi cần loại bỏ phần tử trùng hoặc kiểm tra thành viên nhanh, và thứ tự không quan trọng. Set cũng hỗ trợ các phép hợp, giao, hiệu bằng các toán tử |, &amp; và -.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/datastructures.html" target="_blank" rel="noopener">Python 3.12 – Data Structures</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/stdtypes.html" target="_blank" rel="noopener">Python 3.12 – Built-in Types</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (domains, Command)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Flist-tuple-set-dict-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Flist-tuple-set-dict-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="dieu-kien-vong-lap-if-for-while-python.html"><small>← Bài trước</small>Điều kiện và vòng lặp</a>
+                    <a class="next" href="ham-python-args-kwargs-lambda.html"><small>Bài tiếp theo →</small>Hàm: tham số, **kwargs và lambda</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#list">List: danh sách có thứ tự, sửa được</a></li>
+                        <li><a href="#tuple">Tuple: bộ giá trị cố định</a></li>
+                        <li><a href="#set">Set: tập hợp không trùng lặp</a></li>
+                        <li><a href="#dict">Dict: cặp khóa - giá trị</a></li>
+                        <li><a href="#chon-cau-truc">Chọn cấu trúc nào?</a></li>
+                        <li><a href="#trong-odoo">Gặp lại trong module Odoo</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: gom khóa học theo mức độ</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

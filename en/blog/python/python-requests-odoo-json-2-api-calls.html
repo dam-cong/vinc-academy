@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calling APIs with Python requests: Odoo JSON-2 Guide</title>
+    <meta name="description" content="Use requests to send GET/POST, read JSON, set timeouts, handle errors and call Odoo 20&#x27;s JSON-2 API with a bearer API key. Includes a reusable client and retries." />
+    <meta name="keywords" content="python requests, call api python, odoo json-2 api, raise_for_status, requests timeout, requests session, bearer api key" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Calling APIs with Python requests: Odoo JSON-2 Guide" />
+    <meta property="og:description" content="Calling APIs with Python requests: Odoo 20 JSON-2, bearer API key, timeouts, error handling and a reusable client." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-requests-odoo-json-2-api-calls.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Calling APIs with Python requests: Odoo JSON-2 Guide",
+                "description": "Calling APIs with Python requests: Odoo 20 JSON-2, bearer API key, timeouts, error handling and a reusable client.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-requests-odoo-json-2-api-calls.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Calling APIs with requests"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Why must I always set a timeout in requests?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "According to the requests documentation, without a timeout a request never expires and your program may hang forever when the server does not answer. Nearly all production code should set it."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What does raise_for_status do?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "It raises HTTPError when the response has a 4xx or 5xx status code. If you skip it, an error code such as 401 raises nothing by itself and r.json() returns the error body, which you may mistake for data."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Which headers does a call to Odoo's JSON-2 API need?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Authorization with the value bearer plus the API key, and Content-Type application/json are mandatory. X-Odoo-Database is optional, needed when one server hosts several databases. requests sets Content-Type itself when you use the json parameter."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is requests.Session good for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A Session keeps headers such as Authorization across calls and reuses the connection to the same host, making it faster and suited to many calls."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"goi-api-requests-json-2-odoo-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Calling APIs with requests</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 13 · Practical Python Series</span>
+            <h1>Calling APIs with Python requests: Odoo JSON-2 Guide</h1>
+            <p class="post-lead">Integrating Odoo with other systems almost always starts with one HTTP call. This guide teaches the requests library, setting timeouts, handling errors, and calling Odoo 20's JSON-2 API with an API key, then wraps it into a reusable client.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>The <code>requests</code> library sends HTTP requests in a single line: <code>requests.post(url, json=body, headers=h, timeout=10)</code>.</strong> Always set <code>timeout</code>, call <code>raise_for_status()</code> to turn 4xx/5xx codes into exceptions and read data with <code>.json()</code>. With Odoo 20 you call models through the JSON-2 API: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code> with an API key in the <code>Authorization: bearer</code> header, exactly as in part 12 of the Odoo series.</p>
+                </div>
+
+                <h2 id="http-basics">HTTP in five minutes</h2>
+                <p>An HTTP request consists of a <strong>method</strong> (GET to read, POST to send data...), a <strong>URL</strong>, <strong>headers</strong> (extra information such as content type and authentication) and an optional <strong>body</strong>. The response has a <strong>status code</strong>, headers and a body. The status code tells the outcome:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Code</th><th>Meaning</th><th>Seen with the Odoo API</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>200</td><td>Success</td><td>The body is the method's return value, as JSON</td></tr>
+                            <tr><td>401</td><td>Not authenticated / wrong key</td><td>The documentation's error example: <code>"message": "Invalid apikey"</code></td></tr>
+                            <tr><td>403</td><td>Forbidden</td><td>Revoking with a wrong key gives 403 Forbidden</td></tr>
+                            <tr><td>404</td><td>Not found</td><td>A wrong path or model</td></tr>
+                            <tr><td>422</td><td>Unprocessable</td><td>Exceeding the limit of programmatically generated API keys</td></tr>
+                            <tr><td>Other 4xx/5xx</td><td>Client / server error</td><td>The body is a JSON object with <code>name</code>, <code>message</code>, <code>arguments</code>, <code>context</code>, <code>debug</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="requests-basics">requests: sending a request and reading the response</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 280" role="img" aria-labelledby="dg-en-p13">
+                        <title id="dg-en-p13">One API call from a Python script to Odoo</title>
+                        <rect class="dg-box" x="20" y="10" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="40">1. Python script</text>
+                        <text class="dg-text" x="40" y="60">requests.post(url, json=..., timeout=10)</text>
+                        <path class="dg-arrow" d="M320 72 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="94" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="124">2. Odoo /json/2/&lt;model&gt;/&lt;method&gt;</text>
+                        <text class="dg-text" x="40" y="144">Authorization: bearer header · JSON body (model, method, arguments)</text>
+                        <path class="dg-arrow" d="M320 156 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="178" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="208">3. Response</text>
+                        <text class="dg-text" x="40" y="228">200 + JSON, or 4xx/5xx with a JSON error object</text>
+                        <text class="dg-text" x="20" y="266">Read .status_code and .json(); use raise_for_status() and a timeout so it never hangs.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+
+<pre><code>import requests
+
+r = requests.get("https://example.com/api/courses",
+                 params={"level": "beginner", "page": 1},     # becomes ?level=beginner&amp;page=1
+                 headers={"Accept": "application/json"},
+                 timeout=10)                                  # ALWAYS set a timeout
+
+print(r.status_code, r.ok)                  # 200 True
+print(r.headers["Content-Type"])            # application/json; charset=utf-8
+data = r.json()                             # parse the body into a list/dict
+print(r.url)                                # the full URL including parameters
+print(r.elapsed.total_seconds())            # response time (seconds)</code></pre>
+                <p>The URL in the example is hypothetical (<code>example.com</code> has no such API); swap in a real API when you try it. A local mock server gave exactly the results in the comments.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Parameter / attribute</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>params={...}</code></td><td>URL (query string) parameters, with special characters encoded for you</td></tr>
+                            <tr><td><code>json={...}</code></td><td>Sends a JSON body and sets <code>Content-Type</code> itself</td></tr>
+                            <tr><td><code>headers={...}</code></td><td>Request headers</td></tr>
+                            <tr><td><code>timeout=10</code></td><td>Maximum seconds to wait for a response</td></tr>
+                            <tr><td><code>r.status_code</code>, <code>r.ok</code></td><td>The status code; <code>ok</code> is true for codes below 400</td></tr>
+                            <tr><td><code>r.json()</code>, <code>r.text</code></td><td>The JSON-decoded body / the body as a string</td></tr>
+                            <tr><td><code>r.raise_for_status()</code></td><td>Raises <code>HTTPError</code> for 4xx/5xx codes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="methods-body">HTTP methods and how to send a body</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Function</th><th>Method</th><th>Commonly used to</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>requests.get</code></td><td>GET</td><td>Read data, with no side effects</td></tr>
+                            <tr><td><code>requests.post</code></td><td>POST</td><td>Send data to create something or run an action (Odoo's JSON-2 API uses POST only)</td></tr>
+                            <tr><td><code>requests.put</code>, <code>patch</code></td><td>PUT, PATCH</td><td>Update a whole / part of a resource (typical REST APIs)</td></tr>
+                            <tr><td><code>requests.delete</code></td><td>DELETE</td><td>Delete a resource</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>There are two ways to send a body: <code>data=</code> encodes form-style (<code>application/x-www-form-urlencoded</code>) while <code>json=</code> sends JSON and sets <code>Content-Type: application/json</code>. Odoo's API expects JSON, so use <code>json=</code>. A non-JSON response (an image, a PDF) is read through <code>.content</code> (type <code>bytes</code>) and written to a file as in part 11:</p>
+<pre><code>p1 = requests.Request("POST", "http://x/y", data={"a": "1", "b": "x y"}).prepare()
+print(p1.headers["Content-Type"], p1.body)
+# application/x-www-form-urlencoded a=1&amp;b=x+y
+
+p2 = requests.Request("POST", "http://x/y", json={"a": 1, "b": "Vietnamese text"}).prepare()
+print(p2.headers["Content-Type"], p2.body)
+# application/json b'{"a": 1, "b": "ti\\u1ebfng"}'
+
+img = requests.get(image_url, timeout=10)
+print(type(img.content).__name__)                # bytes: for binary files
+Path("image.png").write_bytes(img.content)         # save straight to a file (part 11)</code></pre>
+                <h3 id="pagination">Pagination for large data sets</h3>
+                <p>Do not fetch tens of thousands of records in one call. The ORM documentation describes <code>search</code> taking <code>offset</code> (records to skip), <code>limit</code> (maximum records) and <code>order</code>. The loop below uses the <code>OdooClient</code> from the next section to fetch page after page until the last page is shorter than <code>page_size</code>:</p>
+<pre><code>def fetch_all_ids(client, domain, page_size=100):
+    ids, offset = [], 0
+    while True:
+        page = client.call("vinc.course", "search", domain=domain,
+                           offset=offset, limit=page_size, order="id")   # parameters of search
+        ids.extend(page)
+        if len(page) &lt; page_size:        # a short last page means the data has run out
+            return ids
+        offset += page_size
+
+# with fake data holding 7 ids: fetch_all_ids(client, [], page_size=3) -&gt; [1, 2, 3, 4, 5, 6, 7]</code></pre>
+                <p>Check your database's <code>/doc</code> page for the exact parameters of each method on your own system.</p>
+
+                <h2 id="call-odoo">Calling Odoo's JSON-2 API</h2>
+                <p>According to the Odoo 20 documentation you POST to <code>/json/2/&lt;model&gt;/&lt;method&gt;</code>. The mandatory headers are <code>Authorization: bearer &lt;API key&gt;</code> and <code>Content-Type: application/json</code> (<code>requests</code> sets the latter when you use <code>json=</code>); <code>X-Odoo-Database</code> is optional, needed when one server hosts several databases. The JSON body holds <code>ids</code> (if the method works on records), an optional <code>context</code> and the method's own parameters:</p>
+<pre><code>import os
+import requests
+
+BASE_URL = os.environ["ODOO_URL"] + "/json/2"          # for example https://mycompany.example.com
+headers = {
+    "Authorization": "bearer " + os.environ["ODOO_API_KEY"],   # NEVER hard-code the key
+    "X-Odoo-Database": os.environ.get("ODOO_DB", ""),
+}
+
+r = requests.post(
+    f"{BASE_URL}/vinc.course/search_read",
+    headers=headers,
+    json={"domain": [["level", "=", "beginner"]], "fields": ["name", "level"]},
+    timeout=10,
+)
+r.raise_for_status()
+print(r.json())
+# [{'id': 1, 'name': 'Odoo basics', 'level': 'beginner'}, ...]</code></pre>
+                <p>A security note: the API key must live outside the code, typically in an environment variable (<code>os.environ</code>) or your system's secret store, because the key carries the rights of its owner. The documentation also advises a dedicated "bot user" with minimal rights for automated integrations, and keys last at most three months, so rotate them regularly.</p>
+<pre><code>bad = requests.post(f"{BASE_URL}/vinc.course/search_read", headers={"Authorization": "bearer WRONG"}, json={}, timeout=10)
+print(bad.status_code, bad.json()["message"])    # 401 Invalid apikey
+bad.raise_for_status()
+# requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: .../json/2/vinc.course/search_read</code></pre>
+
+                <h2 id="network-errors">Handling errors and timeouts</h2>
+                <p>The requests documentation is explicit: without a <code>timeout</code>, a request <strong>never expires</strong> and your program may hang forever; nearly all production code should set it. All errors raised by requests extend <code>requests.exceptions.RequestException</code>:</p>
+<pre><code>import requests
+
+try:
+    r = requests.post(url, headers=headers, json=body, timeout=5)
+    r.raise_for_status()
+except requests.Timeout:
+    print("Timed out")             # the server did not answer within 5 seconds
+except requests.ConnectionError:
+    print("Could not connect")            # DNS failure, connection refused...
+except requests.HTTPError as e:
+    print("Odoo returned an error:", e.response.status_code, e.response.text[:100])
+except requests.RequestException as e:      # the parent of every requests error
+    print("Other error:", e)</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Exception</th><th>When</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ConnectionError</code></td><td>A network problem: DNS failure, refused connection</td></tr>
+                            <tr><td><code>Timeout</code></td><td>No response arrived within the <code>timeout</code> period</td></tr>
+                            <tr><td><code>HTTPError</code></td><td>Only when you call <code>raise_for_status()</code> and the code is 4xx/5xx</td></tr>
+                            <tr><td><code>TooManyRedirects</code></td><td>More redirects than allowed</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Note that <code>timeout</code> does not cap the total time to download a response; it is how long the client waits without receiving any byte from the server.</p>
+
+                <h2 id="client">Wrapping it in a reusable client</h2>
+                <p>When you call an API many times, use <code>requests.Session</code>: it keeps headers (like <code>Authorization</code>) across calls and reuses the connection to the same host, noticeably faster. Combined with classes (part 8) and custom exceptions (part 10) we get a compact client:</p>
+<pre><code>class OdooAPIError(Exception):
+    """An error returned by Odoo or a connection error."""
+
+class OdooClient:
+    def __init__(self, base_url, api_key, database=None, timeout=10):
+        self.base_url = base_url.rstrip("/")
+        self.timeout = timeout
+        self.session = requests.Session()                      # reuses the connection and headers
+        self.session.headers["Authorization"] = f"bearer {api_key}"
+        if database:
+            self.session.headers["X-Odoo-Database"] = database
+
+    def call(self, model, method, **payload):
+        url = f"{self.base_url}/json/2/{model}/{method}"
+        try:
+            response = self.session.post(url, json=payload, timeout=self.timeout)
+        except requests.RequestException as e:
+            raise OdooAPIError(f"Could not call {url}: {e}") from e
+        if not response.ok:
+            try:
+                message = response.json().get("message", response.text)
+            except ValueError:
+                message = response.text
+            raise OdooAPIError(f"HTTP {response.status_code}: {message}")
+        return response.json()</code></pre>
+<pre><code>client = OdooClient(os.environ["ODOO_URL"], os.environ["ODOO_API_KEY"], os.environ.get("ODOO_DB"))
+
+print(client.call("vinc.course", "search_read", domain=[["level", "=", "beginner"]], fields=["name", "level"]))
+# [{'id': 1, 'name': 'Odoo', 'level': 'beginner'}]
+print(client.call("vinc.course", "create", vals_list=[{"name": "Odoo basics", "duration_hours": 24}]))
+# [7]
+
+OdooClient(os.environ["ODOO_URL"], "WRONG").call("vinc.course", "search_read")
+# OdooAPIError: HTTP 401: Invalid apikey</code></pre>
+                <p>All the ugly HTTP details (headers, URL, timeout, error codes) sit inside <code>OdooClient</code>; the rest of the program just calls <code>client.call(...)</code> and catches <code>OdooAPIError</code>. This separation also makes tests easier (part 14): swap the real client for a fake object.</p>
+                <h3 id="retry">Retrying when the network flickers</h3>
+<pre><code>import time
+
+def with_retry(func, attempts=3, delay=0.5):
+    for i in range(1, attempts + 1):
+        try:
+            return func()
+        except OdooAPIError:
+            print(f"attempt {i} failed")
+            if i == attempts:
+                raise                       # out of attempts: re-raise the last error
+            time.sleep(delay * i)           # wait longer between attempts
+
+with_retry(lambda: client.call("vinc.course", "search_read", fields=["name"]))</code></pre>
+                <p>Retry only operations that are <strong>safe to repeat</strong>, such as reading data. For a write (<code>create</code>), retrying may create a duplicate record if the first attempt actually succeeded. The API documentation also stresses that every JSON-2 call is its own transaction, so steps that belong together must be wrapped in one server-side method.</p>
+
+                <h2 id="practice">Practice: checking the connection to Odoo</h2>
+                <ol>
+                    <li>Create an API key in your Odoo user preferences and set <code>ODOO_URL</code>, <code>ODOO_API_KEY</code>, <code>ODOO_DB</code> as environment variables.</li>
+                    <li>Use <code>OdooClient</code> to call <code>search_read</code> on the <code>res.partner</code> model with <code>fields=["name"]</code> and a small <code>limit</code>.</li>
+                    <li>Deliberately use a wrong key and confirm you get <code>OdooAPIError: HTTP 401: Invalid apikey</code>.</li>
+                    <li>Set <code>timeout=0.001</code> and watch the timeout error.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Forgetting <code>timeout</code>.</strong> The program can hang forever when the server does not answer.</li>
+                        <li><strong>Forgetting <code>raise_for_status()</code>.</strong> A 401/404 does not raise by itself, so a later <code>r.json()</code> returns the error body that you take for data. Always check <code>r.ok</code> or call <code>raise_for_status()</code>.</li>
+                        <li><strong>A badly formed header.</strong> It must be <code>Authorization: bearer &lt;key&gt;</code>; a missing <code>bearer</code> word or an expired key both give 401.</li>
+                        <li><strong>Putting the API key in code or Git.</strong> The key carries its owner's rights; use environment variables and revoke it at once if leaked.</li>
+                        <li><strong>A URL without <code>https://</code>.</strong> Raises <code>MissingSchema: Invalid URL ... No scheme supplied</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>requests.get/post(..., timeout=...)</code>; read <code>.status_code</code> and <code>.json()</code>; <code>raise_for_status()</code> turns error codes into exceptions.</li>
+                    <li>Odoo's JSON-2 API: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code>, an <code>Authorization: bearer</code> header, a JSON body; keep the key in an environment variable.</li>
+                    <li><code>requests.Session</code> keeps headers and connections; wrap it in a client with its own exception.</li>
+                    <li>Retry only operations safe to repeat; every JSON-2 call is its own transaction.</li>
+                </ul>
+                <p>The final part pulls it all together: debugging, logging, tests and a small project importing courses from CSV into Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Need to integrate Odoo with other systems using Python?</h3>
+                    <p>The Odoo Advanced Developer course has exercises on APIs, authentication and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why must I always set a timeout in requests?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">According to the requests documentation, without a timeout a request never expires and your program may hang forever when the server does not answer. Nearly all production code should set it.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What does raise_for_status do?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It raises HTTPError when the response has a 4xx or 5xx status code. If you skip it, an error code such as 401 raises nothing by itself and r.json() returns the error body, which you may mistake for data.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Which headers does a call to Odoo's JSON-2 API need?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Authorization with the value bearer plus the API key, and Content-Type application/json are mandatory. X-Odoo-Database is optional, needed when one server hosts several databases. requests sets Content-Type itself when you use the json parameter.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is requests.Session good for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A Session keeps headers such as Authorization across calls and reuses the connection to the same host, making it faster and suited to many calls.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://requests.readthedocs.io/en/latest/user/quickstart/" target="_blank" rel="noopener">Requests – Quickstart</a></li>
+                    <li><a href="https://requests.readthedocs.io/en/latest/user/advanced/" target="_blank" rel="noopener">Requests – Advanced usage (sessions)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/json.html" target="_blank" rel="noopener">Python 3.12 – json</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-requests-odoo-json-2-api-calls.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-requests-odoo-json-2-api-calls.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-datetime-timezones-regex-odoo.html"><small>← Previous</small>Dates, times and regex</a>
+                    <span class="next"><small>Next · Coming soon</small>Debugging, logging, tests and a small project</span>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#http-basics">HTTP in five minutes</a></li>
+                        <li><a href="#requests-basics">requests: sending a request and reading the response</a></li>
+                        <li><a href="#call-odoo">Calling Odoo's JSON-2 API</a></li>
+                        <li><a href="#network-errors">Handling errors and timeouts</a></li>
+                        <li><a href="#client">Wrapping it in a reusable client</a></li>
+                        <li><a href="#practice">Practice: checking the connection to Odoo</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

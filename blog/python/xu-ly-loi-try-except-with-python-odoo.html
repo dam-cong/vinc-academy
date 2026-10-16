@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python xử lý lỗi: try/except, raise, with, ValidationError</title>
+    <meta name="description" content="Học try/except/finally, raise, exception tự định nghĩa và câu lệnh with trong Python, cùng cách báo lỗi bằng ValidationError, UserError trong Odoo." />
+    <meta name="keywords" content="python try except, python raise, python with, exception tự định nghĩa, ValidationError odoo, UserError odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python xử lý lỗi: try/except, raise, with, ValidationError" />
+    <meta property="og:description" content="try/except, raise, with và exception tự định nghĩa trong Python, đối chiếu ValidationError và UserError của Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/xu-ly-loi-try-except-with-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python xử lý lỗi: try/except, raise, with, ValidationError",
+                "description": "try/except, raise, with và exception tự định nghĩa trong Python, đối chiếu ValidationError và UserError của Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/xu-ly-loi-try-except-with-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Xử lý lỗi và câu lệnh with"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Nên bắt lỗi chung chung bằng except Exception không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Chỉ nên bắt loại lỗi cụ thể mà bạn biết cách xử lý. Except trống hoặc except Exception kèm pass nuốt mọi lỗi, kể cả lỗi lập trình, khiến chương trình sai âm thầm. Nếu bắt rộng, hãy ghi log kèm traceback."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "finally dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khối finally luôn chạy, dù có lỗi hay không và kể cả khi có return, nên dùng để dọn dẹp như đóng file hay giải phóng tài nguyên. Câu lệnh with làm việc này tự động cho file."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "ValidationError và UserError khác nhau thế nào trong Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "ValidationError dùng cho ràng buộc dữ liệu, method @api.constrains phải ném nó khi điều kiện không thỏa. UserError dùng để chặn một thao tác vì lý do nghiệp vụ, ví dụ không cho xóa trong @api.ondelete. Cả hai hiển thị thông điệp cho người dùng."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "raise ... from e dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nó ném một lỗi mới nhưng giữ lại lỗi gốc trong thuộc tính __cause__, giúp truy ngược nguyên nhân khi debug."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-error-handling-try-except-with-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Xử lý lỗi và câu lệnh with</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 10 · Series Python thực chiến</span>
+            <h1>Python xử lý lỗi: try/except, raise, with và ValidationError</h1>
+            <p class="post-lead">Dữ liệu luôn có thể sai và file luôn có thể thiếu. Bài này dạy try/except/finally, raise, exception tự định nghĩa và câu lệnh with, rồi đối chiếu với ValidationError, UserError mà Odoo dùng để báo lỗi cho người dùng.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Lỗi trong Python là các ngoại lệ (exception). <code>try</code> bọc đoạn có thể lỗi, <code>except</code> xử lý đúng loại lỗi đó, <code>finally</code> luôn chạy để dọn dẹp, và <code>raise</code> chủ động báo lỗi khi dữ liệu không hợp lệ.</strong> Câu lệnh <code>with</code> đảm bảo tài nguyên (như file) luôn được đóng. Trong Odoo, bạn báo lỗi cho người dùng bằng <code>raise ValidationError(...)</code> hoặc <code>raise UserError(...)</code>, và trong test bắt chúng bằng <code>with self.assertRaises(...)</code>.</p>
+                </div>
+
+                <h2 id="try-except">try, except, else, finally</h2>
+                <p>Khi một lệnh gặp lỗi, Python ngừng chạy và "ném" một ngoại lệ lên các tầng gọi cho tới khi có <code>except</code> bắt được; nếu không ai bắt, chương trình dừng và in traceback. Bốn khối của lệnh <code>try</code>:</p>
+<pre><code>def to_hours(text):
+    try:
+        hours = int(text)             # đoạn có thể lỗi
+    except ValueError:
+        print("Không phải số:", text) # chỉ chạy khi có ValueError
+        return None
+    else:
+        print("chuyển xong")          # chạy khi KHÔNG có lỗi
+        return hours
+    finally:
+        print("luôn chạy")            # luôn chạy, dù có lỗi hay không
+
+print(to_hours("24"))
+# chuyển xong
+# luôn chạy
+# 24
+print(to_hours("abc"))
+# Không phải số: abc
+# luôn chạy
+# None</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Khối</th><th>Chạy khi</th><th>Dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>try</code></td><td>Luôn</td><td>Đặt đoạn code có thể lỗi, càng ngắn càng tốt</td></tr>
+                            <tr><td><code>except Loại</code></td><td>Có lỗi đúng loại đó</td><td>Xử lý hoặc ghi nhận lỗi</td></tr>
+                            <tr><td><code>else</code></td><td>Không có lỗi nào</td><td>Phần xử lý tiếp theo khi mọi thứ ổn</td></tr>
+                            <tr><td><code>finally</code></td><td>Luôn, kể cả khi lỗi hoặc <code>return</code></td><td>Dọn dẹp: đóng file, giải phóng tài nguyên</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="bat-dung-loai">Bắt đúng loại lỗi</h2>
+<pre><code>try:
+    {"a": 1}["b"]
+except (KeyError, IndexError) as e:   # bắt nhiều loại, lấy đối tượng lỗi qua "as e"
+    print(type(e).__name__, e)        # KeyError 'b'
+
+try:
+    open("khong_co.csv")
+except FileNotFoundError as e:
+    print("FileNotFoundError:", e)
+# FileNotFoundError: [Errno 2] No such file or directory: 'khong_co.csv'
+
+def safe_div(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError as e:
+        print("ZeroDivisionError:", e)   # division by zero
+        return 0.0</code></pre>
+                <p>Hãy bắt loại lỗi <strong>cụ thể nhất</strong> mà bạn biết cách xử lý. Một tuple trong <code>except</code> bắt nhiều loại cùng lúc; <code>as e</code> cho bạn đối tượng lỗi để in thông điệp hay đọc thuộc tính. Các lỗi hay gặp nhất khi làm việc với dữ liệu:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lỗi</th><th>Khi nào</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ValueError</code></td><td>Giá trị sai dù kiểu đúng</td><td><code>int("abc")</code></td></tr>
+                            <tr><td><code>TypeError</code></td><td>Sai kiểu dữ liệu</td><td><code>"5" + 3</code></td></tr>
+                            <tr><td><code>KeyError</code></td><td>Khóa dict không tồn tại</td><td><code>d["price"]</code></td></tr>
+                            <tr><td><code>IndexError</code></td><td>Chỉ số ngoài phạm vi</td><td><code>lst[10]</code></td></tr>
+                            <tr><td><code>AttributeError</code></td><td>Đối tượng không có thuộc tính đó</td><td><code>None.name</code></td></tr>
+                            <tr><td><code>FileNotFoundError</code></td><td>File không tồn tại</td><td><code>open("x.csv")</code></td></tr>
+                            <tr><td><code>ZeroDivisionError</code></td><td>Chia cho 0</td><td><code>1 / 0</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="doc-traceback">Đọc traceback: kỹ năng quan trọng nhất</h2>
+                <p>Khi một ngoại lệ không được bắt, Python in <strong>traceback</strong>: chuỗi các lời gọi hàm dẫn tới lỗi. Hãy học cách đọc nó từ <em>dưới lên</em>: dòng cuối cùng cho biết loại lỗi và thông điệp, các dòng phía trên là "đường đi" bạn đã qua. Ví dụ một script đọc danh sách khóa học, trong đó dòng thứ hai có số giờ viết bằng chữ:</p>
+<pre><code>def parse_hours(text):
+    return int(text)
+
+def load_course(row):
+    return {"name": row["name"], "hours": parse_hours(row["hours"])}
+
+rows = [{"name": "Odoo", "hours": "24"}, {"name": "Git", "hours": "tám"}]
+for row in rows:
+    print(load_course(row))</code></pre>
+                <p>Khi chạy, kết quả là:</p>
+<pre><code>{'name': 'Odoo', 'hours': 24}
+Traceback (most recent call last):
+  File "tb.py", line 9, in &lt;module&gt;
+    print(load_course(row))
+  File "tb.py", line 5, in load_course
+    return {"name": row["name"], "hours": parse_hours(row["hours"])}
+  File "tb.py", line 2, in parse_hours
+    return int(text)
+ValueError: invalid literal for int() with base 10: 'tám'</code></pre>
+                <ul>
+                    <li><strong>Dòng cuối</strong> (<code>ValueError: invalid literal for int() ... 'tám'</code>) nói rõ: lỗi là <code>ValueError</code> và giá trị gây lỗi là <code>'tám'</code>.</li>
+                    <li><strong>Khung gần cuối nhất</strong> (<code>parse_hours</code>, dòng 2) là nơi lỗi xảy ra, dòng <code>int(text)</code>.</li>
+                    <li>Các khung phía trên cho biết ai đã gọi nó: <code>load_course</code> rồi vòng <code>for</code> ở mức module. Bạn lần theo để tìm ra dòng dữ liệu nào (<code>"Git"</code>) gây vấn đề.</li>
+                </ul>
+                <p>Thói quen tốt: đọc dòng cuối trước, rồi khung cuối của <em>code của bạn</em> (bỏ qua các khung thuộc thư viện nếu có). Trong Odoo, traceback xuất hiện trong log của server và các khung đi qua <code>odoo/...</code> chỉ là bộ khung; hãy tìm khung đầu tiên thuộc module của bạn.</p>
+
+                <h3 id="eafp">EAFP và LBYL: hai phong cách xử lý lỗi</h3>
+                <p>Có hai cách tiếp cận: <strong>LBYL</strong> ("look before you leap", kiểm tra điều kiện trước rồi mới làm) và <strong>EAFP</strong> ("easier to ask forgiveness than permission", cứ làm rồi bắt lỗi nếu có). Python thiên về EAFP vì nó tránh được tình huống dữ liệu đổi giữa lúc kiểm tra và lúc dùng, nhưng không có cách nào đúng tuyệt đối. Khi thiếu một khóa là chuyện bình thường, <code>d.get()</code> hoặc <code>in</code> thường rõ ràng hơn; khi lỗi thực sự bất thường, dùng <code>try/except</code>:</p>
+<pre><code>d = {"a": 1}
+
+# LBYL: nhìn trước khi nhảy (kiểm tra điều kiện trước)
+value = d["b"] if "b" in d else "none"
+
+# EAFP: xin lỗi sau còn hơn xin phép trước (cứ làm, bắt lỗi nếu có)
+try:
+    value = d["b"]
+except KeyError:
+    value = "none"
+
+# thường gọn nhất với dict
+value = d.get("b", "none")
+
+assert value == "none", "tính sai"     # assert: kiểm tra giả định của lập trình viên
+# AssertionError: tính sai  (nếu điều kiện sai)</code></pre>
+                <p>Từ khóa <code>assert</code> dành cho <em>giả định của lập trình viên</em> ("chỗ này chắc chắn đúng"), không phải để kiểm tra dữ liệu người dùng nhập, vì nó có thể bị tắt khi chạy Python với tùy chọn tối ưu hóa. Dữ liệu từ bên ngoài luôn cần <code>raise</code> lỗi thật.</p>
+
+                <h2 id="raise">raise: chủ động báo lỗi</h2>
+<pre><code>def check(hours):
+    if hours &lt;= 0:
+        raise ValueError(f"Số giờ không hợp lệ: {hours}")
+    return hours
+
+try:
+    check(0)
+except ValueError as e:
+    print("Bắt được:", e)               # Bắt được: Số giờ không hợp lệ: 0
+
+try:
+    try:
+        1 / 0
+    except ZeroDivisionError:
+        print("ghi log rồi ném lại")
+        raise                           # raise trống: ném lại đúng lỗi đang xử lý
+except ZeroDivisionError:
+    print("nơi gọi vẫn nhận được lỗi")</code></pre>
+                <p>Dùng <code>raise</code> khi dữ liệu đầu vào phá vỡ quy tắc nghiệp vụ, thay vì để chương trình chạy tiếp với dữ liệu sai. <code>raise</code> trống bên trong <code>except</code> ném lại đúng lỗi đang xử lý, hữu ích khi bạn muốn ghi log rồi để tầng trên quyết định.</p>
+
+                <h2 id="exception-tu-dinh-nghia">Exception tự định nghĩa</h2>
+<pre><code>class CourseError(Exception):
+    """Lỗi nghiệp vụ khóa học."""
+
+class InvalidHours(CourseError):
+    def __init__(self, hours):
+        super().__init__(f"Số giờ không hợp lệ: {hours}")
+        self.hours = hours
+
+def convert(text):
+    try:
+        return int(text)
+    except ValueError as e:
+        raise InvalidHours(text) from e     # giữ lại nguyên nhân gốc
+
+try:
+    convert("x")
+except CourseError as e:                    # bắt cả lớp cha lẫn lớp con
+    print(e)                                # Số giờ không hợp lệ: x
+    print(repr(e.__cause__))
+    # ValueError("invalid literal for int() with base 10: 'x'")</code></pre>
+                <p>Tạo class kế thừa <code>Exception</code> để đặt tên cho lỗi nghiệp vụ của dự án. Bắt lớp cha (<code>CourseError</code>) sẽ bắt luôn mọi lớp con. Cú pháp <code>raise ... from e</code> giữ lại nguyên nhân gốc trong <code>__cause__</code>, rất hữu ích khi debug. Cả cây ngoại lệ đều bắt nguồn từ <code>BaseException</code>; hầu hết lỗi bạn gặp kế thừa <code>Exception</code>, còn <code>KeyboardInterrupt</code> (Ctrl+C) thì không, nên <code>except Exception</code> không nuốt nó.</p>
+
+                <h2 id="with">with: dọn dẹp tự động</h2>
+                <p>Câu lệnh <code>with</code> làm việc với <em>context manager</em>: đối tượng biết cách "mở" và "đóng". Ví dụ kinh điển là file, tự đóng khi ra khỏi khối <code>with</code> dù có lỗi hay không, nên bạn không cần nhớ gọi <code>close()</code>:</p>
+<pre><code>import tempfile, os
+path = os.path.join(tempfile.mkdtemp(), "a.txt")
+
+with open(path, "w", encoding="utf-8") as f:    # tự đóng file khi ra khỏi khối with
+    f.write("ODO-F\n")
+print(f.closed)                                  # True
+
+with open(path, encoding="utf-8") as f:
+    print(f.read().strip())                      # ODO-F</code></pre>
+                <p>Bạn có thể tự viết context manager bằng decorator <code>contextlib.contextmanager</code>: phần trước <code>yield</code> chạy khi vào khối, phần <code>finally</code> sau đó chạy khi ra, kể cả khi thân khối gặp lỗi:</p>
+<pre><code>from contextlib import contextmanager
+
+@contextmanager
+def section(name):
+    print("bắt đầu", name)
+    try:
+        yield                                    # phần thân khối with chạy ở đây
+    finally:
+        print("kết thúc", name)                  # luôn chạy, kể cả khi thân bị lỗi
+
+with section("nhập"):
+    print("đang làm")
+# bắt đầu nhập
+# đang làm
+# kết thúc nhập
+
+try:
+    with section("lỗi"):
+        raise ValueError("hỏng")
+except ValueError:
+    print("đã bắt")
+# bắt đầu lỗi
+# kết thúc lỗi      &lt;- finally vẫn chạy
+# đã bắt</code></pre>
+
+                <h2 id="trong-odoo">Báo lỗi trong Odoo: ValidationError và UserError</h2>
+<pre><code>from odoo.exceptions import UserError, ValidationError
+
+@api.constrains('duration_hours')
+def _check_duration(self):
+    for course in self:
+        if course.duration_hours &lt;= 0:
+            raise ValidationError("Số giờ học phải lớn hơn 0.")   # hiện thành thông báo lỗi
+
+@api.ondelete(at_uninstall=False)
+def _unlink_except_published(self):
+    if any(course.is_published for course in self):
+        raise UserError("Không thể xóa khóa học đã xuất bản.")
+
+# trong test
+with self.assertRaises(ValidationError):
+    self.course.duration_hours = 0</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Ngoại lệ Odoo</th><th>Dùng khi</th><th>Gặp ở</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ValidationError</code></td><td>Dữ liệu vi phạm ràng buộc</td><td>Method <code>@api.constrains</code> phải ném lỗi này khi điều kiện không thỏa</td></tr>
+                            <tr><td><code>UserError</code></td><td>Chặn một thao tác vì lý do nghiệp vụ</td><td>Ví dụ trong <code>@api.ondelete</code> khi không được xóa</td></tr>
+                            <tr><td><code>AccessError</code></td><td>Người dùng không có quyền</td><td><code>create</code>, <code>write</code>, <code>search</code> ném khi vi phạm quyền (bài 5 series Odoo)</td></tr>
+                            <tr><td><code>ValueError</code></td><td>Tên field không tồn tại</td><td><code>create</code> ném khi giá trị truyền vào có tên field sai</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Thông điệp bạn truyền vào <code>ValidationError</code>/<code>UserError</code> chính là nội dung người dùng nhìn thấy, nên hãy viết rõ ràng, nói họ phải làm gì. Trong test, <code>with self.assertRaises(ValidationError):</code> kiểm tra rằng ràng buộc của bạn thực sự chặn dữ liệu sai (bài 13 series Odoo).</p>
+
+                <h2 id="thuc-hanh">Thực hành: chuyển dòng CSV an toàn</h2>
+<pre><code>def parse_row(row):
+    """Chuyển dict chuỗi thành dict đúng kiểu; ném InvalidHours nếu lỗi."""
+    try:
+        hours = int(row["hours"])
+    except (KeyError, ValueError) as e:
+        raise InvalidHours(row.get("hours")) from e
+    if hours &lt;= 0:
+        raise InvalidHours(hours)
+    return {"code": row["code"].strip().upper(), "hours": hours}
+
+rows = [{"code": " odo-f ", "hours": "24"}, {"code": "x", "hours": "abc"}, {"code": "y", "hours": "-1"}]
+ok, errors = [], []
+for row in rows:
+    try:
+        ok.append(parse_row(row))
+    except CourseError as e:
+        errors.append(str(e))
+print(ok)       # [{'code': 'ODO-F', 'hours': 24}]
+print(errors)   # ['Số giờ không hợp lệ: abc', 'Số giờ không hợp lệ: -1']</code></pre>
+                <p>Đây là mẫu xử lý dữ liệu nhập từ file rất thực tế (bài 11 và 14): gom dòng tốt vào một danh sách, dòng lỗi vào danh sách khác, chương trình không dừng giữa chừng.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+<pre><code>try:
+    risky()
+except:                      # BẮT MỌI THỨ, kể cả KeyboardInterrupt
+    pass                     # và nuốt lỗi: không còn dấu vết nào
+
+# tốt hơn: bắt đúng loại lỗi và ghi lại
+try:
+    risky()
+except ValueError as e:
+    logging.warning("bỏ qua dòng lỗi: %s", e)</code></pre>
+                    <ul>
+                        <li><strong><code>except:</code> trống hoặc <code>except Exception: pass</code>.</strong> Nuốt mọi lỗi, kể cả lỗi lập trình, khiến chương trình sai âm thầm. Hãy bắt đúng loại và ghi log (<code>logging.exception(...)</code> ghi cả traceback).</li>
+                        <li><strong>Bọc cả hàm dài trong một <code>try</code>.</strong> Bạn không biết lỗi đến từ dòng nào. Chỉ bọc những dòng thực sự có thể lỗi.</li>
+                        <li><strong>Dùng lỗi thay cho điều kiện thông thường.</strong> Kiểm tra <code>if key in d:</code> hoặc <code>d.get()</code> thường rõ ràng hơn bắt <code>KeyError</code> khi thiếu khóa là chuyện bình thường.</li>
+                        <li><strong>Nhầm loại ngoại lệ trong Odoo.</strong> Ràng buộc dữ liệu dùng <code>ValidationError</code>; chặn thao tác dùng <code>UserError</code>. Nên thông điệp dành cho người dùng cuối, không phải lập trình viên.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>try/except/else/finally</code> xử lý lỗi; bắt đúng loại cụ thể, tránh <code>except:</code> trống.</li>
+                    <li><code>raise</code> báo lỗi khi dữ liệu không hợp lệ; <code>raise X from e</code> giữ nguyên nhân gốc; exception tự định nghĩa đặt tên cho lỗi nghiệp vụ.</li>
+                    <li><code>with</code> đảm bảo dọn dẹp tài nguyên (file, kết nối) dù có lỗi hay không.</li>
+                    <li>Odoo: <code>ValidationError</code> cho ràng buộc, <code>UserError</code> cho chặn thao tác, thông điệp viết cho người dùng.</li>
+                </ul>
+                <p>Bài tiếp theo là cách đọc và ghi dữ liệu thật: file, <code>pathlib</code>, JSON và CSV.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn xử lý lỗi gọn gàng và báo lỗi thân thiện cho người dùng?</h3>
+                    <p>Khóa Developer Foundation có bài tập xử lý lỗi, ràng buộc dữ liệu và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Nên bắt lỗi chung chung bằng except Exception không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Chỉ nên bắt loại lỗi cụ thể mà bạn biết cách xử lý. Except trống hoặc except Exception kèm pass nuốt mọi lỗi, kể cả lỗi lập trình, khiến chương trình sai âm thầm. Nếu bắt rộng, hãy ghi log kèm traceback.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>finally dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khối finally luôn chạy, dù có lỗi hay không và kể cả khi có return, nên dùng để dọn dẹp như đóng file hay giải phóng tài nguyên. Câu lệnh with làm việc này tự động cho file.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>ValidationError và UserError khác nhau thế nào trong Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">ValidationError dùng cho ràng buộc dữ liệu, method @api.constrains phải ném nó khi điều kiện không thỏa. UserError dùng để chặn một thao tác vì lý do nghiệp vụ, ví dụ không cho xóa trong @api.ondelete. Cả hai hiển thị thông điệp cho người dùng.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>raise ... from e dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nó ném một lỗi mới nhưng giữ lại lỗi gốc trong thuộc tính __cause__, giúp truy ngược nguyên nhân khi debug.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/errors.html" target="_blank" rel="noopener">Python 3.12 – Errors and Exceptions</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/exceptions.html" target="_blank" rel="noopener">Python 3.12 – Built-in Exceptions</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/contextlib.html" target="_blank" rel="noopener">Python 3.12 – contextlib</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (exceptions, constraints)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/10_constraints.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Constraints</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fxu-ly-loi-try-except-with-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fxu-ly-loi-try-except-with-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="ke-thua-super-decorator-python-odoo.html"><small>← Bài trước</small>Kế thừa, super() và decorator</a>
+                    <a class="next" href="file-json-csv-pathlib-python-odoo.html"><small>Bài tiếp theo →</small>Làm việc với file, JSON và CSV</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#try-except">try, except, else, finally</a></li>
+                        <li><a href="#bat-dung-loai">Bắt đúng loại lỗi</a></li>
+                        <li><a href="#doc-traceback">Đọc traceback: kỹ năng quan trọng nhất</a></li>
+                        <li><a href="#raise">raise: chủ động báo lỗi</a></li>
+                        <li><a href="#exception-tu-dinh-nghia">Exception tự định nghĩa</a></li>
+                        <li><a href="#with">with: dọn dẹp tự động</a></li>
+                        <li><a href="#trong-odoo">Báo lỗi trong Odoo: ValidationError và UserError</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: chuyển dòng CSV an toàn</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

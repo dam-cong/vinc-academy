@@ -21,6 +21,11 @@ Mỗi bài cần 1–2 ví dụ "lỗi hay gặp" (khung `.callout`, có căn c�
 ## Vai trò (agent)
 Xem `.claude/agents/`: `blog-writer`, `translator`, `seo-reviewer`, `frontend-qa`.
 
+## Chủ đề đã có
+- `odoo`: series "Lập trình Odoo 20 từ A–Z" (14 bài) — xem `docs/odoo-series-handoff.md`.
+- `python`: series "Python thực chiến cho lập trình viên Odoo" (14 bài, đang viết) — xem `docs/python-series-handoff.md`.
+- Công cụ dựng bài dùng chung: `docs/tools/blog/` (mô tả trong handoff của từng series).
+
 ## Quy tắc link (chạy được cả `file://` và Vercel)
 - Link nội bộ luôn **tương đối** và **ghi rõ `index.html`** (VD `odoo/index.html`, `../index.html`), không dùng `/` đầu dòng hay link thư mục `odoo/` — `file://` không tự mở `index.html`.
 - Chỉ `canonical`, `hreflang`, `og:url`, JSON-LD và `sitemap.xml` dùng URL tuyệt đối dạng thư mục (`/blog/odoo/`) cho gọn.

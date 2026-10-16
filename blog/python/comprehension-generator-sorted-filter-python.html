@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python: comprehension, generator, sorted, filter, mapped</title>
+    <meta name="description" content="Viết list/dict comprehension, generator, sorted, filter, map, any, all trong Python và đối chiếu với mapped, filtered, sorted của recordset Odoo." />
+    <meta name="keywords" content="python list comprehension, python generator yield, python sorted filter map, mapped filtered odoo, python any all sum" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python: comprehension, generator, sorted, filter, mapped" />
+    <meta property="og:description" content="Comprehension, generator, sorted, filter, map trong Python và tương ứng mapped, filtered, sorted, grouped của recordset Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/comprehension-generator-sorted-filter-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python: comprehension, generator, sorted, filter, mapped",
+                "description": "Comprehension, generator, sorted, filter, map trong Python và tương ứng mapped, filtered, sorted, grouped của recordset Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/comprehension-generator-sorted-filter-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Comprehension, generator và sorted/filter"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "List comprehension khác vòng for ở điểm nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Comprehension là biểu thức tạo ngay một danh sách mới từ danh sách cũ, ngắn hơn vòng for kèm append. Nên dùng khi chỉ biến đổi hoặc lọc; nếu vòng lặp có nhiều bước hoặc tác dụng phụ thì giữ vòng for thường."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Generator khác list ở điểm nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Generator không dựng cả danh sách trong bộ nhớ mà sinh từng giá trị khi được hỏi, nên tiết kiệm bộ nhớ với dữ liệu lớn, nhưng chỉ duyệt được một lần."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "mapped và filtered của Odoo giống gì với Python thuần?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "mapped giống comprehension biến đổi từng bản ghi, filtered giống comprehension có điều kiện if. Khác biệt là các phương thức recordset nhận cả tên field và trả về recordset, còn comprehension trả về list."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao lấy phần tử đầu tiên thỏa điều kiện?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng next với generator và giá trị mặc định, ví dụ next((c for c in courses if c[\"hours\"] < 10), None). Nó dừng ngay khi tìm thấy và trả None nếu không có phần tử nào."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-comprehensions-generators-sorted-filter.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Comprehension, generator và sorted/filter</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 6 · Series Python thực chiến</span>
+            <h1>Python comprehension, generator, sorted, filter và mapped Odoo</h1>
+            <p class="post-lead">Xử lý danh sách gọn và nhanh là kỹ năng dùng hằng ngày khi viết code Odoo. Bài này đi qua comprehension, generator, sorted, filter, map, any, all và chỉ ra chúng tương ứng với mapped, filtered, sorted, grouped của recordset thế nào.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 14 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Comprehension biến một vòng <code>for</code> thành một biểu thức: <code>[c["code"] for c in courses if c["published"]]</code>.</strong> Có bốn dạng (list, dict, set, generator), chỉ khác loại ngoặc. Generator tạo giá trị theo yêu cầu nên tiết kiệm bộ nhớ nhưng chỉ dùng được một lần. Cùng với <code>sorted</code>, <code>filter</code>, <code>map</code>, <code>sum</code>, <code>any</code>, <code>all</code>, đây là bộ công cụ xử lý danh sách mà <code>mapped</code>, <code>filtered</code>, <code>sorted</code> của recordset Odoo mô phỏng lại.</p>
+                </div>
+
+                <h2 id="list-comprehension">List comprehension: vòng for trong một dòng</h2>
+                <p>Cú pháp là <code>[biểu_thức for phần_tử in tập_hợp if điều_kiện]</code>, với phần <code>if</code> là tùy chọn. Dùng lại danh sách khóa học của các bài trước:</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "name": "Odoo cơ bản", "hours": 24, "published": True},
+    {"code": "PY-F", "name": "Python cơ bản", "hours": 16, "published": True},
+    {"code": "GIT-T", "name": "Git cho nhóm", "hours": 8, "published": False},
+]
+
+codes = [c["code"] for c in courses]
+print(codes)          # ['ODO-F', 'PY-F', 'GIT-T']
+
+long_codes = [c["code"] for c in courses if c["hours"] &gt;= 16]
+print(long_codes)     # ['ODO-F', 'PY-F']
+
+labels = [f'{c["code"]} ({c["hours"]}h)' for c in courses]
+print(labels)         # ['ODO-F (24h)', 'PY-F (16h)', 'GIT-T (8h)']</code></pre>
+                <p>Đọc từ trái sang phải như một câu: "lấy <code>c["code"]</code> cho mỗi <code>c</code> trong <code>courses</code> nếu <code>c["hours"] &gt;= 16</code>". Nó tương đương vòng lặp bạn đã viết ở bài 3, ngắn hơn và cho thẳng danh sách kết quả:</p>
+<pre><code>result = []
+for c in courses:
+    if c["published"]:
+        result.append(c["code"])
+print(result)         # ['ODO-F', 'PY-F']
+
+# cùng kết quả, một dòng
+print([c["code"] for c in courses if c["published"]])</code></pre>
+                <p>Khi nào dùng? Khi bạn <strong>tạo một danh sách mới</strong> từ danh sách cũ bằng cách biến đổi hoặc lọc. Khi vòng lặp có nhiều bước hoặc tác dụng phụ (ghi file, gọi API), hãy giữ vòng <code>for</code> thường cho dễ đọc.</p>
+
+                <h2 id="dict-set-comprehension">Dict và set comprehension</h2>
+                <p>Chỉ cần đổi ngoặc: ngoặc nhọn với cặp <code>khóa: giá trị</code> cho dict, ngoặc nhọn với một giá trị cho set (ví dụ loại trùng):</p>
+<pre><code>by_code = {c["code"]: c["hours"] for c in courses}
+print(by_code)        # {'ODO-F': 24, 'PY-F': 16, 'GIT-T': 8}
+
+hour_set = {c["hours"] // 8 for c in courses}
+print(sorted(hour_set))   # [1, 2, 3]</code></pre>
+                <p>Dict comprehension rất hợp để dựng bảng tra cứu từ danh sách: ở đây <code>by_code["PY-F"]</code> cho số giờ ngay lập tức, thay vì duyệt cả danh sách mỗi lần.</p>
+
+                <h3 id="long-nhau">Vòng lặp lồng nhau</h3>
+<pre><code>pairs = [(c["code"], t) for c in courses for t in ("A", "B") if c["published"]]
+print(pairs)
+# [('ODO-F', 'A'), ('ODO-F', 'B'), ('PY-F', 'A'), ('PY-F', 'B')]</code></pre>
+                <p>Các mệnh đề <code>for</code> liệt kê theo thứ tự lồng nhau như khi bạn viết vòng lặp thường. Nhưng nếu comprehension cần hai tầng <code>for</code> cộng điều kiện phức tạp, hãy tách ra vòng lặp thường: code dễ đọc quan trọng hơn code ngắn.</p>
+
+                <h2 id="sorted-filter-map">sorted, filter, map và các hàm tổng hợp</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hàm</th><th>Làm gì</th><th>Trả về</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>sorted(ds, key=..., reverse=...)</code></td><td>Sắp xếp theo khóa</td><td>list mới</td></tr>
+                            <tr><td><code>filter(hàm, ds)</code></td><td>Giữ phần tử mà hàm trả đúng</td><td>iterator (bọc <code>list()</code>)</td></tr>
+                            <tr><td><code>map(hàm, ds)</code></td><td>Áp hàm lên từng phần tử</td><td>iterator</td></tr>
+                            <tr><td><code>sum</code>, <code>min</code>, <code>max</code></td><td>Tổng, nhỏ nhất, lớn nhất</td><td>một giá trị</td></tr>
+                            <tr><td><code>any</code>, <code>all</code></td><td>Có ít nhất một / mọi phần tử đúng</td><td><code>True</code>/<code>False</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>print(sorted(courses, key=lambda c: c["hours"], reverse=True)[0]["code"])   # ODO-F
+print(list(filter(lambda c: c["published"], courses))[0]["code"])           # ODO-F
+print(list(map(lambda c: c["hours"] * 60, courses)))                        # [1440, 960, 480]
+
+print(sum(c["hours"] for c in courses), max(c["hours"] for c in courses), min(c["hours"] for c in courses))
+# 48 24 8
+print(any(c["hours"] &gt; 20 for c in courses), all(c["published"] for c in courses))
+# True False</code></pre>
+                <p><code>filter</code> và <code>map</code> trả về một đối tượng iterator chứ không phải list, nên in thẳng sẽ ra <code>&lt;filter object ...&gt;</code>. Trong thực tế, nhiều người ưu tiên comprehension thay cho <code>filter/map</code> vì dễ đọc hơn, và chỉ giữ <code>sorted</code>, <code>sum</code>, <code>any</code>, <code>all</code>.</p>
+
+                <h2 id="bien-doi-dieu-kien">Biến đổi có điều kiện, enumerate và zip</h2>
+                <p>Có hai chỗ đặt điều kiện trong comprehension và chúng khác nhau. <code>if</code> đứng <em>sau</em> <code>for</code> để <strong>loại</strong> phần tử; <code>x if cond else y</code> đứng <em>trước</em> <code>for</code> để <strong>biến đổi</strong> mọi phần tử theo điều kiện. Bạn cũng dùng được <code>enumerate</code> và <code>zip</code> bên trong để lấy chỉ số hoặc duyệt hai danh sách song song:</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+# if-else nằm TRƯỚC for: biến đổi theo điều kiện
+print([c["code"] if c["published"] else c["code"].lower() for c in courses])
+# ['ODO-F', 'PY-F', 'git-t', 'SQL-B']
+
+# enumerate và zip trong comprehension
+print([f"{i}. {c['code']}" for i, c in enumerate(courses, start=1)])
+# ['1. ODO-F', '2. PY-F', '3. GIT-T', '4. SQL-B']
+print({n: h for n, h in zip(["a", "b"], [1, 2])})   # {'a': 1, 'b': 2}</code></pre>
+
+                <h2 id="sap-xep-nang-cao">Sắp xếp nâng cao</h2>
+                <p>Tham số <code>key</code> nhận một hàm trả về "khóa so sánh" cho mỗi phần tử. Muốn sắp theo nhiều tiêu chí, trả về một tuple; dấu trừ đảo chiều cho số. Mô-đun <code>operator</code> có <code>itemgetter</code> làm việc này gọn hơn lambda. Phép sắp xếp của Python là <strong>ổn định</strong>: các phần tử có khóa bằng nhau giữ nguyên thứ tự ban đầu, nên bạn có thể sắp xếp nhiều lần theo từng tiêu chí.</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+from operator import itemgetter
+
+# nhiều khóa: giờ giảm dần, rồi mã tăng dần
+print([c["code"] for c in sorted(courses, key=lambda c: (-c["hours"], c["code"]))])
+# ['ODO-F', 'PY-F', 'SQL-B', 'GIT-T']
+
+print([c["code"] for c in sorted(courses, key=itemgetter("hours", "code"))])
+# ['GIT-T', 'PY-F', 'SQL-B', 'ODO-F']
+
+# sắp xếp ổn định: hai khóa 16 giờ giữ nguyên thứ tự ban đầu
+print([c["code"] for c in sorted(courses, key=lambda c: c["hours"])])
+# ['GIT-T', 'PY-F', 'SQL-B', 'ODO-F']
+
+print(max(courses, key=lambda c: c["hours"])["code"])   # ODO-F</code></pre>
+
+                <h2 id="gom-nhom">Gom nhóm và đếm</h2>
+                <p>Bài 4 bạn đã gom nhóm bằng <code>setdefault</code>. Thư viện chuẩn có công cụ chuyên dụng hơn: <code>defaultdict(list)</code> tự tạo list rỗng cho khóa mới, <code>Counter</code> đếm số lần xuất hiện, và <code>itertools.groupby</code> gom các phần tử liền kề. Hãy cẩn thận với cái cuối: <code>groupby</code> chỉ gom những phần tử <strong>đứng cạnh nhau</strong>, nên dữ liệu phải được sắp xếp theo cùng khóa trước.</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24, "published": True},
+    {"code": "PY-F", "hours": 16, "published": True},
+    {"code": "GIT-T", "hours": 8, "published": False},
+    {"code": "SQL-B", "hours": 16, "published": True},
+]
+
+from collections import defaultdict, Counter
+from itertools import groupby
+from operator import itemgetter
+
+groups = defaultdict(list)
+for c in courses:
+    groups[c["hours"]].append(c["code"])
+print(dict(groups))   # {24: ['ODO-F'], 16: ['PY-F', 'SQL-B'], 8: ['GIT-T']}
+
+print(Counter(c["hours"] for c in courses))   # Counter({16: 2, 24: 1, 8: 1})
+
+# groupby chỉ gom các phần tử LIỀN KỀ: phải sắp xếp trước
+srt = sorted(courses, key=itemgetter("hours"))
+print({h: [c["code"] for c in g] for h, g in groupby(srt, key=itemgetter("hours"))})
+# {8: ['GIT-T'], 16: ['PY-F', 'SQL-B'], 24: ['ODO-F']}
+print({h: [c["code"] for c in g] for h, g in groupby(courses, key=itemgetter("hours"))})
+# {24: ['ODO-F'], 16: ['SQL-B'], 8: ['GIT-T']}   &lt;- sai: mất 'PY-F'!</code></pre>
+                <p>Trong Odoo, <code>records.grouped(key)</code> làm việc gom nhóm này và trả dict từ khóa sang recordset, nên bạn hiếm khi phải tự viết <code>groupby</code>.</p>
+
+                <h2 id="generator">Generator: tạo giá trị theo yêu cầu</h2>
+                <p>Đổi ngoặc vuông của list comprehension thành ngoặc tròn là bạn có <em>generator expression</em>: nó không dựng cả danh sách trong bộ nhớ mà sinh từng giá trị khi được hỏi. Hàm dùng <code>yield</code> thay cho <code>return</code> cũng tạo ra generator: mỗi lần được gọi tiếp, nó chạy tiếp từ chỗ dừng lần trước, nhớ cả giá trị biến và câu lệnh đang thực thi.</p>
+<pre><code>gen = (c["hours"] for c in courses)    # generator expression: ngoặc tròn
+print(type(gen))                        # &lt;class 'generator'&gt;
+print(next(gen), next(gen), list(gen))  # 24 16 [8]
+
+def hours_gen(items):
+    for c in items:
+        yield c["hours"]                # yield: trả từng giá trị, nhớ vị trí
+
+g = hours_gen(courses)
+print(next(g), sum(g))                  # 24 24</code></pre>
+                <p>Lợi ích lớn là bộ nhớ. Với một triệu bản ghi, list chứa hết, còn generator chỉ giữ một phần tử một lúc. Truyền thẳng generator vào <code>sum</code>, <code>max</code>, <code>any</code> như <code>sum(c["hours"] for c in courses)</code> là thói quen tốt, và bạn đã thấy kiểu viết này trong ví dụ <code>any(course.is_published for course in self)</code> ở series Odoo.</p>
+<pre><code>import sys
+big_list = [i for i in range(100000)]
+big_gen = (i for i in range(100000))
+print(sys.getsizeof(big_list) &gt; sys.getsizeof(big_gen))    # True
+print(sum(i for i in range(10)))                          # 45</code></pre>
+                <h3 id="phan-tu-dau-tien">Mẫu "tìm phần tử đầu tiên khớp"</h3>
+<pre><code>first = next((c for c in courses if c["hours"] &lt; 10), None)
+print(first["code"])                                          # GIT-T
+print(next((c for c in courses if c["hours"] &gt; 100), None))   # None</code></pre>
+                <p><code>next(generator, mặc_định)</code> trả phần tử đầu tiên rồi dừng, không duyệt hết danh sách; nếu không có phần tử nào thì trả mặc định thay vì báo lỗi.</p>
+
+                <h2 id="trong-odoo">Tương ứng trong Odoo: mapped, filtered, sorted</h2>
+                <p>Recordset của Odoo có sẵn các phương thức làm đúng những việc trên, nhận cả hàm lẫn tên field. Tài liệu ORM mô tả:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Phương thức recordset</th><th>Tương đương Python thuần</th><th>Ghi chú từ tài liệu</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>records.mapped('name')</code></td><td><code>[r.name for r in records]</code></td><td>Nhận hàm hoặc chuỗi field có dấu chấm (<code>'partner_id.bank_ids'</code>); trả list, hoặc recordset nếu kết quả là recordset (thứ tự không đảm bảo)</td></tr>
+                            <tr><td><code>records.filtered(f)</code></td><td><code>[r for r in records if f(r)]</code></td><td>Nhận hàm, domain hoặc chuỗi field như <code>"partner_id.vat"</code>; trả recordset</td></tr>
+                            <tr><td><code>records.sorted(key)</code></td><td><code>sorted(records, key=key)</code></td><td><code>key</code> là hàm hoặc chuỗi như <code>'name DESC, id'</code>; không có thì theo thứ tự mặc định của model</td></tr>
+                            <tr><td><code>records.grouped(key)</code></td><td>dict gom nhóm</td><td>Trả dict từ kết quả của <code>key</code> sang recordset</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code># danh sách tên (Python thuần ~ recordset)
+names = [c.name for c in courses]            # tương đương courses.mapped('name')
+
+# lọc
+published = [c for c in courses if c.is_published]   # tương đương courses.filtered('is_published')
+
+# sắp xếp
+ordered = sorted(courses, key=lambda c: c.start_date)   # tương đương courses.sorted('start_date')
+
+# tính tổng giờ
+total = sum(c.duration_hours for c in courses)          # tương đương sum(courses.mapped('duration_hours'))</code></pre>
+                <p>Điểm khác quan trọng: các phương thức recordset trả về <strong>recordset</strong> (vẫn gọi tiếp được <code>.write()</code>, <code>.mapped()</code>), còn comprehension trả list thường.</p>
+
+                <h2 id="thuc-hanh">Thực hành: gom khóa học theo trạng thái</h2>
+<pre><code>groups = {}
+for c in courses:
+    groups.setdefault(c["published"], []).append(c["code"])
+print(groups)          # {True: ['ODO-F', 'PY-F'], False: ['GIT-T']}
+
+# viết lại bằng comprehension + sorted
+published_codes = sorted(c["code"] for c in courses if c["published"])
+unpublished_codes = sorted(c["code"] for c in courses if not c["published"])
+print(published_codes, unpublished_codes)   # ['ODO-F', 'PY-F'] ['GIT-T']</code></pre>
+                <p>Hãy thử viết thêm một comprehension tạo dict <code>{code: name}</code> chỉ gồm các khóa đã xuất bản, rồi dùng <code>next(...)</code> để tìm khóa đầu tiên dài hơn 20 giờ.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Dùng lại generator đã cạn.</strong> Sau khi duyệt hết, generator trống; lần duyệt thứ hai cho <code>[]</code>. Cần dùng nhiều lần thì dựng list.</li>
+                        <li><strong>Quên bọc <code>list()</code> quanh <code>filter</code>/<code>map</code>.</strong> In ra <code>&lt;filter object at ...&gt;</code> thay vì kết quả.</li>
+                        <li><strong>Comprehension quá phức tạp.</strong> Hai tầng <code>for</code> cộng nhiều điều kiện khiến người đọc phải giải mã. Hãy tách ra vòng lặp thường hoặc hàm có tên.</li>
+                        <li><strong>Nhầm ngoặc.</strong> <code>[...]</code> là list, <code>{...}</code> là set hoặc dict, <code>(...)</code> là generator, không phải tuple comprehension.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Comprehension tạo list/dict/set mới từ dữ liệu cũ bằng một biểu thức; chỉ dùng khi còn dễ đọc.</li>
+                    <li>Generator (<code>( ... )</code> hoặc <code>yield</code>) sinh giá trị theo yêu cầu, tiết kiệm bộ nhớ, chỉ dùng một lần.</li>
+                    <li><code>sorted</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>any</code>, <code>all</code>, <code>next(..., mặc_định)</code> là bộ công cụ hằng ngày.</li>
+                    <li><code>mapped</code>, <code>filtered</code>, <code>sorted</code>, <code>grouped</code> của recordset Odoo làm cùng việc nhưng trả recordset.</li>
+                </ul>
+                <p>Bài tiếp theo giải thích cách Python tổ chức mã thành module và package, và vì sao module Odoo có <code>__init__.py</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn viết Python gọn và đọc hiểu code Odoo nhanh hơn?</h3>
+                    <p>Khóa Developer Foundation có bài tập comprehension, xử lý recordset và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>List comprehension khác vòng for ở điểm nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Comprehension là biểu thức tạo ngay một danh sách mới từ danh sách cũ, ngắn hơn vòng for kèm append. Nên dùng khi chỉ biến đổi hoặc lọc; nếu vòng lặp có nhiều bước hoặc tác dụng phụ thì giữ vòng for thường.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Generator khác list ở điểm nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Generator không dựng cả danh sách trong bộ nhớ mà sinh từng giá trị khi được hỏi, nên tiết kiệm bộ nhớ với dữ liệu lớn, nhưng chỉ duyệt được một lần.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>mapped và filtered của Odoo giống gì với Python thuần?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">mapped giống comprehension biến đổi từng bản ghi, filtered giống comprehension có điều kiện if. Khác biệt là các phương thức recordset nhận cả tên field và trả về recordset, còn comprehension trả về list.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao lấy phần tử đầu tiên thỏa điều kiện?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng next với generator và giá trị mặc định, ví dụ next((c for c in courses if c["hours"] &lt; 10), None). Nó dừng ngay khi tìm thấy và trả None nếu không có phần tử nào.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/datastructures.html" target="_blank" rel="noopener">Python 3.12 – Data Structures (list comprehensions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes (generators, generator expressions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functions.html" target="_blank" rel="noopener">Python 3.12 – Built-in Functions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (mapped, filtered, sorted, grouped)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fcomprehension-generator-sorted-filter-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fcomprehension-generator-sorted-filter-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="ham-python-args-kwargs-lambda.html"><small>← Bài trước</small>Hàm: tham số, **kwargs và lambda</a>
+                    <a class="next" href="module-package-import-python-odoo.html"><small>Bài tiếp theo →</small>Module, package và import</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#list-comprehension">List comprehension: vòng for trong một dòng</a></li>
+                        <li><a href="#dict-set-comprehension">Dict và set comprehension</a></li>
+                        <li><a href="#sorted-filter-map">sorted, filter, map và các hàm tổng hợp</a></li>
+                        <li><a href="#bien-doi-dieu-kien">Biến đổi có điều kiện, enumerate và zip</a></li>
+                        <li><a href="#sap-xep-nang-cao">Sắp xếp nâng cao</a></li>
+                        <li><a href="#gom-nhom">Gom nhóm và đếm</a></li>
+                        <li><a href="#generator">Generator: tạo giá trị theo yêu cầu</a></li>
+                        <li><a href="#trong-odoo">Tương ứng trong Odoo: mapped, filtered, sorted</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: gom khóa học theo trạng thái</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

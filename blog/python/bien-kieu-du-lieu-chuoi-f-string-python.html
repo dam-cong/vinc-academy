@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python: biến, kiểu dữ liệu, chuỗi và f-string cho dev Odoo</title>
+    <meta name="description" content="Hiểu biến, int, float, str, bool, None, xử lý chuỗi và f-string trong Python, kèm ví dụ sinh mã khóa học và đối chiếu với field Odoo." />
+    <meta name="keywords" content="python biến kiểu dữ liệu, python f-string, xử lý chuỗi python, python int float str, python cho odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python: biến, kiểu dữ liệu, chuỗi và f-string cho dev Odoo" />
+    <meta property="og:description" content="Biến, kiểu dữ liệu, chuỗi và f-string trong Python qua ví dụ mã khóa học, đối chiếu field Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/bien-kieu-du-lieu-chuoi-f-string-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python: biến, kiểu dữ liệu, chuỗi và f-string cho dev Odoo",
+                "description": "Biến, kiểu dữ liệu, chuỗi và f-string trong Python qua ví dụ mã khóa học, đối chiếu field Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/bien-kieu-du-lieu-chuoi-f-string-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Biến, kiểu dữ liệu và chuỗi"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Biến trong Python khác gì so với ngôn ngữ khác?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Python không cần khai báo kiểu; biến chỉ là cái tên trỏ tới một giá trị và có thể được gán lại cho giá trị kiểu khác. Hàm type cho biết giá trị hiện tại thuộc kiểu nào."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "F-string là gì và vì sao nên dùng?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "F-string là chuỗi có tiền tố f cho phép nhúng biểu thức trong dấu ngoặc nhọn và thêm định dạng sau dấu hai chấm, ví dụ f\"{seq:03d}\". Nó ngắn gọn và dễ đọc hơn toán tử % hay format."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao 0.1 + 0.2 khác 0.3?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Số thực được lưu dưới dạng nhị phân nên có sai số nhỏ. Hãy so sánh bằng math.isclose trong Python, hoặc float_compare và float_is_zero trong Odoo, thay vì dùng dấu bằng kép."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Field Char trống trong Odoo là None hay False?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo tài liệu Odoo về file dữ liệu, khi không cung cấp giá trị cho field thì một giá trị False ngầm được đặt. Hãy kiểm tra bằng if not value thay vì is None."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-variables-data-types-strings-f-strings.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Biến, kiểu dữ liệu và chuỗi</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 2 · Series Python thực chiến</span>
+            <h1>Python: biến, kiểu dữ liệu, chuỗi và f-string cho dev Odoo</h1>
+            <p class="post-lead">Mọi dòng code đều bắt đầu từ giá trị và cách đặt tên cho chúng. Bài này giải thích biến, các kiểu dữ liệu cơ bản và xử lý chuỗi bằng ví dụ sinh mã khóa học, đồng thời chỉ ra chúng xuất hiện ở đâu trong field Odoo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Biến trong Python chỉ là cái tên trỏ tới một giá trị; kiểu dữ liệu nằm ở giá trị chứ không ở biến.</strong> Bốn kiểu cơ bản bạn dùng hằng ngày là <code>int</code>, <code>float</code>, <code>str</code> và <code>bool</code>, cộng với <code>None</code> cho "chưa có giá trị". Định dạng chuỗi hiện đại nhất là f-string: <code>f"{ma}-{nam}"</code>. Trong Odoo, các kiểu này tương ứng trực tiếp với <code>fields.Integer</code>, <code>Float</code>, <code>Char</code>, <code>Boolean</code>.</p>
+                </div>
+
+                <h2 id="bien">Biến: đặt tên cho một giá trị</h2>
+                <p>Bạn tạo biến bằng cách gán: không cần khai báo kiểu. Cùng một tên có thể được gán lại cho giá trị kiểu khác, và hàm <code>type()</code> cho biết giá trị hiện tại thuộc kiểu nào:</p>
+<pre><code>course_name = "Odoo Developer Foundation"
+hours = 24
+price = 4500000.0
+is_published = True
+description = None
+
+print(type(course_name), type(hours), type(price), type(is_published), type(description))
+# &lt;class 'str'&gt; &lt;class 'int'&gt; &lt;class 'float'&gt; &lt;class 'bool'&gt; &lt;class 'NoneType'&gt;</code></pre>
+                <p>Quy ước đặt tên trong cộng đồng Python (và Odoo) là <code>snake_case</code> cho biến, hàm; <code>CamelCase</code> cho class. Tên phân biệt hoa thường, không bắt đầu bằng số. Đây cũng là lý do bạn thấy <code>is_published</code>, <code>duration_hours</code> trong model <code>vinc.course</code>: mỗi field của model chính là một "biến" của bản ghi.</p>
+
+                <h2 id="kieu-du-lieu">Các kiểu dữ liệu cơ bản và field Odoo tương ứng</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Kiểu Python</th><th>Ví dụ</th><th>Field Odoo</th><th>Ghi chú</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>int</code></td><td><code>24</code></td><td><code>fields.Integer</code></td><td>Số nguyên</td></tr>
+                            <tr><td><code>float</code></td><td><code>4500000.0</code></td><td><code>fields.Float</code></td><td>Số thực, có sai số làm tròn</td></tr>
+                            <tr><td><code>str</code></td><td><code>"ODO-F"</code></td><td><code>fields.Char</code>, <code>Text</code></td><td>Chuỗi ký tự, không đổi được tại chỗ</td></tr>
+                            <tr><td><code>bool</code></td><td><code>True</code></td><td><code>fields.Boolean</code></td><td><code>True</code> / <code>False</code></td></tr>
+                            <tr><td><code>None</code></td><td><code>None</code></td><td>(field trống)</td><td>"Không có giá trị"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout tip">
+                    <p class="callout-title">Field trống trong Odoo là False, không phải None</p>
+                    <p>Ở phía Odoo, tài liệu về file dữ liệu cho biết khi không cung cấp giá trị cho một field, một giá trị <code>False</code> ngầm được đặt cho nó. Vì vậy khi đọc field Char chưa nhập, đừng dùng <code>is None</code> để kiểm tra; hãy dùng điều kiện "có giá trị hay không" như <code>if not course.name:</code>.</p>
+                </div>
+                <p>Python coi những giá trị sau là "sai" trong điều kiện: <code>False</code>, <code>None</code>, số 0, chuỗi rỗng và danh sách rỗng. Mọi giá trị khác là "đúng". Nhờ đó <code>if description:</code> vừa chặn <code>None</code> vừa chặn chuỗi rỗng:</p>
+<pre><code>print(bool(""), bool("a"), bool(0), bool([]), bool(None))
+# False True False False False</code></pre>
+
+                <h2 id="so">Số và phép tính</h2>
+<pre><code>print(7 / 2, 7 // 2, 7 % 2, 2 ** 10)
+# 3.5 3 1 1024</code></pre>
+                <p><code>/</code> luôn trả số thực, <code>//</code> chia lấy phần nguyên, <code>%</code> lấy phần dư và <code>**</code> là lũy thừa. Ví dụ đổi giờ ra buổi học 8 giờ: <code>hours // 8</code> là số buổi tròn, <code>hours % 8</code> là số giờ lẻ.</p>
+                <p>Số thực lưu dưới dạng nhị phân nên có sai số nhỏ, đây là chuyện của mọi ngôn ngữ chứ không riêng Python:</p>
+<pre><code>print(0.1 + 0.2, 0.1 + 0.2 == 0.3)
+# 0.30000000000000004 False
+
+import math
+print(math.isclose(0.1 + 0.2, 0.3))
+# True</code></pre>
+                <p>Đây là lý do tài liệu Odoo dặn khi so sánh số thực phải dùng <code>float_compare()</code> và <code>float_is_zero()</code> thay vì <code>==</code> (bài 8 của series Odoo). Với tiền tệ, hãy dùng field <code>Monetary</code> hoặc làm tròn đúng độ chính xác.</p>
+
+                <h2 id="chuoi">Chuỗi: thứ bạn xử lý nhiều nhất</h2>
+                <p>Chuỗi viết trong dấu nháy đơn hoặc kép; chuỗi nhiều dòng dùng ba dấu nháy. Chuỗi là <strong>bất biến</strong>: các hàm xử lý luôn trả chuỗi mới chứ không sửa chuỗi cũ.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thao tác</th><th>Ví dụ</th><th>Kết quả</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Cắt khoảng trắng đầu cuối</td><td><code>"  Odoo  ".strip()</code></td><td><code>'Odoo'</code></td></tr>
+                            <tr><td>Chữ thường / hoa</td><td><code>"Odoo".lower()</code> / <code>.upper()</code></td><td><code>'odoo'</code> / <code>'ODOO'</code></td></tr>
+                            <tr><td>Thay thế</td><td><code>"a b".replace(" ", "-")</code></td><td><code>'a-b'</code></td></tr>
+                            <tr><td>Tách thành danh sách</td><td><code>"odoo,python".split(",")</code></td><td><code>['odoo', 'python']</code></td></tr>
+                            <tr><td>Nối danh sách</td><td><code>" | ".join(["odoo", "python"])</code></td><td><code>'odoo | python'</code></td></tr>
+                            <tr><td>Bắt đầu bằng</td><td><code>"ODO-F".startswith("ODO")</code></td><td><code>True</code></td></tr>
+                            <tr><td>Độ dài, cắt lát</td><td><code>len(s)</code>, <code>s[:4]</code>, <code>s[-10:]</code></td><td>độ dài, 4 ký tự đầu, 10 ký tự cuối</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 id="f-string">Định dạng chuỗi: f-string, %, format()</h3>
+                <p>F-string (chuỗi có tiền tố <code>f</code>) cho phép nhúng biểu thức vào trong dấu ngoặc nhọn và thêm định dạng sau dấu hai chấm:</p>
+<pre><code>prefix, year, seq = "ODO", 2026, 7
+print(f"{prefix}-{year}-{seq:03d}")        # ODO-2026-007
+price, hours = 4500000.0, 24
+print(f"{price:,.0f} VND", f"{hours / 8:.1f} ngày")   # 4,500,000 VND 3.0 ngày</code></pre>
+                <p>Hai kiểu cũ hơn bạn vẫn gặp trong mã Odoo: toán tử <code>%</code> (tài liệu Odoo viết <code>self.message = "Dear %s" % (self.partner_id.name or "")</code>) và <code>"{} - {}".format(...)</code>. Chúng cho cùng kết quả:</p>
+<pre><code>print("Dear %s" % "Hiền", "%d giờ" % 24)    # Dear Hiền 24 giờ
+print("{} - {}".format("ODO-F", hours))     # ODO-F - 24</code></pre>
+
+                <h2 id="so-sanh">So sánh và toán tử logic</h2>
+                <p>Điều kiện (bài sau) được dựng từ phép so sánh và <code>and</code>, <code>or</code>, <code>not</code>. Kết quả luôn là <code>True</code> hoặc <code>False</code>:</p>
+<pre><code>hours = 24
+level = "beginner"
+print(hours &gt; 20, hours == 24, hours != 24, 10 &lt;= hours &lt; 30)
+# True True False True
+print(level == "beginner" and hours &gt;= 24, level == "advanced" or hours &gt; 100, not hours &gt; 100)
+# True False True
+print("odoo" in "odoo developer", "Odoo" in ["odoo", "python"], 24 in [8, 24])
+# True False True</code></pre>
+                <ul>
+                    <li>Có thể viết so sánh chuỗi như <code>10 &lt;= hours &lt; 30</code>, đúng như cách bạn viết trong toán học.</li>
+                    <li><code>in</code> kiểm tra một chuỗi con nằm trong chuỗi hay một phần tử nằm trong danh sách. Chú ý so sánh chuỗi <strong>phân biệt hoa thường</strong>: <code>"python" == "Python"</code> là <code>False</code>, nên người ta thường chuẩn hóa bằng <code>.lower()</code> trước khi so.</li>
+                    <li>Với <code>None</code>, hãy dùng <code>is None</code> / <code>is not None</code> thay vì <code>== None</code>. Cả hai thường cho cùng kết quả, nhưng <code>is</code> là cách viết chuẩn của Python và rõ ý hơn.</li>
+                </ul>
+                <p>Những phép so sánh này chính là nền của <em>domain</em> trong Odoo: <code>[('hours', '&gt;', 20), ('level', '=', 'beginner')]</code> là cách viết "dữ liệu" của cùng một điều kiện, ORM sẽ dịch thành SQL.</p>
+
+                <h2 id="trong-odoo">Bạn gặp các kiểu này ở đâu trong module Odoo?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Đoạn code Odoo</th><th>Giá trị Python</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_name = 'vinc.course'</code></td><td>chuỗi (<code>str</code>)</td></tr>
+                            <tr><td><code>'version': '20.0.1.0.0'</code> trong manifest</td><td>chuỗi</td></tr>
+                            <tr><td><code>'application': True</code></td><td>boolean</td></tr>
+                            <tr><td><code>limit=10</code> trong <code>search()</code></td><td>số nguyên</td></tr>
+                            <tr><td><code>price = fields.Float()</code></td><td>số thực; giá trị số thực</td></tr>
+                            <tr><td><code>raise ValidationError("Số giờ phải lớn hơn 0.")</code></td><td>chuỗi thông báo cho người dùng</td></tr>
+                            <tr><td><code>"Dear %s" % partner.name</code></td><td>định dạng chuỗi kiểu <code>%</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="ep-kieu">Ép kiểu</h2>
+<pre><code>print(int("12") + 1, str(12) + "h", float("3.5"))
+# 13 12h 3.5</code></pre>
+                <p>Dữ liệu đọc từ file CSV hay form thường là chuỗi, nên bạn cần <code>int()</code>, <code>float()</code> trước khi tính toán. Chuỗi không hợp lệ gây ra <code>ValueError</code> (bài 10 sẽ xử lý lỗi này).</p>
+
+                <h2 id="thuc-hanh">Thực hành: sinh mã và slug cho khóa học</h2>
+                <p>Viết script nhận tên khóa học thô và số thứ tự, trả về mã khóa học và slug thân thiện URL:</p>
+<pre><code>def make_code(prefix, year, seq):
+    return f"{prefix.upper()}-{year}-{seq:03d}"
+
+def make_slug(name):
+    return name.strip().lower().replace(" ", "-")
+
+print(make_code("odo", 2026, 7))
+print(make_slug("  Odoo Developer Foundation  "))
+# ODO-2026-007
+# odoo-developer-foundation</code></pre>
+                <p>Thử thay đổi: thêm kiểm tra <code>if not name:</code> để báo lỗi khi tên rỗng. Đây đúng là kiểu logic bạn đặt trong <code>create()</code> hoặc một compute method để tự sinh mã khóa học.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Cộng chuỗi với số.</strong> <code>"5" + 3</code> báo <code>TypeError: can only concatenate str (not "int") to str</code>. Hãy ép kiểu (<code>int("5") + 3</code>) hoặc dùng f-string (<code>f"{5}{3}"</code>).</li>
+                        <li><strong>Sửa một ký tự trong chuỗi.</strong> <code>course_name[0] = "x"</code> báo <code>TypeError: 'str' object does not support item assignment</code> vì chuỗi bất biến. Hãy tạo chuỗi mới bằng <code>replace()</code> hoặc cắt lát.</li>
+                        <li><strong>So sánh số thực bằng <code>==</code>.</strong> <code>0.1 + 0.2 == 0.3</code> là <code>False</code>. Dùng <code>math.isclose()</code> trong Python thuần, hoặc <code>float_compare()</code> trong Odoo.</li>
+                        <li><strong>Ép chuỗi không phải số.</strong> <code>int("abc")</code> báo <code>ValueError: invalid literal for int() with base 10: 'abc'</code>. Hãy kiểm tra hoặc bắt lỗi trước khi ép.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Biến là tên trỏ tới giá trị; dùng <code>snake_case</code>; <code>type()</code> cho biết kiểu.</li>
+                    <li>Bốn kiểu cơ bản <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code> cùng <code>None</code> tương ứng các field Odoo.</li>
+                    <li>Chuỗi bất biến; dùng <code>strip</code>, <code>split</code>, <code>join</code>, <code>replace</code> và f-string để xử lý.</li>
+                    <li>Không so sánh số thực bằng <code>==</code>; dữ liệu đọc ra thường là chuỗi nên cần ép kiểu.</li>
+                </ul>
+                <p>Bài tiếp theo thêm "bộ não" cho chương trình: điều kiện và vòng lặp, nền tảng của <code>for record in self</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn luyện Python với bài tập thực tế?</h3>
+                    <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập bám sát công việc và review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Biến trong Python khác gì so với ngôn ngữ khác?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Python không cần khai báo kiểu; biến chỉ là cái tên trỏ tới một giá trị và có thể được gán lại cho giá trị kiểu khác. Hàm type cho biết giá trị hiện tại thuộc kiểu nào.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>F-string là gì và vì sao nên dùng?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">F-string là chuỗi có tiền tố f cho phép nhúng biểu thức trong dấu ngoặc nhọn và thêm định dạng sau dấu hai chấm, ví dụ f"{seq:03d}". Nó ngắn gọn và dễ đọc hơn toán tử % hay format.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao 0.1 + 0.2 khác 0.3?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Số thực được lưu dưới dạng nhị phân nên có sai số nhỏ. Hãy so sánh bằng math.isclose trong Python, hoặc float_compare và float_is_zero trong Odoo, thay vì dùng dấu bằng kép.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Field Char trống trong Odoo là None hay False?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo tài liệu Odoo về file dữ liệu, khi không cung cấp giá trị cho field thì một giá trị False ngầm được đặt. Hãy kiểm tra bằng if not value thay vì is None.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/introduction.html" target="_blank" rel="noopener">Python 3.12 – An Informal Introduction to Python</a></li>
+                    <li><a href="https://docs.python.org/3.12/tutorial/inputoutput.html" target="_blank" rel="noopener">Python 3.12 – Input and Output (formatting)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/stdtypes.html" target="_blank" rel="noopener">Python 3.12 – Built-in Types</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/data.html" target="_blank" rel="noopener">Odoo 20 – Data files</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fbien-kieu-du-lieu-chuoi-f-string-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fbien-kieu-du-lieu-chuoi-f-string-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="lam-quen-python-cai-dat-venv-pip.html"><small>← Bài trước</small>Làm quen Python: cài đặt, venv và pip</a>
+                    <a class="next" href="dieu-kien-vong-lap-if-for-while-python.html"><small>Bài tiếp theo →</small>Điều kiện và vòng lặp</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#bien">Biến: đặt tên cho một giá trị</a></li>
+                        <li><a href="#kieu-du-lieu">Các kiểu dữ liệu cơ bản và field Odoo tương ứng</a></li>
+                        <li><a href="#so">Số và phép tính</a></li>
+                        <li><a href="#chuoi">Chuỗi: thứ bạn xử lý nhiều nhất</a></li>
+                        <li><a href="#so-sanh">So sánh và toán tử logic</a></li>
+                        <li><a href="#trong-odoo">Bạn gặp các kiểu này ở đâu trong module Odoo?</a></li>
+                        <li><a href="#ep-kieu">Ép kiểu</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: sinh mã và slug cho khóa học</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

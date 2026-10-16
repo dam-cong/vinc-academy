@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python đọc ghi file, JSON, CSV và pathlib cho dev Odoo</title>
+    <meta name="description" content="Đọc ghi file với pathlib và open, xử lý JSON, CSV, configparser trong Python, kèm ví dụ xuất nhập khóa học và lỗi encoding thường gặp." />
+    <meta name="keywords" content="python đọc ghi file, python json, python csv, pathlib, configparser odoo.conf, encoding utf-8 python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python đọc ghi file, JSON, CSV và pathlib cho dev Odoo" />
+    <meta property="og:description" content="pathlib, open, json, csv và configparser trong Python với ví dụ xuất nhập danh sách khóa học cho Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/file-json-csv-pathlib-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python đọc ghi file, JSON, CSV và pathlib cho dev Odoo",
+                "description": "pathlib, open, json, csv và configparser trong Python với ví dụ xuất nhập danh sách khóa học cho Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/file-json-csv-pathlib-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Làm việc với file, JSON và CSV"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao phải ghi encoding=\"utf-8\" khi mở file?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nếu không chỉ định, Python dùng bảng mã mặc định của hệ thống nên kết quả có thể khác nhau giữa các máy. Với dữ liệu tiếng Việt, luôn ghi rõ utf-8 để tránh UnicodeDecodeError hoặc chữ lỗi."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao csv cần newline=\"\"?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Module csv tự xử lý ký tự xuống dòng bên trong ô và giữa các dòng. Mở file mà không đặt newline rỗng có thể sinh dòng trống thừa hoặc đọc sai ô nhiều dòng, nhất là trên Windows."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa json.dumps và json.dump?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "dumps trả về một chuỗi JSON, còn dump ghi trực tiếp vào một file đã mở. Tương tự loads đọc từ chuỗi và load đọc từ file."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao số trong file CSV đọc ra lại là chuỗi?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "CSV chỉ là văn bản nên csv.reader và DictReader trả mọi ô dưới dạng chuỗi. Bạn phải tự ép kiểu bằng int() hoặc float() trước khi tính toán."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-files-json-csv-pathlib-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Làm việc với file, JSON và CSV</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 11 · Series Python thực chiến</span>
+            <h1>Python đọc ghi file, JSON, CSV và pathlib cho dev Odoo</h1>
+            <p class="post-lead">Nhập xuất dữ liệu là công việc thường xuyên của dev Odoo: file CSV, phản hồi API dạng JSON, file cấu hình. Bài này dạy pathlib, open, json, csv, configparser bằng ví dụ xuất nhập danh sách khóa học, kèm các lỗi encoding hay gặp.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Dùng <code>pathlib.Path</code> cho đường dẫn, <code>with open(..., encoding="utf-8")</code> để đọc ghi file, <code>json</code> cho dữ liệu lồng nhau và <code>csv</code> cho bảng.</strong> Luôn chỉ định <code>encoding="utf-8"</code> (và <code>newline=""</code> với csv). Mọi giá trị đọc từ CSV đều là chuỗi nên phải ép kiểu. Trong công việc Odoo, bạn gặp ba định dạng này liên tục: CSV cho dữ liệu và phân quyền (<code>ir.model.access.csv</code>), JSON cho API, và file cấu hình <code>odoo.conf</code>.</p>
+                </div>
+
+                <h2 id="pathlib">Đường dẫn với pathlib</h2>
+                <p>Thay vì nối chuỗi đường dẫn bằng tay, dùng <code>pathlib.Path</code>: nó xử lý đúng dấu phân cách trên mọi hệ điều hành và có sẵn các thao tác hay dùng:</p>
+<pre><code>from pathlib import Path
+
+base = Path("data")
+base.mkdir(parents=True, exist_ok=True)       # tạo thư mục, không lỗi nếu đã có
+p = base / "courses.json"                      # toán tử / nối đường dẫn
+print(p, p.suffix, p.stem, p.parent, p.exists())
+# data/courses.json .json courses data False
+
+(base / "a.txt").write_text("ODO-F\nPY-F\n", encoding="utf-8")
+print((base / "a.txt").read_text(encoding="utf-8").splitlines())   # ['ODO-F', 'PY-F']
+print(sorted(x.name for x in base.glob("*.txt")))                  # ['a.txt']</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Thao tác</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Nối đường dẫn</td><td><code>base / "courses.json"</code></td></tr>
+                            <tr><td>Phần tên, đuôi, thư mục cha</td><td><code>p.stem</code>, <code>p.suffix</code>, <code>p.parent</code></td></tr>
+                            <tr><td>Kiểm tra tồn tại</td><td><code>p.exists()</code>, <code>p.is_file()</code>, <code>p.is_dir()</code></td></tr>
+                            <tr><td>Tạo thư mục</td><td><code>p.mkdir(parents=True, exist_ok=True)</code></td></tr>
+                            <tr><td>Đọc / ghi cả file text</td><td><code>p.read_text(encoding=...)</code>, <code>p.write_text(...)</code></td></tr>
+                            <tr><td>Liệt kê, tìm theo mẫu</td><td><code>p.iterdir()</code>, <code>p.glob("*.csv")</code></td></tr>
+                            <tr><td>Thư mục của chính file script</td><td><code>Path(__file__).resolve().parent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Đường dẫn tương đối như <code>"data/courses.json"</code> được tính theo <strong>thư mục hiện tại</strong> khi chạy chương trình, không phải thư mục chứa file script. Muốn đường dẫn ổn định, hãy tính từ <code>Path(__file__).resolve().parent</code>.</p>
+
+                <h2 id="open">Đọc và ghi file text</h2>
+<pre><code>with open(base / "a.txt", encoding="utf-8") as f:     # chế độ mặc định "r" (đọc)
+    for line in f:                                     # duyệt từng dòng, tiết kiệm bộ nhớ
+        print(line.strip(), end=" ")                   # ODO-F PY-F
+print()
+
+with open(base / "a.txt", "a", encoding="utf-8") as f:  # "a": ghi nối thêm vào cuối
+    f.write("GIT-T\n")
+print((base / "a.txt").read_text(encoding="utf-8").splitlines())   # ['ODO-F', 'PY-F', 'GIT-T']</code></pre>
+                <ul>
+                    <li>Chế độ <code>"r"</code> đọc (mặc định), <code>"w"</code> ghi và <strong>xóa nội dung cũ</strong>, <code>"a"</code> ghi nối thêm vào cuối.</li>
+                    <li>Luôn thêm <code>encoding="utf-8"</code>, nhất là khi dữ liệu có tiếng Việt, để kết quả giống nhau trên mọi máy.</li>
+                    <li>Duyệt <code>for line in f</code> đọc từng dòng, tiết kiệm bộ nhớ với file lớn, còn <code>read()</code> đọc cả file một lần.</li>
+                    <li>Luôn dùng <code>with</code> (bài 10) để file tự đóng.</li>
+                </ul>
+
+                <h3 id="che-do-mo">Các chế độ mở file</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Chế độ</th><th>Ý nghĩa</th><th>Khi nào dùng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>"r"</code></td><td>Đọc (mặc định); lỗi nếu file chưa có</td><td>Đọc dữ liệu đầu vào</td></tr>
+                            <tr><td><code>"w"</code></td><td>Ghi, tạo mới hoặc <strong>xóa sạch</strong> file cũ</td><td>Xuất báo cáo ra file mới</td></tr>
+                            <tr><td><code>"a"</code></td><td>Ghi nối vào cuối</td><td>File log, dữ liệu tích lũy</td></tr>
+                            <tr><td><code>"x"</code></td><td>Tạo mới, lỗi nếu file đã tồn tại</td><td>Tránh ghi đè nhầm</td></tr>
+                            <tr><td><code>"r+"</code></td><td>Đọc và ghi cùng lúc</td><td>Sửa tại chỗ (hiếm)</td></tr>
+                            <tr><td>thêm <code>"b"</code></td><td>Chế độ nhị phân (<code>"rb"</code>, <code>"wb"</code>)</td><td>Ảnh, PDF, file nén</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>p = Path("x.txt")
+p.write_text("a", encoding="utf-8")
+
+open(p, "x", encoding="utf-8")
+# FileExistsError: [Errno 17] File exists: 'x.txt'      &lt;- "x": chỉ tạo mới, không ghi đè
+
+with open(p, "r+", encoding="utf-8") as f:     # "r+": đọc và ghi trên cùng file
+    print(f.read())        # a
+    f.seek(0)              # quay về đầu file
+    f.write("Z")
+print(p.read_text())       # Z</code></pre>
+                <h3 id="nhi-phan-base64">File nhị phân và base64</h3>
+                <p>Ảnh, PDF, file nén là dữ liệu nhị phân: đọc ra <code>bytes</code>, không phải chuỗi. Khi cần đưa chúng qua JSON hay lưu trong field của Odoo, người ta mã hóa thành văn bản bằng <strong>base64</strong>. Tài liệu Odoo về file dữ liệu cũng có kiểu <code>base64</code> để nạp nội dung file (như hình ảnh) vào attachment, và các field nhị phân của Odoo đọc ra dạng chuỗi base64 qua <code>read()</code>:</p>
+<pre><code>import base64
+
+img = Path("a.bin")
+img.write_bytes(bytes([0, 1, 2, 255]))         # ghi nhị phân: bytes, không phải str
+raw = img.read_bytes()
+print(raw, len(raw))                           # b'\x00\x01\x02\xff' 4
+
+b64 = base64.b64encode(raw).decode("ascii")    # bytes -&gt; chuỗi base64 để gửi qua JSON
+print(b64, base64.b64decode(b64) == raw)       # AAEC/w== True</code></pre>
+                <h3 id="file-tam">File và thư mục tạm</h3>
+                <p>Khi viết test (bài 14) hoặc xử lý trung gian, bạn không muốn để lại file rác. Module <code>tempfile</code> tạo thư mục hoặc file tạm và tự dọn khi ra khỏi khối <code>with</code>:</p>
+<pre><code>import tempfile
+
+with tempfile.TemporaryDirectory() as tmp:     # thư mục tạm, tự xóa khi ra khỏi khối with
+    t = Path(tmp) / "t.txt"
+    t.write_text("tạm", encoding="utf-8")
+    print(t.exists())                          # True
+print(t.exists())                              # False</code></pre>
+                <h3 id="dung-json-an-toan">Đọc JSON từ API một cách an toàn</h3>
+                <p>Dữ liệu JSON từ bên ngoài không đảm bảo có đủ khóa. Dùng <code>.get()</code> với giá trị mặc định ở mỗi tầng có thể vắng, rồi chuyển sang đối tượng có kiểu (như <code>@dataclass</code> ở bài 8) để phần còn lại của code làm việc với dữ liệu sạch. Đây là ranh giới hợp lý để kiểm tra và ép kiểu:</p>
+<pre><code>import json
+from dataclasses import dataclass
+
+payload = json.loads('{"data": [{"code": "ODO-F", "hours": 24, "extra": {"x": 1}}, {"code": "PY-F"}]}')
+
+for item in payload.get("data", []):
+    print(item["code"], item.get("hours", 0), item.get("extra", {}).get("x"))
+# ODO-F 24 1
+# PY-F 0 None
+
+@dataclass
+class CourseRow:
+    code: str
+    hours: int = 0
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(code=d["code"].strip().upper(), hours=int(d.get("hours", 0)))
+
+print([CourseRow.from_dict(i) for i in payload["data"]])
+# [CourseRow(code='ODO-F', hours=24), CourseRow(code='PY-F', hours=0)]</code></pre>
+                <p>So sánh <code>pathlib</code> với <code>os.path</code> cũ hơn: <code>os.path.join("data", "a.txt")</code> trả chuỗi, còn <code>Path("data") / "a.txt"</code> trả đối tượng có sẵn <code>.exists()</code>, <code>.read_text()</code>... Code mới nên ưu tiên <code>pathlib</code>, nhưng bạn vẫn đọc được <code>os.path</code> trong mã cũ vì nhiều hàm chấp nhận cả hai kiểu.</p>
+
+                <h2 id="json">JSON: dữ liệu lồng nhau</h2>
+                <p>JSON là định dạng văn bản mô tả đối tượng, danh sách, chuỗi, số, boolean và null. Nó tương ứng trực tiếp với dict, list, str, int/float, bool và <code>None</code> của Python (bài 4), nên là định dạng của hầu hết API.</p>
+<pre><code>import json
+
+courses = [
+    {"code": "ODO-F", "name": "Odoo cơ bản", "hours": 24, "published": True, "price": None},
+    {"code": "PY-F", "name": "Python cơ bản", "hours": 16, "published": False, "price": 1500000.5},
+]
+text = json.dumps(courses, ensure_ascii=False, indent=2)    # đối tượng -&gt; chuỗi JSON
+(base / "courses.json").write_text(text, encoding="utf-8")
+
+back = json.loads((base / "courses.json").read_text(encoding="utf-8"))   # chuỗi -&gt; đối tượng
+print(back == courses, back[0]["published"], back[0]["price"])   # True True None
+
+print(json.dumps({"a": True, "b": None}))             # {"a": true, "b": null}
+print(json.dumps("tiếng Việt"))                       # "ti\u1ebfng Vi\u1ec7t"
+print(json.dumps("tiếng Việt", ensure_ascii=False))   # "tiếng Việt"
+
+with open(base / "out.json", "w", encoding="utf-8") as f:
+    json.dump(courses, f, ensure_ascii=False)         # dump/load làm việc trực tiếp với file</code></pre>
+                <ul>
+                    <li><code>dumps</code>/<code>loads</code> làm việc với chuỗi; <code>dump</code>/<code>load</code> làm việc trực tiếp với file.</li>
+                    <li><code>ensure_ascii=False</code> giữ nguyên tiếng Việt thay vì đổi thành <code>\uXXXX</code>; <code>indent=2</code> in đẹp.</li>
+                    <li><code>True</code>/<code>None</code> trở thành <code>true</code>/<code>null</code> trong JSON, rồi quay về đúng khi đọc lại.</li>
+                    <li>JSON chuẩn dùng <strong>dấu nháy kép</strong>; dấu nháy đơn là lỗi.</li>
+                </ul>
+<pre><code>import datetime
+json.dumps({"when": datetime.date(2026, 10, 16)})
+# TypeError: Object of type date is not JSON serializable
+
+print(json.dumps({"when": datetime.date(2026, 10, 16)}, default=str))   # {"when": "2026-10-16"}
+
+json.loads("{'a': 1}")
+# json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></pre>
+                <p>Ngày giờ không tự chuyển được sang JSON; hãy chuyển thành chuỗi bằng <code>default=str</code> hoặc định dạng riêng (bài 12). Bạn đã thấy cách này trong tài liệu API ngoài của Odoo, nơi một đoạn mã minh họa trả về <code>json.dumps(records.ids)</code> và <code>json.dumps(names)</code>.</p>
+
+                <h2 id="csv">CSV: dữ liệu dạng bảng</h2>
+<pre><code>import csv
+
+csv_path = base / "courses.csv"
+with open(csv_path, "w", encoding="utf-8", newline="") as f:     # newline="" bắt buộc với csv
+    w = csv.DictWriter(f, fieldnames=["code", "name", "hours"])
+    w.writeheader()
+    for c in courses:
+        w.writerow({k: c[k] for k in ("code", "name", "hours")})
+    w.writerow({"code": "X,Y", "name": 'Có "dấu nháy"', "hours": 8})   # dấu phẩy và nháy tự được bọc
+
+print(csv_path.read_text(encoding="utf-8"))
+# code,name,hours
+# ODO-F,Odoo cơ bản,24
+# PY-F,Python cơ bản,16
+# "X,Y","Có ""dấu nháy""",8
+
+with open(csv_path, encoding="utf-8", newline="") as f:
+    rows = list(csv.DictReader(f))                # mỗi dòng là một dict theo tiêu đề cột
+print(rows[0])            # {'code': 'ODO-F', 'name': 'Odoo cơ bản', 'hours': '24'}
+print(type(rows[0]["hours"]))   # &lt;class 'str'&gt;   &lt;- mọi giá trị đọc ra đều là chuỗi!
+print(sum(int(r["hours"]) for r in rows))   # 48</code></pre>
+<pre><code>with open(csv_path, encoding="utf-8", newline="") as f:
+    r = csv.reader(f)                  # dòng là list, không có tên cột
+    header = next(r)                   # lấy dòng tiêu đề
+    print(header, next(r))
+# ['code', 'name', 'hours'] ['ODO-F', 'Odoo cơ bản', '24']</code></pre>
+                <ul>
+                    <li><code>csv.DictWriter</code>/<code>DictReader</code> làm việc theo tên cột nên dễ đọc hơn <code>csv.writer</code>/<code>reader</code> làm việc theo vị trí.</li>
+                    <li>Mở file CSV với <code>newline=""</code> để module <code>csv</code> tự xử lý xuống dòng đúng cách.</li>
+                    <li>Giá trị chứa dấu phẩy hay dấu nháy được tự động bọc (<code>"X,Y"</code>) khi ghi và tách đúng khi đọc.</li>
+                    <li><strong>Mọi ô đọc ra đều là chuỗi</strong>: <code>"24"</code> không phải <code>24</code>, phải <code>int()</code> trước khi tính.</li>
+                </ul>
+
+                <h2 id="cau-hinh">File cấu hình kiểu odoo.conf</h2>
+                <p>File <code>odoo.conf</code> có dạng ini: các mục trong ngoặc vuông (<code>[options]</code>) và dòng <code>khóa = giá_trị</code>. Module <code>configparser</code> đọc được định dạng này:</p>
+<pre><code>import configparser
+
+Path("odoo.conf").write_text(
+    "[options]\nadmin_passwd = secret\ndb_host = 127.0.0.1\nworkers = 5\n", encoding="utf-8")
+
+cp = configparser.ConfigParser()
+cp.read("odoo.conf", encoding="utf-8")
+print(cp["options"]["db_host"])                       # 127.0.0.1
+print(cp.getint("options", "workers"))                # 5
+print(cp.get("options", "dbfilter", fallback="(none)"))   # (none)</code></pre>
+                <p><code>fallback</code> cho giá trị mặc định khi khóa vắng. Bạn có thể dùng chính cách này để viết script kiểm tra cấu hình production trước khi triển khai (bài 14 của series Odoo): đọc <code>workers</code>, <code>dbfilter</code>, <code>list_db</code> rồi cảnh báo nếu thiếu.</p>
+
+                <h2 id="trong-odoo">Ba định dạng này ở đâu trong công việc Odoo?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Định dạng</th><th>Công cụ Python</th><th>Trong Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CSV</td><td><code>csv</code></td><td>Dữ liệu nạp khi cài module, như <code>security/ir.model.access.csv</code>; xuất nhập dữ liệu hàng loạt</td></tr>
+                            <tr><td>JSON</td><td><code>json</code>, <code>requests</code></td><td>Body và kết quả của API JSON-2; tham số <code>domain</code> gửi lên là mảng JSON</td></tr>
+                            <tr><td>ini</td><td><code>configparser</code></td><td>File <code>odoo.conf</code> với mục <code>[options]</code></td></tr>
+                            <tr><td>XML</td><td><code>xml.etree</code> (ít dùng ở đây)</td><td>View, action, menu, báo cáo QWeb</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="thuc-hanh">Thực hành: xuất và nhập danh sách khóa học</h2>
+<pre><code>def export_courses(courses, path):
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["code", "name", "hours"])
+        w.writeheader()
+        for c in courses:
+            w.writerow({k: c[k] for k in ("code", "name", "hours")})
+
+def import_courses(path):
+    ok, errors = [], []
+    with open(path, encoding="utf-8", newline="") as f:
+        for n, row in enumerate(csv.DictReader(f), start=2):     # dòng 1 là tiêu đề
+            try:
+                ok.append({"code": row["code"].strip().upper(), "hours": int(row["hours"])})
+            except (KeyError, ValueError) as e:
+                errors.append(f"dòng {n}: {e}")
+    return ok, errors
+
+export_courses(courses, base / "export.csv")
+(base / "export.csv").open("a", encoding="utf-8", newline="").write("BAD,Hỏng,abc\n")
+print(import_courses(base / "export.csv"))
+# ([{'code': 'ODO-F', 'hours': 24}, {'code': 'PY-F', 'hours': 16}], ["dòng 4: invalid literal for int() with base 10: 'abc'"])</code></pre>
+                <p>Hàm <code>import_courses</code> dùng lại mẫu gom dòng tốt/dòng lỗi ở bài 10, kèm số dòng để người dùng biết sửa ở đâu. Đây là phần lõi của script nhập dữ liệu vào Odoo ở bài 14.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+<pre><code>open(base / "nope.txt").read()
+# FileNotFoundError: [Errno 2] No such file or directory: 'data/nope.txt'
+
+(base / "vn.txt").write_text("Tiếng Việt", encoding="utf-8")
+open(base / "vn.txt", encoding="ascii").read()
+# UnicodeDecodeError: 'ascii' codec can't decode byte 0xe1 in position 2: ordinal not in range(128)
+
+# CSV cho Excel: dùng utf-8-sig để có dấu BOM (Excel nhận ra UTF-8)
+with open(base / "bom.csv", "w", encoding="utf-8-sig", newline="") as f:
+    f.write("code,name\nA,Tiếng Việt\n")</code></pre>
+                    <ul>
+                        <li><strong>Đường dẫn tương đối chạy ở máy này được, máy khác thì không.</strong> <code>FileNotFoundError</code> thường do thư mục hiện tại khác. Tính đường dẫn từ <code>Path(__file__)</code> hoặc dùng đường dẫn tuyệt đối.</li>
+                        <li><strong>Quên <code>encoding</code>.</strong> Đọc file UTF-8 bằng bảng mã sai báo <code>UnicodeDecodeError</code> hoặc ra chữ lộn xộn. Luôn ghi rõ <code>encoding="utf-8"</code>.</li>
+                        <li><strong>Quên <code>newline=""</code> với CSV.</strong> Có thể sinh dòng trống thừa (đặc biệt trên Windows) hoặc đọc sai ô nhiều dòng.</li>
+                        <li><strong>Tính toán trên giá trị CSV chưa ép kiểu.</strong> <code>"24" + "16"</code> ra <code>"2416"</code>. Luôn <code>int()</code>/<code>float()</code> trước.</li>
+                        <li><strong>Ghi bằng <code>"w"</code> làm mất dữ liệu cũ.</strong> Dùng <code>"a"</code> nếu muốn nối thêm.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>pathlib.Path</code> cho đường dẫn; <code>with open(..., encoding="utf-8")</code> cho file; <code>"w"</code> xóa cũ, <code>"a"</code> nối thêm.</li>
+                    <li><code>json</code>: <code>dumps/loads</code> với chuỗi, <code>dump/load</code> với file; <code>ensure_ascii=False</code> cho tiếng Việt.</li>
+                    <li><code>csv.DictReader/DictWriter</code> với <code>newline=""</code>; mọi ô đọc ra là chuỗi.</li>
+                    <li><code>configparser</code> đọc file kiểu <code>odoo.conf</code>.</li>
+                </ul>
+                <p>Bài tiếp theo xử lý hai loại dữ liệu cực kỳ dễ sai khi nhập: ngày giờ và chuỗi cần kiểm tra bằng regex.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn tự động hóa nhập xuất dữ liệu cho Odoo?</h3>
+                    <p>Khóa Developer Foundation có bài tập đọc ghi file, JSON, CSV và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao phải ghi encoding="utf-8" khi mở file?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nếu không chỉ định, Python dùng bảng mã mặc định của hệ thống nên kết quả có thể khác nhau giữa các máy. Với dữ liệu tiếng Việt, luôn ghi rõ utf-8 để tránh UnicodeDecodeError hoặc chữ lỗi.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao csv cần newline=""?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Module csv tự xử lý ký tự xuống dòng bên trong ô và giữa các dòng. Mở file mà không đặt newline rỗng có thể sinh dòng trống thừa hoặc đọc sai ô nhiều dòng, nhất là trên Windows.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa json.dumps và json.dump?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">dumps trả về một chuỗi JSON, còn dump ghi trực tiếp vào một file đã mở. Tương tự loads đọc từ chuỗi và load đọc từ file.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao số trong file CSV đọc ra lại là chuỗi?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">CSV chỉ là văn bản nên csv.reader và DictReader trả mọi ô dưới dạng chuỗi. Bạn phải tự ép kiểu bằng int() hoặc float() trước khi tính toán.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/inputoutput.html" target="_blank" rel="noopener">Python 3.12 – Input and Output (files, JSON)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/pathlib.html" target="_blank" rel="noopener">Python 3.12 – pathlib</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/json.html" target="_blank" rel="noopener">Python 3.12 – json</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/csv.html" target="_blank" rel="noopener">Python 3.12 – csv</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/deploy.html" target="_blank" rel="noopener">Odoo 20 – Deploying Odoo (odoo.conf)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Ffile-json-csv-pathlib-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Ffile-json-csv-pathlib-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="xu-ly-loi-try-except-with-python-odoo.html"><small>← Bài trước</small>Xử lý lỗi và câu lệnh with</a>
+                    <a class="next" href="ngay-gio-datetime-regex-python-odoo.html"><small>Bài tiếp theo →</small>Ngày giờ và regex</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#pathlib">Đường dẫn với pathlib</a></li>
+                        <li><a href="#open">Đọc và ghi file text</a></li>
+                        <li><a href="#json">JSON: dữ liệu lồng nhau</a></li>
+                        <li><a href="#csv">CSV: dữ liệu dạng bảng</a></li>
+                        <li><a href="#cau-hinh">File cấu hình kiểu odoo.conf</a></li>
+                        <li><a href="#trong-odoo">Ba định dạng này ở đâu trong công việc Odoo?</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: xuất và nhập danh sách khóa học</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

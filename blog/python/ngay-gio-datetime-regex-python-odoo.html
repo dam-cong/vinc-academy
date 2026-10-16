@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python ngày giờ, datetime và regex cho dev Odoo</title>
+    <meta name="description" content="Dùng datetime, timedelta, múi giờ và regex trong Python, kèm quy tắc Date/Datetime của Odoo 20 như lưu UTC, fields.Date.add, start_of, end_of." />
+    <meta name="keywords" content="python datetime, python timedelta, python múi giờ, python regex, fields.Date odoo, datetime utc odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python ngày giờ, datetime và regex cho dev Odoo" />
+    <meta property="og:description" content="datetime, timedelta, múi giờ và regex trong Python, kèm quy tắc Date và Datetime trong Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/ngay-gio-datetime-regex-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python ngày giờ, datetime và regex cho dev Odoo",
+                "description": "datetime, timedelta, múi giờ và regex trong Python, kèm quy tắc Date và Datetime trong Odoo 20.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/ngay-gio-datetime-regex-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Ngày giờ và regex"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Odoo lưu Datetime ở múi giờ nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo tài liệu ORM, field Datetime lưu dưới dạng timestamp không múi giờ ở UTC để cơ sở dữ liệu độc lập với múi giờ máy chủ. Việc đổi múi giờ do phía client xử lý."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao Python báo lỗi khi so sánh hai datetime?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Python không cho so sánh datetime không có múi giờ (naive) với datetime có múi giờ (aware) và báo TypeError. Hãy thống nhất cả hai cùng là naive hoặc cùng aware, tốt nhất tính bằng UTC."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "re.match khác re.search thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "re.match chỉ khớp ở đầu chuỗi, re.search tìm ở bất kỳ vị trí nào, còn re.fullmatch đòi khớp toàn bộ chuỗi."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao cộng 3 tháng vào một ngày trong Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Dùng fields.Date.add(ngay, months=3). timedelta của Python không có đơn vị tháng hay năm vì độ dài của chúng thay đổi, còn add của Odoo truyền tham số cho relativedelta."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-datetime-timezones-regex-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Ngày giờ và regex</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 12 · Series Python thực chiến</span>
+            <h1>Python ngày giờ, datetime và regex cho dev Odoo</h1>
+            <p class="post-lead">Ngày giờ và chuỗi cần kiểm tra là hai loại dữ liệu dễ sai nhất khi nhập. Bài này dạy datetime, timedelta, múi giờ và regex trong Python, rồi chỉ ra quy tắc Date/Datetime của Odoo như lưu UTC và các hàm fields.Date.add, start_of, end_of.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Module <code>datetime</code> cho bạn <code>date</code>, <code>datetime</code> và <code>timedelta</code> để tính toán ngày giờ; <code>strptime</code>/<code>strftime</code> chuyển qua lại giữa chuỗi và ngày giờ. Module <code>re</code> kiểm tra và trích xuất chuỗi theo mẫu.</strong> Với Odoo, hãy nhớ Datetime lưu ở UTC, Date chỉ so sánh với <code>date</code> và Datetime chỉ so sánh với <code>datetime</code>, và dùng các hàm <code>fields.Date.today()</code>, <code>add</code>, <code>start_of</code>, <code>end_of</code> thay vì tự tính.</p>
+                </div>
+
+                <h2 id="datetime">date, datetime và định dạng chuỗi</h2>
+<pre><code>from datetime import date, datetime, timedelta
+
+d = date(2026, 10, 16)
+print(d, d.year, d.month, d.day, d.isoformat())      # 2026-10-16 2026 10 16 2026-10-16
+
+dt = datetime(2026, 10, 16, 9, 30, 15)
+print(dt, dt.date(), dt.time())     # 2026-10-16 09:30:15 2026-10-16 09:30:15
+print(dt.strftime("%d/%m/%Y %H:%M"))                 # 16/10/2026 09:30
+print(datetime.strptime("16/10/2026 09:30", "%d/%m/%Y %H:%M"))   # 2026-10-16 09:30:00
+print(date.fromisoformat("2026-10-16"))              # 2026-10-16</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mã định dạng</th><th>Ý nghĩa</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>%Y</code></td><td>Năm 4 chữ số</td><td><code>2026</code></td></tr>
+                            <tr><td><code>%m</code></td><td>Tháng 2 chữ số</td><td><code>10</code></td></tr>
+                            <tr><td><code>%d</code></td><td>Ngày 2 chữ số</td><td><code>16</code></td></tr>
+                            <tr><td><code>%H</code> / <code>%M</code> / <code>%S</code></td><td>Giờ (24h) / phút / giây</td><td><code>09</code> / <code>30</code> / <code>15</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><code>strftime</code> chuyển ngày giờ thành chuỗi theo định dạng; <code>strptime</code> làm ngược lại và <strong>định dạng phải khớp chính xác</strong> với chuỗi đầu vào. Khi chuỗi đã theo chuẩn ISO (<code>YYYY-MM-DD</code>), <code>date.fromisoformat</code> và <code>datetime.fromisoformat</code> gọn hơn. ISO cũng là dạng nên dùng để trao đổi dữ liệu giữa các hệ thống.</p>
+
+                <h2 id="timedelta">Tính toán với timedelta</h2>
+<pre><code>td = timedelta(days=7, hours=3)
+print(d + timedelta(days=30), dt + td)     # 2026-11-15 2026-10-23 12:30:15
+print(td.days, td.total_seconds())         # 7 615600.0
+
+print(date(2026, 12, 31) - d)              # 76 days, 0:00:00
+print((date(2026, 12, 31) - d).days)       # 76
+
+start = date(2026, 11, 3)
+print([start + timedelta(weeks=i) for i in range(3)])
+# [datetime.date(2026, 11, 3), datetime.date(2026, 11, 10), datetime.date(2026, 11, 17)]
+print(d &lt; date(2026, 11, 1), d == date(2026, 10, 16))   # True True</code></pre>
+                <p><code>timedelta</code> là khoảng thời gian (ngày, giờ, phút, tuần...). Cộng/trừ nó với ngày giờ cho ngày giờ mới; trừ hai ngày cho một <code>timedelta</code>. Các bài toán quen thuộc: hạn đăng ký là ngày bắt đầu trừ 7 ngày, ngày kết thúc khóa là ngày bắt đầu cộng số tuần, số ngày còn lại tới hạn là <code>(han - date.today()).days</code>. Lưu ý <code>timedelta</code> không có đơn vị tháng hay năm vì độ dài của chúng thay đổi; Odoo xử lý việc đó bằng <code>fields.Date.add(today, months=3)</code>.</p>
+
+                <h3 id="bai-toan-ngay">Những bài toán ngày thường gặp</h3>
+                <p>Ngoài cộng trừ, công việc thực tế hay cần: thứ mấy trong tuần, ngày đầu và cuối tháng, thứ Hai kế tiếp, cộng số ngày làm việc. Python có sẵn <code>weekday()</code> (0 là thứ Hai), <code>isocalendar()</code> và module <code>calendar</code>:</p>
+<pre><code>from datetime import date, timedelta
+import calendar
+
+d = date(2026, 10, 16)
+print(d.weekday(), calendar.day_name[d.weekday()])        # 4 Friday   (0 = thứ Hai ... 6 = Chủ nhật)
+print(d.isocalendar().week)                               # 42   (tuần thứ mấy trong năm)
+
+print(calendar.monthrange(2026, 2))                       # (6, 28): thứ của ngày đầu tháng, số ngày trong tháng
+first = d.replace(day=1)
+last = d.replace(day=calendar.monthrange(d.year, d.month)[1])
+print(first, last)                                        # 2026-10-01 2026-10-31
+
+next_monday = d + timedelta(days=(7 - d.weekday()) % 7 or 7)
+print(next_monday, next_monday.weekday())                 # 2026-10-19 0
+
+def add_workdays(start, n):                               # cộng n ngày làm việc (bỏ thứ Bảy, Chủ nhật)
+    cur = start
+    while n &gt; 0:
+        cur += timedelta(days=1)
+        if cur.weekday() &lt; 5:
+            n -= 1
+    return cur
+
+print(add_workdays(d, 5))                                 # 2026-10-23
+
+print(date(2026, 1, 31) + timedelta(days=30))             # 2026-03-02  &lt;- "cộng một tháng" bằng 30 ngày không phải lúc nào cũng đúng</code></pre>
+                <p>Dòng cuối cho thấy cái bẫy của việc "cộng một tháng bằng 30 ngày": 31/1 cộng 30 ngày ra 2/3, nhảy qua cả tháng 2. Vì độ dài tháng thay đổi, hãy dùng công cụ biết về lịch. Trong Python thuần đó là <code>dateutil.relativedelta</code> (<code>d + relativedelta(months=3)</code>, thư viện này đi kèm Odoo); trong Odoo là <code>fields.Date.add(d, months=3)</code>, vốn truyền tham số cho <code>relativedelta</code> theo đúng mô tả của tài liệu. Hãy cẩn thận nữa với ngày làm việc: phép tính ở trên chỉ bỏ cuối tuần, không biết ngày lễ, nên hệ thống thật cần thêm danh sách ngày nghỉ.</p>
+
+                <h2 id="mui-gio">Múi giờ: naive và aware</h2>
+<pre><code>from datetime import timezone, timedelta
+from zoneinfo import ZoneInfo
+
+utc = datetime(2026, 10, 16, 2, 0, tzinfo=timezone.utc)
+vn = utc.astimezone(timezone(timedelta(hours=7)))
+print(utc.isoformat())                  # 2026-10-16T02:00:00+00:00
+print(vn.isoformat(), vn.strftime("%H:%M"))   # 2026-10-16T09:00:00+07:00 09:00
+print(utc.astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).strftime("%Y-%m-%d %H:%M"))   # 2026-10-16 09:00
+
+naive = datetime(2026, 10, 16, 9, 0)    # không có múi giờ (naive)
+naive &lt; utc
+# TypeError: can't compare offset-naive and offset-aware datetimes</code></pre>
+                <p>Đối tượng không có múi giờ gọi là <em>naive</em>, có múi giờ là <em>aware</em>. Python không cho so sánh hai loại với nhau, nên cần đồng nhất trước. Nguyên tắc vàng cho hệ thống nghiệp vụ: <strong>lưu và tính bằng UTC, chỉ đổi sang múi giờ người dùng khi hiển thị</strong>. Odoo đi đúng nguyên tắc này: tài liệu ORM nói field Datetime lưu dạng timestamp không múi giờ ở UTC, việc đổi múi giờ do phía client lo. Trong báo cáo QWeb có sẵn hàm <code>context_timestamp</code> đổi một datetime UTC sang múi giờ của người in.</p>
+
+                <h2 id="ngay-trong-odoo">Date và Datetime trong Odoo</h2>
+<pre><code>from odoo import fields
+
+today = fields.Date.today()                         # date, theo định dạng ORM chờ
+now = fields.Datetime.now()                         # datetime (UTC)
+end = fields.Date.add(today, months=3)              # cộng khoảng, tham số truyền cho relativedelta
+first = fields.Date.start_of(today, 'month')        # ngày đầu tháng
+last = fields.Date.end_of(today, 'month')           # ngày cuối tháng
+d = fields.Date.to_date("2026-10-16")               # chuỗi -&gt; date
+s = fields.Date.to_string(today)                    # date -&gt; chuỗi 'YYYY-MM-DD'
+
+# giá trị mặc định là hôm nay, tính khi tạo bản ghi
+start_date = fields.Date(default=fields.Date.today)</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Quy tắc</th><th>Theo tài liệu Odoo 20</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Giá trị gán cho field</td><td>Đối tượng <code>date</code>/<code>datetime</code>, chuỗi đúng định dạng server (<code>YYYY-MM-DD</code> hoặc <code>YYYY-MM-DD HH:MM:SS</code>), hoặc <code>False</code>/<code>None</code></td></tr>
+                            <tr><td>So sánh</td><td>Field Date chỉ so sánh với <code>date</code>, field Datetime chỉ so sánh với <code>datetime</code>; so sánh chuỗi ngày giờ bị khuyến cáo mạnh là không nên</td></tr>
+                            <tr><td>Chuỗi từ nguồn ngoài</td><td>Dùng <code>fields.Date.to_date()</code> / <code>Datetime.to_datetime()</code> để chuyển; lưu ý <code>to_date</code> trên datetime làm mất giờ và múi giờ</td></tr>
+                            <tr><td>Cộng, trừ, đầu/cuối kỳ</td><td><code>add</code>, <code>subtract</code>, <code>start_of</code>, <code>end_of</code> với đơn vị year, quarter, month, week, day, hour</td></tr>
+                            <tr><td>Ngày hiện tại theo múi giờ người dùng</td><td><code>fields.Date.context_today(record)</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="regex">Regex: kiểm tra và trích xuất chuỗi theo mẫu</h2>
+                <p>Biểu thức chính quy (regex) mô tả một mẫu chuỗi. Dùng <strong>chuỗi thô</strong> <code>r"..."</code> để dấu gạch ngược không bị Python xử lý trước. Dưới đây là ví dụ kiểm tra mã khóa học và trích email, số điện thoại:</p>
+<pre><code>import re
+
+code_re = re.compile(r"^[A-Z]{2,4}-\d{3}$")          # 2-4 chữ hoa, dấu gạch, đúng 3 chữ số
+for c in ("ODO-001", "odo-1", "PY-12345"):
+    print(c, bool(code_re.match(c)))
+# ODO-001 True
+# odo-1 False
+# PY-12345 False
+
+text = "Liên hệ: hien@example.com hoặc sale@example.vn, SĐT 0900 111 222"
+print(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text))     # ['hien@example.com', 'sale@example.vn']
+m = re.search(r"(\d{4}) (\d{3}) (\d{3})", text)
+print(m.group(0), m.groups())                         # 0900 111 222 ('0900', '111', '222')
+
+print(re.sub(r"\s+", " ", "a   b \n c"))             # a b c
+print(re.sub(r"\D", "", "0900 111-222"))              # 0900111222  (chỉ giữ chữ số)
+print(re.split(r"[,;]\s*", "a, b;c"))                 # ['a', 'b', 'c']</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mẫu</th><th>Khớp với</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>\d</code>, <code>\w</code>, <code>\s</code></td><td>Chữ số, ký tự chữ-số-gạch dưới, khoảng trắng (viết hoa <code>\D</code>, <code>\W</code>, <code>\S</code> là phủ định)</td></tr>
+                            <tr><td><code>.</code></td><td>Một ký tự bất kỳ (trừ xuống dòng)</td></tr>
+                            <tr><td><code>*</code>, <code>+</code>, <code>?</code>, <code>{3}</code>, <code>{2,4}</code></td><td>0 hoặc nhiều, 1 hoặc nhiều, 0 hoặc 1, đúng 3 lần, từ 2 đến 4 lần</td></tr>
+                            <tr><td><code>[A-Z]</code>, <code>[^0-9]</code></td><td>Một ký tự trong tập, hoặc không thuộc tập</td></tr>
+                            <tr><td><code>^</code>, <code>$</code></td><td>Đầu và cuối chuỗi</td></tr>
+                            <tr><td><code>( )</code>, <code>(?P&lt;ten&gt;...)</code></td><td>Nhóm bắt giữ, nhóm có tên</td></tr>
+                            <tr><td><code>\b</code></td><td>Ranh giới từ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>m = re.match(r"(?P&lt;code&gt;[A-Z]+)-(?P&lt;seq&gt;\d+)", "ODO-007")
+print(m["code"], int(m["seq"]), m.groupdict())        # ODO 7 {'code': 'ODO', 'seq': '007'}
+
+print(re.match(r"\d+", "abc"), re.fullmatch(r"\d+", "123x"))   # None None
+print(re.findall(r"a.*b", "a1b a2b"))                  # ['a1b a2b']   &lt;- tham lam: nuốt cả hai
+print(re.findall(r"a.*?b", "a1b a2b"))                 # ['a1b', 'a2b'] &lt;- lười: khớp ngắn nhất
+print(bool(re.search("odoo", "Odoo 20", re.IGNORECASE)))   # True</code></pre>
+                <ul>
+                    <li><code>re.match</code> chỉ khớp ở <strong>đầu</strong> chuỗi, <code>re.search</code> tìm ở bất kỳ đâu, <code>re.fullmatch</code> đòi khớp toàn bộ chuỗi.</li>
+                    <li>Mặc định các dấu lặp <strong>tham lam</strong> (khớp càng dài càng tốt); thêm <code>?</code> (như <code>.*?</code>) để khớp ngắn nhất.</li>
+                    <li><code>re.compile</code> biên dịch mẫu một lần để dùng lại nhiều lần, nhanh và gọn hơn.</li>
+                </ul>
+                <p>Regex mạnh nhưng dễ trở nên khó đọc: nếu mẫu dài hơn một dòng, hãy tách nhỏ, đặt tên hằng và viết thêm vài dòng test. Với việc kiểm tra email phức tạp theo chuẩn, mẫu đơn giản như trên chỉ để lọc sơ bộ chứ không thay thế việc kiểm tra thật.</p>
+
+                <h3 id="mau-regex">Vài mẫu regex hữu ích</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mục đích</th><th>Mẫu</th><th>Ghi chú</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Số điện thoại 10 số bắt đầu bằng 0</td><td><code>r"0\d{9}"</code> với <code>fullmatch</code></td><td><code>"0900111222"</code> khớp, <code>"090011122"</code> thì không</td></tr>
+                            <tr><td>Ngày ISO</td><td><code>r"\d{4}-\d{2}-\d{2}"</code></td><td>Chỉ kiểm tra hình dạng; dùng <code>date.fromisoformat</code> để biết ngày có tồn tại</td></tr>
+                            <tr><td>Số có phần thập phân</td><td><code>r"\d+(?:\.\d+)?"</code></td><td><code>findall</code> trên <code>"giá 4500.5 và 24 giờ"</code> ra <code>['4500.5', '24']</code></td></tr>
+                            <tr><td>Hashtag</td><td><code>r"#(\w+)"</code></td><td>Nhóm bắt giữ trả về phần sau dấu <code>#</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Nguyên tắc: dùng regex để kiểm tra <em>hình dạng</em> rồi để các hàm chuyên dụng (như <code>date.fromisoformat</code>, <code>int()</code>) kiểm tra <em>ý nghĩa</em>. Mẫu đúng hình dạng nhưng sai nghĩa, như ngày <code>2026-13-45</code>, sẽ lọt qua nếu chỉ dùng regex.</p>
+
+                <h2 id="thuc-hanh">Thực hành: kiểm tra mã và tính ngày kết thúc khóa học</h2>
+<pre><code>import re
+from datetime import date, timedelta
+
+CODE_RE = re.compile(r"^[A-Z]{2,4}-\d{3}$")
+
+def validate_course(code, start, weeks):
+    """Trả về (hợp lệ, ngày kết thúc hoặc thông báo lỗi)."""
+    if not CODE_RE.match(code):
+        return False, f"Mã không hợp lệ: {code}"
+    try:
+        start_date = date.fromisoformat(start)
+    except ValueError:
+        return False, f"Ngày không hợp lệ: {start}"
+    return True, start_date + timedelta(weeks=weeks)
+
+print(validate_course("ODO-001", "2026-11-03", 8))   # (True, datetime.date(2026, 12, 29))
+print(validate_course("odo-1", "2026-11-03", 8))     # (False, 'Mã không hợp lệ: odo-1')
+print(validate_course("ODO-001", "2026-13-03", 8))   # (False, 'Ngày không hợp lệ: 2026-13-03')</code></pre>
+                <p>Hàm này gom hai việc bạn hay làm với dữ liệu nhập: kiểm tra định dạng mã bằng regex và đổi chuỗi ngày thành đối tượng <code>date</code> rồi cộng khoảng thời gian. Hãy thử mở rộng để ngày bắt đầu phải rơi vào thứ Hai (<code>start_date.weekday() == 0</code>).</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+<pre><code>datetime.strptime("2026-10-16", "%d/%m/%Y")
+# ValueError: time data '2026-10-16' does not match format '%d/%m/%Y'
+
+date(2026, 2, 30)
+# ValueError: day is out of range for month</code></pre>
+                    <ul>
+                        <li><strong>Định dạng <code>strptime</code> không khớp chuỗi.</strong> Báo <code>ValueError: time data ... does not match format ...</code>. Kiểm tra thứ tự ngày-tháng và dấu phân cách.</li>
+                        <li><strong>So sánh datetime naive với aware.</strong> Báo <code>TypeError: can't compare offset-naive and offset-aware datetimes</code>. Hãy thống nhất cả hai đều có múi giờ, hoặc cùng là UTC không múi giờ như Odoo.</li>
+                        <li><strong>Ngày không tồn tại.</strong> <code>date(2026, 2, 30)</code> báo <code>day is out of range for month</code>.</li>
+                        <li><strong>Dùng <code>re.match</code> khi muốn tìm ở giữa chuỗi.</strong> Nó chỉ khớp ở đầu; dùng <code>re.search</code>.</li>
+                        <li><strong>Quên chuỗi thô.</strong> <code>"\d"</code> trong chuỗi thường dễ nhầm; luôn viết <code>r"\d"</code>.</li>
+                        <li><strong>So sánh Date với Datetime trong Odoo.</strong> Tài liệu cảnh báo mỗi loại chỉ so sánh với đúng kiểu của nó; dùng <code>to_date()</code> để thống nhất.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>date</code>, <code>datetime</code>, <code>timedelta</code> cho tính toán; <code>strftime</code>/<code>strptime</code> cho chuỗi; ISO cho trao đổi dữ liệu.</li>
+                    <li>Tính bằng UTC, đổi múi giờ khi hiển thị; không trộn naive với aware.</li>
+                    <li>Odoo: dùng <code>fields.Date.today/add/start_of/end_of</code>; Date so với <code>date</code>, Datetime so với <code>datetime</code>.</li>
+                    <li><code>re</code>: dùng chuỗi thô, biết khác biệt <code>match/search/fullmatch</code>, tham lam và lười.</li>
+                </ul>
+                <p>Bài tiếp theo kết nối với thế giới bên ngoài: gọi API bằng <code>requests</code>, kể cả API JSON-2 của Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn xử lý ngày giờ và kiểm tra dữ liệu không sai sót?</h3>
+                    <p>Khóa Developer Foundation có bài tập datetime, regex và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo lưu Datetime ở múi giờ nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo tài liệu ORM, field Datetime lưu dưới dạng timestamp không múi giờ ở UTC để cơ sở dữ liệu độc lập với múi giờ máy chủ. Việc đổi múi giờ do phía client xử lý.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao Python báo lỗi khi so sánh hai datetime?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Python không cho so sánh datetime không có múi giờ (naive) với datetime có múi giờ (aware) và báo TypeError. Hãy thống nhất cả hai cùng là naive hoặc cùng aware, tốt nhất tính bằng UTC.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>re.match khác re.search thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">re.match chỉ khớp ở đầu chuỗi, re.search tìm ở bất kỳ vị trí nào, còn re.fullmatch đòi khớp toàn bộ chuỗi.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao cộng 3 tháng vào một ngày trong Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Dùng fields.Date.add(ngay, months=3). timedelta của Python không có đơn vị tháng hay năm vì độ dài của chúng thay đổi, còn add của Odoo truyền tham số cho relativedelta.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/library/datetime.html" target="_blank" rel="noopener">Python 3.12 – datetime</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/re.html" target="_blank" rel="noopener">Python 3.12 – re (regular expressions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/zoneinfo.html" target="_blank" rel="noopener">Python 3.12 – zoneinfo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (Date and Datetime fields)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/reports.html" target="_blank" rel="noopener">Odoo 20 – QWeb Reports (context_timestamp)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fngay-gio-datetime-regex-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fngay-gio-datetime-regex-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="file-json-csv-pathlib-python-odoo.html"><small>← Bài trước</small>Làm việc với file, JSON và CSV</a>
+                    <a class="next" href="goi-api-requests-json-2-odoo-python.html"><small>Bài tiếp theo →</small>Gọi API với requests</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#datetime">date, datetime và định dạng chuỗi</a></li>
+                        <li><a href="#timedelta">Tính toán với timedelta</a></li>
+                        <li><a href="#mui-gio">Múi giờ: naive và aware</a></li>
+                        <li><a href="#ngay-trong-odoo">Date và Datetime trong Odoo</a></li>
+                        <li><a href="#regex">Regex: kiểm tra và trích xuất chuỗi theo mẫu</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: kiểm tra mã và tính ngày kết thúc khóa học</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

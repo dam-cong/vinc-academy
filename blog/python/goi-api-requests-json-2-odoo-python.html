@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gọi API bằng Python requests: JSON-2 của Odoo từ A–Z</title>
+    <meta name="description" content="Dùng requests gửi GET/POST, đọc JSON, đặt timeout, xử lý lỗi và gọi API JSON-2 của Odoo 20 với bearer API key. Có client dùng lại được và thử lại." />
+    <meta name="keywords" content="python requests, gọi api python, json-2 api odoo, raise_for_status, requests timeout, requests session, bearer api key" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Gọi API bằng Python requests: JSON-2 của Odoo từ A–Z" />
+    <meta property="og:description" content="Gọi API bằng Python requests: JSON-2 của Odoo 20, bearer API key, timeout, xử lý lỗi và client dùng lại được." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/goi-api-requests-json-2-odoo-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Gọi API bằng Python requests: JSON-2 của Odoo từ A–Z",
+                "description": "Gọi API bằng Python requests: JSON-2 của Odoo 20, bearer API key, timeout, xử lý lỗi và client dùng lại được.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/goi-api-requests-json-2-odoo-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Gọi API với requests"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao luôn phải đặt timeout trong requests?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Theo tài liệu requests, nếu không đặt timeout thì yêu cầu không bao giờ hết hạn và chương trình có thể treo vô hạn khi server không trả lời. Gần như mọi code production nên đặt tham số này."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "raise_for_status làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nó ném HTTPError khi phản hồi có mã trạng thái 4xx hoặc 5xx. Nếu không gọi, mã lỗi như 401 không tự gây ngoại lệ và r.json() sẽ trả về nội dung lỗi mà bạn có thể nhầm là dữ liệu."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Gọi API JSON-2 của Odoo cần những header nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Bắt buộc có Authorization với giá trị bearer kèm API key và Content-Type application/json. X-Odoo-Database là tùy chọn, cần khi một server chứa nhiều database. requests tự đặt Content-Type khi bạn dùng tham số json."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "requests.Session có lợi gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Session giữ lại header như Authorization giữa các lệnh gọi và tái sử dụng kết nối tới cùng một host nên nhanh hơn, phù hợp khi gọi API nhiều lần."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-requests-odoo-json-2-api-calls.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Gọi API với requests</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 13 · Series Python thực chiến</span>
+            <h1>Gọi API bằng Python requests: JSON-2 của Odoo từ A–Z</h1>
+            <p class="post-lead">Tích hợp Odoo với hệ thống khác hầu như luôn bắt đầu bằng một lệnh gọi HTTP. Bài này dạy thư viện requests, cách đặt timeout, xử lý lỗi, và gọi API JSON-2 của Odoo 20 bằng API key, rồi gói lại thành một client dùng lại được.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Thư viện <code>requests</code> gửi yêu cầu HTTP chỉ trong một dòng: <code>requests.post(url, json=body, headers=h, timeout=10)</code>.</strong> Hãy luôn đặt <code>timeout</code>, gọi <code>raise_for_status()</code> để biến mã lỗi 4xx/5xx thành ngoại lệ và đọc dữ liệu bằng <code>.json()</code>. Với Odoo 20, bạn gọi model qua API JSON-2: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code> kèm API key trong header <code>Authorization: bearer</code>, đúng như bài 12 của series Odoo.</p>
+                </div>
+
+                <h2 id="http-co-ban">HTTP trong năm phút</h2>
+                <p>Một yêu cầu HTTP gồm: <strong>phương thức</strong> (GET để đọc, POST để gửi dữ liệu...), <strong>URL</strong>, <strong>header</strong> (thông tin kèm theo như loại nội dung, xác thực) và tùy chọn <strong>body</strong>. Phản hồi gồm <strong>mã trạng thái</strong>, header và body. Mã trạng thái cho biết kết quả:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mã</th><th>Ý nghĩa</th><th>Gặp ở API Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>200</td><td>Thành công</td><td>Body là giá trị trả về của method, dạng JSON</td></tr>
+                            <tr><td>401</td><td>Chưa xác thực / key sai</td><td>Ví dụ lỗi trong tài liệu: <code>"message": "Invalid apikey"</code></td></tr>
+                            <tr><td>403</td><td>Bị cấm</td><td>Thu hồi key sai báo 403 Forbidden</td></tr>
+                            <tr><td>404</td><td>Không tìm thấy</td><td>Sai đường dẫn hoặc model</td></tr>
+                            <tr><td>422</td><td>Không xử lý được</td><td>Vượt giới hạn sinh API key bằng lập trình</td></tr>
+                            <tr><td>4xx/5xx khác</td><td>Lỗi phía client / server</td><td>Body là đối tượng JSON có <code>name</code>, <code>message</code>, <code>arguments</code>, <code>context</code>, <code>debug</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="requests-co-ban">requests: gửi yêu cầu và đọc phản hồi</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 280" role="img" aria-labelledby="dg-vi-p13">
+                        <title id="dg-vi-p13">Một lệnh gọi API từ script Python tới Odoo</title>
+                        <rect class="dg-box" x="20" y="10" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="40">1. Script Python</text>
+                        <text class="dg-text" x="40" y="60">requests.post(url, json=..., timeout=10)</text>
+                        <path class="dg-arrow" d="M320 72 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-accent" x="20" y="94" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="124">2. Odoo /json/2/&lt;model&gt;/&lt;method&gt;</text>
+                        <text class="dg-text" x="40" y="144">Header Authorization: bearer · body JSON (model, method, tham số)</text>
+                        <path class="dg-arrow" d="M320 156 v20 m-6 -8 l6 8 l6 -8" />
+                        <rect class="dg-box" x="20" y="178" width="600" height="62" rx="12" />
+                        <text class="dg-title" x="40" y="208">3. Phản hồi</text>
+                        <text class="dg-text" x="40" y="228">200 + JSON, hoặc 4xx/5xx kèm đối tượng lỗi JSON</text>
+                        <text class="dg-text" x="20" y="266">Script đọc .status_code, .json(); dùng raise_for_status() và timeout để không treo.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+
+<pre><code>import requests
+
+r = requests.get("https://example.com/api/courses",
+                 params={"level": "beginner", "page": 1},     # thành ?level=beginner&amp;page=1
+                 headers={"Accept": "application/json"},
+                 timeout=10)                                  # LUÔN đặt timeout
+
+print(r.status_code, r.ok)                  # 200 True
+print(r.headers["Content-Type"])            # application/json; charset=utf-8
+data = r.json()                             # đọc body thành list/dict
+print(r.url)                                # URL đầy đủ đã gồm tham số
+print(r.elapsed.total_seconds())            # thời gian phản hồi (giây)</code></pre>
+                <p>URL trong ví dụ là giả định (<code>example.com</code> không có API này); hãy thay bằng một API thật khi thử. Mô phỏng một server cục bộ cho kết quả đúng như các dòng chú thích.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tham số / thuộc tính</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>params={...}</code></td><td>Tham số trên URL (query string), tự mã hóa ký tự đặc biệt</td></tr>
+                            <tr><td><code>json={...}</code></td><td>Gửi body JSON và tự đặt <code>Content-Type</code></td></tr>
+                            <tr><td><code>headers={...}</code></td><td>Header của yêu cầu</td></tr>
+                            <tr><td><code>timeout=10</code></td><td>Số giây tối đa chờ phản hồi</td></tr>
+                            <tr><td><code>r.status_code</code>, <code>r.ok</code></td><td>Mã trạng thái; <code>ok</code> đúng với mã dưới 400</td></tr>
+                            <tr><td><code>r.json()</code>, <code>r.text</code></td><td>Body đã giải mã JSON / body dạng chuỗi</td></tr>
+                            <tr><td><code>r.raise_for_status()</code></td><td>Ném <code>HTTPError</code> nếu mã là 4xx/5xx</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="phuong-thuc-body">Phương thức HTTP và cách gửi body</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hàm</th><th>Phương thức</th><th>Thường dùng để</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>requests.get</code></td><td>GET</td><td>Đọc dữ liệu, không có tác dụng phụ</td></tr>
+                            <tr><td><code>requests.post</code></td><td>POST</td><td>Gửi dữ liệu để tạo hoặc thực thi hành động (API JSON-2 của Odoo chỉ dùng POST)</td></tr>
+                            <tr><td><code>requests.put</code>, <code>patch</code></td><td>PUT, PATCH</td><td>Cập nhật toàn bộ / một phần tài nguyên (API REST thông thường)</td></tr>
+                            <tr><td><code>requests.delete</code></td><td>DELETE</td><td>Xóa tài nguyên</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Có hai cách gửi body: <code>data=</code> mã hóa dạng form (<code>application/x-www-form-urlencoded</code>) còn <code>json=</code> gửi JSON và đặt <code>Content-Type: application/json</code>. API của Odoo mong JSON nên hãy dùng <code>json=</code>. Phản hồi không phải JSON (như ảnh, PDF) thì đọc bằng <code>.content</code> (kiểu <code>bytes</code>) và ghi ra file như ở bài 11:</p>
+<pre><code>p1 = requests.Request("POST", "http://x/y", data={"a": "1", "b": "x y"}).prepare()
+print(p1.headers["Content-Type"], p1.body)
+# application/x-www-form-urlencoded a=1&amp;b=x+y
+
+p2 = requests.Request("POST", "http://x/y", json={"a": 1, "b": "tiếng"}).prepare()
+print(p2.headers["Content-Type"], p2.body)
+# application/json b'{"a": 1, "b": "ti\\u1ebfng"}'
+
+img = requests.get(url_cua_anh, timeout=10)
+print(type(img.content).__name__)                # bytes: dùng cho file nhị phân
+Path("anh.png").write_bytes(img.content)         # lưu thẳng ra file (bài 11)</code></pre>
+                <h3 id="phan-trang">Phân trang khi dữ liệu nhiều</h3>
+                <p>Không nên lấy hàng chục nghìn bản ghi trong một lệnh gọi. Tài liệu ORM mô tả <code>search</code> nhận <code>offset</code> (số bản ghi bỏ qua), <code>limit</code> (số bản ghi tối đa) và <code>order</code>. Vòng lặp dưới đây dùng <code>OdooClient</code> ở phần sau để lấy từng trang cho tới khi trang cuối ngắn hơn <code>page_size</code>:</p>
+<pre><code>def fetch_all_ids(client, domain, page_size=100):
+    ids, offset = [], 0
+    while True:
+        page = client.call("vinc.course", "search", domain=domain,
+                           offset=offset, limit=page_size, order="id")   # tham số của search
+        ids.extend(page)
+        if len(page) &lt; page_size:        # trang cuối thiếu phần tử: đã hết dữ liệu
+            return ids
+        offset += page_size
+
+# với dữ liệu giả gồm 7 id: fetch_all_ids(client, [], page_size=3) -&gt; [1, 2, 3, 4, 5, 6, 7]</code></pre>
+                <p>Hãy kiểm tra trang <code>/doc</code> của database để biết chính xác tham số của từng method trên hệ thống của bạn.</p>
+
+                <h2 id="goi-odoo">Gọi API JSON-2 của Odoo</h2>
+                <p>Theo tài liệu Odoo 20, bạn gửi POST tới <code>/json/2/&lt;model&gt;/&lt;method&gt;</code>. Header bắt buộc gồm <code>Authorization: bearer &lt;API key&gt;</code> và <code>Content-Type: application/json</code> (<code>requests</code> tự đặt cái sau khi bạn dùng <code>json=</code>); <code>X-Odoo-Database</code> là tùy chọn, cần khi một server chứa nhiều database. Body JSON gồm <code>ids</code> (nếu method làm việc trên bản ghi), <code>context</code> tùy chọn và các tham số của method:</p>
+<pre><code>import os
+import requests
+
+BASE_URL = os.environ["ODOO_URL"] + "/json/2"          # ví dụ https://mycompany.example.com
+headers = {
+    "Authorization": "bearer " + os.environ["ODOO_API_KEY"],   # KHÔNG ghi key vào code
+    "X-Odoo-Database": os.environ.get("ODOO_DB", ""),
+}
+
+r = requests.post(
+    f"{BASE_URL}/vinc.course/search_read",
+    headers=headers,
+    json={"domain": [["level", "=", "beginner"]], "fields": ["name", "level"]},
+    timeout=10,
+)
+r.raise_for_status()
+print(r.json())
+# [{'id': 1, 'name': 'Odoo cơ bản', 'level': 'beginner'}, ...]</code></pre>
+                <p>Lưu ý bảo mật: API key phải nằm ngoài code, thường trong biến môi trường (<code>os.environ</code>) hoặc nơi lưu bí mật của hệ thống, vì key có quyền của người dùng sở hữu nó. Tài liệu còn khuyến nghị dùng "bot user" riêng với quyền tối thiểu cho tích hợp tự động, và key có thời hạn tối đa ba tháng nên cần xoay vòng định kỳ.</p>
+<pre><code>bad = requests.post(f"{BASE_URL}/vinc.course/search_read", headers={"Authorization": "bearer WRONG"}, json={}, timeout=10)
+print(bad.status_code, bad.json()["message"])    # 401 Invalid apikey
+bad.raise_for_status()
+# requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: .../json/2/vinc.course/search_read</code></pre>
+
+                <h2 id="loi-mang">Xử lý lỗi và timeout</h2>
+                <p>Tài liệu requests nêu rõ: nếu không đặt <code>timeout</code>, yêu cầu <strong>không bao giờ hết hạn</strong> và chương trình có thể treo vô hạn; gần như mọi code production nên đặt tham số này. Các lỗi của requests đều kế thừa <code>requests.exceptions.RequestException</code>:</p>
+<pre><code>import requests
+
+try:
+    r = requests.post(url, headers=headers, json=body, timeout=5)
+    r.raise_for_status()
+except requests.Timeout:
+    print("Quá thời gian chờ")             # server không trả lời trong 5 giây
+except requests.ConnectionError:
+    print("Không kết nối được")            # DNS lỗi, bị từ chối kết nối...
+except requests.HTTPError as e:
+    print("Odoo trả lỗi:", e.response.status_code, e.response.text[:100])
+except requests.RequestException as e:      # lớp cha của mọi lỗi requests
+    print("Lỗi khác:", e)</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Ngoại lệ</th><th>Khi nào</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ConnectionError</code></td><td>Sự cố mạng: DNS lỗi, từ chối kết nối</td></tr>
+                            <tr><td><code>Timeout</code></td><td>Không nhận được phản hồi trong thời gian <code>timeout</code></td></tr>
+                            <tr><td><code>HTTPError</code></td><td>Chỉ khi bạn gọi <code>raise_for_status()</code> và mã là 4xx/5xx</td></tr>
+                            <tr><td><code>TooManyRedirects</code></td><td>Chuyển hướng quá số lần cho phép</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Lưu ý <code>timeout</code> không giới hạn tổng thời gian tải phản hồi mà là thời gian chờ không nhận được byte nào từ server.</p>
+
+                <h2 id="client">Gói thành một client dùng lại được</h2>
+                <p>Khi gọi API nhiều lần, hãy dùng <code>requests.Session</code>: nó giữ lại header (như <code>Authorization</code>) giữa các lệnh gọi và tái sử dụng kết nối tới cùng một host, nhanh hơn đáng kể. Kết hợp với kiến thức class (bài 8) và exception tự định nghĩa (bài 10), ta có một client nhỏ gọn:</p>
+<pre><code>class OdooAPIError(Exception):
+    """Lỗi do Odoo trả về hoặc lỗi kết nối."""
+
+class OdooClient:
+    def __init__(self, base_url, api_key, database=None, timeout=10):
+        self.base_url = base_url.rstrip("/")
+        self.timeout = timeout
+        self.session = requests.Session()                      # dùng lại kết nối và header
+        self.session.headers["Authorization"] = f"bearer {api_key}"
+        if database:
+            self.session.headers["X-Odoo-Database"] = database
+
+    def call(self, model, method, **payload):
+        url = f"{self.base_url}/json/2/{model}/{method}"
+        try:
+            response = self.session.post(url, json=payload, timeout=self.timeout)
+        except requests.RequestException as e:
+            raise OdooAPIError(f"Không gọi được {url}: {e}") from e
+        if not response.ok:
+            try:
+                message = response.json().get("message", response.text)
+            except ValueError:
+                message = response.text
+            raise OdooAPIError(f"HTTP {response.status_code}: {message}")
+        return response.json()</code></pre>
+<pre><code>client = OdooClient(os.environ["ODOO_URL"], os.environ["ODOO_API_KEY"], os.environ.get("ODOO_DB"))
+
+print(client.call("vinc.course", "search_read", domain=[["level", "=", "beginner"]], fields=["name", "level"]))
+# [{'id': 1, 'name': 'Odoo', 'level': 'beginner'}]
+print(client.call("vinc.course", "create", vals_list=[{"name": "Odoo cơ bản", "duration_hours": 24}]))
+# [7]
+
+OdooClient(os.environ["ODOO_URL"], "WRONG").call("vinc.course", "search_read")
+# OdooAPIError: HTTP 401: Invalid apikey</code></pre>
+                <p>Mọi chi tiết xấu của HTTP (header, URL, timeout, mã lỗi) nằm gọn trong <code>OdooClient</code>; phần còn lại của chương trình chỉ gọi <code>client.call(...)</code> và bắt <code>OdooAPIError</code>. Đây là kiểu tách lớp giúp bạn dễ viết test (bài 14): thay client thật bằng đối tượng giả.</p>
+                <h3 id="thu-lai">Thử lại khi mạng chập chờn</h3>
+<pre><code>import time
+
+def with_retry(func, attempts=3, delay=0.5):
+    for i in range(1, attempts + 1):
+        try:
+            return func()
+        except OdooAPIError:
+            print(f"lần {i} lỗi")
+            if i == attempts:
+                raise                       # hết lượt thử: ném lại lỗi cuối
+            time.sleep(delay * i)           # chờ lâu dần giữa các lần thử
+
+with_retry(lambda: client.call("vinc.course", "search_read", fields=["name"]))</code></pre>
+                <p>Chỉ nên thử lại với thao tác <strong>an toàn khi lặp lại</strong>, như đọc dữ liệu. Với thao tác ghi (<code>create</code>), thử lại có thể tạo bản ghi trùng nếu lần đầu thực ra đã thành công. Tài liệu API còn nhấn mạnh mỗi lệnh gọi JSON-2 là một transaction riêng, nên các bước liên quan nhau cần được gói vào một method duy nhất phía server.</p>
+
+                <h2 id="thuc-hanh">Thực hành: kiểm tra kết nối tới Odoo</h2>
+                <ol>
+                    <li>Tạo API key trong tùy chọn người dùng Odoo và đặt <code>ODOO_URL</code>, <code>ODOO_API_KEY</code>, <code>ODOO_DB</code> thành biến môi trường.</li>
+                    <li>Dùng <code>OdooClient</code> gọi <code>search_read</code> cho model <code>res.partner</code> với <code>fields=["name"]</code> và <code>limit</code> nhỏ.</li>
+                    <li>Cố ý đặt key sai và kiểm tra bạn nhận <code>OdooAPIError: HTTP 401: Invalid apikey</code>.</li>
+                    <li>Đặt <code>timeout=0.001</code> và quan sát lỗi quá thời gian.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Quên <code>timeout</code>.</strong> Chương trình có thể treo mãi khi server không trả lời.</li>
+                        <li><strong>Quên <code>raise_for_status()</code>.</strong> Mã 401/404 không tự gây lỗi, <code>r.json()</code> sau đó trả về nội dung lỗi mà bạn tưởng là dữ liệu. Luôn kiểm tra <code>r.ok</code> hoặc gọi <code>raise_for_status()</code>.</li>
+                        <li><strong>Header sai định dạng.</strong> Phải là <code>Authorization: bearer &lt;key&gt;</code>; thiếu chữ <code>bearer</code> hay key hết hạn đều cho 401.</li>
+                        <li><strong>Ghi API key vào code hoặc Git.</strong> Key có quyền của chủ sở hữu; hãy dùng biến môi trường và thu hồi ngay nếu lộ.</li>
+                        <li><strong>URL thiếu <code>https://</code>.</strong> Báo <code>MissingSchema: Invalid URL ... No scheme supplied</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>requests.get/post(..., timeout=...)</code>; đọc <code>.status_code</code>, <code>.json()</code>; <code>raise_for_status()</code> biến mã lỗi thành ngoại lệ.</li>
+                    <li>API JSON-2 của Odoo: <code>POST /json/2/&lt;model&gt;/&lt;method&gt;</code>, header <code>Authorization: bearer</code>, body JSON; key để trong biến môi trường.</li>
+                    <li><code>requests.Session</code> giữ header và kết nối; gói thành client có exception riêng.</li>
+                    <li>Chỉ thử lại thao tác an toàn khi lặp; mỗi lệnh gọi JSON-2 là một transaction.</li>
+                </ul>
+                <p>Bài cuối gom tất cả lại: debug, logging, test và một dự án nhỏ nhập khóa học từ CSV vào Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Cần tích hợp Odoo với hệ thống khác bằng Python?</h3>
+                    <p>Khóa Odoo Advanced Developer có bài tập API, xác thực và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao luôn phải đặt timeout trong requests?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Theo tài liệu requests, nếu không đặt timeout thì yêu cầu không bao giờ hết hạn và chương trình có thể treo vô hạn khi server không trả lời. Gần như mọi code production nên đặt tham số này.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>raise_for_status làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nó ném HTTPError khi phản hồi có mã trạng thái 4xx hoặc 5xx. Nếu không gọi, mã lỗi như 401 không tự gây ngoại lệ và r.json() sẽ trả về nội dung lỗi mà bạn có thể nhầm là dữ liệu.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Gọi API JSON-2 của Odoo cần những header nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Bắt buộc có Authorization với giá trị bearer kèm API key và Content-Type application/json. X-Odoo-Database là tùy chọn, cần khi một server chứa nhiều database. requests tự đặt Content-Type khi bạn dùng tham số json.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>requests.Session có lợi gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Session giữ lại header như Authorization giữa các lệnh gọi và tái sử dụng kết nối tới cùng một host nên nhanh hơn, phù hợp khi gọi API nhiều lần.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://requests.readthedocs.io/en/latest/user/quickstart/" target="_blank" rel="noopener">Requests – Quickstart</a></li>
+                    <li><a href="https://requests.readthedocs.io/en/latest/user/advanced/" target="_blank" rel="noopener">Requests – Advanced usage (sessions)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/json.html" target="_blank" rel="noopener">Python 3.12 – json</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fgoi-api-requests-json-2-odoo-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fgoi-api-requests-json-2-odoo-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="ngay-gio-datetime-regex-python-odoo.html"><small>← Bài trước</small>Ngày giờ và regex</a>
+                    <span class="next"><small>Bài tiếp theo · Sắp ra mắt</small>Debug, logging, test và dự án nhỏ</span>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#http-co-ban">HTTP trong năm phút</a></li>
+                        <li><a href="#requests-co-ban">requests: gửi yêu cầu và đọc phản hồi</a></li>
+                        <li><a href="#goi-odoo">Gọi API JSON-2 của Odoo</a></li>
+                        <li><a href="#loi-mang">Xử lý lỗi và timeout</a></li>
+                        <li><a href="#client">Gói thành một client dùng lại được</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: kiểm tra kết nối tới Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

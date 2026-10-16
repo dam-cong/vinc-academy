@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python module, package và import: hiểu __init__.py của Odoo</title>
+    <meta name="description" content="Hiểu module, package, import tương đối, __name__ == &quot;__main__&quot; và sys.path trong Python, cùng chuỗi __init__.py của module Odoo và lỗi import vòng." />
+    <meta name="keywords" content="python module package, python import, __init__.py odoo, from . import odoo, __name__ main, circular import python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python module, package và import: hiểu __init__.py của Odoo" />
+    <meta property="og:description" content="Module, package, import và __init__.py trong Python, và vì sao thiếu một dòng import khiến model Odoo không tồn tại." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/module-package-import-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python module, package và import: hiểu __init__.py của Odoo",
+                "description": "Module, package, import và __init__.py trong Python, và vì sao thiếu một dòng import khiến model Odoo không tồn tại.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/module-package-import-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Module, package và import"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao module Odoo cần file __init__.py?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "__init__.py biến thư mục thành package và chứa các dòng import (như from . import models) để Python nạp file model, controller. Nếu thiếu dòng import, class model không bao giờ được chạy nên Odoo không biết model tồn tại."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "if __name__ == \"__main__\" dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khối này chỉ chạy khi file được chạy trực tiếp bằng python file.py, và không chạy khi file được import. Nó thường chứa đoạn thử nhanh hoặc điểm vào của một script."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa import tương đối và tuyệt đối?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Import tương đối dùng dấu chấm để chỉ vị trí trong cùng package, ví dụ from . import course. Import tuyệt đối ghi đầy đủ đường dẫn từ gốc, ví dụ from vinc_tools.courses import make_code."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Làm sao xử lý lỗi circular import?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Cấu trúc lại để các module phụ thuộc một chiều, ví dụ đưa phần dùng chung ra module thứ ba. Cách chữa nhanh là chuyển lệnh import vào bên trong hàm cần dùng."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-modules-packages-imports-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Module, package và import</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 7 · Series Python thực chiến</span>
+            <h1>Python module, package và import: hiểu __init__.py của Odoo</h1>
+            <p class="post-lead">Mỗi lần bạn thêm model hay controller vào module Odoo, bạn lại phải sửa một file __init__.py. Bài này giải thích module, package, import tương đối và cách Python tìm mã, để bạn hiểu vì sao thiếu một dòng import là model biến mất.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Một file <code>.py</code> là một <em>module</em>, một thư mục có <code>__init__.py</code> là một <em>package</em>. Bạn dùng <code>import</code> để lấy code từ module khác.</strong> Với module Odoo, <code>__init__.py</code> ở thư mục gốc và ở <code>models/</code> chính là chuỗi import đưa file model vào hệ thống: thiếu một dòng <code>from . import course</code> là model không tồn tại. Python tìm module theo <code>sys.path</code>, và file có dòng <code>if __name__ == "__main__":</code> vừa chạy được trực tiếp vừa import được.</p>
+                </div>
+
+                <h2 id="module">Module: một file Python là một thư viện nhỏ</h2>
+                <p>Bất kỳ file <code>.py</code> nào cũng có thể được nạp bởi file khác. Có ba cách viết lệnh <code>import</code>:</p>
+<pre><code>import math                         # nạp cả module, dùng math.sqrt(...)
+import math as m                    # đặt bí danh
+from math import sqrt, pi           # lấy tên cụ thể
+
+print(math.sqrt(16), m.sqrt(25), sqrt(9), round(pi, 2))
+# 4.0 5.0 3.0 3.14</code></pre>
+                <ul>
+                    <li><code>import math</code> nạp cả module; bạn gọi qua tên module (<code>math.sqrt</code>), rất rõ nguồn gốc.</li>
+                    <li><code>import math as m</code> đặt tên ngắn; hay gặp ở thư viện dài tên.</li>
+                    <li><code>from math import sqrt</code> lấy trực tiếp một tên vào chỗ dùng; ngắn nhưng dễ gây trùng tên nếu import nhiều.</li>
+                </ul>
+                <p>Thư viện chuẩn có hàng trăm module sẵn (<code>math</code>, <code>json</code>, <code>datetime</code>, <code>csv</code>, <code>re</code>...), và bạn sẽ dùng nhiều ở các bài sau. Thư viện bên ngoài (như <code>requests</code>) cài bằng <code>pip</code> như bài 1 rồi import theo cách tương tự.</p>
+
+                <h2 id="package">Package: thư mục chứa nhiều module</h2>
+                <p>Khi dự án lớn dần, bạn gom các file liên quan vào một thư mục và thêm file <code>__init__.py</code> để Python coi nó là package. Đó là cách bạn tổ chức một công cụ nhỏ cho dự án khóa học:</p>
+<pre><code>vinc-tools/
+├── main.py
+└── vinc_tools/
+    ├── __init__.py
+    ├── courses.py
+    └── report.py</code></pre>
+<pre><code># vinc_tools/courses.py
+PREFIX = "ODO"
+
+def make_code(seq):
+    return f"{PREFIX}-{seq:03d}"
+
+if __name__ == "__main__":
+    print("chạy trực tiếp:", make_code(1))</code></pre>
+<pre><code># vinc_tools/__init__.py
+from .courses import make_code</code></pre>
+<pre><code># vinc_tools/report.py
+from . import courses
+from .courses import make_code as mk
+
+def line(seq):
+    return courses.PREFIX + ":" + mk(seq)</code></pre>
+<pre><code># main.py (cùng cấp với thư mục vinc_tools)
+import vinc_tools
+from vinc_tools import report
+from vinc_tools.courses import PREFIX
+import vinc_tools.courses as vc
+
+print(vinc_tools.make_code(7), report.line(2), PREFIX, vc.PREFIX)
+print(__name__)</code></pre>
+<pre><code>$ python3 main.py
+ODO-007 ODO:ODO-002 ODO ODO
+__main__
+
+$ python3 vinc_tools/courses.py
+chạy trực tiếp: ODO-001</code></pre>
+                <ul>
+                    <li><code>from .courses import make_code</code> trong <code>__init__.py</code> là <strong>import tương đối</strong>: dấu chấm nghĩa là "trong cùng package này". Nhờ đó người dùng gọi được <code>vinc_tools.make_code</code> thay vì phải biết nó nằm trong file nào.</li>
+                    <li><code>from . import courses</code> nạp module <code>courses</code> của cùng package, còn <code>from .courses import make_code as mk</code> lấy một tên và đổi tên.</li>
+                    <li><code>__init__.py</code> chạy một lần ngay khi package được nạp.</li>
+                </ul>
+
+                <h3 id="name-main">Khối if __name__ == "__main__"</h3>
+                <p>Mỗi module có biến <code>__name__</code>. Khi file được chạy trực tiếp bằng <code>python file.py</code>, <code>__name__</code> bằng <code>"__main__"</code>; khi nó được import, <code>__name__</code> là tên module. Khối <code>if __name__ == "__main__":</code> vì vậy chỉ chạy khi bạn chạy file như script, rất hợp để đặt đoạn thử nhanh hoặc điểm vào của chương trình (bạn sẽ dùng ở bài 14). Hãy so sánh kết quả của hai lệnh trong ví dụ trên: <code>main.py</code> in <code>__main__</code>, còn khi import <code>vinc_tools.courses</code>, dòng "chạy trực tiếp" không xuất hiện.</p>
+
+                <h2 id="tim-module">Python tìm module ở đâu?</h2>
+                <p>Khi gặp <code>import x</code>, Python tìm lần lượt trong danh sách <code>sys.path</code>: thư mục chứa script đang chạy (hoặc thư mục hiện tại ở chế độ tương tác, phần tử đầu là chuỗi rỗng), rồi thư viện chuẩn và nơi cài thư viện của môi trường ảo. Đó là lý do chạy <code>python3 main.py</code> từ thư mục dự án thì <code>import vinc_tools</code> thành công, còn chạy từ thư mục khác thì có thể không tìm thấy. Môi trường ảo ở bài 1 cũng thay đổi nơi tìm: <code>pip install</code> trong venv đặt gói vào thư mục riêng của venv.</p>
+                <p>Odoo dùng một cơ chế khác nhưng cùng tinh thần: danh sách thư mục module được khai báo bằng <code>--addons-path</code> (bài 2 của series Odoo), và Odoo tìm các thư mục có <code>__manifest__.py</code> trong đó.</p>
+
+                <h2 id="kham-pha">Khám phá một module: dir, help và __file__</h2>
+                <p>Khi gặp module lạ, bạn không cần mở tài liệu ngay. Ba công cụ có sẵn trả lời hầu hết câu hỏi: <code>dir(module)</code> liệt kê các tên bên trong, <code>help(module.ham)</code> hoặc thuộc tính <code>__doc__</code> in phần mô tả, và <code>module.__file__</code> cho biết file nguồn nằm đâu (rất tiện khi muốn đọc mã của Odoo hay một thư viện). Python cũng lưu các module đã nạp trong <code>sys.modules</code>, nên import lần thứ hai gần như không tốn thời gian và code của module chỉ chạy một lần.</p>
+<pre><code>import math
+print([n for n in dir(math) if n in ("sqrt", "pi", "floor", "ceil")])
+# ['ceil', 'floor', 'pi', 'sqrt']
+print(math.sqrt.__doc__.splitlines()[0])
+# Return the square root of x.
+
+import sys
+print("math" in sys.modules, "requests" in sys.modules)
+# True False   (module đã import thì được lưu lại, import lần hai rất nhanh)</code></pre>
+                <h3 id="thu-vien-chuan">Những module chuẩn bạn sẽ dùng nhiều</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Module</th><th>Dùng để</th><th>Học ở bài</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>json</code>, <code>csv</code></td><td>Đọc ghi dữ liệu có cấu trúc</td><td>Bài 11</td></tr>
+                            <tr><td><code>pathlib</code>, <code>os</code></td><td>Làm việc với đường dẫn, thư mục</td><td>Bài 11</td></tr>
+                            <tr><td><code>datetime</code></td><td>Ngày giờ</td><td>Bài 12</td></tr>
+                            <tr><td><code>re</code></td><td>Biểu thức chính quy</td><td>Bài 12</td></tr>
+                            <tr><td><code>logging</code></td><td>Ghi log thay cho <code>print</code></td><td>Bài 14</td></tr>
+                            <tr><td><code>unittest</code></td><td>Viết test</td><td>Bài 14</td></tr>
+                            <tr><td><code>collections</code>, <code>itertools</code>, <code>functools</code></td><td>Cấu trúc dữ liệu và công cụ lặp nâng cao</td><td>Bài 6, 9</td></tr>
+                            <tr><td><code>requests</code> (cài thêm)</td><td>Gọi HTTP API</td><td>Bài 13</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Một quy ước thông thường là xếp các dòng <code>import</code> ở đầu file theo nhóm: thư viện chuẩn trước, thư viện bên ngoài sau, module của dự án cuối cùng, mỗi nhóm cách nhau một dòng trống. Nhìn vào đầu file, người đọc biết ngay file phụ thuộc vào những gì, và đó cũng là lý do bạn thấy các dòng <code>from odoo import ...</code> luôn nằm trên cùng.</p>
+
+                <h2 id="module-odoo">Chuỗi import trong module Odoo</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 145" role="img" aria-labelledby="dg-vi-p07">
+                        <title id="dg-vi-p07">Chuỗi import trong một module Odoo</title>
+                        <rect class="dg-accent" x="10" y="10" width="190" height="70" rx="12" />
+                        <text class="dg-title" x="26" y="38">vinc_course/__init__.py</text>
+                        <text class="dg-text" x="26" y="64">from . import models</text>
+                        <path class="dg-arrow" d="M202 45 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="228" y="10" width="190" height="70" rx="12" />
+                        <text class="dg-title" x="244" y="38">models/__init__.py</text>
+                        <text class="dg-text" x="244" y="64">from . import course</text>
+                        <path class="dg-arrow" d="M420 45 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="446" y="10" width="184" height="70" rx="12" />
+                        <text class="dg-title" x="462" y="38">models/course.py</text>
+                        <text class="dg-text" x="462" y="64">class VincCourse(...)</text>
+                        <text class="dg-text" x="10" y="110">Odoo nạp thư mục module rồi Python chạy __init__.py, lần lượt kéo từng file vào.</text>
+                        <text class="dg-text" x="10" y="132">Quên một dòng import ở đây = model không được đăng ký.</text>
+                    </svg>
+                    <figcaption>Sơ đồ do Vinc Academy biên soạn.</figcaption>
+                </figure>
+
+
+<pre><code># vinc_course/__init__.py
+from . import models
+
+# vinc_course/models/__init__.py
+from . import course
+from . import course_category
+
+# vinc_course/models/course.py
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError</code></pre>
+                <p>Hai file <code>__init__.py</code> này là chỗ nhiều người mới "đau" nhất. Tạo file <code>models/course.py</code> xong mà quên <code>from . import course</code> thì class <code>VincCourse</code> không bao giờ được Python chạy, Odoo không biết có model <code>vinc.course</code>, và bảng cũng không được tạo khi nâng cấp. Tutorial chính thức của Odoo mô tả đúng chuỗi này: model nằm trong <code>models/</code>, file được import trong <code>models/__init__.py</code>, và thư mục <code>models</code> được import trong <code>__init__.py</code> gốc. Các dòng <code>from odoo import api, fields, models</code> ở đầu file là import từ thư viện của chính Odoo.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Bạn muốn</th><th>Viết</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Thêm model mới</td><td>Tạo <code>models/ten.py</code> + <code>from . import ten</code> trong <code>models/__init__.py</code></td></tr>
+                            <tr><td>Thêm controller</td><td>Tạo <code>controllers/main.py</code> + <code>from . import main</code> trong <code>controllers/__init__.py</code></td></tr>
+                            <tr><td>Thêm test</td><td>File <code>tests/test_x.py</code> + <code>from . import test_x</code> trong <code>tests/__init__.py</code></td></tr>
+                            <tr><td>Dùng thư viện ngoài</td><td><code>import requests</code> và khai báo trong <code>external_dependencies</code> của manifest</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Mẫu "mỗi thư mục con có <code>__init__.py</code> import các file của nó" lặp lại cho <code>controllers</code> và <code>tests</code>; riêng test còn có quy ước tên file <code>test_*.py</code> (bài 13 series Odoo).</p>
+
+                <h2 id="thuc-hanh">Thực hành: dựng package công cụ</h2>
+                <ol>
+                    <li>Tạo cấu trúc <code>vinc-tools/vinc_tools/</code> như trên với ba file.</li>
+                    <li>Từ thư mục <code>vinc-tools</code>, chạy <code>python3 main.py</code> và kiểm tra dòng đầu ra <code>ODO-007 ODO:ODO-002 ODO ODO</code>.</li>
+                    <li>Chạy <code>python3 vinc_tools/courses.py</code> và thấy dòng "chạy trực tiếp".</li>
+                    <li>Thử bỏ dòng import trong <code>__init__.py</code> và quan sát lỗi khi <code>main.py</code> gọi <code>vinc_tools.make_code</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+<pre><code>import nonexistent_mod
+# ModuleNotFoundError: No module named 'nonexistent_mod'
+
+from vinc_tools import nothing
+# ImportError: cannot import name 'nothing' from 'vinc_tools' (.../vinc_tools/__init__.py)
+
+# chạy file có import tương đối trực tiếp:
+# $ python3 vinc_tools/report.py
+# ImportError: attempted relative import with no known parent package</code></pre>
+                    <ul>
+                        <li><strong><code>ModuleNotFoundError</code>.</strong> Python không tìm thấy module: chưa cài bằng <code>pip</code> (hoặc đang ở sai môi trường ảo), sai tên, hoặc đang chạy từ thư mục khiến <code>sys.path</code> không chứa dự án.</li>
+                        <li><strong>Chạy trực tiếp file có import tương đối.</strong> <code>python3 vinc_tools/report.py</code> báo "attempted relative import with no known parent package" vì file không được nạp như một phần package. Hãy chạy qua file ngoài package (như <code>main.py</code>).</li>
+                        <li><strong>Import vòng tròn.</strong> Hai module import lẫn nhau gây <code>ImportError: cannot import name ... (most likely due to a circular import)</code>:</li>
+                    </ul>
+<pre><code># circ/a.py
+from circ.b import fb
+def fa(): return "a"
+
+# circ/b.py
+from circ.a import fa
+def fb(): return "b"
+
+# import circ.a  -&gt;
+# ImportError: cannot import name 'fa' from partially initialized module 'circ.a'
+#   (most likely due to a circular import)
+
+# Cách gỡ: chuyển import vào bên trong hàm
+# circ/b.py
+def fb():
+    from circ.a import fa      # chỉ import khi hàm chạy
+    return "b" + fa()</code></pre>
+                    <p>Cách tốt nhất là cấu trúc lại để phụ thuộc đi một chiều (đưa phần dùng chung ra module thứ ba); đưa import vào trong hàm chỉ là cách chữa nhanh.</p>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>File <code>.py</code> = module; thư mục có <code>__init__.py</code> = package; <code>import</code> kéo code từ nơi khác.</li>
+                    <li>Dùng import tương đối (<code>from . import x</code>) trong cùng package.</li>
+                    <li><code>if __name__ == "__main__":</code> chỉ chạy khi file được chạy trực tiếp.</li>
+                    <li>Module Odoo: mỗi <code>__init__.py</code> phải import các file con, thiếu dòng là model không tồn tại.</li>
+                </ul>
+                <p>Bài tiếp theo là nền tảng của mọi model Odoo: class và đối tượng.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn tổ chức module Odoo gọn gàng ngay từ đầu?</h3>
+                    <p>Khóa Developer Foundation hướng dẫn cấu trúc module, import và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao module Odoo cần file __init__.py?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">__init__.py biến thư mục thành package và chứa các dòng import (như from . import models) để Python nạp file model, controller. Nếu thiếu dòng import, class model không bao giờ được chạy nên Odoo không biết model tồn tại.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>if __name__ == "__main__" dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khối này chỉ chạy khi file được chạy trực tiếp bằng python file.py, và không chạy khi file được import. Nó thường chứa đoạn thử nhanh hoặc điểm vào của một script.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa import tương đối và tuyệt đối?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Import tương đối dùng dấu chấm để chỉ vị trí trong cùng package, ví dụ from . import course. Import tuyệt đối ghi đầy đủ đường dẫn từ gốc, ví dụ from vinc_tools.courses import make_code.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Làm sao xử lý lỗi circular import?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Cấu trúc lại để các module phụ thuộc một chiều, ví dụ đưa phần dùng chung ra module thứ ba. Cách chữa nhanh là chuyển lệnh import vào bên trong hàm cần dùng.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/modules.html" target="_blank" rel="noopener">Python 3.12 – Modules</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/import.html" target="_blank" rel="noopener">Python 3.12 – The import system</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fmodule-package-import-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fmodule-package-import-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="comprehension-generator-sorted-filter-python.html"><small>← Bài trước</small>Comprehension, generator và sorted/filter</a>
+                    <a class="next" href="class-doi-tuong-oop-python-odoo.html"><small>Bài tiếp theo →</small>Class và đối tượng</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#module">Module: một file Python là một thư viện nhỏ</a></li>
+                        <li><a href="#package">Package: thư mục chứa nhiều module</a></li>
+                        <li><a href="#tim-module">Python tìm module ở đâu?</a></li>
+                        <li><a href="#kham-pha">Khám phá một module: dir, help và __file__</a></li>
+                        <li><a href="#module-odoo">Chuỗi import trong module Odoo</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: dựng package công cụ</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

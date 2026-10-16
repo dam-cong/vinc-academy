@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python kế thừa, super() và decorator cho dev Odoo</title>
+    <meta name="description" content="Hiểu kế thừa class, super(), mixin và decorator trong Python, rồi áp dụng vào ghi đè create/write và @api.depends, @api.model, @http.route của Odoo." />
+    <meta name="keywords" content="python kế thừa, python super(), python decorator, functools.wraps, ghi đè create odoo, api.depends decorator" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python kế thừa, super() và decorator cho dev Odoo" />
+    <meta property="og:description" content="Kế thừa, super(), mixin và decorator trong Python, và cách chúng xuất hiện trong ghi đè method và các decorator @api của Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/ke-thua-super-decorator-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python kế thừa, super() và decorator cho dev Odoo",
+                "description": "Kế thừa, super(), mixin và decorator trong Python, và cách chúng xuất hiện trong ghi đè method và các decorator @api của Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/ke-thua-super-decorator-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Kế thừa, super() và decorator"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "super() dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "super() trả về cầu nối tới class cha để bạn gọi lại method gốc, ví dụ super().create(vals_list). Nhờ đó bạn thêm logic trước hoặc sau mà vẫn giữ nguyên hành vi của cha."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao phải gọi super() khi ghi đè method trong Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Tài liệu Odoo nhấn mạnh phải luôn gọi super() để không phá vỡ luồng xử lý, và trả về dữ liệu cùng kiểu với method cha, ví dụ cha trả dict thì bản ghi đè cũng trả dict."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Decorator là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Decorator là hàm nhận một hàm và trả về hàm mới có thêm hành vi. Cú pháp @ten đặt trên dòng def là cách viết gọn của ham = ten(ham)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao cần functools.wraps khi viết decorator?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Nó sao chép tên và docstring của hàm gốc lên hàm bọc. Thiếu nó, hàm bị đổi tên thành wrapper và mất docstring, gây khó khăn khi debug."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-inheritance-super-decorators-odoo.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Kế thừa, super() và decorator</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 9 · Series Python thực chiến</span>
+            <h1>Python kế thừa, super() và decorator cho dev Odoo</h1>
+            <p class="post-lead">Ghi đè create hay viết @api.depends đều dựa trên hai kỹ thuật Python: kế thừa với super() và decorator. Bài này dạy chúng bằng ví dụ chạy được, rồi chỉ ra quy tắc vàng khi ghi đè method trong Odoo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Kế thừa cho phép class con dùng lại và mở rộng class cha: <code>class OnlineCourse(Course)</code>. Khi ghi đè method, hãy gọi <code>super()</code> để chạy logic của class cha.</strong> Decorator là hàm bọc hàm khác để thêm hành vi, viết bằng <code>@ten</code> ngay trên dòng <code>def</code>. Odoo dùng cả hai ở khắp nơi: <code>super().create(vals_list)</code> khi ghi đè, <code>@api.depends</code>, <code>@api.model</code>, <code>@api.constrains</code>, <code>@http.route</code>.</p>
+                </div>
+
+                <h2 id="ke-thua">Kế thừa class và super()</h2>
+                <p>Class con khai báo class cha trong ngoặc. Nó nhận mọi thuộc tính và method của cha, và có thể <strong>ghi đè</strong> method nào cần thay đổi. Hàm <code>super()</code> trả về một "cầu nối" tới class cha để bạn gọi lại method gốc:</p>
+<pre><code>class Course:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+
+    def describe(self):
+        return f"{self.name} - {self.hours}h"
+
+class OnlineCourse(Course):                  # kế thừa Course
+    def __init__(self, name, hours, platform="Zoom"):
+        super().__init__(name, hours)        # gọi __init__ của class cha
+        self.platform = platform
+
+    def describe(self):                      # ghi đè method cha
+        base = super().describe()            # tái sử dụng kết quả của cha
+        return f"{base} (online: {self.platform})"
+
+c = OnlineCourse("Odoo", 24)
+print(c.describe())     # Odoo - 24h (online: Zoom)
+print(isinstance(c, Course), issubclass(OnlineCourse, Course))   # True True
+print([k.__name__ for k in OnlineCourse.__mro__])   # ['OnlineCourse', 'Course', 'object']</code></pre>
+                <ul>
+                    <li><code>super().__init__(name, hours)</code> chạy phần khởi tạo của cha, nên class con không phải lặp lại việc gán <code>name</code>, <code>hours</code>.</li>
+                    <li><code>super().describe()</code> lấy kết quả của method cha rồi bạn bổ sung thêm, thay vì viết lại từ đầu.</li>
+                    <li><code>isinstance(c, Course)</code> là <code>True</code> với đối tượng của class con: đối tượng <code>OnlineCourse</code> "cũng là" một <code>Course</code>.</li>
+                    <li><code>__mro__</code> (method resolution order) cho biết Python tìm method theo thứ tự nào: class con trước, rồi cha, cuối cùng là <code>object</code>.</li>
+                </ul>
+
+                <h2 id="mixin">Đa kế thừa và mixin</h2>
+                <p>Một class có thể kế thừa nhiều class. Mẫu hữu ích nhất là <strong>mixin</strong>: class nhỏ chỉ cung cấp một khả năng (ghi log, đánh dấu thời gian...), được "trộn" vào class khác:</p>
+<pre><code>class LogMixin:
+    def log(self, msg):
+        print(f"[{type(self).__name__}] {msg}")
+
+class Tracked(LogMixin, Course):
+    def describe(self):
+        self.log("describe được gọi")
+        return super().describe()
+
+print(Tracked("Git", 8).describe())
+# [Tracked] describe được gọi
+# Git - 8h
+print([k.__name__ for k in Tracked.__mro__])
+# ['Tracked', 'LogMixin', 'Course', 'object']</code></pre>
+                <p>Python tìm method theo <code>__mro__</code>, và <code>super()</code> đi theo đúng thứ tự đó, nên mixin và class chính phối hợp được với nhau. Odoo dùng nguyên lý này rất nhiều: tài liệu mô tả <code>_inherit</code> nhận một danh sách model cha khi model mới có <code>_name</code>, chính là đa kế thừa ở tầng model.</p>
+
+                <h2 id="ghi-de-odoo">Ghi đè method và quy tắc vàng khi dùng super()</h2>
+                <p>Ghi đè <code>create</code>, <code>write</code> là việc dev Odoo làm hằng ngày (bài 9 của series Odoo). Cấu trúc luôn giống nhau: xử lý dữ liệu đầu vào, gọi cha, xử lý kết quả, trả về. Mô phỏng thuần Python:</p>
+<pre><code>class Base:
+    @classmethod
+    def create(cls, vals):
+        print("Base.create", vals)
+        return vals
+
+class MyModel(Base):
+    @classmethod
+    def create(cls, vals):
+        vals = dict(vals)                 # làm việc trên bản sao
+        vals.setdefault("code", "AUTO")   # logic của bạn trước
+        result = super().create(vals)     # gọi cha: KHÔNG được quên
+        print("sau khi tạo")
+        return result                     # trả đúng kiểu như cha
+
+print(MyModel.create({"name": "x"}))
+# Base.create {'name': 'x', 'code': 'AUTO'}
+# sau khi tạo
+# {'name': 'x', 'code': 'AUTO'}</code></pre>
+                <p>Tài liệu Odoo nhấn mạnh hai điều: <strong>luôn gọi <code>super()</code></strong> để không phá vỡ luồng xử lý (chỉ rất ít trường hợp đặc biệt mới không gọi), và <strong>trả về dữ liệu cùng kiểu với method cha</strong>: cha trả <code>dict</code> thì bản ghi đè cũng phải trả <code>dict</code>. Hãy làm việc trên bản sao của đối số (như <code>dict(vals)</code> ở bài 5) để không đổi dữ liệu của nơi gọi.</p>
+
+                <h3 id="mro-super">super() và thứ tự MRO khi đa kế thừa</h3>
+                <p>Với đa kế thừa có "hình thoi", <code>super()</code> không đơn giản là "gọi cha trực tiếp" mà là "gọi class kế tiếp trong <code>__mro__</code>". Nhờ vậy mỗi class trong chuỗi chạy đúng một lần, và các class cùng ghi đè một method phối hợp được với nhau:</p>
+<pre><code>class A:
+    def hello(self):
+        return ["A"]
+
+class B(A):
+    def hello(self):
+        return ["B"] + super().hello()
+
+class C(A):
+    def hello(self):
+        return ["C"] + super().hello()
+
+class D(B, C):
+    def hello(self):
+        return ["D"] + super().hello()
+
+print(D().hello())                       # ['D', 'B', 'C', 'A']
+print([k.__name__ for k in D.__mro__])   # ['D', 'B', 'C', 'A', 'object']</code></pre>
+                <p>Chính vì vậy quy tắc "luôn gọi <code>super()</code>" quan trọng: nếu một class trong chuỗi bỏ qua nó, mọi class phía sau trong <code>__mro__</code> sẽ không bao giờ được chạy. Mô hình tương tự áp dụng khi nhiều module cùng mở rộng một model Odoo: mỗi module ghi đè method và phải gọi <code>super()</code> để phần của module khác vẫn hoạt động.</p>
+
+                <h3 id="thanh-phan">Kế thừa hay thành phần?</h3>
+                <p>Kế thừa diễn tả quan hệ "<strong>là một</strong>" (<code>OnlineCourse</code> là một <code>Course</code>). Khi quan hệ chỉ là "<strong>có một</strong>", hãy dùng <strong>thành phần</strong>: lưu đối tượng kia làm thuộc tính. Lạm dụng kế thừa tạo ra cây class sâu, khó hiểu và khó đổi; thành phần linh hoạt hơn:</p>
+<pre><code>class Instructor:
+    def __init__(self, name):
+        self.name = name
+
+class Offering:                          # thành phần: "có một", không phải "là một"
+    def __init__(self, course, instructor):
+        self.course = course
+        self.instructor = instructor
+
+    def title(self):
+        return f"{self.course.name} - {self.instructor.name}"
+
+print(Offering(Course("Odoo", 24), Instructor("Hiền")).title())   # Odoo - Hiền</code></pre>
+                <p>Trong Odoo, quan hệ "có một" chính là Many2one (<code>instructor_id</code>) và "có nhiều" là One2many: model dùng thành phần qua field quan hệ, còn <code>_inherit</code> dành cho khi bạn thực sự muốn mở rộng hoặc tái sử dụng chính model đó.</p>
+
+                <h2 id="decorator">Decorator: hàm bọc hàm</h2>
+                <p>Decorator là một hàm nhận hàm khác và trả về hàm mới thêm hành vi. Cú pháp <code>@timer</code> trên dòng <code>def</code> là cách viết gọn của <code>slow_sum = timer(slow_sum)</code>. Nó dựa trên closure bạn đã gặp ở bài 5:</p>
+<pre><code>import functools
+
+def timer(func):
+    @functools.wraps(func)                # giữ tên và docstring của hàm gốc
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} xong")
+        return result
+    return wrapper
+
+@timer                                    # tương đương slow_sum = timer(slow_sum)
+def slow_sum(n):
+    """Cộng 1..n"""
+    return sum(range(n + 1))
+
+print(slow_sum(10), slow_sum.__name__, slow_sum.__doc__)
+# slow_sum xong
+# 55 slow_sum Cộng 1..n</code></pre>
+                <p><code>functools.wraps</code> rất quan trọng: nó sao chép tên và docstring của hàm gốc lên hàm bọc. Thiếu nó, hàm bị đổi thành <code>wrapper</code> và mất docstring, gây khó khăn khi debug và với mọi công cụ hay framework đọc tên hàm (log, debugger, bộ đăng ký route...):</p>
+<pre><code>def no_wraps(func):
+    def wrapper(*a, **k):
+        return func(*a, **k)
+    return wrapper
+
+@no_wraps
+def f():
+    "doc"
+
+print(f.__name__, f.__doc__)     # wrapper None   &lt;- mất tên và docstring</code></pre>
+
+                <h3 id="decorator-tham-so">Decorator có tham số</h3>
+                <p>Muốn truyền tham số như <code>@retry(3)</code>, bạn cần thêm một tầng hàm: <code>retry(3)</code> trả về decorator thật. Đây chính là cấu trúc của <code>@api.depends('a', 'b')</code> hay <code>@http.route('/x', auth='public')</code>:</p>
+<pre><code>def retry(times):
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            last = None
+            for i in range(1, times + 1):
+                try:
+                    return func(*args, **kwargs)
+                except ValueError as e:
+                    last = e
+                    print(f"lần {i} lỗi: {e}")
+            raise last
+        return wrapper
+    return deco
+
+calls = {"n": 0}
+
+@retry(3)                                 # decorator có tham số: retry(3) trả về deco
+def flaky():
+    calls["n"] += 1
+    if calls["n"] &lt; 3:
+        raise ValueError("chưa được")
+    return "ok"
+
+print(flaky())
+# lần 1 lỗi: chưa được
+# lần 2 lỗi: chưa được
+# ok</code></pre>
+                <h3 id="thu-tu-decorator">Thứ tự nhiều decorator</h3>
+<pre><code>def deco(tag):
+    def d(f):
+        def w():
+            return f"&lt;{tag}&gt;" + f() + f"&lt;/{tag}&gt;"
+        return w
+    return d
+
+@deco("a")
+@deco("b")
+def x():
+    return "x"
+
+print(x())    # &lt;a&gt;&lt;b&gt;x&lt;/b&gt;&lt;/a&gt;   (decorator gần hàm nhất áp dụng trước)</code></pre>
+
+                <h3 id="decorator-thuc-te">Hai decorator hữu ích tự viết hoặc dùng sẵn</h3>
+                <p>Ngoài ghi log, decorator hay dùng nhất là <strong>nhớ kết quả</strong> (cache) cho hàm tốn thời gian và <strong>kiểm tra đối số</strong> trước khi chạy hàm. Thư viện chuẩn có sẵn <code>functools.cache</code> (và <code>lru_cache</code> giới hạn kích thước):</p>
+<pre><code>import functools
+
+@functools.cache                         # nhớ kết quả theo đối số
+def course_price(code):
+    print("đang tra", code)              # chỉ in ở lần gọi đầu
+    return {"ODO-F": 100}.get(code, 0)
+
+print(course_price("ODO-F"), course_price("ODO-F"))
+# đang tra ODO-F
+# 100 100
+
+def require_positive(func):              # decorator kiểm tra đối số
+    @functools.wraps(func)
+    def wrapper(hours, *args, **kwargs):
+        if hours &lt;= 0:
+            raise ValueError("hours phải &gt; 0")
+        return func(hours, *args, **kwargs)
+    return wrapper
+
+@require_positive
+def sessions(hours):
+    return hours // 8
+
+print(sessions(24))                      # 3
+sessions(0)
+# ValueError: hours phải &gt; 0</code></pre>
+                <p>Hãy cẩn thận khi cache hàm có tác dụng phụ hoặc phụ thuộc dữ liệu thay đổi: kết quả cũ sẽ được trả lại dù dữ liệu gốc đã đổi. Cache hợp với hàm "thuần" như tra bảng cố định.</p>
+
+                <h2 id="classmethod-staticmethod">@classmethod và @staticmethod</h2>
+<pre><code>class Tool:
+    @staticmethod
+    def hours_to_days(h):                 # không cần self hay cls
+        return h / 8
+
+    @classmethod
+    def from_string(cls, s):              # nhận class, hay dùng làm "hàm tạo" thứ hai
+        name, hours = s.split(":")
+        return Course(name, int(hours))
+
+print(Tool.hours_to_days(24))             # 3.0
+print(Tool.from_string("Odoo:24").describe())   # Odoo - 24h</code></pre>
+                <p><code>@staticmethod</code> là hàm thường nằm trong class (không nhận <code>self</code> hay <code>cls</code>). <code>@classmethod</code> nhận chính class làm tham số đầu tiên, thường dùng làm "hàm tạo thay thế" như <code>from_string</code>. Hai decorator này cùng <code>@property</code> ở bài 8 là các decorator dựng sẵn bạn gặp nhiều nhất.</p>
+
+                <h2 id="trong-odoo">Decorator bạn gặp trong code Odoo</h2>
+<pre><code># 1. decorator có tham số: khai báo phụ thuộc của computed field
+@api.depends('price', 'duration_hours')
+def _compute_price_per_hour(self):
+    ...
+
+# 2. decorator không tham số: create nhận list vals
+@api.model
+def create(self, vals_list):
+    courses = super().create(vals_list)
+    return courses
+
+# 3. ràng buộc dữ liệu
+@api.constrains('duration_hours')
+def _check_duration(self):
+    ...
+
+# 4. route của controller, ghi đè phải gắn lại @route()
+@http.route('/vinc_course/courses', auth='public')
+def courses(self, **kw):
+    ...</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Decorator</th><th>Tác dụng (theo tài liệu Odoo)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>@api.depends(...)</code></td><td>Khai báo field mà compute method phụ thuộc; ORM tính lại khi chúng đổi</td></tr>
+                            <tr><td><code>@api.constrains(...)</code></td><td>Method kiểm tra ràng buộc, chạy khi các field được nêu bị sửa</td></tr>
+                            <tr><td><code>@api.onchange(...)</code></td><td>Cập nhật form khi field thay đổi, chỉ trong giao diện</td></tr>
+                            <tr><td><code>@api.model</code></td><td>Method mà nội dung <code>self</code> không quan trọng, chỉ cần model</td></tr>
+                            <tr><td><code>@api.ondelete(at_uninstall=False)</code></td><td>Chạy trong lúc xóa bản ghi, cho phép chặn xóa mà không ảnh hưởng gỡ module</td></tr>
+                            <tr><td><code>@http.route(...)</code></td><td>Gắn method vào một URL; ghi đè controller phải gắn lại <code>@route()</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Bạn không cần tự viết các decorator này mà chỉ cần hiểu chúng là hàm bọc hàm, và đặt đúng chỗ ngay trên dòng <code>def</code>. Điều đó giải thích vì sao tài liệu Odoo lưu ý rằng ghi đè method của controller mà quên gắn lại <code>@route()</code> sẽ làm route biến mất: decorator mới là thứ đăng ký method vào hệ thống.</p>
+
+                <h2 id="thuc-hanh">Thực hành: decorator ghi log và kiểm tra</h2>
+                <ol>
+                    <li>Viết decorator <code>log_call</code> in tên hàm và đối số trước khi chạy hàm gốc, dùng <code>functools.wraps</code>.</li>
+                    <li>Áp dụng nó lên một hàm tính giá mỗi giờ ở bài 5 và kiểm tra <code>__name__</code> vẫn là tên cũ.</li>
+                    <li>Tạo class <code>OnlineCourse</code> như trên và thêm method <code>describe</code> dùng <code>super()</code>; thử thêm <code>LogMixin</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Quên <code>super().__init__(...)</code> trong class con.</strong> Thuộc tính của cha không được tạo, và về sau gặp <code>AttributeError</code>.</li>
+                        <li><strong>Ghi đè method mà quên <code>return</code>.</strong> Hàm trả <code>None</code> thay vì kết quả cha, làm hỏng mọi nơi gọi.</li>
+                        <li><strong>Viết decorator mà quên <code>functools.wraps</code>.</strong> Hàm mất tên và docstring (<code>f.__name__</code> thành <code>wrapper</code>).</li>
+                        <li><strong>Quên gọi <code>retry(3)</code> khi decorator có tham số.</strong> Viết <code>@retry</code> thay vì <code>@retry(3)</code> truyền hàm vào chỗ tham số.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Class con kế thừa, ghi đè và dùng <code>super()</code> để tái sử dụng class cha; mixin cung cấp một khả năng riêng.</li>
+                    <li>Khi ghi đè method Odoo: luôn gọi <code>super()</code>, làm việc trên bản sao đối số và trả về cùng kiểu.</li>
+                    <li>Decorator là hàm bọc hàm; dùng <code>functools.wraps</code>; decorator có tham số cần thêm một tầng.</li>
+                    <li>Hãy nhận ra <code>@api.depends</code>, <code>@api.constrains</code>, <code>@api.model</code>, <code>@http.route</code> là decorator.</li>
+                </ul>
+                <p>Bài tiếp theo xử lý khi mọi thứ đi sai: <code>try/except</code>, <code>raise</code> và <code>ValidationError</code> của Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn ghi đè method Odoo an toàn và viết decorator của riêng bạn?</h3>
+                    <p>Khóa Odoo Advanced Developer có bài tập kế thừa, decorator và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>super() dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">super() trả về cầu nối tới class cha để bạn gọi lại method gốc, ví dụ super().create(vals_list). Nhờ đó bạn thêm logic trước hoặc sau mà vẫn giữ nguyên hành vi của cha.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao phải gọi super() khi ghi đè method trong Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Tài liệu Odoo nhấn mạnh phải luôn gọi super() để không phá vỡ luồng xử lý, và trả về dữ liệu cùng kiểu với method cha, ví dụ cha trả dict thì bản ghi đè cũng trả dict.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Decorator là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Decorator là hàm nhận một hàm và trả về hàm mới có thêm hành vi. Cú pháp @ten đặt trên dòng def là cách viết gọn của ham = ten(ham).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao cần functools.wraps khi viết decorator?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Nó sao chép tên và docstring của hàm gốc lên hàm bọc. Thiếu nó, hàm bị đổi tên thành wrapper và mất docstring, gây khó khăn khi debug.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes (inheritance, multiple inheritance)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functools.html" target="_blank" rel="noopener">Python 3.12 – functools (wraps)</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Function definitions (decorators)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/12_inheritance.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Inheritance</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (decorators)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fke-thua-super-decorator-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fke-thua-super-decorator-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="class-doi-tuong-oop-python-odoo.html"><small>← Bài trước</small>Class và đối tượng</a>
+                    <a class="next" href="xu-ly-loi-try-except-with-python-odoo.html"><small>Bài tiếp theo →</small>Xử lý lỗi và câu lệnh with</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#ke-thua">Kế thừa class và super()</a></li>
+                        <li><a href="#mixin">Đa kế thừa và mixin</a></li>
+                        <li><a href="#ghi-de-odoo">Ghi đè method và quy tắc vàng khi dùng super()</a></li>
+                        <li><a href="#decorator">Decorator: hàm bọc hàm</a></li>
+                        <li><a href="#classmethod-staticmethod">@classmethod và @staticmethod</a></li>
+                        <li><a href="#trong-odoo">Decorator bạn gặp trong code Odoo</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: decorator ghi log và kiểm tra</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debug, logging, test và dự án nhỏ: hoàn thiện công cụ Python</title>
+    <meta name="description" content="Dùng breakpoint() và pdb để gỡ lỗi, logging có cấp độ thay cho print, viết test với unittest và Mock, thêm type hints, rồi ghép tất cả thành script import_courses.py hoàn chỉnh." />
+    <meta name="keywords" content="python debug, breakpoint pdb, python logging, unittest python, mock unittest, type hints python, argparse python, dự án python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Debug, logging, test và dự án nhỏ: hoàn thiện công cụ Python" />
+    <meta property="og:description" content="Debug, logging và test trong Python: pdb, logging, unittest, Mock và một script nhập khóa học vào Odoo hoàn chỉnh." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/debug-logging-test-du-an-nho-python.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Debug, logging, test và dự án nhỏ: hoàn thiện công cụ Python",
+                "description": "Debug, logging và test trong Python: pdb, logging, unittest, Mock và một script nhập khóa học vào Odoo hoàn chỉnh.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/debug-logging-test-du-an-nho-python.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Debug, logging và test"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Khi nào nên dùng breakpoint() thay vì print để gỡ lỗi?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "breakpoint() mở trình gỡ lỗi pdb ngay tại dòng đó, cho phép xem biến (p), chạy từng dòng (n, s) và tiếp tục (c) mà không phải sửa code thêm. Vài dòng print cũng đủ khi luồng đơn giản, nhưng với luồng phức tạp thì breakpoint() nhanh và sạch hơn; nhớ xóa nó trước khi commit."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao nên dùng logging thay cho print?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "logging gắn cấp độ (DEBUG tới CRITICAL), thời gian và tên logger, và bạn tắt hay bật theo mức mà không sửa code. print phù hợp cho kết quả chương trình, logging cho thông tin vận hành; Odoo cũng dùng logging.getLogger(__name__) và điều chỉnh bằng tham số --log-level."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Type hints có bắt lỗi kiểu khi chạy không?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Không. Python không kiểm tra type hints lúc chạy, nên find(123) vẫn chạy dù khai báo find(code: str). Chúng giúp người đọc, trình soạn thảo và công cụ kiểm tra kiểu tĩnh như mypy; muốn bắt lỗi kiểu thì phải chạy công cụ đó hoặc viết test."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Odoo dùng unittest hay bộ test riêng?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo dùng unittest: TransactionCase cùng các lớp test của Odoo là phần mở rộng của unittest.TestCase, nên kiến thức assertEqual, setUp hay assertRaises ở bài này dùng được nguyên vẹn khi viết test cho model."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-debugging-logging-testing-small-project.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Debug, logging và test</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 14 · Series Python thực chiến</span>
+            <h1>Debug, logging, test và dự án nhỏ: hoàn thiện công cụ Python</h1>
+            <p class="post-lead">Bài cuối ghép mọi thứ đã học thành một công cụ dòng lệnh: gỡ lỗi bằng breakpoint() và pdb, ghi log có cấp độ, viết test với unittest và Mock, thêm type hints, rồi hoàn thiện script nhập khóa học từ CSV vào Odoo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Bài cuối gom mọi kỹ năng thành một chương trình hoàn chỉnh: đọc CSV, kiểm tra dữ liệu, gọi API JSON-2 của Odoo, ghi log và có bộ test.</strong> Công cụ đi kèm: <code>breakpoint()</code> để gỡ lỗi từng dòng, <code>logging</code> thay cho <code>print</code>, <code>unittest</code> (nền của <code>TransactionCase</code> trong Odoo) cùng <code>Mock</code> để test không cần mạng, và type hints để code tự mô tả. Cuối bài là script <code>import_courses.py</code> chạy được, đã kiểm tra bằng 6 test và một server giả lập.</p>
+                </div>
+
+                <h2 id="debug">Gỡ lỗi: breakpoint() và pdb</h2>
+                <p>Thay vì rải <code>print</code> khắp nơi, hãy dừng chương trình ngay chỗ nghi ngờ và quan sát. Hàm dựng sẵn <code>breakpoint()</code> mở trình gỡ lỗi <code>pdb</code> tại dòng đó:</p>
+<pre><code>def price_per_hour(price, hours):
+    breakpoint()                    # dừng tại đây và mở trình gỡ lỗi pdb
+    return price / hours
+
+price_per_hour(4500000, 24)
+# &gt; script.py(3)price_per_hour()
+# -&gt; return price / hours
+# (Pdb) p hours                    &lt;- in giá trị biến
+# 24
+# (Pdb) n                          &lt;- chạy dòng kế tiếp
+# (Pdb) c                          &lt;- tiếp tục chạy tới hết hoặc tới breakpoint sau</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Lệnh pdb</th><th>Tác dụng</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>p biểu_thức</code></td><td>In giá trị biến hay biểu thức</td></tr>
+                            <tr><td><code>n</code> (next)</td><td>Chạy dòng kế tiếp, không đi vào hàm</td></tr>
+                            <tr><td><code>s</code> (step)</td><td>Chạy dòng kế tiếp và đi vào hàm được gọi</td></tr>
+                            <tr><td><code>c</code> (continue)</td><td>Chạy tiếp tới hết hoặc breakpoint kế</td></tr>
+                            <tr><td><code>l</code> (list)</td><td>Hiện đoạn code quanh dòng hiện tại</td></tr>
+                            <tr><td><code>w</code> (where)</td><td>Hiện chuỗi lời gọi (giống traceback)</td></tr>
+                            <tr><td><code>q</code> (quit)</td><td>Thoát trình gỡ lỗi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Bạn cũng chạy được cả chương trình dưới trình gỡ lỗi bằng <code>python3 -m pdb script.py</code>. Khi làm việc với Odoo, cách thường dùng là <code>pip install ipdb</code> rồi đặt <code>import ipdb; ipdb.set_trace()</code> tại dòng cần dừng, như đã nhắc ở bài 2 của series Odoo, và chạy server ở chế độ có terminal để nhập lệnh. Nhớ <strong>xóa breakpoint trước khi commit</strong>: một <code>breakpoint()</code> sót lại trên server sẽ treo tiến trình chờ người nhập lệnh.</p>
+
+                <h2 id="logging">logging: ghi nhật ký có cấp độ</h2>
+                <p><code>print</code> không cho biết thông điệp quan trọng đến đâu, không có thời gian, và không tắt được khi chạy thật. <code>logging</code> giải quyết cả ba:</p>
+<pre><code>import logging
+
+print(logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL)
+# 10 20 30 40 50
+
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(name)s: %(message)s", datefmt="%H:%M:%S")
+log = logging.getLogger("vinc.import")      # logger có tên, thường dùng __name__
+
+log.debug("không hiện vì level là INFO")
+log.info("đã nạp %d khóa học", 5)            # 11:41:00 INFO vinc.import: đã nạp 5 khóa học
+log.warning("khóa %s thiếu giờ", "PY-F")     # 11:41:00 WARNING vinc.import: khóa PY-F thiếu giờ
+
+try:
+    1 / 0
+except ZeroDivisionError:
+    log.exception("lỗi tính toán")           # ERROR kèm toàn bộ traceback</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cấp độ</th><th>Giá trị</th><th>Dùng khi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>DEBUG</code></td><td>10</td><td>Chi tiết cho lập trình viên khi tìm lỗi</td></tr>
+                            <tr><td><code>INFO</code></td><td>20</td><td>Xác nhận mọi thứ chạy như dự kiến</td></tr>
+                            <tr><td><code>WARNING</code></td><td>30</td><td>Có điều bất thường nhưng chương trình vẫn chạy (mức mặc định)</td></tr>
+                            <tr><td><code>ERROR</code></td><td>40</td><td>Một việc không làm được</td></tr>
+                            <tr><td><code>CRITICAL</code></td><td>50</td><td>Lỗi nghiêm trọng, chương trình có thể không chạy tiếp được</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul>
+                    <li>Chỉ thông điệp từ <strong>cấp độ đã cài trở lên</strong> mới hiện: với <code>level=INFO</code>, dòng <code>debug</code> bị bỏ qua.</li>
+                    <li>Truyền tham số riêng (<code>log.info("đã nạp %d", n)</code>) thay vì dựng chuỗi bằng f-string: chuỗi chỉ được ghép khi dòng log thật sự được ghi.</li>
+                    <li><code>log.exception(...)</code> trong khối <code>except</code> ghi cả traceback.</li>
+                    <li>Đặt tên logger theo module (<code>logging.getLogger(__name__)</code>) để lọc theo nguồn.</li>
+                </ul>
+                <p>Odoo dùng đúng cách này: trong code Odoo bạn gặp <code>_logger = logging.getLogger(__name__)</code> rồi <code>_logger.warning(...)</code> (tài liệu về server action có ví dụ như vậy), và bạn điều chỉnh độ chi tiết bằng tham số <code>--log-level</code> của <code>odoo-bin</code>. Nguyên tắc ngón tay cái: <code>print</code> cho kết quả chương trình, <code>logging</code> cho mọi thứ còn lại.</p>
+
+                <h2 id="unittest">Viết test với unittest</h2>
+                <p>Test tự động chạy code của bạn với dữ liệu đã biết và so kết quả với mong đợi. Python có sẵn <code>unittest</code>, và <code>TransactionCase</code> của Odoo (bài 13 series Odoo) chỉ là phần mở rộng của nó: những gì bạn học ở đây dùng được nguyên vẹn khi viết test cho model.</p>
+<pre><code>import unittest
+
+class TestCourseRow(unittest.TestCase):
+    def setUp(self):                          # chạy trước MỖI test
+        self.row = {"name": "  Odoo  ", "hours": "24"}
+
+    def test_valid_row(self):
+        course = CourseRow.from_dict(self.row)
+        self.assertEqual(course, CourseRow(name="Odoo", hours=24))
+
+    def test_bad_hours(self):
+        for bad in ("abc", "0", "-3"):
+            with self.subTest(hours=bad):     # mỗi giá trị là một phép thử riêng
+                with self.assertRaises(InvalidRow):
+                    CourseRow.from_dict({"name": "X", "hours": bad})
+
+if __name__ == "__main__":
+    unittest.main()</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Phương thức</th><th>Kiểm tra</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>assertEqual(a, b)</code></td><td><code>a == b</code></td></tr>
+                            <tr><td><code>assertTrue(x)</code> / <code>assertFalse(x)</code></td><td>Giá trị đúng / sai</td></tr>
+                            <tr><td><code>assertIn(a, b)</code></td><td><code>a in b</code></td></tr>
+                            <tr><td><code>assertIsNone(x)</code></td><td><code>x is None</code></td></tr>
+                            <tr><td><code>assertRaises(Lỗi)</code></td><td>Khối <code>with</code> bên trong phải ném đúng loại lỗi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Chạy bộ test bằng <code>python3 -m unittest -v</code> (tự tìm các file <code>test_*.py</code>). Một test thất bại in rõ giá trị lệch:</p>
+<pre><code>class T(unittest.TestCase):
+    def test_fail(self):
+        self.assertEqual(1 + 1, 3)
+
+# FAIL: test_fail (__main__.T.test_fail)
+# AssertionError: 2 != 3
+# FAILED (failures=1)</code></pre>
+
+                <h3 id="mock">Mock: test mà không cần mạng</h3>
+                <p>Test không nên gọi API thật: chậm, cần key và có thể làm đổi dữ liệu. <code>unittest.mock.Mock</code> tạo đối tượng giả ghi nhớ cách nó bị gọi, để bạn kiểm tra rằng code đã gọi API đúng và đủ:</p>
+<pre><code>from unittest.mock import Mock
+
+def test_calls_api_for_each_row(self):
+    client = Mock()                           # đối tượng giả, thay OdooClient thật
+    client.call.return_value = [1]
+    rows = [CourseRow("A", 8), CourseRow("B", 16)]
+
+    self.assertEqual(import_rows(client, rows), 2)
+    self.assertEqual(client.call.call_count, 2)
+    client.call.assert_any_call("vinc.course", "create",
+                                vals_list=[{"name": "A", "duration_hours": 8}])</code></pre>
+                <p>Đây là lý do bài 13 khuyên gói HTTP vào <code>OdooClient</code>: hàm <code>import_rows</code> nhận client như một tham số nên test chỉ cần truyền client giả.</p>
+
+                <h2 id="type-hints">Type hints: code tự mô tả</h2>
+                <p>Gợi ý kiểu ghi kiểu dự kiến của tham số và giá trị trả về. Python <strong>không</strong> kiểm tra chúng lúc chạy, nhưng chúng giúp người đọc, trình soạn thảo và các công cụ kiểm tra kiểu phát hiện sai sót sớm:</p>
+<pre><code>def total(hours: list[int], factor: float = 1.0) -&gt; float:
+    return sum(hours) * factor
+
+print(total([1, 2], 2))                  # 6.0 (factor là int dù khai báo float: Python không phàn nàn)
+print(total.__annotations__)
+# {'hours': list[int], 'factor': &lt;class 'float'&gt;, 'return': &lt;class 'float'&gt;}
+
+def find(code: str) -&gt; dict | None:      # dict hoặc None
+    return {"code": code} if code else None
+
+print(find(""), find("X"), find(123))   # None {'code': 'X'} {'code': 123}   &lt;- gợi ý kiểu không chặn lúc chạy</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Gợi ý</th><th>Nghĩa</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>x: int</code>, <code>name: str</code></td><td>Kiểu cơ bản</td></tr>
+                            <tr><td><code>list[int]</code>, <code>dict[str, int]</code></td><td>Danh sách số nguyên, dict khóa chuỗi giá trị số</td></tr>
+                            <tr><td><code>str | None</code></td><td>Chuỗi hoặc <code>None</code></td></tr>
+                            <tr><td><code>-&gt; float</code></td><td>Kiểu giá trị trả về</td></tr>
+                            <tr><td><code>@dataclass</code> với <code>name: str</code></td><td>Khai báo trường của lớp dữ liệu (bài 8)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Tài liệu Odoo cũng ghi chữ ký method kèm kiểu, ví dụ <code>search(domain, offset, limit, order) -&gt; Self</code>, nên đọc type hints giúp bạn hiểu tài liệu ORM nhanh hơn.</p>
+
+                <h2 id="du-an">Dự án nhỏ: script nhập khóa học vào Odoo</h2>
+                <p>Ta ghép mọi thứ đã học thành một công cụ dòng lệnh. Cấu trúc thư mục:</p>
+<pre><code>vinc-tools/
+├── import_courses.py        # chương trình chính
+├── test_import_courses.py   # bộ test
+├── courses.csv              # dữ liệu mẫu
+└── requirements.txt         # requests</code></pre>
+                <p>Dữ liệu mẫu có cả dòng tốt lẫn dòng lỗi (thiếu tên, giờ không phải số, giờ âm):</p>
+<pre><code>name,hours
+Odoo cơ bản,24
+Python cơ bản,16
+,8
+Git cho nhóm,abc
+SQL căn bản,-4</code></pre>
+                <p>Và chương trình chính:</p>
+                <p class="code-title">import_courses.py</p>
+<pre><code>#!/usr/bin/env python3
+"""Nhập khóa học từ file CSV vào Odoo qua API JSON-2."""
+import argparse
+import csv
+import logging
+import os
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+import requests
+
+_logger = logging.getLogger("import_courses")
+
+
+class OdooAPIError(Exception):
+    """Lỗi do Odoo trả về hoặc lỗi kết nối."""
+
+
+class InvalidRow(Exception):
+    """Dòng CSV không hợp lệ."""
+
+
+@dataclass
+class CourseRow:
+    name: str
+    hours: int
+
+    @classmethod
+    def from_dict(cls, row: dict) -&gt; "CourseRow":
+        name = (row.get("name") or "").strip()
+        if not name:
+            raise InvalidRow("thiếu tên khóa học")
+        try:
+            hours = int(row["hours"])
+        except (KeyError, ValueError) as e:
+            raise InvalidRow(f"số giờ không hợp lệ: {row.get('hours')!r}") from e
+        if hours &lt;= 0:
+            raise InvalidRow(f"số giờ phải lớn hơn 0: {hours}")
+        return cls(name=name, hours=hours)
+
+
+class OdooClient:
+    def __init__(self, base_url: str, api_key: str, database: str | None = None, timeout: int = 10):
+        self.base_url = base_url.rstrip("/")
+        self.timeout = timeout
+        self.session = requests.Session()
+        self.session.headers["Authorization"] = f"bearer {api_key}"
+        if database:
+            self.session.headers["X-Odoo-Database"] = database
+
+    def call(self, model: str, method: str, **payload):
+        url = f"{self.base_url}/json/2/{model}/{method}"
+        try:
+            response = self.session.post(url, json=payload, timeout=self.timeout)
+        except requests.RequestException as e:
+            raise OdooAPIError(f"Không gọi được {url}: {e}") from e
+        if not response.ok:
+            try:
+                message = response.json().get("message", response.text)
+            except ValueError:
+                message = response.text
+            raise OdooAPIError(f"HTTP {response.status_code}: {message}")
+        return response.json()
+
+
+def read_rows(path: Path) -&gt; tuple[list[CourseRow], list[str]]:
+    ok, errors = [], []
+    with open(path, encoding="utf-8", newline="") as f:
+        for number, row in enumerate(csv.DictReader(f), start=2):   # dòng 1 là tiêu đề
+            try:
+                ok.append(CourseRow.from_dict(row))
+            except InvalidRow as e:
+                errors.append(f"dòng {number}: {e}")
+    return ok, errors
+
+
+def import_rows(client, rows: list[CourseRow], dry_run: bool = False) -&gt; int:
+    created = 0
+    for row in rows:
+        if dry_run:
+            _logger.info("[dry-run] sẽ tạo: %s (%s giờ)", row.name, row.hours)
+            continue
+        ids = client.call("vinc.course", "create",
+                          vals_list=[{"name": row.name, "duration_hours": row.hours}])
+        _logger.debug("đã tạo id=%s", ids)
+        created += 1
+    return created
+
+
+def main(argv=None) -&gt; int:
+    parser = argparse.ArgumentParser(description="Nhập khóa học từ CSV vào Odoo.")
+    parser.add_argument("csv_file", type=Path)
+    parser.add_argument("--dry-run", action="store_true", help="chỉ kiểm tra, không gọi API tạo")
+    parser.add_argument("-v", "--verbose", action="store_true", help="hiện log chi tiết")
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
+                        format="%(levelname)s %(message)s")
+    try:
+        rows, errors = read_rows(args.csv_file)
+    except FileNotFoundError:
+        _logger.error("Không thấy file: %s", args.csv_file)
+        return 2
+    for message in errors:
+        _logger.warning("bỏ qua %s", message)
+    _logger.info("đọc được %d dòng hợp lệ, %d dòng lỗi", len(rows), len(errors))
+
+    client = OdooClient(os.environ["ODOO_URL"], os.environ["ODOO_API_KEY"], os.environ.get("ODOO_DB"))
+    try:
+        created = import_rows(client, rows, dry_run=args.dry_run)
+    except OdooAPIError as e:
+        _logger.error("Odoo báo lỗi: %s", e)
+        return 1
+    _logger.info("hoàn tất: tạo %d khóa học", created)
+    return 0 if not errors else 3
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+</code></pre>
+                <p>Hãy đối chiếu với từng bài của series: <code>pathlib</code>, <code>csv</code> và <code>with</code> (bài 10, 11); <code>@dataclass</code> và <code>@classmethod</code> (bài 8, 9); exception tự định nghĩa <code>InvalidRow</code>, <code>OdooAPIError</code> (bài 10); <code>requests.Session</code> và <code>timeout</code> (bài 13); <code>logging</code> (bài này); <code>if __name__ == "__main__"</code> và <code>sys.exit</code> (bài 7). Thêm vào đó <code>argparse</code> đọc tham số dòng lệnh (<code>--dry-run</code>, <code>-v</code>) và tự sinh phần <code>--help</code>.</p>
+                <p>Kết quả chạy (với biến môi trường trỏ tới Odoo của bạn):</p>
+<pre><code>$ export ODOO_URL=https://mycompany.example.com ODOO_API_KEY=... ODOO_DB=mycompany
+
+$ python3 import_courses.py courses.csv --dry-run
+WARNING bỏ qua dòng 4: thiếu tên khóa học
+WARNING bỏ qua dòng 5: số giờ không hợp lệ: 'abc'
+WARNING bỏ qua dòng 6: số giờ phải lớn hơn 0: -4
+INFO đọc được 2 dòng hợp lệ, 3 dòng lỗi
+INFO [dry-run] sẽ tạo: Odoo cơ bản (24 giờ)
+INFO [dry-run] sẽ tạo: Python cơ bản (16 giờ)
+INFO hoàn tất: tạo 0 khóa học
+
+$ python3 import_courses.py courses.csv
+...
+INFO hoàn tất: tạo 2 khóa học        (mã thoát 3 vì còn dòng lỗi)
+
+$ ODOO_API_KEY=sai python3 import_courses.py courses.csv
+ERROR Odoo báo lỗi: HTTP 401: Invalid apikey      (mã thoát 1)
+
+$ python3 import_courses.py khong_co.csv
+ERROR Không thấy file: khong_co.csv                (mã thoát 2)</code></pre>
+                <ul>
+                    <li><strong>Mã thoát</strong> cho biết kết quả cho các script khác hoặc cron: 0 thành công hoàn toàn, 1 lỗi API, 2 không thấy file, 3 hoàn tất nhưng còn dòng lỗi.</li>
+                    <li><strong><code>--dry-run</code></strong> cho bạn xem trước mà không ghi gì vào Odoo: thói quen an toàn với mọi script ghi dữ liệu.</li>
+                    <li>Dòng lỗi không làm dừng cả chương trình: chúng được báo kèm số dòng để người dùng sửa file.</li>
+                </ul>
+                <p>Bộ test (6 test, đã chạy đạt) dùng <code>subTest</code>, thư mục tạm và <code>Mock</code> như ở trên:</p>
+<pre><code>$ python3 -m unittest -v
+test_bad_hours (test_import_courses.TestCourseRow.test_bad_hours) ... ok
+test_missing_name (test_import_courses.TestCourseRow.test_missing_name) ... ok
+test_valid_row (test_import_courses.TestCourseRow.test_valid_row) ... ok
+test_calls_api_for_each_row (test_import_courses.TestImportRows.test_calls_api_for_each_row) ... ok
+test_dry_run_makes_no_call (test_import_courses.TestImportRows.test_dry_run_makes_no_call) ... ok
+test_splits_good_and_bad_rows (test_import_courses.TestReadRows.test_splits_good_and_bad_rows) ... ok
+
+Ran 6 tests in 0.001s
+OK</code></pre>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Để sót <code>breakpoint()</code> hoặc <code>print</code> gỡ lỗi trong code.</strong> Hãy tìm và xóa trước khi commit; dùng <code>logging</code> cho những gì cần giữ lại.</li>
+                        <li><strong>Gọi <code>logging.basicConfig</code> sau khi đã có log.</strong> Cấu hình đầu tiên mới có hiệu lực; hãy gọi một lần, sớm, trong <code>main</code>.</li>
+                        <li><strong>Test phụ thuộc thứ tự hay dữ liệu ngoài.</strong> Mỗi test phải tự chuẩn bị dữ liệu (<code>setUp</code>, thư mục tạm) và không gọi mạng thật.</li>
+                        <li><strong>Tưởng type hints chặn được lỗi kiểu.</strong> Chúng không ngăn <code>find(123)</code> chạy; cần công cụ kiểm tra kiểu hoặc test để bắt lỗi.</li>
+                        <li><strong>Test tên không bắt đầu bằng <code>test</code>.</strong> <code>unittest</code> sẽ bỏ qua (cũng như quy tắc của Odoo ở bài 13 series Odoo).</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết cả series và bước tiếp theo</h2>
+                <ul>
+                    <li><code>breakpoint()</code> và pdb cho gỡ lỗi; <code>logging</code> với cấp độ thay cho <code>print</code>.</li>
+                    <li><code>unittest</code> + <code>Mock</code> để test không cần mạng; <code>TransactionCase</code> của Odoo là phần mở rộng của nó.</li>
+                    <li>Type hints mô tả kiểu nhưng không bắt buộc lúc chạy.</li>
+                    <li>Một chương trình thực tế là sự kết hợp của file, kiểm tra dữ liệu, API, log và test.</li>
+                </ul>
+                <p>Qua 14 bài, bạn đã đi từ môi trường <code>venv</code> đến một công cụ tích hợp hoàn chỉnh, và mỗi khái niệm đều gắn với nơi nó xuất hiện trong code Odoo. Bước tiếp theo tự nhiên là quay lại <a href="../odoo/index.html">series Lập trình Odoo 20</a>: giờ bạn có thể đọc <code>self</code>, recordset, decorator và <code>super()</code> như những thứ đã quen, và tập trung vào ORM, view và nghiệp vụ.</p>
+
+                <div class="cta-box">
+                    <h3>Sẵn sàng từ Python sang Odoo thực chiến?</h3>
+                    <p>Khóa Odoo Developer Foundation đưa bạn từ nền tảng Python tới module Odoo hoàn chỉnh với mentor review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khi nào nên dùng breakpoint() thay vì print để gỡ lỗi?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">breakpoint() mở trình gỡ lỗi pdb ngay tại dòng đó, cho phép xem biến (p), chạy từng dòng (n, s) và tiếp tục (c) mà không phải sửa code thêm. Vài dòng print cũng đủ khi luồng đơn giản, nhưng với luồng phức tạp thì breakpoint() nhanh và sạch hơn; nhớ xóa nó trước khi commit.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao nên dùng logging thay cho print?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">logging gắn cấp độ (DEBUG tới CRITICAL), thời gian và tên logger, và bạn tắt hay bật theo mức mà không sửa code. print phù hợp cho kết quả chương trình, logging cho thông tin vận hành; Odoo cũng dùng logging.getLogger(__name__) và điều chỉnh bằng tham số --log-level.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Type hints có bắt lỗi kiểu khi chạy không?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Không. Python không kiểm tra type hints lúc chạy, nên find(123) vẫn chạy dù khai báo find(code: str). Chúng giúp người đọc, trình soạn thảo và công cụ kiểm tra kiểu tĩnh như mypy; muốn bắt lỗi kiểu thì phải chạy công cụ đó hoặc viết test.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Odoo dùng unittest hay bộ test riêng?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo dùng unittest: TransactionCase cùng các lớp test của Odoo là phần mở rộng của unittest.TestCase, nên kiến thức assertEqual, setUp hay assertRaises ở bài này dùng được nguyên vẹn khi viết test cho model.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/library/pdb.html" target="_blank" rel="noopener">Python 3.12 – pdb, the Python debugger</a></li>
+                    <li><a href="https://docs.python.org/3.12/howto/logging.html" target="_blank" rel="noopener">Python 3.12 – Logging HOWTO</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/unittest.html" target="_blank" rel="noopener">Python 3.12 – unittest</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/typing.html" target="_blank" rel="noopener">Python 3.12 – typing</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/argparse.html" target="_blank" rel="noopener">Python 3.12 – argparse</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fdebug-logging-test-du-an-nho-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fdebug-logging-test-du-an-nho-python.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="goi-api-requests-json-2-odoo-python.html"><small>← Bài trước</small>Gọi API với requests</a>
+                    <a class="next" href="index.html"><small>Về series →</small>Python thực chiến cho lập trình viên Odoo</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#debug">Gỡ lỗi: breakpoint() và pdb</a></li>
+                        <li><a href="#logging">logging: ghi nhật ký có cấp độ</a></li>
+                        <li><a href="#unittest">Viết test với unittest</a></li>
+                        <li><a href="#type-hints">Type hints: code tự mô tả</a></li>
+                        <li><a href="#du-an">Dự án nhỏ: script nhập khóa học vào Odoo</a></li>
+                        <li><a href="#tong-ket">Tổng kết cả series và bước tiếp theo</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

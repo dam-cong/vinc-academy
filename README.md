@@ -10,7 +10,7 @@ Landing page giới thiệu và đăng ký khóa học của **Vinc Academy**, x
 - Form đăng ký có validation + toast notification
 - FAQ accordion hoạt động
 - Scroll mượt qua các section
-- Blog "Kiến thức" song ngữ VI/EN tại `/blog/` (chủ đề: Odoo đã có; Python, Git, SQL, AI sắp ra mắt) — xem `docs/blog-guide.md`
+- Blog "Kiến thức" song ngữ VI/EN tại `/blog/` (chủ đề: Odoo 14 bài, Python đang xuất bản; Git, SQL, AI sắp ra mắt) — xem `docs/blog-guide.md`
 - Deploy Vercel (`vercel.json` redirect, `.vercelignore`), không build step
 
 ## Cấu trúc thư mục

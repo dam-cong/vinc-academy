@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hàm Python: tham số, *args, **kwargs, lambda cho dev Odoo</title>
+    <meta name="description" content="Viết hàm Python đúng cách: return, tham số mặc định, *args, **kwargs, lambda, phạm vi biến, và nơi chúng xuất hiện trong Odoo như default=lambda." />
+    <meta name="keywords" content="hàm python, python *args **kwargs, python lambda, default lambda odoo, python tham số mặc định, phạm vi biến python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Hàm Python: tham số, *args, **kwargs, lambda cho dev Odoo" />
+    <meta property="og:description" content="Hàm Python: return, tham số mặc định, *args, **kwargs, lambda và các mẫu tương ứng trong code Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/ham-python-args-kwargs-lambda.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Hàm Python: tham số, *args, **kwargs, lambda cho dev Odoo",
+                "description": "Hàm Python: return, tham số mặc định, *args, **kwargs, lambda và các mẫu tương ứng trong code Odoo.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/ham-python-args-kwargs-lambda.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Hàm: tham số, **kwargs và lambda"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "*args và **kwargs khác nhau thế nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "*args gom mọi tham số truyền theo vị trí thành một tuple, còn **kwargs gom mọi tham số truyền theo tên thành một dict. Cả hai cho phép hàm nhận số lượng tham số tùy ý."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao không nên dùng list làm giá trị mặc định của tham số?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Giá trị mặc định chỉ được tạo một lần khi hàm được định nghĩa, nên mọi lần gọi dùng chung cùng một list và kết quả bị dính giữa các lần gọi. Hãy dùng None rồi tạo list mới trong hàm."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "lambda dùng khi nào?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Khi cần một hàm ngắn, dùng một lần và truyền như đối số, ví dụ key của sorted, hàm của filtered, hoặc default của field Odoo như default=lambda self: self.env.user."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Vì sao tránh biến toàn cục có thể thay đổi trong Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Một tiến trình Odoo có thể chạy nhiều database cùng lúc, mỗi database cài các module khác nhau, nên trạng thái lưu trong biến toàn cục sẽ bị dùng chung ngoài ý muốn."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-functions-args-kwargs-lambda.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Hàm: tham số, **kwargs và lambda</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 5 · Series Python thực chiến</span>
+            <h1>Hàm Python: tham số, *args, **kwargs, lambda cho dev Odoo</h1>
+            <p class="post-lead">Method của model Odoo chỉ là hàm Python có thêm self. Bài này dạy cách viết hàm, dùng tham số mặc định, *args và **kwargs, lambda, và cảnh báo cái bẫy giá trị mặc định có thể thay đổi mà dev mới hay mắc.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Hàm gói một đoạn logic thành khối có tên để dùng lại: <code>def ten(tham_so): ... return ket_qua</code>.</strong> Bạn có thể đặt tham số mặc định, truyền theo tên, nhận số lượng tham số tùy ý bằng <code>*args</code> và <code>**kwargs</code>. <code>lambda</code> là hàm một dòng không tên, rất hay dùng làm <code>default</code> của field và đối số của <code>filtered</code>, <code>sorted</code>. Method của model Odoo chỉ là hàm có thêm <code>self</code>.</p>
+                </div>
+
+                <h2 id="def">Định nghĩa hàm và trả về giá trị</h2>
+                <p>Hàm được khai báo bằng <code>def</code>, tên theo <code>snake_case</code>, thân hàm thụt dòng. Dòng chuỗi ngay đầu thân hàm là <em>docstring</em>, mô tả hàm cho người đọc và công cụ trợ giúp. Hàm trả giá trị bằng <code>return</code>; hàm không có <code>return</code> (hoặc <code>return</code> trống) trả về <code>None</code>.</p>
+<pre><code>def price_per_hour(price, hours=1):
+    """Giá mỗi giờ; trả 0.0 nếu hours = 0."""
+    if not hours:
+        return 0.0
+    return price / hours
+
+print(price_per_hour(4500000, 24))      # 187500.0
+print(price_per_hour(price=100, hours=4))   # 25.0 (truyền theo tên)
+print(price_per_hour(50))               # 50.0 (hours dùng giá trị mặc định 1)</code></pre>
+                <p>Hai cách gọi tham số: theo vị trí (<code>price_per_hour(4500000, 24)</code>) hoặc theo tên (<code>price=100, hours=4</code>). Tham số có giá trị mặc định (<code>hours=1</code>) có thể bỏ khi gọi, nhưng phải đứng <strong>sau</strong> các tham số không có mặc định, nếu không Python báo <code>SyntaxError: parameter without a default follows parameter with a default</code>.</p>
+
+                <h2 id="tham-so">Tham số: mặc định, *args và **kwargs</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Cú pháp</th><th>Ý nghĩa</th><th>Ví dụ gọi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>def f(a, b)</code></td><td>Tham số bắt buộc</td><td><code>f(1, 2)</code></td></tr>
+                            <tr><td><code>def f(a, b=1)</code></td><td>Tham số có mặc định</td><td><code>f(1)</code> hoặc <code>f(1, b=5)</code></td></tr>
+                            <tr><td><code>def f(*args)</code></td><td>Gom mọi tham số vị trí thành tuple</td><td><code>f(1, 2, 3)</code></td></tr>
+                            <tr><td><code>def f(**kwargs)</code></td><td>Gom mọi tham số đặt tên thành dict</td><td><code>f(name="x", hours=3)</code></td></tr>
+                            <tr><td><code>f(*list, **dict)</code></td><td>Giải nén khi gọi</td><td><code>f(*[1, 2], **{"b": 3})</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>def show(*args, **kwargs):
+    print(args, kwargs)
+
+show(1, 2, name="Odoo", hours=24)
+# (1, 2) {'name': 'Odoo', 'hours': 24}
+
+nums = [1, 2]
+opts = {"sep": "-"}
+print(*nums, **opts)    # 1-2   (giải nén list và dict thành tham số)</code></pre>
+                <p><code>**kwargs</code> (viết gọn <code>**kw</code>) là thứ bạn gặp liên tục trong controller Odoo: khung do <code>odoo-bin scaffold</code> sinh ra có sẵn <code>def index(self, **kw)</code> để nhận mọi tham số truy vấn từ URL mà không cần khai báo từng cái.</p>
+
+                <h3 id="mutable-default">Bẫy lớn nhất: giá trị mặc định có thể thay đổi</h3>
+                <p>Giá trị mặc định chỉ được tạo <strong>một lần</strong>, lúc hàm được định nghĩa. Nếu nó là list hay dict, mọi lần gọi dùng chung đối tượng đó:</p>
+<pre><code>def add_tag(tag, tags=[]):
+    tags.append(tag)
+    return tags
+
+print(add_tag("a"), add_tag("b"))
+# ['a', 'b'] ['a', 'b']   &lt;- cùng một list được dùng lại!
+
+def add_tag_ok(tag, tags=None):
+    if tags is None:
+        tags = []
+    tags.append(tag)
+    return tags
+
+print(add_tag_ok("a"), add_tag_ok("b"))
+# ['a'] ['b']</code></pre>
+                <p>Quy tắc: dùng <code>None</code> làm mặc định rồi tạo đối tượng mới bên trong hàm.</p>
+
+                <h2 id="tra-ve">Trả nhiều giá trị và kiểm tra sớm</h2>
+<pre><code>def stats(nums):
+    return min(nums), max(nums), sum(nums) / len(nums)
+
+lo, hi, avg = stats([24, 8, 16])
+print(lo, hi, avg)      # 8 24 16.0</code></pre>
+                <p>Thực chất hàm trả về một tuple, rồi bạn tách nó ra (bài 4). Với hàm có nhiều điều kiện, hãy <code>return</code> sớm như ở bài 3, đỡ lồng <code>if</code> nhiều tầng. Hàm không trả gì mà chỉ có tác dụng phụ (như ghi file, gọi API) thì <code>None</code> là đủ. Nhưng nếu bạn quên <code>return</code> ở hàm đáng lẽ phải trả giá trị, kết quả cũng là <code>None</code>:</p>
+<pre><code>def no_return(x):
+    y = x * 2        # quên return
+
+print(no_return(2))  # None</code></pre>
+
+                <h2 id="doi-so-bi-doi">Hàm có làm thay đổi đối số của bạn không?</h2>
+                <p>Python truyền đối số bằng cách gán <em>tên</em> cho chính đối tượng bạn đưa vào, chứ không sao chép. Với kiểu bất biến (số, chuỗi, tuple) điều này vô hại. Nhưng với list và dict, hàm có thể thay đổi đối tượng của người gọi mà họ không hay biết:</p>
+<pre><code>def add_default_hours(vals):
+    vals["duration_hours"] = vals.get("duration_hours", 8)   # sửa trực tiếp dict của người gọi
+    return vals
+
+v = {"name": "X"}
+add_default_hours(v)
+print(v)      # {'name': 'X', 'duration_hours': 8}  &lt;- v đã bị đổi!
+
+def add_default_hours_safe(vals):
+    vals = dict(vals)                 # làm việc trên bản sao
+    vals.setdefault("duration_hours", 8)
+    return vals
+
+w = {"name": "Y"}
+print(add_default_hours_safe(w), w)
+# {'name': 'Y', 'duration_hours': 8} {'name': 'Y'}</code></pre>
+                <p>Mẫu này cực kỳ thực tế: khi ghi đè <code>create(self, vals_list)</code> ở series Odoo, bạn nhận một dict (hoặc list dict) <code>vals</code> từ nơi gọi. Nếu bạn sửa trực tiếp trong đó, người gọi sẽ thấy dữ liệu của họ đổi. Quy tắc: hoặc ghi rõ trong docstring là hàm có sửa đối số, hoặc làm việc trên bản sao (<code>dict(vals)</code>, <code>list(items)</code>).</p>
+
+                <h3 id="keyword-only">Tham số chỉ nhận theo tên</h3>
+                <p>Một dấu <code>*</code> trong danh sách tham số buộc mọi tham số đứng sau nó phải truyền theo tên. Cách này giúp lời gọi dễ đọc và tránh nhầm thứ tự, nhất là với các tham số boolean:</p>
+<pre><code>def search(name, *, published=True, limit=10):
+    return name, published, limit
+
+print(search("odoo", limit=5))     # ('odoo', True, 5)
+search("odoo", False)
+# TypeError: search() takes 1 positional argument but 2 were given</code></pre>
+                <p>So <code>search("odoo", False)</code> với <code>search("odoo", published=False)</code>: cách thứ hai tự giải thích, còn cách đầu thì không ai biết <code>False</code> là gì.</p>
+
+                <h2 id="viet-ham-tot">Viết hàm tốt: vài quy ước đáng nhớ</h2>
+                <ul>
+                    <li><strong>Mỗi hàm làm một việc</strong> và tên là động từ nói rõ việc đó (<code>make_code</code>, <code>calc_price_per_hour</code>). Hàm quá dài thường nên tách nhỏ.</li>
+                    <li><strong>Ưu tiên hàm thuần</strong>: cùng đầu vào cho cùng kết quả, không đổi dữ liệu bên ngoài. Hàm thuần dễ test và dễ tái sử dụng (bài 14).</li>
+                    <li><strong>Docstring một dòng</strong> mô tả hàm làm gì, đặc biệt với hàm tiện ích dùng chung.</li>
+                    <li><strong>Ít tham số</strong>: nếu quá ba bốn tham số, cân nhắc gom vào một dict hoặc đối tượng.</li>
+                </ul>
+                <p>Odoo cũng có quy ước đặt tên method để người đọc đoán được vai trò, và tài liệu dùng chúng nhất quán:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tên method</th><th>Vai trò</th><th>Ví dụ trong tài liệu</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>_compute_xxx</code></td><td>Tính giá trị cho computed field</td><td><code>_compute_total</code></td></tr>
+                            <tr><td><code>_inverse_xxx</code></td><td>Ghi ngược giá trị của computed field</td><td><code>_inverse_total</code></td></tr>
+                            <tr><td><code>_check_xxx</code></td><td>Ràng buộc dữ liệu</td><td><code>_check_description</code></td></tr>
+                            <tr><td><code>_onchange_xxx</code></td><td>Phản ứng khi field đổi trên form</td><td><code>_onchange_partner_id</code></td></tr>
+                            <tr><td><code>_default_xxx</code></td><td>Tính giá trị mặc định</td><td><code>_default_name</code></td></tr>
+                            <tr><td><code>action_xxx</code></td><td>Hành động công khai gắn với nút bấm</td><td><code>action_done</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Tên bắt đầu bằng <code>_</code> là method riêng, không gọi được từ nút bấm hay API ngoài; còn tên công khai như <code>action_done</code> có thể bị gọi qua RPC với tham số tùy ý, nên phải tự kiểm tra điều kiện bên trong (bài 5 của series Odoo).</p>
+
+                <h2 id="pham-vi">Phạm vi biến: trong hàm và ngoài hàm</h2>
+                <p>Biến gán trong hàm là biến <em>cục bộ</em>, chỉ tồn tại trong hàm. Đọc biến bên ngoài thì được, nhưng gán lại thì phải khai báo <code>global</code>:</p>
+<pre><code>counter = 0
+
+def inc():
+    global counter     # khai báo dùng biến toàn cục (hạn chế dùng)
+    counter += 1
+
+inc()
+print(counter)         # 1
+
+def bad():
+    total += 1         # total chưa được gán trong hàm này
+
+bad()
+# UnboundLocalError: cannot access local variable 'total' where it is not associated with a value</code></pre>
+                <p>Hãy hạn chế <code>global</code>. Tài liệu Odoo có một cảnh báo riêng: <strong>không dùng biến toàn cục có thể thay đổi</strong>, vì một tiến trình Odoo có thể chạy nhiều database cùng lúc, mỗi database cài các module khác nhau, nên trạng thái toàn cục sẽ bị dùng chung ngoài ý muốn.</p>
+
+                <h2 id="lambda">Lambda: hàm một dòng không tên</h2>
+                <p><code>lambda tham_so: biểu_thức</code> tạo một hàm nhỏ và trả về giá trị của biểu thức. Nó hay được truyền như đối số:</p>
+<pre><code>courses = [{"code": "ODO-F", "hours": 24}, {"code": "GIT-T", "hours": 8}]
+
+print(sorted(courses, key=lambda c: c["hours"])[0]["code"])      # GIT-T
+print([c["code"] for c in filter(lambda c: c["hours"] &gt; 10, courses)])   # ['ODO-F']</code></pre>
+                <p>Hàm lồng trong hàm (closure) cũng nhớ được biến của hàm ngoài, là nền của decorator ở bài 9:</p>
+<pre><code>def outer():
+    prefix = "ODO"
+    def make(seq):                 # hàm lồng trong hàm, nhớ được prefix
+        return f"{prefix}-{seq:03d}"
+    return make
+
+mk = outer()
+print(mk(5))                       # ODO-005</code></pre>
+
+                <h2 id="trong-odoo">Gặp lại trong code Odoo</h2>
+<pre><code># 1. giá trị mặc định là một hàm: được gọi mỗi khi tạo bản ghi
+instructor_id = fields.Many2one('res.users', default=lambda self: self.env.user)
+
+# 2. lọc recordset bằng lambda
+published = courses.filtered(lambda c: c.is_published)
+
+# 3. route nhận tham số tùy ý trong controller
+@http.route('/vinc_course/courses', auth='public')
+def courses(self, **kw):
+    ...</code></pre>
+                <p>Tài liệu ORM mô tả <code>default</code> của field có thể là một giá trị cố định hoặc một hàm nhận recordset và trả giá trị; và <code>filtered</code> nhận một hàm, ví dụ <code>records.filtered(lambda r: r.company_id == user.company_id)</code>, hoặc một chuỗi đường dẫn field như <code>"partner_id.vat"</code>.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mẫu hàm</th><th>Ví dụ ở Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Hàm có <code>self</code></td><td>Method của model; <code>self</code> là recordset</td></tr>
+                            <tr><td><code>**kw</code></td><td>Route của controller</td></tr>
+                            <tr><td>Hàm trả về hàm / lambda</td><td><code>default=lambda self: ...</code></td></tr>
+                            <tr><td>Hàm bắt đầu bằng <code>_</code></td><td>Method riêng, như <code>_compute_total</code>, không gọi được từ giao diện</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="thuc-hanh">Thực hành: hàm tóm tắt khóa học</h2>
+<pre><code>def summarize(courses, min_hours=0, **extra):
+    """Tóm tắt danh sách khóa học dài ít nhất min_hours giờ."""
+    selected = [c for c in courses if c["hours"] &gt;= min_hours]
+    total = sum(c["hours"] for c in selected)
+    return {"count": len(selected), "total_hours": total, **extra}
+
+courses = [{"code": "ODO-F", "hours": 24}, {"code": "PY-F", "hours": 16}, {"code": "GIT-T", "hours": 8}]
+print(summarize(courses))
+print(summarize(courses, min_hours=10, source="catalog"))
+# {'count': 3, 'total_hours': 48}
+# {'count': 2, 'total_hours': 40, 'source': 'catalog'}</code></pre>
+                <p>Thử thêm một tham số <code>only_published=False</code> để lọc theo trạng thái. Đây đúng là cách bạn viết một hàm tiện ích dùng chung trong module, rồi gọi từ nhiều method.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+                    <ul>
+                        <li><strong>Dùng list/dict làm giá trị mặc định.</strong> Kết quả bị "dính" giữa các lần gọi. Hãy dùng <code>None</code> rồi tạo mới trong hàm.</li>
+                        <li><strong>Quên <code>return</code>.</strong> Hàm trả về <code>None</code> và dòng sau báo lỗi khó hiểu như <code>'NoneType' object ...</code>. Kiểm tra mọi nhánh đều có <code>return</code>.</li>
+                        <li><strong>Gọi sai số tham số.</strong> <code>price_per_hour()</code> báo <code>TypeError: price_per_hour() missing 1 required positional argument: 'price'</code>; gọi thừa báo <code>takes from 1 to 2 positional arguments but 3 were given</code>.</li>
+                        <li><strong>Gán lại biến ngoài hàm mà quên <code>global</code>.</strong> Báo <code>UnboundLocalError</code>. Cách tốt hơn là truyền giá trị vào và trả kết quả ra thay vì dùng biến toàn cục.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li><code>def</code> + <code>return</code>; không có <code>return</code> thì hàm trả <code>None</code>.</li>
+                    <li>Tham số mặc định đứng sau tham số bắt buộc; không dùng list/dict làm mặc định.</li>
+                    <li><code>*args</code>, <code>**kwargs</code> gom tham số; <code>*</code>/<code>**</code> khi gọi để giải nén.</li>
+                    <li>Biến trong hàm là cục bộ; tránh biến toàn cục thay đổi được. <code>lambda</code> cho hàm ngắn.</li>
+                </ul>
+                <p>Bài tiếp theo biến vòng lặp thành một dòng gọn: comprehension, generator và các hàm <code>sorted/filter/map</code>.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn viết hàm sạch và dễ test?</h3>
+                    <p>Khóa Developer Foundation có bài tập viết hàm, tách logic và review code từng buổi.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>*args và **kwargs khác nhau thế nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">*args gom mọi tham số truyền theo vị trí thành một tuple, còn **kwargs gom mọi tham số truyền theo tên thành một dict. Cả hai cho phép hàm nhận số lượng tham số tùy ý.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao không nên dùng list làm giá trị mặc định của tham số?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Giá trị mặc định chỉ được tạo một lần khi hàm được định nghĩa, nên mọi lần gọi dùng chung cùng một list và kết quả bị dính giữa các lần gọi. Hãy dùng None rồi tạo list mới trong hàm.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>lambda dùng khi nào?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Khi cần một hàm ngắn, dùng một lần và truyền như đối số, ví dụ key của sorted, hàm của filtered, hoặc default của field Odoo như default=lambda self: self.env.user.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Vì sao tránh biến toàn cục có thể thay đổi trong Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Một tiến trình Odoo có thể chạy nhiều database cùng lúc, mỗi database cài các module khác nhau, nên trạng thái lưu trong biến toàn cục sẽ bị dùng chung ngoài ý muốn.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/controlflow.html" target="_blank" rel="noopener">Python 3.12 – More Control Flow Tools (defining functions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Function definitions</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fham-python-args-kwargs-lambda.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fham-python-args-kwargs-lambda.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="list-tuple-set-dict-python.html"><small>← Bài trước</small>List, tuple, set và dict</a>
+                    <a class="next" href="comprehension-generator-sorted-filter-python.html"><small>Bài tiếp theo →</small>Comprehension, generator và sorted/filter</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#def">Định nghĩa hàm và trả về giá trị</a></li>
+                        <li><a href="#tham-so">Tham số: mặc định, *args và **kwargs</a></li>
+                        <li><a href="#tra-ve">Trả nhiều giá trị và kiểm tra sớm</a></li>
+                        <li><a href="#doi-so-bi-doi">Hàm có làm thay đổi đối số của bạn không?</a></li>
+                        <li><a href="#viet-ham-tot">Viết hàm tốt: vài quy ước đáng nhớ</a></li>
+                        <li><a href="#pham-vi">Phạm vi biến: trong hàm và ngoài hàm</a></li>
+                        <li><a href="#lambda">Lambda: hàm một dòng không tên</a></li>
+                        <li><a href="#trong-odoo">Gặp lại trong code Odoo</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: hàm tóm tắt khóa học</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

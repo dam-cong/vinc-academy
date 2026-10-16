@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python File I/O, JSON, CSV and pathlib for Odoo Devs</title>
+    <meta name="description" content="Read and write files with pathlib and open, handle JSON, CSV and configparser in Python, with course import/export examples and common encoding errors." />
+    <meta name="keywords" content="python read write file, python json, python csv, pathlib, configparser odoo.conf, utf-8 encoding python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python File I/O, JSON, CSV and pathlib for Odoo Devs" />
+    <meta property="og:description" content="pathlib, open, json, csv and configparser in Python with course list import/export examples for Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-files-json-csv-pathlib-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python File I/O, JSON, CSV and pathlib for Odoo Devs",
+                "description": "pathlib, open, json, csv and configparser in Python with course list import/export examples for Odoo.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-files-json-csv-pathlib-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Working with files, JSON and CSV"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Why specify encoding=\"utf-8\" when opening a file?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Without it Python uses the system default encoding, so results can differ between machines. With Vietnamese data, always state utf-8 to avoid UnicodeDecodeError or garbled text."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does csv need newline=\"\"?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The csv module handles line breaks inside cells and between rows itself. Opening a file without an empty newline can add extra blank lines or misread multi-line cells, especially on Windows."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between json.dumps and json.dump?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "dumps returns a JSON string, while dump writes straight into an open file. Likewise loads reads from a string and load reads from a file."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why are numbers in a CSV file read as strings?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "CSV is just text, so csv.reader and DictReader return every cell as a string. You must convert with int() or float() before calculating."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"file-json-csv-pathlib-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Working with files, JSON and CSV</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 11 · Practical Python Series</span>
+            <h1>Python File I/O, JSON, CSV and pathlib for Odoo Devs</h1>
+            <p class="post-lead">Moving data in and out is regular work for Odoo developers: CSV files, JSON API responses, configuration files. This guide teaches pathlib, open, json, csv and configparser with a course import/export example, plus the encoding errors you will meet.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Use <code>pathlib.Path</code> for paths, <code>with open(..., encoding="utf-8")</code> to read and write files, <code>json</code> for nested data and <code>csv</code> for tables.</strong> Always specify <code>encoding="utf-8"</code> (and <code>newline=""</code> with csv). Every value read from CSV is a string, so convert it. In Odoo work you meet these formats constantly: CSV for data and access rights (<code>ir.model.access.csv</code>), JSON for APIs, and the <code>odoo.conf</code> configuration file.</p>
+                </div>
+
+                <h2 id="pathlib">Paths with pathlib</h2>
+                <p>Instead of joining path strings by hand, use <code>pathlib.Path</code>: it handles the right separator on every operating system and bundles the operations you reach for:</p>
+<pre><code>from pathlib import Path
+
+base = Path("data")
+base.mkdir(parents=True, exist_ok=True)       # create the folder, no error if it exists
+p = base / "courses.json"                      # the / operator joins paths
+print(p, p.suffix, p.stem, p.parent, p.exists())
+# data/courses.json .json courses data False
+
+(base / "a.txt").write_text("ODO-F\nPY-F\n", encoding="utf-8")
+print((base / "a.txt").read_text(encoding="utf-8").splitlines())   # ['ODO-F', 'PY-F']
+print(sorted(x.name for x in base.glob("*.txt")))                  # ['a.txt']</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Operation</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Join paths</td><td><code>base / "courses.json"</code></td></tr>
+                            <tr><td>Name part, extension, parent folder</td><td><code>p.stem</code>, <code>p.suffix</code>, <code>p.parent</code></td></tr>
+                            <tr><td>Check existence</td><td><code>p.exists()</code>, <code>p.is_file()</code>, <code>p.is_dir()</code></td></tr>
+                            <tr><td>Create a folder</td><td><code>p.mkdir(parents=True, exist_ok=True)</code></td></tr>
+                            <tr><td>Read / write a whole text file</td><td><code>p.read_text(encoding=...)</code>, <code>p.write_text(...)</code></td></tr>
+                            <tr><td>List, match by pattern</td><td><code>p.iterdir()</code>, <code>p.glob("*.csv")</code></td></tr>
+                            <tr><td>The folder of the script file itself</td><td><code>Path(__file__).resolve().parent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A relative path such as <code>"data/courses.json"</code> is resolved against the <strong>current directory</strong> at run time, not the folder holding the script. For stable paths, compute them from <code>Path(__file__).resolve().parent</code>.</p>
+
+                <h2 id="open">Reading and writing text files</h2>
+<pre><code>with open(base / "a.txt", encoding="utf-8") as f:     # the default mode "r" (read)
+    for line in f:                                     # loop line by line, saving memory
+        print(line.strip(), end=" ")                   # ODO-F PY-F
+print()
+
+with open(base / "a.txt", "a", encoding="utf-8") as f:  # "a": append at the end
+    f.write("GIT-T\n")
+print((base / "a.txt").read_text(encoding="utf-8").splitlines())   # ['ODO-F', 'PY-F', 'GIT-T']</code></pre>
+                <ul>
+                    <li>Mode <code>"r"</code> reads (the default), <code>"w"</code> writes and <strong>erases old content</strong>, <code>"a"</code> appends at the end.</li>
+                    <li>Always add <code>encoding="utf-8"</code>, especially with Vietnamese text, so results match on every machine.</li>
+                    <li>Looping with <code>for line in f</code> reads line by line, saving memory with big files, whereas <code>read()</code> loads the whole file at once.</li>
+                    <li>Always use <code>with</code> (part 10) so the file closes by itself.</li>
+                </ul>
+
+                <h3 id="open-modes">File open modes</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Mode</th><th>Meaning</th><th>Use it when</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>"r"</code></td><td>Read (the default); an error if the file is absent</td><td>Reading input data</td></tr>
+                            <tr><td><code>"w"</code></td><td>Write, creating or <strong>wiping</strong> an old file</td><td>Exporting a report to a fresh file</td></tr>
+                            <tr><td><code>"a"</code></td><td>Write, appending at the end</td><td>Log files, accumulating data</td></tr>
+                            <tr><td><code>"x"</code></td><td>Create new, an error if the file already exists</td><td>Preventing accidental overwrites</td></tr>
+                            <tr><td><code>"r+"</code></td><td>Read and write at once</td><td>Editing in place (rare)</td></tr>
+                            <tr><td>add <code>"b"</code></td><td>Binary mode (<code>"rb"</code>, <code>"wb"</code>)</td><td>Images, PDFs, archives</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>p = Path("x.txt")
+p.write_text("a", encoding="utf-8")
+
+open(p, "x", encoding="utf-8")
+# FileExistsError: [Errno 17] File exists: 'x.txt'      &lt;- "x": create only, never overwrite
+
+with open(p, "r+", encoding="utf-8") as f:     # "r+": read and write the same file
+    print(f.read())        # a
+    f.seek(0)              # jump back to the start of the file
+    f.write("Z")
+print(p.read_text())       # Z</code></pre>
+                <h3 id="binary-base64">Binary files and base64</h3>
+                <p>Images, PDFs and archives are binary data: reading gives <code>bytes</code>, not a string. When they must travel through JSON or live in an Odoo field they are encoded as text with <strong>base64</strong>. Odoo's data-files reference likewise has a <code>base64</code> type for loading file content (such as images) into attachments, and Odoo's binary fields come back as base64 strings through <code>read()</code>:</p>
+<pre><code>import base64
+
+img = Path("a.bin")
+img.write_bytes(bytes([0, 1, 2, 255]))         # binary write: bytes, not str
+raw = img.read_bytes()
+print(raw, len(raw))                           # b'\x00\x01\x02\xff' 4
+
+b64 = base64.b64encode(raw).decode("ascii")    # bytes -&gt; base64 text to send through JSON
+print(b64, base64.b64decode(b64) == raw)       # AAEC/w== True</code></pre>
+                <h3 id="temp-files">Temporary files and folders</h3>
+                <p>When writing tests (part 14) or intermediate processing you do not want to leave junk files behind. The <code>tempfile</code> module creates temporary folders or files and cleans them up when the <code>with</code> block ends:</p>
+<pre><code>import tempfile
+
+with tempfile.TemporaryDirectory() as tmp:     # a temp folder, deleted when the with block ends
+    t = Path(tmp) / "t.txt"
+    t.write_text("temp", encoding="utf-8")
+    print(t.exists())                          # True
+print(t.exists())                              # False</code></pre>
+                <h3 id="safe-json">Reading API JSON safely</h3>
+                <p>JSON arriving from outside does not guarantee every key. Use <code>.get()</code> with a default at each level that may be absent, then convert into a typed object (such as the <code>@dataclass</code> of part 8) so the rest of your code deals with clean data. This is a sensible border for validating and converting types:</p>
+<pre><code>import json
+from dataclasses import dataclass
+
+payload = json.loads('{"data": [{"code": "ODO-F", "hours": 24, "extra": {"x": 1}}, {"code": "PY-F"}]}')
+
+for item in payload.get("data", []):
+    print(item["code"], item.get("hours", 0), item.get("extra", {}).get("x"))
+# ODO-F 24 1
+# PY-F 0 None
+
+@dataclass
+class CourseRow:
+    code: str
+    hours: int = 0
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(code=d["code"].strip().upper(), hours=int(d.get("hours", 0)))
+
+print([CourseRow.from_dict(i) for i in payload["data"]])
+# [CourseRow(code='ODO-F', hours=24), CourseRow(code='PY-F', hours=0)]</code></pre>
+                <p>Compare <code>pathlib</code> with the older <code>os.path</code>: <code>os.path.join("data", "a.txt")</code> returns a string, while <code>Path("data") / "a.txt"</code> returns an object that comes with <code>.exists()</code>, <code>.read_text()</code> and more. New code should prefer <code>pathlib</code>, but you will still read <code>os.path</code> in older code since many functions accept both types.</p>
+
+                <h2 id="json">JSON: nested data</h2>
+                <p>JSON is a text format describing objects, lists, strings, numbers, booleans and null. It maps directly onto Python's dict, list, str, int/float, bool and <code>None</code> (part 4), which is why it is the format of most APIs.</p>
+<pre><code>import json
+
+courses = [
+    {"code": "ODO-F", "name": "Odoo basics", "hours": 24, "published": True, "price": None},
+    {"code": "PY-F", "name": "Python basics", "hours": 16, "published": False, "price": 1500000.5},
+]
+text = json.dumps(courses, ensure_ascii=False, indent=2)    # object -&gt; JSON string
+(base / "courses.json").write_text(text, encoding="utf-8")
+
+back = json.loads((base / "courses.json").read_text(encoding="utf-8"))   # string -&gt; object
+print(back == courses, back[0]["published"], back[0]["price"])   # True True None
+
+print(json.dumps({"a": True, "b": None}))             # {"a": true, "b": null}
+print(json.dumps("tiếng Việt"))                       # "ti\u1ebfng Vi\u1ec7t"
+print(json.dumps("tiếng Việt", ensure_ascii=False))   # "tiếng Việt"
+
+with open(base / "out.json", "w", encoding="utf-8") as f:
+    json.dump(courses, f, ensure_ascii=False)         # dump/load work directly with files</code></pre>
+                <ul>
+                    <li><code>dumps</code>/<code>loads</code> work with strings; <code>dump</code>/<code>load</code> work directly with files.</li>
+                    <li><code>ensure_ascii=False</code> keeps non-ASCII text instead of turning it into <code>\uXXXX</code>; <code>indent=2</code> pretty-prints.</li>
+                    <li><code>True</code>/<code>None</code> become <code>true</code>/<code>null</code> in JSON and come back correctly when read.</li>
+                    <li>Standard JSON uses <strong>double quotes</strong>; single quotes are an error.</li>
+                </ul>
+<pre><code>import datetime
+json.dumps({"when": datetime.date(2026, 10, 16)})
+# TypeError: Object of type date is not JSON serializable
+
+print(json.dumps({"when": datetime.date(2026, 10, 16)}, default=str))   # {"when": "2026-10-16"}
+
+json.loads("{'a': 1}")
+# json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></pre>
+                <p>Dates do not convert to JSON by themselves; turn them into strings with <code>default=str</code> or a format of your own (part 12). You have seen this approach in Odoo's external API documentation, where an illustrative snippet returns <code>json.dumps(records.ids)</code> and <code>json.dumps(names)</code>.</p>
+
+                <h2 id="csv">CSV: tabular data</h2>
+<pre><code>import csv
+
+csv_path = base / "courses.csv"
+with open(csv_path, "w", encoding="utf-8", newline="") as f:     # newline="" is required with csv
+    w = csv.DictWriter(f, fieldnames=["code", "name", "hours"])
+    w.writeheader()
+    for c in courses:
+        w.writerow({k: c[k] for k in ("code", "name", "hours")})
+    w.writerow({"code": "X,Y", "name": 'Có "dấu nháy"', "hours": 8})   # commas and quotes are escaped automatically
+
+print(csv_path.read_text(encoding="utf-8"))
+# code,name,hours
+# ODO-F,Odoo basics,24
+# PY-F,Python basics,16
+# "X,Y","Có ""dấu nháy""",8
+
+with open(csv_path, encoding="utf-8", newline="") as f:
+    rows = list(csv.DictReader(f))                # each row is a dict keyed by the column headers
+print(rows[0])            # {'code': 'ODO-F', 'name': 'Odoo basics', 'hours': '24'}
+print(type(rows[0]["hours"]))   # &lt;class 'str'&gt;   &lt;- every value read is a string!
+print(sum(int(r["hours"]) for r in rows))   # 48</code></pre>
+<pre><code>with open(csv_path, encoding="utf-8", newline="") as f:
+    r = csv.reader(f)                  # rows are lists, without column names
+    header = next(r)                   # take the header row
+    print(header, next(r))
+# ['code', 'name', 'hours'] ['ODO-F', 'Odoo basics', '24']</code></pre>
+                <ul>
+                    <li><code>csv.DictWriter</code>/<code>DictReader</code> work by column name so they read better than the position-based <code>csv.writer</code>/<code>reader</code>.</li>
+                    <li>Open CSV files with <code>newline=""</code> so the <code>csv</code> module handles line endings itself.</li>
+                    <li>Values containing commas or quotes are wrapped automatically (<code>"X,Y"</code>) on writing and split correctly on reading.</li>
+                    <li><strong>Every cell read is a string</strong>: <code>"24"</code> is not <code>24</code>; call <code>int()</code> before computing.</li>
+                </ul>
+
+                <h2 id="config">odoo.conf-style configuration files</h2>
+                <p>The <code>odoo.conf</code> file is in ini format: sections in square brackets (<code>[options]</code>) and <code>key = value</code> lines. The <code>configparser</code> module reads it:</p>
+<pre><code>import configparser
+
+Path("odoo.conf").write_text(
+    "[options]\nadmin_passwd = secret\ndb_host = 127.0.0.1\nworkers = 5\n", encoding="utf-8")
+
+cp = configparser.ConfigParser()
+cp.read("odoo.conf", encoding="utf-8")
+print(cp["options"]["db_host"])                       # 127.0.0.1
+print(cp.getint("options", "workers"))                # 5
+print(cp.get("options", "dbfilter", fallback="(none)"))   # (none)</code></pre>
+                <p><code>fallback</code> supplies a default when a key is absent. You can use this very approach to write a script that checks a production configuration before deployment (part 14 of the Odoo series): read <code>workers</code>, <code>dbfilter</code>, <code>list_db</code> and warn when something is missing.</p>
+
+                <h2 id="in-odoo">Where do these formats appear in Odoo work?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Format</th><th>Python tool</th><th>In Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CSV</td><td><code>csv</code></td><td>Data loaded when a module installs, like <code>security/ir.model.access.csv</code>; bulk import/export</td></tr>
+                            <tr><td>JSON</td><td><code>json</code>, <code>requests</code></td><td>Body and result of the JSON-2 API; the <code>domain</code> parameter you send is a JSON array</td></tr>
+                            <tr><td>ini</td><td><code>configparser</code></td><td>The <code>odoo.conf</code> file with its <code>[options]</code> section</td></tr>
+                            <tr><td>XML</td><td><code>xml.etree</code> (rarely needed here)</td><td>Views, actions, menus, QWeb reports</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="practice">Practice: exporting and importing the course list</h2>
+<pre><code>def export_courses(courses, path):
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["code", "name", "hours"])
+        w.writeheader()
+        for c in courses:
+            w.writerow({k: c[k] for k in ("code", "name", "hours")})
+
+def import_courses(path):
+    ok, errors = [], []
+    with open(path, encoding="utf-8", newline="") as f:
+        for n, row in enumerate(csv.DictReader(f), start=2):     # row 1 is the header
+            try:
+                ok.append({"code": row["code"].strip().upper(), "hours": int(row["hours"])})
+            except (KeyError, ValueError) as e:
+                errors.append(f"row {n}: {e}")
+    return ok, errors
+
+export_courses(courses, base / "export.csv")
+(base / "export.csv").open("a", encoding="utf-8", newline="").write("BAD,Broken,abc\n")
+print(import_courses(base / "export.csv"))
+# ([{'code': 'ODO-F', 'hours': 24}, {'code': 'PY-F', 'hours': 16}], ["row 4: invalid literal for int() with base 10: 'abc'"])</code></pre>
+                <p>The <code>import_courses</code> function reuses the good-rows/bad-rows pattern from part 10, adding the row number so users know where to fix. This is the core of the script that imports data into Odoo in part 14.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+<pre><code>open(base / "nope.txt").read()
+# FileNotFoundError: [Errno 2] No such file or directory: 'data/nope.txt'
+
+(base / "vn.txt").write_text("Tiếng Việt", encoding="utf-8")
+open(base / "vn.txt", encoding="ascii").read()
+# UnicodeDecodeError: 'ascii' codec can't decode byte 0xe1 in position 2: ordinal not in range(128)
+
+# CSV for Excel: use utf-8-sig to add a BOM (Excel recognizes UTF-8)
+with open(base / "bom.csv", "w", encoding="utf-8-sig", newline="") as f:
+    f.write("code,name\nA,Tiếng Việt\n")</code></pre>
+                    <ul>
+                        <li><strong>A relative path works on one machine but not another.</strong> <code>FileNotFoundError</code> is usually a different current directory. Compute paths from <code>Path(__file__)</code> or use absolute paths.</li>
+                        <li><strong>Forgetting <code>encoding</code>.</strong> Reading a UTF-8 file with the wrong codec raises <code>UnicodeDecodeError</code> or produces garbled text. Always state <code>encoding="utf-8"</code>.</li>
+                        <li><strong>Forgetting <code>newline=""</code> with CSV.</strong> It may add extra blank lines (especially on Windows) or misread multi-line cells.</li>
+                        <li><strong>Calculating on unconverted CSV values.</strong> <code>"24" + "16"</code> gives <code>"2416"</code>. Always <code>int()</code>/<code>float()</code> first.</li>
+                        <li><strong>Writing with <code>"w"</code> destroys old data.</strong> Use <code>"a"</code> to append.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>pathlib.Path</code> for paths; <code>with open(..., encoding="utf-8")</code> for files; <code>"w"</code> erases, <code>"a"</code> appends.</li>
+                    <li><code>json</code>: <code>dumps/loads</code> with strings, <code>dump/load</code> with files; <code>ensure_ascii=False</code> for Vietnamese.</li>
+                    <li><code>csv.DictReader/DictWriter</code> with <code>newline=""</code>; every cell read is a string.</li>
+                    <li><code>configparser</code> reads <code>odoo.conf</code>-style files.</li>
+                </ul>
+                <p>The next part deals with two kinds of data that are very easy to get wrong on input: dates and times, and strings that need validating with regex.</p>
+
+                <div class="cta-box">
+                    <h3>Want to automate data import and export for Odoo?</h3>
+                    <p>The Developer Foundation course has exercises on file I/O, JSON, CSV and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why specify encoding="utf-8" when opening a file?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Without it Python uses the system default encoding, so results can differ between machines. With Vietnamese data, always state utf-8 to avoid UnicodeDecodeError or garbled text.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does csv need newline=""?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The csv module handles line breaks inside cells and between rows itself. Opening a file without an empty newline can add extra blank lines or misread multi-line cells, especially on Windows.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between json.dumps and json.dump?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">dumps returns a JSON string, while dump writes straight into an open file. Likewise loads reads from a string and load reads from a file.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why are numbers in a CSV file read as strings?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">CSV is just text, so csv.reader and DictReader return every cell as a string. You must convert with int() or float() before calculating.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/inputoutput.html" target="_blank" rel="noopener">Python 3.12 – Input and Output (files, JSON)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/pathlib.html" target="_blank" rel="noopener">Python 3.12 – pathlib</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/json.html" target="_blank" rel="noopener">Python 3.12 – json</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/csv.html" target="_blank" rel="noopener">Python 3.12 – csv</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/external_api.html" target="_blank" rel="noopener">Odoo 20 – External JSON-2 API</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/administration/on_premise/deploy.html" target="_blank" rel="noopener">Odoo 20 – Deploying Odoo (odoo.conf)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-files-json-csv-pathlib-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-files-json-csv-pathlib-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-error-handling-try-except-with-odoo.html"><small>← Previous</small>Error handling and the with statement</a>
+                    <a class="next" href="python-datetime-timezones-regex-odoo.html"><small>Next →</small>Dates, times and regex</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#pathlib">Paths with pathlib</a></li>
+                        <li><a href="#open">Reading and writing text files</a></li>
+                        <li><a href="#json">JSON: nested data</a></li>
+                        <li><a href="#csv">CSV: tabular data</a></li>
+                        <li><a href="#config">odoo.conf-style configuration files</a></li>
+                        <li><a href="#in-odoo">Where do these formats appear in Odoo work?</a></li>
+                        <li><a href="#practice">Practice: exporting and importing the course list</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Debugging, Logging and Testing: a Small Project</title>
+    <meta name="description" content="Use breakpoint() and pdb to debug, levelled logging instead of print, tests with unittest and Mock, type hints, then assemble it all into a complete import_courses.py script." />
+    <meta name="keywords" content="python debug, breakpoint pdb, python logging, python unittest, unittest mock, python type hints, argparse python, python project" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Debugging, Logging and Testing: a Small Project" />
+    <meta property="og:description" content="Debugging, logging and testing in Python: pdb, logging, unittest, Mock and a complete course-import script for Odoo." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-debugging-logging-testing-small-project.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Debugging, Logging and Testing: a Small Project",
+                "description": "Debugging, logging and testing in Python: pdb, logging, unittest, Mock and a complete course-import script for Odoo.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-debugging-logging-testing-small-project.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Debugging, logging and testing"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "When should I use breakpoint() instead of print to debug?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "breakpoint() opens the pdb debugger right at that line, letting you inspect variables (p), step line by line (n, s) and continue (c) without editing the code further. A few print calls are enough for simple flows, but for complex ones breakpoint() is faster and cleaner; remember to remove it before committing."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why use logging instead of print?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "logging attaches a level (DEBUG through CRITICAL), a timestamp and a logger name, and you can turn it on or off by level without editing code. print suits a program's results, logging suits operational information; Odoo also uses logging.getLogger(__name__) and tunes it with the --log-level option."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do type hints catch type errors at run time?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "No. Python does not check type hints at run time, so find(123) still runs even with find(code: str). They help readers, editors and static type checkers such as mypy; catching type errors needs that checker or tests."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does Odoo use unittest or its own test framework?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Odoo uses unittest: TransactionCase and Odoo's test classes extend unittest.TestCase, so assertEqual, setUp and assertRaises from this part carry straight over to testing models."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"debug-logging-test-du-an-nho-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Debugging, logging and testing</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 14 · Practical Python Series</span>
+            <h1>Python Debugging, Logging and Testing: a Small Project</h1>
+            <p class="post-lead">The final part assembles everything into a command-line tool: debug with breakpoint() and pdb, write levelled logs, test with unittest and Mock, add type hints, then finish a script that imports courses from CSV into Odoo.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>The final part gathers every skill into one complete program: read a CSV, validate data, call Odoo's JSON-2 API, write logs and have a test suite.</strong> The tools along the way: <code>breakpoint()</code> for line-by-line debugging, <code>logging</code> instead of <code>print</code>, <code>unittest</code> (the base of Odoo's <code>TransactionCase</code>) with <code>Mock</code> so tests need no network, and type hints so code describes itself. At the end sits a working <code>import_courses.py</code> script, checked with 6 tests and a mock server.</p>
+                </div>
+
+                <h2 id="debug">Debugging: breakpoint() and pdb</h2>
+                <p>Instead of sprinkling <code>print</code> everywhere, stop the program exactly where you suspect trouble and look around. The built-in <code>breakpoint()</code> opens the <code>pdb</code> debugger at that line:</p>
+<pre><code>def price_per_hour(price, hours):
+    breakpoint()                    # stop here and open the pdb debugger
+    return price / hours
+
+price_per_hour(4500000, 24)
+# &gt; script.py(3)price_per_hour()
+# -&gt; return price / hours
+# (Pdb) p hours                    &lt;- print a variable
+# 24
+# (Pdb) n                          &lt;- run the next line
+# (Pdb) c                          &lt;- continue to the end or the next breakpoint</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>pdb command</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>p expression</code></td><td>Prints a variable or expression</td></tr>
+                            <tr><td><code>n</code> (next)</td><td>Runs the next line without entering functions</td></tr>
+                            <tr><td><code>s</code> (step)</td><td>Runs the next line and steps into a called function</td></tr>
+                            <tr><td><code>c</code> (continue)</td><td>Runs on to the end or the next breakpoint</td></tr>
+                            <tr><td><code>l</code> (list)</td><td>Shows the code around the current line</td></tr>
+                            <tr><td><code>w</code> (where)</td><td>Shows the call stack (like a traceback)</td></tr>
+                            <tr><td><code>q</code> (quit)</td><td>Leaves the debugger</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>You can also run a whole program under the debugger with <code>python3 -m pdb script.py</code>. With Odoo, the usual route is <code>pip install ipdb</code> and placing <code>import ipdb; ipdb.set_trace()</code> where you want to stop, as mentioned in part 2 of the Odoo series, running the server in a terminal so you can type commands. Remember to <strong>remove breakpoints before committing</strong>: a stray <code>breakpoint()</code> left on a server freezes the process waiting for someone to type.</p>
+
+                <h2 id="logging">logging: levelled logs</h2>
+                <p><code>print</code> does not say how important a message is, has no timestamp and cannot be silenced in production. <code>logging</code> solves all three:</p>
+<pre><code>import logging
+
+print(logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL)
+# 10 20 30 40 50
+
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(name)s: %(message)s", datefmt="%H:%M:%S")
+log = logging.getLogger("vinc.import")      # a named logger, usually __name__
+
+log.debug("hidden because the level is INFO")
+log.info("loaded %d courses", 5)            # 11:41:00 INFO vinc.import: đã nạp 5 khóa học
+log.warning("course %s has no hours", "PY-F")     # 11:41:00 WARNING vinc.import: khóa PY-F thiếu giờ
+
+try:
+    1 / 0
+except ZeroDivisionError:
+    log.exception("calculation error")           # ERROR plus the full traceback</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Level</th><th>Value</th><th>Use it when</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>DEBUG</code></td><td>10</td><td>Detail for developers tracking a bug</td></tr>
+                            <tr><td><code>INFO</code></td><td>20</td><td>Confirming things work as expected</td></tr>
+                            <tr><td><code>WARNING</code></td><td>30</td><td>Something unusual but the program carries on (the default level)</td></tr>
+                            <tr><td><code>ERROR</code></td><td>40</td><td>A job could not be done</td></tr>
+                            <tr><td><code>CRITICAL</code></td><td>50</td><td>A serious error, the program may be unable to continue</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul>
+                    <li>Only messages <strong>at or above the configured level</strong> appear: with <code>level=INFO</code> the <code>debug</code> line is dropped.</li>
+                    <li>Pass arguments separately (<code>log.info("loaded %d", n)</code>) rather than building the string with an f-string: the string is only assembled when the line is actually written.</li>
+                    <li><code>log.exception(...)</code> inside an <code>except</code> block records the traceback too.</li>
+                    <li>Name loggers after the module (<code>logging.getLogger(__name__)</code>) so you can filter by source.</li>
+                </ul>
+                <p>Odoo does exactly this: in Odoo code you meet <code>_logger = logging.getLogger(__name__)</code> followed by <code>_logger.warning(...)</code> (the server-action documentation has an example), and you tune verbosity with <code>odoo-bin</code>'s <code>--log-level</code> option. Rule of thumb: <code>print</code> for a program's results, <code>logging</code> for everything else.</p>
+
+                <h2 id="unittest">Writing tests with unittest</h2>
+                <p>Automated tests run your code with known data and compare the outcome with what you expect. Python ships <code>unittest</code>, and Odoo's <code>TransactionCase</code> (part 13 of the Odoo series) is merely an extension of it: what you learn here carries straight over to testing models.</p>
+<pre><code>import unittest
+
+class TestCourseRow(unittest.TestCase):
+    def setUp(self):                          # runs before EACH test
+        self.row = {"name": "  Odoo  ", "hours": "24"}
+
+    def test_valid_row(self):
+        course = CourseRow.from_dict(self.row)
+        self.assertEqual(course, CourseRow(name="Odoo", hours=24))
+
+    def test_bad_hours(self):
+        for bad in ("abc", "0", "-3"):
+            with self.subTest(hours=bad):     # each value is a separate check
+                with self.assertRaises(InvalidRow):
+                    CourseRow.from_dict({"name": "X", "hours": bad})
+
+if __name__ == "__main__":
+    unittest.main()</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Checks</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>assertEqual(a, b)</code></td><td><code>a == b</code></td></tr>
+                            <tr><td><code>assertTrue(x)</code> / <code>assertFalse(x)</code></td><td>A true / false value</td></tr>
+                            <tr><td><code>assertIn(a, b)</code></td><td><code>a in b</code></td></tr>
+                            <tr><td><code>assertIsNone(x)</code></td><td><code>x is None</code></td></tr>
+                            <tr><td><code>assertRaises(Error)</code></td><td>The <code>with</code> block inside must raise that kind of error</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Run the suite with <code>python3 -m unittest -v</code> (it discovers <code>test_*.py</code> files). A failing test prints the mismatching values clearly:</p>
+<pre><code>class T(unittest.TestCase):
+    def test_fail(self):
+        self.assertEqual(1 + 1, 3)
+
+# FAIL: test_fail (__main__.T.test_fail)
+# AssertionError: 2 != 3
+# FAILED (failures=1)</code></pre>
+
+                <h3 id="mock">Mock: testing without a network</h3>
+                <p>Tests should not call the real API: slow, needs a key and may change data. <code>unittest.mock.Mock</code> builds a fake object that remembers how it was called, so you can check that your code made the right calls:</p>
+<pre><code>from unittest.mock import Mock
+
+def test_calls_api_for_each_row(self):
+    client = Mock()                           # a fake object standing in for the real OdooClient
+    client.call.return_value = [1]
+    rows = [CourseRow("A", 8), CourseRow("B", 16)]
+
+    self.assertEqual(import_rows(client, rows), 2)
+    self.assertEqual(client.call.call_count, 2)
+    client.call.assert_any_call("vinc.course", "create",
+                                vals_list=[{"name": "A", "duration_hours": 8}])</code></pre>
+                <p>That is why part 13 recommended wrapping HTTP in <code>OdooClient</code>: <code>import_rows</code> takes the client as a parameter, so a test simply passes a fake one.</p>
+
+                <h2 id="type-hints">Type hints: self-describing code</h2>
+                <p>Type hints record the expected types of parameters and return values. Python does <strong>not</strong> check them at run time, but they help readers, editors and type-checking tools catch slips early:</p>
+<pre><code>def total(hours: list[int], factor: float = 1.0) -&gt; float:
+    return sum(hours) * factor
+
+print(total([1, 2], 2))                  # 6.0 (factor is an int though declared float: Python does not complain)
+print(total.__annotations__)
+# {'hours': list[int], 'factor': &lt;class 'float'&gt;, 'return': &lt;class 'float'&gt;}
+
+def find(code: str) -&gt; dict | None:      # a dict or None
+    return {"code": code} if code else None
+
+print(find(""), find("X"), find(123))   # None {'code': 'X'} {'code': 123}   &lt;- type hints do not block at run time</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Hint</th><th>Meaning</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>x: int</code>, <code>name: str</code></td><td>Basic types</td></tr>
+                            <tr><td><code>list[int]</code>, <code>dict[str, int]</code></td><td>A list of ints, a dict with string keys and int values</td></tr>
+                            <tr><td><code>str | None</code></td><td>A string or <code>None</code></td></tr>
+                            <tr><td><code>-&gt; float</code></td><td>The return type</td></tr>
+                            <tr><td><code>@dataclass</code> with <code>name: str</code></td><td>Declares the fields of a data class (part 8)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Odoo's documentation also states method signatures with types, for example <code>search(domain, offset, limit, order) -&gt; Self</code>, so reading type hints helps you follow the ORM reference faster.</p>
+
+                <h2 id="project">A small project: a script that imports courses into Odoo</h2>
+                <p>We assemble everything learned into a command-line tool. The folder layout:</p>
+<pre><code>vinc-tools/
+├── import_courses.py        # the main program
+├── test_import_courses.py   # the test suite
+├── courses.csv              # sample data
+└── requirements.txt         # requests</code></pre>
+                <p>The sample data holds good rows and bad ones (a missing name, hours that are not a number, negative hours):</p>
+<pre><code>name,hours
+Odoo basics,24
+Python basics,16
+,8
+Git for teams,abc
+SQL fundamentals,-4</code></pre>
+                <p>And the main program:</p>
+                <p class="code-title">import_courses.py</p>
+<pre><code>#!/usr/bin/env python3
+"""Import courses from a CSV file into Odoo through the JSON-2 API."""
+import argparse
+import csv
+import logging
+import os
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+import requests
+
+_logger = logging.getLogger("import_courses")
+
+
+class OdooAPIError(Exception):
+    """An error returned by Odoo or a connection error."""
+
+
+class InvalidRow(Exception):
+    """An invalid CSV row."""
+
+
+@dataclass
+class CourseRow:
+    name: str
+    hours: int
+
+    @classmethod
+    def from_dict(cls, row: dict) -&gt; "CourseRow":
+        name = (row.get("name") or "").strip()
+        if not name:
+            raise InvalidRow("missing course name")
+        try:
+            hours = int(row["hours"])
+        except (KeyError, ValueError) as e:
+            raise InvalidRow(f"invalid hours: {row.get('hours')!r}") from e
+        if hours &lt;= 0:
+            raise InvalidRow(f"hours must be greater than 0: {hours}")
+        return cls(name=name, hours=hours)
+
+
+class OdooClient:
+    def __init__(self, base_url: str, api_key: str, database: str | None = None, timeout: int = 10):
+        self.base_url = base_url.rstrip("/")
+        self.timeout = timeout
+        self.session = requests.Session()
+        self.session.headers["Authorization"] = f"bearer {api_key}"
+        if database:
+            self.session.headers["X-Odoo-Database"] = database
+
+    def call(self, model: str, method: str, **payload):
+        url = f"{self.base_url}/json/2/{model}/{method}"
+        try:
+            response = self.session.post(url, json=payload, timeout=self.timeout)
+        except requests.RequestException as e:
+            raise OdooAPIError(f"Could not call {url}: {e}") from e
+        if not response.ok:
+            try:
+                message = response.json().get("message", response.text)
+            except ValueError:
+                message = response.text
+            raise OdooAPIError(f"HTTP {response.status_code}: {message}")
+        return response.json()
+
+
+def read_rows(path: Path) -&gt; tuple[list[CourseRow], list[str]]:
+    ok, errors = [], []
+    with open(path, encoding="utf-8", newline="") as f:
+        for number, row in enumerate(csv.DictReader(f), start=2):   # row 1 is the header
+            try:
+                ok.append(CourseRow.from_dict(row))
+            except InvalidRow as e:
+                errors.append(f"row {number}: {e}")
+    return ok, errors
+
+
+def import_rows(client, rows: list[CourseRow], dry_run: bool = False) -&gt; int:
+    created = 0
+    for row in rows:
+        if dry_run:
+            _logger.info("[dry-run] would create: %s (%s hours)", row.name, row.hours)
+            continue
+        ids = client.call("vinc.course", "create",
+                          vals_list=[{"name": row.name, "duration_hours": row.hours}])
+        _logger.debug("created id=%s", ids)
+        created += 1
+    return created
+
+
+def main(argv=None) -&gt; int:
+    parser = argparse.ArgumentParser(description="Import courses from CSV into Odoo.")
+    parser.add_argument("csv_file", type=Path)
+    parser.add_argument("--dry-run", action="store_true", help="check only, do not call the create API")
+    parser.add_argument("-v", "--verbose", action="store_true", help="show detailed logs")
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
+                        format="%(levelname)s %(message)s")
+    try:
+        rows, errors = read_rows(args.csv_file)
+    except FileNotFoundError:
+        _logger.error("File not found: %s", args.csv_file)
+        return 2
+    for message in errors:
+        _logger.warning("skipping %s", message)
+    _logger.info("read %d valid rows, %d bad rows", len(rows), len(errors))
+
+    client = OdooClient(os.environ["ODOO_URL"], os.environ["ODOO_API_KEY"], os.environ.get("ODOO_DB"))
+    try:
+        created = import_rows(client, rows, dry_run=args.dry_run)
+    except OdooAPIError as e:
+        _logger.error("Odoo reported an error: %s", e)
+        return 1
+    _logger.info("done: created %d courses", created)
+    return 0 if not errors else 3
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+</code></pre>
+                <p>Match it against each part of the series: <code>pathlib</code>, <code>csv</code> and <code>with</code> (parts 10, 11); <code>@dataclass</code> and <code>@classmethod</code> (parts 8, 9); the custom exceptions <code>InvalidRow</code> and <code>OdooAPIError</code> (part 10); <code>requests.Session</code> and <code>timeout</code> (part 13); <code>logging</code> (this part); <code>if __name__ == "__main__"</code> and <code>sys.exit</code> (part 7). On top of these, <code>argparse</code> reads command-line options (<code>--dry-run</code>, <code>-v</code>) and generates <code>--help</code> for you.</p>
+                <p>Sample runs (with environment variables pointing at your Odoo):</p>
+<pre><code>$ export ODOO_URL=https://mycompany.example.com ODOO_API_KEY=... ODOO_DB=mycompany
+
+$ python3 import_courses.py courses.csv --dry-run
+WARNING skipping row 4: missing course name
+WARNING skipping row 5: invalid hours: 'abc'
+WARNING skipping row 6: hours must be greater than 0: -4
+INFO read 2 valid rows, 3 bad rows
+INFO [dry-run] would create: Odoo basics (24 hours)
+INFO [dry-run] would create: Python basics (16 hours)
+INFO done: created 0 courses
+
+$ python3 import_courses.py courses.csv
+...
+INFO done: created 2 courses        (exit code 3 because bad rows remain)
+
+$ ODOO_API_KEY=wrong python3 import_courses.py courses.csv
+ERROR Odoo reported an error: HTTP 401: Invalid apikey      (exit code 1)
+
+$ python3 import_courses.py no_such.csv
+ERROR File not found: no_such.csv                (exit code 2)</code></pre>
+                <ul>
+                    <li><strong>Exit codes</strong> tell other scripts or cron how it went: 0 fully successful, 1 API error, 2 file not found, 3 finished but bad rows remain.</li>
+                    <li><strong><code>--dry-run</code></strong> lets you preview without writing anything to Odoo: a safe habit for every script that writes data.</li>
+                    <li>Bad rows do not stop the whole program: they are reported with their row number so the user can fix the file.</li>
+                </ul>
+                <p>The test suite (6 tests, all passing) uses <code>subTest</code>, a temporary folder and <code>Mock</code> as above:</p>
+<pre><code>$ python3 -m unittest -v
+test_bad_hours (test_import_courses.TestCourseRow.test_bad_hours) ... ok
+test_missing_name (test_import_courses.TestCourseRow.test_missing_name) ... ok
+test_valid_row (test_import_courses.TestCourseRow.test_valid_row) ... ok
+test_calls_api_for_each_row (test_import_courses.TestImportRows.test_calls_api_for_each_row) ... ok
+test_dry_run_makes_no_call (test_import_courses.TestImportRows.test_dry_run_makes_no_call) ... ok
+test_splits_good_and_bad_rows (test_import_courses.TestReadRows.test_splits_good_and_bad_rows) ... ok
+
+Ran 6 tests in 0.001s
+OK</code></pre>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Leaving a <code>breakpoint()</code> or debug <code>print</code> in the code.</strong> Search for and remove them before committing; use <code>logging</code> for what should stay.</li>
+                        <li><strong>Calling <code>logging.basicConfig</code> after logs have already been emitted.</strong> Only the first configuration takes effect; call it once, early, inside <code>main</code>.</li>
+                        <li><strong>Tests that depend on order or outside data.</strong> Each test must prepare its own data (<code>setUp</code>, temporary folders) and never hit a real network.</li>
+                        <li><strong>Assuming type hints block type errors.</strong> They do not stop <code>find(123)</code> from running; you need a type checker or tests to catch such errors.</li>
+                        <li><strong>Test names that do not start with <code>test</code>.</strong> <code>unittest</code> skips them (the same rule as in Odoo's part 13 of the Odoo series).</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Series summary and next steps</h2>
+                <ul>
+                    <li><code>breakpoint()</code> and pdb for debugging; levelled <code>logging</code> instead of <code>print</code>.</li>
+                    <li><code>unittest</code> + <code>Mock</code> for tests without a network; Odoo's <code>TransactionCase</code> extends it.</li>
+                    <li>Type hints describe types but are not enforced at run time.</li>
+                    <li>A real program combines files, validation, APIs, logs and tests.</li>
+                </ul>
+                <p>Across 14 parts you have gone from a <code>venv</code> to a complete integration tool, each concept tied to where it appears in Odoo code. The natural next step is back to the <a href="../odoo/index.html">Odoo 20 Development series</a>: you can now read <code>self</code>, recordsets, decorators and <code>super()</code> as old friends and concentrate on the ORM, views and business logic.</p>
+
+                <div class="cta-box">
+                    <h3>Ready to move from Python to hands-on Odoo?</h3>
+                    <p>The Odoo Developer Foundation course takes you from Python basics to a complete Odoo module, with mentor code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use breakpoint() instead of print to debug?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">breakpoint() opens the pdb debugger right at that line, letting you inspect variables (p), step line by line (n, s) and continue (c) without editing the code further. A few print calls are enough for simple flows, but for complex ones breakpoint() is faster and cleaner; remember to remove it before committing.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why use logging instead of print?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">logging attaches a level (DEBUG through CRITICAL), a timestamp and a logger name, and you can turn it on or off by level without editing code. print suits a program's results, logging suits operational information; Odoo also uses logging.getLogger(__name__) and tunes it with the --log-level option.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Do type hints catch type errors at run time?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">No. Python does not check type hints at run time, so find(123) still runs even with find(code: str). They help readers, editors and static type checkers such as mypy; catching type errors needs that checker or tests.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Does Odoo use unittest or its own test framework?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Odoo uses unittest: TransactionCase and Odoo's test classes extend unittest.TestCase, so assertEqual, setUp and assertRaises from this part carry straight over to testing models.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/library/pdb.html" target="_blank" rel="noopener">Python 3.12 – pdb, the Python debugger</a></li>
+                    <li><a href="https://docs.python.org/3.12/howto/logging.html" target="_blank" rel="noopener">Python 3.12 – Logging HOWTO</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/unittest.html" target="_blank" rel="noopener">Python 3.12 – unittest</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/typing.html" target="_blank" rel="noopener">Python 3.12 – typing</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/argparse.html" target="_blank" rel="noopener">Python 3.12 – argparse</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/testing.html" target="_blank" rel="noopener">Odoo 20 – Testing Odoo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/cli.html" target="_blank" rel="noopener">Odoo 20 – Command-line interface (CLI)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-debugging-logging-testing-small-project.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-debugging-logging-testing-small-project.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-requests-odoo-json-2-api-calls.html"><small>← Previous</small>Calling APIs with requests</a>
+                    <a class="next" href="index.html"><small>Back to series →</small>Practical Python for Odoo Developers</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#debug">Debugging: breakpoint() and pdb</a></li>
+                        <li><a href="#logging">logging: levelled logs</a></li>
+                        <li><a href="#unittest">Writing tests with unittest</a></li>
+                        <li><a href="#type-hints">Type hints: self-describing code</a></li>
+                        <li><a href="#project">A small project: a script that imports courses into Odoo</a></li>
+                        <li><a href="#summary">Series summary and next steps</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

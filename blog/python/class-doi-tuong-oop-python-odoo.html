@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi" data-lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python class và đối tượng: từ OOP cơ bản đến model Odoo</title>
+    <meta name="description" content="Học class, __init__, self, thuộc tính, method, @property trong Python và thấy class trở thành model Odoo, self thành recordset như thế nào." />
+    <meta name="keywords" content="python class, python oop, __init__ self python, python property, model odoo class, recordset self odoo" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Python class và đối tượng: từ OOP cơ bản đến model Odoo" />
+    <meta property="og:description" content="Class, __init__, self, @property trong Python và cách class Python trở thành model Odoo với field là thuộc tính, self là recordset." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/class-doi-tuong-oop-python-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python class và đối tượng: từ OOP cơ bản đến model Odoo",
+                "description": "Class, __init__, self, @property trong Python và cách class Python trở thành model Odoo với field là thuộc tính, self là recordset.",
+                "inLanguage": "vi",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/class-doi-tuong-oop-python-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Trang chủ",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Kiến thức",
+                        "item": "https://vinc-academy.vercel.app/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Class và đối tượng"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "self trong Python là gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "self là tham chiếu tới chính đối tượng đang gọi method. Nó luôn là tham số đầu tiên của method trong class và Python tự truyền vào khi bạn gọi, ví dụ c.publish() tương đương Course.publish(c)."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Khác nhau giữa thuộc tính class và thuộc tính đối tượng?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Thuộc tính khai báo trong thân class được mọi đối tượng dùng chung, còn thuộc tính gán qua self trong __init__ là của riêng từng đối tượng. List hay dict ở cấp class bị dùng chung nên cần khởi tạo trong __init__."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "@property dùng để làm gì?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Biến một method thành thuộc tính chỉ đọc được tính khi cần, như c.price_per_hour. Muốn kiểm tra giá trị lúc gán, thêm setter bằng @ten.setter."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "self trong method của model Odoo khác gì self thông thường?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Trong Odoo, self là một recordset, có thể chứa 0, 1 hoặc nhiều bản ghi, nên bạn duyệt for record in self để xử lý từng bản ghi thay vì coi nó là một đối tượng đơn lẻ."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../index.html#about" data-i18n="nav.about">Giới thiệu</a>
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Chứng chỉ</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../index.html#register'" data-i18n="nav.register">Tư vấn miễn phí</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../en/blog/python/"python-classes-objects-oop-odoo-models.html" title="Switch language" aria-label="Toggle language">EN</button><button class="theme-toggle" onclick="toggleTheme()" title="Chuyển chế độ sáng/tối" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">Trang chủ</a></li>
+            <li><a href="../index.html">Kiến thức</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Class và đối tượng</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Bài 8 · Series Python thực chiến</span>
+            <h1>Python class và đối tượng: từ OOP cơ bản đến model Odoo</h1>
+            <p class="post-lead">Mỗi model Odoo là một class Python. Bài này dạy OOP cơ bản qua class Course thuần Python, rồi đối chiếu với class VincCourse trong Odoo để bạn hiểu field là thuộc tính, self là recordset và tại sao quy ước đặt tên giống nhau.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Cập nhật: <time datetime="2026-10-16">16/10/2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 phút đọc</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Đội ngũ Vinc Academy</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Tóm tắt nhanh</p>
+                    <p><strong>Class là khuôn, đối tượng (object) là sản phẩm tạo từ khuôn: <code>c = Course("Odoo", 24)</code>.</strong> Trong class, <code>__init__</code> khởi tạo dữ liệu, <code>self</code> là chính đối tượng đang dùng, thuộc tính lưu dữ liệu và method là hàm gắn với đối tượng. Model Odoo là một class kế thừa <code>models.Model</code>: field là thuộc tính của class, <code>_name</code> đặt tên model, và <code>self</code> trong method là một <em>recordset</em>, tức một tập đối tượng chứ không chỉ một.</p>
+                </div>
+
+                <h2 id="class-co-ban">Class và đối tượng cơ bản</h2>
+                <p>Hãy dựng class <code>Course</code> thuần Python, mô phỏng khóa học trong dự án <code>vinc_course</code>:</p>
+<pre><code>class Course:
+    prefix = "ODO"                       # thuộc tính của class (dùng chung)
+
+    def __init__(self, name, hours, price=0.0):
+        self.name = name                 # thuộc tính của từng đối tượng
+        self.hours = hours
+        self.price = price
+        self.published = False
+
+    @property
+    def price_per_hour(self):            # đọc như thuộc tính, tính khi cần
+        return self.price / self.hours if self.hours else 0.0
+
+    def publish(self):
+        if self.hours &lt;= 0:
+            raise ValueError("Số giờ phải lớn hơn 0")
+        self.published = True
+
+    def __repr__(self):
+        return f"Course({self.name!r}, {self.hours}h)"</code></pre>
+                <ul>
+                    <li><code>__init__</code> chạy mỗi khi tạo đối tượng. Tham số đầu tiên luôn là <code>self</code>, tham chiếu đến chính đối tượng đó; Python tự truyền nó khi bạn gọi <code>Course(...)</code>.</li>
+                    <li><code>self.name = name</code> tạo <strong>thuộc tính</strong> của đối tượng; mỗi đối tượng có bộ thuộc tính riêng.</li>
+                    <li>Method (như <code>publish</code>) là hàm khai báo trong class, tham số đầu tiên cũng là <code>self</code>.</li>
+                    <li><code>__repr__</code> quyết định chuỗi hiển thị khi in đối tượng hoặc xem trong danh sách; thiếu nó bạn chỉ thấy dòng khó đọc như <code>&lt;Course object at 0x...&gt;</code>.</li>
+                </ul>
+<pre><code>c = Course("Odoo cơ bản", 24, 4500000)
+print(c)                      # Course('Odoo cơ bản', 24h)
+print(c.name, c.hours, c.published)   # Odoo cơ bản 24 False
+c.publish()
+print(c.published, round(c.price_per_hour))   # True 187500
+
+other = Course("Python", 16)
+print([c, other])             # [Course('Odoo cơ bản', 24h), Course('Python', 16h)]
+print(isinstance(c, Course), type(c).__name__)   # True Course</code></pre>
+                <p>Điều đáng chú ý là <code>c.publish()</code> không cần truyền <code>self</code>: Python tự đưa <code>c</code> vào. Hàm <code>isinstance(c, Course)</code> kiểm tra một đối tượng có thuộc class nào đó không, và <code>vars(c)</code> cho bạn dict các thuộc tính của nó.</p>
+
+                <h2 id="thuoc-tinh">Thuộc tính của class và của đối tượng</h2>
+                <p>Thuộc tính khai báo trực tiếp trong thân class (như <code>prefix</code>) thuộc về class và được mọi đối tượng chia sẻ; thuộc tính gán qua <code>self.</code> thuộc về từng đối tượng. Gán lại qua một đối tượng chỉ tạo thuộc tính riêng cho đối tượng đó:</p>
+<pre><code>print(Course.prefix, c.prefix)     # ODO ODO
+c.prefix = "X"                     # tạo thuộc tính riêng cho c, không đổi class
+print(c.prefix, Course.prefix)     # X ODO
+
+class Bad:
+    tags = []                      # list ở cấp class: dùng chung cho MỌI đối tượng
+    def add(self, t):
+        self.tags.append(t)
+
+a, b = Bad(), Bad()
+a.add("x")
+print(b.tags)                      # ['x']   &lt;- b cũng thấy!
+
+class Good:
+    def __init__(self):
+        self.tags = []             # mỗi đối tượng có list riêng
+    def add(self, t):
+        self.tags.append(t)
+
+a, b = Good(), Good()
+a.add("x")
+print(a.tags, b.tags)              # ['x'] []</code></pre>
+                <p>Bẫy này giống hệt giá trị mặc định có thể thay đổi ở bài 5: một list ở cấp class bị dùng chung. Quy tắc: dữ liệu riêng của đối tượng luôn khởi tạo trong <code>__init__</code>.</p>
+
+                <h2 id="method-dac-biet">Method đặc biệt (dunder) và so sánh đối tượng</h2>
+                <p>Các method có tên dạng <code>__ten__</code> được Python gọi ngầm khi bạn dùng cú pháp quen thuộc. Bạn đã gặp <code>__init__</code> và <code>__repr__</code>; dưới đây là vài method hay dùng khác:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Được gọi khi</th><th>Ví dụ</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>__init__</code></td><td>Tạo đối tượng</td><td><code>Course("Odoo", 24)</code></td></tr>
+                            <tr><td><code>__repr__</code></td><td>Xem đối tượng trong list, debug</td><td><code>[course]</code></td></tr>
+                            <tr><td><code>__str__</code></td><td><code>print</code>, f-string</td><td><code>f"{course}"</code></td></tr>
+                            <tr><td><code>__eq__</code></td><td>Phép <code>==</code></td><td><code>a == b</code></td></tr>
+                            <tr><td><code>__len__</code></td><td>Hàm <code>len()</code></td><td><code>len(course)</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>class Course:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+    def __repr__(self):                 # dành cho lập trình viên (debug, list)
+        return f"Course({self.name!r}, {self.hours})"
+    def __str__(self):                  # dành cho người dùng (print, f-string)
+        return f"{self.name} ({self.hours}h)"
+    def __eq__(self, other):            # định nghĩa phép ==
+        return isinstance(other, Course) and (self.name, self.hours) == (other.name, other.hours)
+    def __len__(self):                  # len(course)
+        return self.hours
+
+a, b = Course("Odoo", 24), Course("Odoo", 24)
+print(a == b, a is b)                   # True False
+print(repr(a), str(a), len(a))          # Course('Odoo', 24) Odoo (24h) 24
+print(f"{a}", [a])                      # Odoo (24h) [Course('Odoo', 24)]</code></pre>
+                <p>Hai điểm đáng nhớ. Thứ nhất, <code>==</code> mặc định so sánh <strong>danh tính</strong> (có phải cùng một đối tượng không); muốn hai đối tượng có dữ liệu giống nhau được coi là bằng nhau, bạn phải tự viết <code>__eq__</code>. Toán tử <code>is</code> luôn kiểm tra cùng đối tượng. Thứ hai, <code>__repr__</code> hướng tới lập trình viên (nên đủ thông tin để tái tạo đối tượng), còn <code>__str__</code> hướng tới người dùng cuối; nếu chỉ viết một, hãy viết <code>__repr__</code>.</p>
+
+                <h3 id="dataclass">@dataclass: class chỉ để chứa dữ liệu</h3>
+                <p>Với class chủ yếu để gom dữ liệu (kiểu như một dòng CSV hay một phản hồi API), viết <code>__init__</code>, <code>__repr__</code> và <code>__eq__</code> bằng tay rất lặp lại. Decorator <code>@dataclass</code> của thư viện chuẩn tự sinh chúng từ danh sách thuộc tính có chú thích kiểu. Với list hay dict làm mặc định, dùng <code>field(default_factory=list)</code> để tránh bẫy dùng chung đã nói ở bài 5:</p>
+<pre><code>from dataclasses import dataclass, field
+
+@dataclass
+class CourseDC:
+    name: str
+    hours: int
+    price: float = 0.0
+    tags: list = field(default_factory=list)   # mặc định list an toàn
+
+d = CourseDC("Odoo", 24)
+print(d)                                  # CourseDC(name='Odoo', hours=24, price=0.0, tags=[])
+print(d == CourseDC("Odoo", 24))          # True
+print(CourseDC("X", 1).tags)              # []  (mỗi đối tượng có list riêng)</code></pre>
+                <p>Bạn sẽ dùng <code>@dataclass</code> ở bài 13 và 14 để mô tả dữ liệu đọc từ file hoặc API trước khi gửi vào Odoo.</p>
+
+                <h3 id="quy-uoc-ten">Quy ước về tên: _ và __</h3>
+                <p>Python không có thuộc tính "private" thực sự. Quy ước là một dấu gạch dưới đầu tên (<code>_internal</code>) báo hiệu "dùng nội bộ". Hai dấu gạch dưới (<code>__secret</code>) khiến Python đổi tên thuộc tính thành <code>_TênClass__secret</code> để tránh va chạm với class con, chứ không phải để giấu hoàn toàn:</p>
+<pre><code>class Acc:
+    def __init__(self):
+        self._internal = 1        # quy ước: nội bộ, đừng đụng từ ngoài
+        self.__secret = 2         # tên bị đổi thành _Acc__secret
+
+x = Acc()
+print(x._internal, hasattr(x, "__secret"), x._Acc__secret)   # 1 False 2</code></pre>
+                <p>Trong Odoo, tiền tố một gạch dưới còn có ý nghĩa mạnh hơn: method bắt đầu bằng <code>_</code> không gọi được từ nút bấm hay API bên ngoài.</p>
+
+                <h2 id="property">@property: tính toán nhưng dùng như thuộc tính</h2>
+                <p><code>@property</code> biến method thành thuộc tính chỉ đọc: <code>c.price_per_hour</code> không cần ngoặc và luôn được tính từ dữ liệu hiện tại. Gán vào một property không có setter báo <code>AttributeError: property 'price_per_hour' of 'Course' object has no setter</code>. Khi muốn kiểm tra giá trị lúc gán, thêm setter:</p>
+<pre><code>class Timer:
+    def __init__(self):
+        self._h = 0
+    @property
+    def h(self):
+        return self._h
+    @h.setter
+    def h(self, v):
+        if v &lt; 0:
+            raise ValueError("h phải &gt;= 0")
+        self._h = v
+
+t = Timer()
+t.h = 5
+print(t.h)                         # 5
+t.h = -1
+# ValueError: h phải &gt;= 0</code></pre>
+                <p>Quy ước đặt tên: một dấu gạch dưới đầu tên (<code>_h</code>) nói "đây là chi tiết nội bộ, đừng đụng từ bên ngoài". Odoo dùng cùng quy ước cho method riêng như <code>_compute_total</code>.</p>
+
+                <h2 id="quan-he-giua-doi-tuong">Đối tượng chứa đối tượng</h2>
+<pre><code>class Session:
+    def __init__(self, name, hours):
+        self.name, self.hours = name, hours
+
+class Course2:
+    def __init__(self, name):
+        self.name = name
+        self.sessions = []         # một khóa "có nhiều" buổi học
+
+    def add_session(self, s):
+        self.sessions.append(s)
+        return self
+
+    @property
+    def total_hours(self):
+        return sum(s.hours for s in self.sessions)
+
+cc = Course2("Odoo").add_session(Session("1", 3)).add_session(Session("2", 4))
+print(cc.total_hours, len(cc.sessions))     # 7 2</code></pre>
+                <p>Một khóa học "có nhiều" buổi học: đó là quan hệ One2many ở series Odoo, được mô phỏng bằng một list thuộc tính. Phép <code>sum(s.hours for s in self.sessions)</code> chính là cách một compute method tính tổng giờ.</p>
+
+                <h2 id="trong-odoo">Class Python trở thành model Odoo như thế nào?</h2>
+<pre><code>from odoo import fields, models
+
+class VincCourse(models.Model):
+    _name = 'vinc.course'
+    _description = "Khóa học"
+
+    name = fields.Char(required=True)             # thuộc tính của class
+    duration_hours = fields.Integer()
+    session_ids = fields.One2many('vinc.course.session', 'course_id')
+
+    def action_publish(self):
+        for course in self:                       # self là recordset, duyệt từng bản ghi
+            course.is_published = True</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Class Python thuần</th><th>Model Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>class Course:</code></td><td><code>class VincCourse(models.Model):</code> với <code>_name = 'vinc.course'</code></td></tr>
+                            <tr><td><code>self.name = name</code> trong <code>__init__</code></td><td><code>name = fields.Char()</code> là thuộc tính của class; ORM tự lo việc tạo cột và gán giá trị</td></tr>
+                            <tr><td>Mỗi <code>Course(...)</code> là một đối tượng</td><td>Mỗi dòng trong bảng là một bản ghi; <code>self</code> là <strong>recordset</strong> có thể chứa 0, 1 hoặc nhiều bản ghi</td></tr>
+                            <tr><td><code>@property</code></td><td>Computed field (<code>compute='_compute_x'</code>)</td></tr>
+                            <tr><td><code>__repr__</code></td><td><code>_rec_name</code> quyết định field dùng làm nhãn bản ghi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Có hai điểm khác cần nhớ. Thứ nhất, bạn thường không viết <code>__init__</code> cho model như ví dụ trên: khung ORM của <code>models.Model</code> lo việc tạo đối tượng (theo tài liệu, class được khởi tạo một lần cho mỗi database có cài module), bạn chỉ khai báo field. Thứ hai, trong method của model, <code>self</code> là recordset, nên bạn duyệt <code>for course in self</code> để làm việc với từng bản ghi (bài 3); mỗi lần lặp, <code>course</code> là recordset một phần tử. Tài liệu ORM cũng cảnh báo bạn không được khai báo một field và một method cùng tên trong một model vì khai báo sau sẽ ghi đè khai báo trước mà không có thông báo.</p>
+
+                <h2 id="thuc-hanh">Thực hành: class Session và Course</h2>
+                <ol>
+                    <li>Chạy lại ví dụ <code>Course2</code> và <code>Session</code> ở trên.</li>
+                    <li>Thêm property <code>end_hour</code> hoặc method <code>remove_session(name)</code> vào <code>Course2</code>.</li>
+                    <li>Thêm kiểm tra: <code>add_session</code> báo <code>ValueError</code> nếu <code>hours &lt;= 0</code>.</li>
+                </ol>
+                <p>Mục tiêu là làm quen với việc đưa logic vào method của class thay vì rải rác ở nhiều hàm: đúng thói quen bạn cần khi viết method cho model Odoo.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Lỗi hay gặp khi mới học</p>
+<pre><code>Course()
+# TypeError: Course.__init__() missing 2 required positional arguments: 'name' and 'hours'
+
+c.price_per_hour = 5
+# AttributeError: property 'price_per_hour' of 'Course' object has no setter
+
+x = Course("A", 1)
+y = x                              # y là cùng đối tượng, không phải bản sao
+y.name = "B"
+print(x.name)                      # B</code></pre>
+                    <ul>
+                        <li><strong>Thiếu tham số khi tạo đối tượng.</strong> Báo <code>TypeError</code> liệt kê các tham số bắt buộc còn thiếu.</li>
+                        <li><strong>List/dict ở cấp class.</strong> Dùng chung giữa mọi đối tượng; hãy khởi tạo trong <code>__init__</code>.</li>
+                        <li><strong>Tưởng phép gán sao chép đối tượng.</strong> <code>y = x</code> chỉ thêm một tên cho cùng đối tượng, sửa <code>y</code> là sửa <code>x</code>.</li>
+                        <li><strong>Quên <code>self</code>.</strong> Trong method, truy cập thuộc tính phải qua <code>self.name</code>; chỉ viết <code>name</code> là một biến khác hoặc gây lỗi.</li>
+                    </ul>
+                </div>
+
+                <h2 id="tong-ket">Tổng kết</h2>
+                <ul>
+                    <li>Class là khuôn, đối tượng là bản thể; <code>__init__</code> khởi tạo, <code>self</code> là đối tượng hiện tại.</li>
+                    <li>Dữ liệu riêng khởi tạo trong <code>__init__</code>; list/dict cấp class bị dùng chung.</li>
+                    <li><code>@property</code> cho giá trị tính toán dùng như thuộc tính; thêm setter để kiểm tra khi gán.</li>
+                    <li>Model Odoo là class với field là thuộc tính; <code>self</code> là recordset nên luôn duyệt bằng <code>for record in self</code>.</li>
+                </ul>
+                <p>Bài tiếp theo mở rộng class bằng kế thừa, <code>super()</code> và decorator, nền tảng của việc ghi đè method trong Odoo.</p>
+
+                <div class="cta-box">
+                    <h3>Muốn nắm chắc OOP để viết model Odoo tự tin?</h3>
+                    <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập OOP và review code.</p>
+                    <div class="cta-actions">
+                        <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
+                        <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">Câu hỏi thường gặp</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>self trong Python là gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">self là tham chiếu tới chính đối tượng đang gọi method. Nó luôn là tham số đầu tiên của method trong class và Python tự truyền vào khi bạn gọi, ví dụ c.publish() tương đương Course.publish(c).</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Khác nhau giữa thuộc tính class và thuộc tính đối tượng?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Thuộc tính khai báo trong thân class được mọi đối tượng dùng chung, còn thuộc tính gán qua self trong __init__ là của riêng từng đối tượng. List hay dict ở cấp class bị dùng chung nên cần khởi tạo trong __init__.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>@property dùng để làm gì?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Biến một method thành thuộc tính chỉ đọc được tính khi cần, như c.price_per_hour. Muốn kiểm tra giá trị lúc gán, thêm setter bằng @ten.setter.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>self trong method của model Odoo khác gì self thông thường?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Trong Odoo, self là một recordset, có thể chứa 0, 1 hoặc nhiều bản ghi, nên bạn duyệt for record in self để xử lý từng bản ghi thay vì coi nó là một đối tượng đơn lẻ.</div>
+                    </div>
+                </div>
+
+                <h2 id="nguon">Nguồn tham khảo</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/classes.html" target="_blank" rel="noopener">Python 3.12 – Classes</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/functions.html#property" target="_blank" rel="noopener">Python 3.12 – property()</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (models, fields, recordsets)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Chia sẻ:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fclass-doi-tuong-oop-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fblog%2Fpython%2Fclass-doi-tuong-oop-python-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Điều hướng series">
+                    <a href="module-package-import-python-odoo.html"><small>← Bài trước</small>Module, package và import</a>
+                    <a class="next" href="ke-thua-super-decorator-python-odoo.html"><small>Bài tiếp theo →</small>Kế thừa, super() và decorator</a>
+                </div>
+
+                <p class="disclaimer">Bài viết thuộc bản quyền của Vinc Academy. Vui lòng ghi rõ nguồn và dẫn link khi trích dẫn. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Mục lục</summary>
+                    <ol>
+                        <li><a href="#class-co-ban">Class và đối tượng cơ bản</a></li>
+                        <li><a href="#thuoc-tinh">Thuộc tính của class và của đối tượng</a></li>
+                        <li><a href="#method-dac-biet">Method đặc biệt (dunder) và so sánh đối tượng</a></li>
+                        <li><a href="#property">@property: tính toán nhưng dùng như thuộc tính</a></li>
+                        <li><a href="#quan-he-giua-doi-tuong">Đối tượng chứa đối tượng</a></li>
+                        <li><a href="#trong-odoo">Class Python trở thành model Odoo như thế nào?</a></li>
+                        <li><a href="#thuc-hanh">Thực hành: class Session và Course</a></li>
+                        <li><a href="#tong-ket">Tổng kết</a></li>
+                        <li><a href="#faq">Câu hỏi thường gặp</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../index.html#programs" data-i18n="nav.programs">Chương trình</a>
+            <a href="../../index.html#register" data-i18n="nav.pricing">Học phí</a>
+            <a href="../index.html" data-i18n="nav.blog">Kiến thức</a>
+            <a href="../../index.html#verify" data-i18n="footer.verify">Tra cứu chứng chỉ</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../script.js"></script>
+</body>
+
+</html>

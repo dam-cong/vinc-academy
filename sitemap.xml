@@ -261,4 +261,244 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/odoo/odoo-production-deployment-nginx-workers.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/odoo/trien-khai-odoo-production-nginx-workers.html"/>
   </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/getting-started-python-venv-pip.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/lam-quen-python-cai-dat-venv-pip.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-variables-data-types-strings-f-strings.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/bien-kieu-du-lieu-chuoi-f-string-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-functions-args-kwargs-lambda.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ham-python-args-kwargs-lambda.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-comprehensions-generators-sorted-filter.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/comprehension-generator-sorted-filter-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-classes-objects-oop-odoo-models.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/class-doi-tuong-oop-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-inheritance-super-decorators-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ke-thua-super-decorator-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-files-json-csv-pathlib-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/file-json-csv-pathlib-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-requests-odoo-json-2-api-calls.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/goi-api-requests-json-2-odoo-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html"/>
+  </url>
+  <url>
+    <loc>https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-debugging-logging-testing-small-project.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/debug-logging-test-du-an-nho-python.html"/>
+  </url>
 </urlset>

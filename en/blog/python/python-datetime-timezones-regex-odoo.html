@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Dates, Times, datetime and Regex for Odoo Devs</title>
+    <meta name="description" content="Use datetime, timedelta, time zones and regex in Python, with Odoo 20 Date/Datetime rules such as UTC storage, fields.Date.add, start_of and end_of." />
+    <meta name="keywords" content="python datetime, python timedelta, python time zones, python regex, fields.Date odoo, odoo datetime utc" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/ngay-gio-datetime-regex-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Dates, Times, datetime and Regex for Odoo Devs" />
+    <meta property="og:description" content="datetime, timedelta, time zones and regex in Python, with the Date and Datetime rules of Odoo 20." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-datetime-timezones-regex-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Dates, Times, datetime and Regex for Odoo Devs",
+                "description": "datetime, timedelta, time zones and regex in Python, with the Date and Datetime rules of Odoo 20.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-datetime-timezones-regex-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-datetime-timezones-regex-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Dates, times and regex"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "In which time zone does Odoo store a Datetime?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "According to the ORM documentation, Datetime fields are stored as timestamps without time zone in UTC, so the database is independent of the server's zone. Time zone conversion is handled by the client side."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does Python raise an error when comparing two datetimes?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Python refuses to compare a datetime without a time zone (naive) with one that has a zone (aware) and raises TypeError. Make both naive or both aware, ideally computing in UTC."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How does re.match differ from re.search?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "re.match matches only at the start of the string, re.search looks anywhere, and re.fullmatch requires the entire string to match."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I add 3 months to a date in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Use fields.Date.add(date, months=3). Python's timedelta has no month or year unit because their lengths vary, while Odoo's add passes the arguments to relativedelta."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"ngay-gio-datetime-regex-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Dates, times and regex</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 12 · Practical Python Series</span>
+            <h1>Python Dates, Times, datetime and Regex for Odoo Devs</h1>
+            <p class="post-lead">Dates and strings needing validation are the two kinds of data most prone to input mistakes. This guide teaches datetime, timedelta, time zones and regex in Python, then shows Odoo's Date/Datetime rules such as UTC storage and the fields.Date.add, start_of and end_of helpers.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 16 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>The <code>datetime</code> module gives you <code>date</code>, <code>datetime</code> and <code>timedelta</code> for date arithmetic; <code>strptime</code>/<code>strftime</code> convert between strings and dates. The <code>re</code> module checks and extracts strings by pattern.</strong> With Odoo, remember that Datetime is stored in UTC, a Date compares only with <code>date</code> and a Datetime only with <code>datetime</code>, and prefer <code>fields.Date.today()</code>, <code>add</code>, <code>start_of</code> and <code>end_of</code> over hand calculation.</p>
+                </div>
+
+                <h2 id="datetime">date, datetime and string formats</h2>
+<pre><code>from datetime import date, datetime, timedelta
+
+d = date(2026, 10, 16)
+print(d, d.year, d.month, d.day, d.isoformat())      # 2026-10-16 2026 10 16 2026-10-16
+
+dt = datetime(2026, 10, 16, 9, 30, 15)
+print(dt, dt.date(), dt.time())     # 2026-10-16 09:30:15 2026-10-16 09:30:15
+print(dt.strftime("%d/%m/%Y %H:%M"))                 # 16/10/2026 09:30
+print(datetime.strptime("16/10/2026 09:30", "%d/%m/%Y %H:%M"))   # 2026-10-16 09:30:00
+print(date.fromisoformat("2026-10-16"))              # 2026-10-16</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Format code</th><th>Meaning</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>%Y</code></td><td>4-digit year</td><td><code>2026</code></td></tr>
+                            <tr><td><code>%m</code></td><td>2-digit month</td><td><code>10</code></td></tr>
+                            <tr><td><code>%d</code></td><td>2-digit day</td><td><code>16</code></td></tr>
+                            <tr><td><code>%H</code> / <code>%M</code> / <code>%S</code></td><td>Hour (24h) / minute / second</td><td><code>09</code> / <code>30</code> / <code>15</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><code>strftime</code> turns a date into a string using a format; <code>strptime</code> does the reverse and <strong>the format must match the input string exactly</strong>. When a string already follows ISO (<code>YYYY-MM-DD</code>), <code>date.fromisoformat</code> and <code>datetime.fromisoformat</code> are tidier. ISO is also the form to prefer when exchanging data between systems.</p>
+
+                <h2 id="timedelta">Arithmetic with timedelta</h2>
+<pre><code>td = timedelta(days=7, hours=3)
+print(d + timedelta(days=30), dt + td)     # 2026-11-15 2026-10-23 12:30:15
+print(td.days, td.total_seconds())         # 7 615600.0
+
+print(date(2026, 12, 31) - d)              # 76 days, 0:00:00
+print((date(2026, 12, 31) - d).days)       # 76
+
+start = date(2026, 11, 3)
+print([start + timedelta(weeks=i) for i in range(3)])
+# [datetime.date(2026, 11, 3), datetime.date(2026, 11, 10), datetime.date(2026, 11, 17)]
+print(d &lt; date(2026, 11, 1), d == date(2026, 10, 16))   # True True</code></pre>
+                <p>A <code>timedelta</code> is a span of time (days, hours, minutes, weeks...). Adding or subtracting it from a date gives a new date; subtracting two dates gives a <code>timedelta</code>. Familiar problems: a registration deadline is the start date minus 7 days, a course's end date is the start date plus a number of weeks, and days left until a deadline is <code>(deadline - date.today()).days</code>. Note that <code>timedelta</code> has no month or year unit because their lengths vary; Odoo handles that with <code>fields.Date.add(today, months=3)</code>.</p>
+
+                <h3 id="date-problems">Everyday date problems</h3>
+                <p>Beyond adding and subtracting, real work often needs: the weekday, the first and last day of a month, the next Monday, adding working days. Python offers <code>weekday()</code> (0 is Monday), <code>isocalendar()</code> and the <code>calendar</code> module:</p>
+<pre><code>from datetime import date, timedelta
+import calendar
+
+d = date(2026, 10, 16)
+print(d.weekday(), calendar.day_name[d.weekday()])        # 4 Friday   (0 = Monday ... 6 = Sunday)
+print(d.isocalendar().week)                               # 42   (which week of the year)
+
+print(calendar.monthrange(2026, 2))                       # (6, 28): weekday of the 1st, number of days in the month
+first = d.replace(day=1)
+last = d.replace(day=calendar.monthrange(d.year, d.month)[1])
+print(first, last)                                        # 2026-10-01 2026-10-31
+
+next_monday = d + timedelta(days=(7 - d.weekday()) % 7 or 7)
+print(next_monday, next_monday.weekday())                 # 2026-10-19 0
+
+def add_workdays(start, n):                               # add n working days (skipping Saturday and Sunday)
+    cur = start
+    while n &gt; 0:
+        cur += timedelta(days=1)
+        if cur.weekday() &lt; 5:
+            n -= 1
+    return cur
+
+print(add_workdays(d, 5))                                 # 2026-10-23
+
+print(date(2026, 1, 31) + timedelta(days=30))             # 2026-03-02  &lt;- "adding a month" as 30 days is not always right</code></pre>
+                <p>The last line shows the trap of "adding a month as 30 days": 31 January plus 30 days gives 2 March, skipping February altogether. Because month lengths vary, use a tool that understands calendars. In plain Python that is <code>dateutil.relativedelta</code> (<code>d + relativedelta(months=3)</code>, a library that ships with Odoo); in Odoo it is <code>fields.Date.add(d, months=3)</code>, which passes its arguments to <code>relativedelta</code> as the documentation describes. Be careful with working days too: the calculation above only skips weekends and knows nothing about public holidays, so a real system needs a list of days off as well.</p>
+
+                <h2 id="timezones">Time zones: naive and aware</h2>
+<pre><code>from datetime import timezone, timedelta
+from zoneinfo import ZoneInfo
+
+utc = datetime(2026, 10, 16, 2, 0, tzinfo=timezone.utc)
+vn = utc.astimezone(timezone(timedelta(hours=7)))
+print(utc.isoformat())                  # 2026-10-16T02:00:00+00:00
+print(vn.isoformat(), vn.strftime("%H:%M"))   # 2026-10-16T09:00:00+07:00 09:00
+print(utc.astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).strftime("%Y-%m-%d %H:%M"))   # 2026-10-16 09:00
+
+naive = datetime(2026, 10, 16, 9, 0)    # no time zone (naive)
+naive &lt; utc
+# TypeError: can't compare offset-naive and offset-aware datetimes</code></pre>
+                <p>An object without a time zone is <em>naive</em>, one with a zone is <em>aware</em>. Python refuses to compare the two kinds, so you must align them first. The golden rule for business systems: <strong>store and compute in UTC and convert to the user's zone only when displaying</strong>. Odoo follows it: the ORM documentation says Datetime columns hold UTC timestamps without a zone, leaving the conversion to the client. QWeb reports provide a <code>context_timestamp</code> function that converts a UTC datetime to the printing user's zone.</p>
+
+                <h2 id="dates-in-odoo">Date and Datetime in Odoo</h2>
+<pre><code>from odoo import fields
+
+today = fields.Date.today()                         # a date, in the format the ORM expects
+now = fields.Datetime.now()                         # a datetime (UTC)
+end = fields.Date.add(today, months=3)              # add a span, arguments go to relativedelta
+first = fields.Date.start_of(today, 'month')        # first day of the month
+last = fields.Date.end_of(today, 'month')           # last day of the month
+d = fields.Date.to_date("2026-10-16")               # string -&gt; date
+s = fields.Date.to_string(today)                    # date -&gt; string 'YYYY-MM-DD'
+
+# the default is today, evaluated when a record is created
+start_date = fields.Date(default=fields.Date.today)</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Rule</th><th>Per the Odoo 20 documentation</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Values assigned to a field</td><td>Three forms are accepted: a <code>date</code>/<code>datetime</code> object, text shaped like <code>YYYY-MM-DD</code> or <code>YYYY-MM-DD HH:MM:SS</code>, or <code>False</code>/<code>None</code></td></tr>
+                            <tr><td>Comparison</td><td>Compare a Date field only against <code>date</code> values and a Datetime field only against <code>datetime</code> values; comparing date strings is strongly advised against</td></tr>
+                            <tr><td>Strings from outside sources</td><td>Convert with <code>fields.Date.to_date()</code> / <code>Datetime.to_datetime()</code>; note <code>to_date</code> on a datetime drops the time and zone</td></tr>
+                            <tr><td>Add, subtract, start/end of a period</td><td><code>add</code>, <code>subtract</code>, <code>start_of</code>, <code>end_of</code>, taking a granularity such as year, quarter, month, week, day or hour</td></tr>
+                            <tr><td>Today in the user's time zone</td><td><code>fields.Date.context_today(record)</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="regex">Regex: validating and extracting strings by pattern</h2>
+                <p>A regular expression (regex) describes a string pattern. Use a <strong>raw string</strong> <code>r"..."</code> so backslashes are not processed by Python first. Below, checking a course code and extracting an email and a phone number:</p>
+<pre><code>import re
+
+code_re = re.compile(r"^[A-Z]{2,4}-\d{3}$")          # 2-4 capital letters, a dash, exactly 3 digits
+for c in ("ODO-001", "odo-1", "PY-12345"):
+    print(c, bool(code_re.match(c)))
+# ODO-001 True
+# odo-1 False
+# PY-12345 False
+
+text = "Contact: hien@example.com or sale@example.vn, phone 0900 111 222"
+print(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text))     # ['hien@example.com', 'sale@example.vn']
+m = re.search(r"(\d{4}) (\d{3}) (\d{3})", text)
+print(m.group(0), m.groups())                         # 0900 111 222 ('0900', '111', '222')
+
+print(re.sub(r"\s+", " ", "a   b \n c"))             # a b c
+print(re.sub(r"\D", "", "0900 111-222"))              # 0900111222  (chỉ giữ chữ số)
+print(re.split(r"[,;]\s*", "a, b;c"))                 # ['a', 'b', 'c']</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Pattern</th><th>Matches</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>\d</code>, <code>\w</code>, <code>\s</code></td><td>A digit, a letter-digit-underscore character, whitespace (the capitals <code>\D</code>, <code>\W</code>, <code>\S</code> negate)</td></tr>
+                            <tr><td><code>.</code></td><td>Any single character (except a newline)</td></tr>
+                            <tr><td><code>*</code>, <code>+</code>, <code>?</code>, <code>{3}</code>, <code>{2,4}</code></td><td>0 or more, 1 or more, 0 or 1, exactly 3, between 2 and 4 times</td></tr>
+                            <tr><td><code>[A-Z]</code>, <code>[^0-9]</code></td><td>One character from a set, or not from the set</td></tr>
+                            <tr><td><code>^</code>, <code>$</code></td><td>Start and end of the string</td></tr>
+                            <tr><td><code>( )</code>, <code>(?P&lt;name&gt;...)</code></td><td>A capturing group, a named group</td></tr>
+                            <tr><td><code>\b</code></td><td>A word boundary</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>m = re.match(r"(?P&lt;code&gt;[A-Z]+)-(?P&lt;seq&gt;\d+)", "ODO-007")
+print(m["code"], int(m["seq"]), m.groupdict())        # ODO 7 {'code': 'ODO', 'seq': '007'}
+
+print(re.match(r"\d+", "abc"), re.fullmatch(r"\d+", "123x"))   # None None
+print(re.findall(r"a.*b", "a1b a2b"))                  # ['a1b a2b']   &lt;- greedy: swallows both
+print(re.findall(r"a.*?b", "a1b a2b"))                 # ['a1b', 'a2b'] &lt;- lazy: shortest match
+print(bool(re.search("odoo", "Odoo 20", re.IGNORECASE)))   # True</code></pre>
+                <ul>
+                    <li><code>re.match</code> matches only at the <strong>start</strong> of a string, <code>re.search</code> looks anywhere, and <code>re.fullmatch</code> demands that the entire string match.</li>
+                    <li>Repetition marks are <strong>greedy</strong> by default (matching as much as possible); add <code>?</code> (as in <code>.*?</code>) for the shortest match.</li>
+                    <li><code>re.compile</code> compiles a pattern once for repeated use, faster and tidier.</li>
+                </ul>
+                <p>Regex is powerful but easily unreadable: if a pattern runs past one line, split it, name the constants and add a few test lines. For validating emails to the full standard, a simple pattern like the one above is only a rough filter, not a replacement for real verification.</p>
+
+                <h3 id="regex-recipes">A few useful regex recipes</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Purpose</th><th>Pattern</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>A 10-digit phone number starting with 0</td><td><code>r"0\d{9}"</code> with <code>fullmatch</code></td><td><code>"0900111222"</code> matches, <code>"090011122"</code> does not</td></tr>
+                            <tr><td>An ISO date</td><td><code>r"\d{4}-\d{2}-\d{2}"</code></td><td>Checks the shape only; use <code>date.fromisoformat</code> to learn whether the date exists</td></tr>
+                            <tr><td>A number with a decimal part</td><td><code>r"\d+(?:\.\d+)?"</code></td><td><code>findall</code> on <code>"price 4500.5 and 24 hours"</code> returns <code>['4500.5', '24']</code></td></tr>
+                            <tr><td>A hashtag</td><td><code>r"#(\w+)"</code></td><td>The capturing group returns the part after the <code>#</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The principle: use regex to check <em>shape</em> and let dedicated functions (such as <code>date.fromisoformat</code> and <code>int()</code>) check <em>meaning</em>. A pattern with the right shape but a wrong meaning, like the date <code>2026-13-45</code>, slips through if regex is all you use.</p>
+
+                <h2 id="practice">Practice: validate a code and compute a course end date</h2>
+<pre><code>import re
+from datetime import date, timedelta
+
+CODE_RE = re.compile(r"^[A-Z]{2,4}-\d{3}$")
+
+def validate_course(code, start, weeks):
+    """Return (valid, end date or error message)."""
+    if not CODE_RE.match(code):
+        return False, f"Invalid code: {code}"
+    try:
+        start_date = date.fromisoformat(start)
+    except ValueError:
+        return False, f"Invalid date: {start}"
+    return True, start_date + timedelta(weeks=weeks)
+
+print(validate_course("ODO-001", "2026-11-03", 8))   # (True, datetime.date(2026, 12, 29))
+print(validate_course("odo-1", "2026-11-03", 8))     # (False, 'Invalid code: odo-1')
+print(validate_course("ODO-001", "2026-13-03", 8))   # (False, 'Invalid date: 2026-13-03')</code></pre>
+                <p>This function combines two things you often do with input data: checking a code's format with regex and turning a date string into a <code>date</code> object, then adding a span. Try extending it so the start date must fall on a Monday (<code>start_date.weekday() == 0</code>).</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+<pre><code>datetime.strptime("2026-10-16", "%d/%m/%Y")
+# ValueError: time data '2026-10-16' does not match format '%d/%m/%Y'
+
+date(2026, 2, 30)
+# ValueError: day is out of range for month</code></pre>
+                    <ul>
+                        <li><strong>A <code>strptime</code> format that does not match the string.</strong> Raises <code>ValueError: time data ... does not match format ...</code>. Check day-month order and separators.</li>
+                        <li><strong>Comparing naive and aware datetimes.</strong> Raises <code>TypeError: can't compare offset-naive and offset-aware datetimes</code>. Make both aware, or both UTC without a zone as Odoo does.</li>
+                        <li><strong>A date that does not exist.</strong> <code>date(2026, 2, 30)</code> raises <code>day is out of range for month</code>.</li>
+                        <li><strong>Using <code>re.match</code> to search the middle of a string.</strong> It only matches at the start; use <code>re.search</code>.</li>
+                        <li><strong>Forgetting raw strings.</strong> <code>"\d"</code> in a plain string is easy to get wrong; always write <code>r"\d"</code>.</li>
+                        <li><strong>Comparing a Date with a Datetime in Odoo.</strong> The documentation warns each type compares only with its own kind; use <code>to_date()</code> to align them.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>date</code>, <code>datetime</code>, <code>timedelta</code> for arithmetic; <code>strftime</code>/<code>strptime</code> for strings; ISO for data exchange.</li>
+                    <li>Compute in UTC and convert zones for display; never mix naive with aware.</li>
+                    <li>Odoo: use <code>fields.Date.today/add/start_of/end_of</code>; Date against <code>date</code>, Datetime against <code>datetime</code>.</li>
+                    <li><code>re</code>: use raw strings, know <code>match/search/fullmatch</code>, greedy and lazy.</li>
+                </ul>
+                <p>The next part connects to the outside world: calling APIs with <code>requests</code>, including Odoo's JSON-2 API.</p>
+
+                <div class="cta-box">
+                    <h3>Want to handle dates and validate data without slips?</h3>
+                    <p>The Developer Foundation course has exercises on datetime, regex and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>In which time zone does Odoo store a Datetime?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">According to the ORM documentation, Datetime fields are stored as timestamps without time zone in UTC, so the database is independent of the server's zone. Time zone conversion is handled by the client side.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does Python raise an error when comparing two datetimes?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Python refuses to compare a datetime without a time zone (naive) with one that has a zone (aware) and raises TypeError. Make both naive or both aware, ideally computing in UTC.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How does re.match differ from re.search?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">re.match matches only at the start of the string, re.search looks anywhere, and re.fullmatch requires the entire string to match.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I add 3 months to a date in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Use fields.Date.add(date, months=3). Python's timedelta has no month or year unit because their lengths vary, while Odoo's add passes the arguments to relativedelta.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/library/datetime.html" target="_blank" rel="noopener">Python 3.12 – datetime</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/re.html" target="_blank" rel="noopener">Python 3.12 – re (regular expressions)</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/zoneinfo.html" target="_blank" rel="noopener">Python 3.12 – zoneinfo</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (Date and Datetime fields)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/reports.html" target="_blank" rel="noopener">Odoo 20 – QWeb Reports (context_timestamp)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-datetime-timezones-regex-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-datetime-timezones-regex-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-files-json-csv-pathlib-odoo.html"><small>← Previous</small>Working with files, JSON and CSV</a>
+                    <a class="next" href="python-requests-odoo-json-2-api-calls.html"><small>Next →</small>Calling APIs with requests</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#datetime">date, datetime and string formats</a></li>
+                        <li><a href="#timedelta">Arithmetic with timedelta</a></li>
+                        <li><a href="#timezones">Time zones: naive and aware</a></li>
+                        <li><a href="#dates-in-odoo">Date and Datetime in Odoo</a></li>
+                        <li><a href="#regex">Regex: validating and extracting strings by pattern</a></li>
+                        <li><a href="#practice">Practice: validate a code and compute a course end date</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

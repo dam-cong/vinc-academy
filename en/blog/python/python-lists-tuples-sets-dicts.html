@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Lists, Tuples, Sets and Dicts with Odoo Examples</title>
+    <meta name="description" content="Master Python lists, tuples, sets and dicts and see where they appear in Odoo: create vals, domains, Command, the manifest. Runnable examples." />
+    <meta name="keywords" content="python list tuple set dict, python dictionary, vals_list odoo, odoo domain tuple, odoo Command, python data structures" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/list-tuple-set-dict-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Lists, Tuples, Sets and Dicts with Odoo Examples" />
+    <meta property="og:description" content="Lists, tuples, sets and dicts in Python, mapped to Odoo&#x27;s vals, domains, Command and manifest." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-lists-tuples-sets-dicts.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Lists, Tuples, Sets and Dicts with Odoo Examples",
+                "description": "Lists, tuples, sets and dicts in Python, mapped to Odoo's vals, domains, Command and manifest.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-lists-tuples-sets-dicts.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-lists-tuples-sets-dicts.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Lists, tuples, sets and dicts"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between a list and a tuple?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A list can change after creation while a tuple cannot. A tuple suits fixed-shape bundles such as a domain condition (field, operator, value) or a Command."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I avoid KeyError when reading a dict?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Use d.get(key, default) instead of d[key]. The get method returns a default value instead of raising an error when the key does not exist."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why does changing b also change a after b = a?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Assignment does not copy; it only adds another name for the same list. For an independent copy use a.copy() or a[:]."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use a set?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When you need to drop duplicate items or test membership quickly and order does not matter. Sets also support union, intersection and difference through the |, & and - operators."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"list-tuple-set-dict-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Lists, tuples, sets and dicts</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 4 · Practical Python Series</span>
+            <h1>Python Lists, Tuples, Sets and Dicts with Odoo Examples</h1>
+            <p class="post-lead">These four data structures appear in nearly every line of Odoo code: the vals of create is a dict, a domain is a list of tuples, and the manifest is a dict too. This guide helps you pick the right structure and avoid the classic traps.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 11 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Python's four built-in data structures cover nearly every need: <code>list</code> (ordered, changeable), <code>tuple</code> (a fixed bundle of values), <code>set</code> (unique items) and <code>dict</code> (key-value pairs).</strong> In Odoo you meet all four: a dict is the <code>vals</code> of <code>create()</code> and the whole manifest, a list of triples is a <code>domain</code>, tuples are <code>Command</code>s and <code>Selection</code> pairs, and sets inspire the operations on recordsets.</p>
+                </div>
+
+                <h2 id="list">List: ordered and changeable</h2>
+                <p>A list is written in square brackets, its items are numbered from 0 and may be of any type. It is what you use most to hold "many things of the same kind":</p>
+<pre><code>codes = ["ODO-F", "PY-F", "GIT-T"]
+codes.append("AI-O")           # append at the end
+codes.insert(1, "SQL-B")       # insert at position 1
+print(codes)
+# ['ODO-F', 'SQL-B', 'PY-F', 'GIT-T', 'AI-O']
+
+codes.remove("SQL-B")          # remove by value
+last = codes.pop()             # take and remove the last one
+print(codes, last)
+# ['ODO-F', 'PY-F', 'GIT-T'] AI-O
+
+print(codes[0], codes[-1], codes[1:], len(codes), "PY-F" in codes)
+# ODO-F GIT-T ['PY-F', 'GIT-T'] 3 True</code></pre>
+                <ul>
+                    <li><code>append</code>, <code>insert</code> and <code>extend</code> add items; <code>remove</code> deletes by value; <code>pop</code> takes and deletes by position (the last item by default).</li>
+                    <li>Negative indexes count from the end (<code>codes[-1]</code> is the last item); slicing <code>codes[1:]</code> yields a new list.</li>
+                    <li><code>sorted()</code> returns a new sorted list; the <code>key</code> parameter lets you sort by a field:</li>
+                </ul>
+<pre><code>print(sorted([24, 8, 16]), sorted([24, 8, 16], reverse=True))
+# [8, 16, 24] [24, 16, 8]
+
+courses = [{"code": "ODO-F", "hours": 24}, {"code": "PY-F", "hours": 16}, {"code": "GIT-T", "hours": 8}]
+shortest = sorted(courses, key=lambda c: c["hours"])[0]
+print(shortest["code"])
+# GIT-T</code></pre>
+                <p>In Odoo, when you call <code>create()</code> for several records you pass a list of dicts called <code>vals_list</code>: <code>env['vinc.course'].create([{...}, {...}])</code>. The ORM documentation describes this argument as a list of dictionaries and says the call returns the created records.</p>
+
+                <h3 id="list-methods">List methods</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Method</th><th>Effect</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>append(x)</code> / <code>extend(items)</code></td><td>Adds one item / adds every item of another list at the end</td></tr>
+                            <tr><td><code>insert(i, x)</code></td><td>Inserts <code>x</code> at position <code>i</code></td></tr>
+                            <tr><td><code>remove(x)</code> / <code>pop(i)</code></td><td>Deletes by value / takes and deletes by position</td></tr>
+                            <tr><td><code>index(x)</code> / <code>count(x)</code></td><td>First position of <code>x</code> / how many times <code>x</code> occurs</td></tr>
+                            <tr><td><code>sort()</code> / <code>reverse()</code></td><td>Sorts / reverses <strong>in place</strong> (unlike <code>sorted()</code>, which always returns a new list)</td></tr>
+                            <tr><td><code>copy()</code> / <code>clear()</code></td><td>Makes a copy / empties the list</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A list also works as a stack (last in, first out) using just <code>append()</code> and <code>pop()</code>. For a queue (first in, first out) the Python documentation recommends <code>collections.deque</code>, since <code>popleft()</code> is much faster than removing the first item of a list:</p>
+<pre><code>from collections import deque
+q = deque(["a", "b"])
+q.append("c")
+print(q.popleft(), list(q))    # a ['b', 'c']</code></pre>
+                <p>You can also split the first item from the rest with <code>first, *rest = [1, 2, 3]</code>, giving <code>first = 1</code> and <code>rest = [2, 3]</code>. It is handy for the first (header) line of a CSV file in part 11.</p>
+
+                <h3 id="list-copy">A classic trap: assigning a list does not copy it</h3>
+<pre><code>a = [1, 2]
+b = a              # b and a are the SAME list
+b.append(3)
+print(a)           # [1, 2, 3]
+
+c = a.copy()       # an independent copy
+c.append(4)
+print(a, c)        # [1, 2, 3] [1, 2, 3, 4]</code></pre>
+                <p>The assignment <code>b = a</code> merely gives the list a second name. For an independent copy use <code>a.copy()</code> or <code>a[:]</code>.</p>
+
+                <h2 id="tuple">Tuple: a fixed bundle of values</h2>
+                <p>A tuple is written in parentheses and <strong>cannot be changed</strong> after creation. It fits things with a fixed shape: a condition, a coordinate, or a multi-part return value.</p>
+<pre><code>cond = ("level", "=", "beginner")
+field, op, value = cond            # unpack into 3 variables
+print(field, op, value, cond[0])   # level = beginner level
+
+domain = [("is_published", "=", True), ("hours", "&gt;", 10)]   # a list of triples
+
+def min_max(nums):
+    return min(nums), max(nums)    # returns a tuple
+
+lo, hi = min_max([24, 8, 16])
+print(lo, hi)                      # 8 24
+
+print(type((1,)), type((1)))
+# &lt;class 'tuple'&gt; &lt;class 'int'&gt;</code></pre>
+                <p>Two details to remember: a one-item tuple needs a trailing comma (<code>(1,)</code>), otherwise <code>(1)</code> is just the number 1 in parentheses; and assigning to an element raises <code>TypeError: 'tuple' object does not support item assignment</code>.</p>
+                <p>You have met tuples everywhere in the Odoo series: each domain condition is a triple <code>(field name, operator, value)</code>; each <code>Selection</code> choice is a <code>(value, label)</code> pair; and each <code>Command</code> is really a triple whose first item is a numeric code, for instance <code>Command.link(12)</code> corresponds to <code>(4, 12, 0)</code>.</p>
+
+                <h2 id="set">Set: a collection without duplicates</h2>
+                <p>A set is written in braces (or <code>set(...)</code>); each value appears once and there is no fixed order. Use it to drop duplicates or to test membership quickly:</p>
+<pre><code>ids = {1, 2, 2, 3}
+print(ids, len(ids), 2 in ids)             # {1, 2, 3} 3 True
+
+x, y = {1, 2, 3}, {3, 4}
+print(x | y, x &amp; y, x - y, sorted(x ^ y))
+# {1, 2, 3, 4} {3} {1, 2} [1, 2, 4]
+
+print(sorted(set([3, 1, 3, 2])))           # [1, 2, 3]  (loại trùng)</code></pre>
+                <p>Set operations: <code>|</code> union, <code>&amp;</code> intersection, <code>-</code> difference, <code>^</code> symmetric difference. Odoo deliberately borrows this notation for recordsets: the ORM documentation says recordsets support set operations like <code>recs1 | recs2</code> for merging two groups of records.</p>
+
+                <h2 id="dict">Dict: key-value pairs</h2>
+                <p>A dict is written in braces with <code>key: value</code> pairs, and lookup by key is very fast. It is the structure you use most with real data: JSON, the <code>vals</code> of <code>create()</code>/<code>write()</code>, settings, the manifest:</p>
+<pre><code>vals = {"name": "Odoo basics", "duration_hours": 24}
+print(vals["name"], vals.get("price"), vals.get("price", 0.0))
+# Odoo basics None 0.0
+
+vals["price"] = 2000                       # add or change a key
+vals.update({"is_published": True})        # add several keys at once
+for k, v in vals.items():
+    print(k, "=", v)
+# name = Odoo basics
+# duration_hours = 24
+# price = 2000
+# is_published = True
+
+print(vals.pop("price"), "price" in vals)  # 2000 False
+
+d = {}
+d.setdefault("tags", []).append("odoo")    # create an empty list if missing
+print(d)                                   # {'tags': ['odoo']}</code></pre>
+                <ul>
+                    <li><code>d[key]</code> raises <code>KeyError</code> when the key is absent, whereas <code>d.get(key, default)</code> returns a default instead of failing.</li>
+                    <li>Keys must be hashable (numbers, strings, tuples) while lists are not: <code>{[1]: 2}</code> raises <code>TypeError: unhashable type: 'list'</code>.</li>
+                    <li>Since Python 3.7 a dict keeps insertion order, so <code>.items()</code> loops give stable results.</li>
+                </ul>
+
+                <h3 id="nested">Nested structures: JSON-like data</h3>
+                <p>Structures nest inside each other, which is the shape of most API payloads and of the data Odoo returns. For example a course holding a list of sessions, each session being a dict:</p>
+<pre><code>data = {"course": {"code": "ODO-F", "sessions": [
+    {"name": "Session 1", "hours": 3},
+    {"name": "Session 2", "hours": 3},
+]}}
+print(data["course"]["sessions"][1]["name"])                 # Session 2
+print(sum(s["hours"] for s in data["course"]["sessions"]))   # 6
+del data["course"]["code"]                                   # remove one key</code></pre>
+                <p>Read it from the outside in: <code>data["course"]</code> is a dict, <code>["sessions"]</code> a list, <code>[1]</code> picks the second item, and <code>["name"]</code> takes its name. With such deep access, consider <code>.get()</code> at each level that might be missing, or test <code>if "sessions" in data["course"]:</code> before iterating. This is also the shape you will receive when calling Odoo's JSON-2 API in part 13: a <code>search_read</code> result is a list of dicts.</p>
+
+                <h2 id="which-structure">Which structure should you pick?</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Structure</th><th>Changeable</th><th>Order</th><th>Duplicates</th><th>Use for</th><th>In Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>list</code></td><td>Yes</td><td>Yes</td><td>Allowed</td><td>Many things of one kind</td><td><code>vals_list</code>, <code>depends</code>, <code>data</code></td></tr>
+                            <tr><td><code>tuple</code></td><td>No</td><td>Yes</td><td>Allowed</td><td>Fixed bundles, multiple return values</td><td>domain conditions, <code>Command</code>, Selection pairs</td></tr>
+                            <tr><td><code>set</code></td><td>Yes</td><td>No</td><td>No</td><td>Removing duplicates, set maths</td><td>the <code>|</code> operation on recordsets</td></tr>
+                            <tr><td><code>dict</code></td><td>Yes</td><td>Insertion order</td><td>Unique keys</td><td>Lookup by key</td><td><code>vals</code>, manifest, context</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="in-odoo">Meeting them again in an Odoo module</h2>
+<pre><code>manifest = {"name": "Vinc Course", "depends": ["base"], "application": True}
+print(manifest["depends"][0])              # base
+
+selection = [("beginner", "Basic"), ("advanced", "Advanced")]
+print(dict(selection)["beginner"])         # Basic
+
+import json
+print(json.dumps({"name": "Odoo basics", "is_published": True}, ensure_ascii=False))
+# {"name": "Odoo basics", "is_published": true}</code></pre>
+                <p>The manifest is a plain Python dict: the <code>'depends'</code> key holds a list and <code>'application'</code> a boolean. That explains why <code>__manifest__.py</code> is just one dict that Odoo reads as a data structure.</p>
+
+                <h2 id="practice">Practice: group courses by length</h2>
+                <p>Given a list of courses, build a dict collecting course codes by length ("long" from 24 hours, otherwise "short"):</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "hours": 24},
+    {"code": "PY-F", "hours": 16},
+    {"code": "GIT-T", "hours": 8},
+]
+groups = {}
+for course in courses:
+    key = "long" if course["hours"] &gt;= 24 else "short"
+    groups.setdefault(key, []).append(course["code"])
+print(groups)
+# {'long': ['ODO-F'], 'short': ['PY-F', 'GIT-T']}</code></pre>
+                <p>This "dict of lists" pattern recurs whenever you group report data. Part 6 will shorten it with comprehensions.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Reading a missing key.</strong> <code>vals["price"]</code> raises <code>KeyError: 'price'</code>. Use <code>vals.get("price", 0.0)</code> when the key may be absent.</li>
+                        <li><strong>Confusing assignment with copying.</strong> <code>b = a</code> makes both names point at one list, so changing <code>b</code> changes <code>a</code>. Use <code>a.copy()</code> for a copy.</li>
+                        <li><strong>Forgetting the comma of a one-item tuple.</strong> <code>(1)</code> is an integer; <code>(1,)</code> is the tuple.</li>
+                        <li><strong>Using a list as a dict key or set member.</strong> It raises <code>TypeError: unhashable type: 'list'</code>; switch to a tuple.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>list</code> for many same-kind items, changeable; <code>tuple</code> for fixed bundles; <code>set</code> drops duplicates; <code>dict</code> looks up by key.</li>
+                    <li>Assignment does not copy; use <code>.copy()</code>.</li>
+                    <li><code>dict.get()</code> avoids <code>KeyError</code>; dict keys must be hashable.</li>
+                    <li>Odoo uses exactly these structures: <code>vals</code>, domains, <code>Command</code>, the manifest.</li>
+                </ul>
+                <p>The next part packages logic into functions: parameters, <code>**kwargs</code> and lambda.</p>
+
+                <div class="cta-box">
+                    <h3>Want to master data structures through exercises?</h3>
+                    <p>The Developer Foundation course has a Python Fundamentals module with list and dict exercises, plus code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between a list and a tuple?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A list can change after creation while a tuple cannot. A tuple suits fixed-shape bundles such as a domain condition (field, operator, value) or a Command.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I avoid KeyError when reading a dict?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Use d.get(key, default) instead of d[key]. The get method returns a default value instead of raising an error when the key does not exist.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does changing b also change a after b = a?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Assignment does not copy; it only adds another name for the same list. For an independent copy use a.copy() or a[:].</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use a set?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When you need to drop duplicate items or test membership quickly and order does not matter. Sets also support union, intersection and difference through the |, &amp; and - operators.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/datastructures.html" target="_blank" rel="noopener">Python 3.12 – Data Structures</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/stdtypes.html" target="_blank" rel="noopener">Python 3.12 – Built-in Types</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (domains, Command)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-lists-tuples-sets-dicts.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-lists-tuples-sets-dicts.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-conditions-loops-if-for-while-match.html"><small>← Previous</small>Conditions and loops</a>
+                    <a class="next" href="python-functions-args-kwargs-lambda.html"><small>Next →</small>Functions: parameters, **kwargs and lambda</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#list">List: ordered and changeable</a></li>
+                        <li><a href="#tuple">Tuple: a fixed bundle of values</a></li>
+                        <li><a href="#set">Set: a collection without duplicates</a></li>
+                        <li><a href="#dict">Dict: key-value pairs</a></li>
+                        <li><a href="#which-structure">Which structure should you pick?</a></li>
+                        <li><a href="#in-odoo">Meeting them again in an Odoo module</a></li>
+                        <li><a href="#practice">Practice: group courses by length</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

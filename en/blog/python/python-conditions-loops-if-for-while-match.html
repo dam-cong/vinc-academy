@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Conditions and Loops: if, for, while, match</title>
+    <meta name="description" content="Learn if/elif/else, for, while, break, continue and match in Python through a course list, the groundwork for for record in self in Odoo." />
+    <meta name="keywords" content="python if else, python for loop, python while, python match case, for record in self odoo, enumerate zip" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/dieu-kien-vong-lap-if-for-while-python.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Conditions and Loops: if, for, while, match" />
+    <meta property="og:description" content="if/elif/else, for, while, break, continue and match in Python with real examples and the link to Odoo&#x27;s for record in self." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-conditions-loops-if-for-while-match.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Conditions and Loops: if, for, while, match",
+                "description": "if/elif/else, for, while, break, continue and match in Python with real examples and the link to Odoo's for record in self.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-conditions-loops-if-for-while-match.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-conditions-loops-if-for-while-match.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Conditions and loops"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is for record in self in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "self is a recordset, a set of records. The for loop walks over each record and assigns it to record, so your method works even when it is called on several records at once."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between break and continue?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "continue skips the rest of the current pass and moves to the next item, while break leaves the loop altogether."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When does the else branch of a for loop run?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The else branch runs when the loop ends normally, meaning without a break. It suits searches: if nothing was found, else runs."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "When should I use match instead of if/elif?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "When one value has several clear branches, such as HTTP status codes. match exists since Python 3.10, so it works in Odoo 20 modules running Python 3.12 or newer."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"dieu-kien-vong-lap-if-for-while-python.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Conditions and loops</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 3 · Practical Python Series</span>
+            <h1>Python Conditions and Loops: if, for, while, match</h1>
+            <p class="post-lead">Conditions and loops are how a program makes decisions and processes data in bulk. This guide covers if, for, while and match using a course list, and shows why Odoo's for record in self is just the familiar for loop.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 10 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Conditions (<code>if/elif/else</code>) decide which code runs, and loops (<code>for</code>, <code>while</code>) repeat a block. Python marks blocks with indentation and a colon.</strong> The loop you will use most is <code>for item in items</code>, which is exactly the shape of <code>for record in self</code> in every Odoo model method. <code>match</code> (since Python 3.10) helps when one value has several branches.</p>
+                </div>
+
+                <h2 id="if">Conditions: if, elif, else</h2>
+                <p>Every branch ends with a colon and the block below it must be indented (by convention 4 spaces). Python checks branches from the top and runs the first true one. Example: classify a course's length by its hours:</p>
+<pre><code>def level_of(hours):
+    if hours &gt;= 24:
+        return "long"
+    elif hours &gt;= 12:
+        return "medium"
+    else:
+        return "short"
+
+print(level_of(24), level_of(16), level_of(8))
+# long medium short</code></pre>
+                <p>You already know comparisons and <code>and/or/not</code> from the previous part. For lists, strings or the number 0 you can write <code>if items:</code> directly to test "has elements" without comparing a length.</p>
+
+                <h3 id="one-line-conditions">One-line conditions and early checks</h3>
+                <p>When you only need to pick between two values, use a conditional expression instead of a whole <code>if/else</code> block. This form appears all over Odoo compute methods, notably to avoid dividing by zero:</p>
+<pre><code>hours = 24
+label = "long" if hours &gt;= 24 else "short"          # long
+
+price, duration = 4500000.0, 0
+price_per_hour = price / duration if duration else 0.0   # 0.0, no division-by-zero error</code></pre>
+                <p>For data validation, a good habit is to <strong>check early and exit early</strong> rather than nesting many <code>if</code> levels. Each failing condition returns at once and the success path sits last, flush with the left margin:</p>
+<pre><code>def check(course):
+    if not course["name"]:
+        return "Missing name"
+    if course["hours"] &lt;= 0:
+        return "Hours must be greater than 0"
+    if not course["published"]:
+        return "Not published"
+    return "OK"
+
+print(check({"name": "", "hours": 8, "published": True}))     # Missing name
+print(check({"name": "Git", "hours": 0, "published": True}))  # Hours must be greater than 0
+print(check({"name": "Git", "hours": 8, "published": True}))  # OK</code></pre>
+                <p>This structure mirrors an Odoo constraint method, except that instead of returning a string Odoo does <code>raise ValidationError(...)</code> (part 10). Another pattern you will meet is checking permissions before sensitive work, like the example in Odoo's security documentation: <code>if self.state == "draft" and self.env.user.has_group('base.manager'):</code>.</p>
+
+                <h2 id="for">The for loop: visiting each item</h2>
+                <p>We use a list of courses as sample data (each course is a dict, covered properly in part 4):</p>
+<pre><code>courses = [
+    {"code": "ODO-F", "name": "Odoo basics", "hours": 24, "published": True},
+    {"code": "PY-F", "name": "Python basics", "hours": 16, "published": True},
+    {"code": "GIT-T", "name": "Git for teams", "hours": 8, "published": False},
+]
+
+total = 0
+for course in courses:
+    if not course["published"]:
+        continue
+    total += course["hours"]
+print("Published hours:", total)
+# Published hours: 40</code></pre>
+                <p>On each pass the variable <code>course</code> receives one element. <code>continue</code> skips the rest of the current pass, and <code>break</code> leaves the loop entirely. In Odoo the same shape shows up in computed fields:</p>
+<pre><code>for course in self:
+    course.session_count = len(course.session_ids)</code></pre>
+                <p>Here <code>self</code> is a recordset (a set of records) and the loop hands each record to <code>course</code>. That is why <code>for record in self</code> opens so many compute, constraint and <code>action_*</code> methods.</p>
+
+                <h3 id="loop-helpers">Four loop helpers</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Function</th><th>Use it when</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>range(n)</code></td><td>Repeating a number of times</td><td><code>list(range(3))</code> is <code>[0, 1, 2]</code>; <code>range(1, 10, 4)</code> yields <code>1, 5, 9</code></td></tr>
+                            <tr><td><code>enumerate(items, start=1)</code></td><td>You need the counter and the item</td><td><code>for i, course in enumerate(courses, start=1):</code></td></tr>
+                            <tr><td><code>zip(a, b)</code></td><td>Walking two lists in parallel</td><td><code>for name, h in zip(names, hours):</code></td></tr>
+                            <tr><td><code>d.items()</code></td><td>Walking a dict as key-value pairs</td><td><code>for k, v in {"ODO-F": 24}.items():</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+<pre><code>for i, course in enumerate(courses, start=1):
+    print(i, course["name"])
+# 1 Odoo basics
+# 2 Python basics
+# 3 Git for teams
+
+names = ["Odoo basics", "Python basics"]
+hours = [24, 16]
+for name, h in zip(names, hours):
+    print(f"{name}: {h} hours")
+# Odoo basics: 24 giờ
+# Python basics: 16 giờ</code></pre>
+
+                <h3 id="loop-details">A few details that are easy to miss</h3>
+                <ul>
+                    <li><strong>The loop variable outlives the loop.</strong> After <code>for course in courses: pass</code>, <code>course</code> still holds the last element. Do not rely on this, and name loop variables differently from outer ones so you do not overwrite them by accident.</li>
+                    <li><strong><code>pass</code> is the "do nothing" statement</strong>, used when the syntax demands a block but you have not written one yet (for instance a skeleton method waiting for its body).</li>
+                    <li><strong>Avoid <code>range(len(items))</code> just to get an index.</strong> It works but is wordy; use <code>enumerate</code> as in the table above.</li>
+                    <li><strong><code>any()</code> and <code>all()</code> replace checking loops.</strong> <code>any(c["hours"] &gt; 20 for c in courses)</code> returns <code>True</code> if at least one course exceeds 20 hours; <code>all(...)</code> is <code>True</code> only when every course qualifies. You have already seen <code>any(course.is_published for course in self)</code> in the delete-blocking example of the Odoo series.</li>
+                    <li><strong><code>while True</code> with <code>break</code></strong> is a familiar pattern when you must run at least once before knowing whether to continue.</li>
+                </ul>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Condition/loop pattern</th><th>Where it shows up in Odoo</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>for record in self:</code></td><td>Every compute method, constraint and <code>action_*</code></td></tr>
+                            <tr><td><code>if not record.field:</code></td><td>Requiring a value before processing</td></tr>
+                            <tr><td><code>x if cond else y</code></td><td><code>course.price / course.duration_hours if course.duration_hours else 0.0</code></td></tr>
+                            <tr><td><code>any(...)</code> / <code>all(...)</code></td><td>Blocking deletion when a published record exists</td></tr>
+                            <tr><td><code>raise</code> inside an <code>if</code> branch</td><td>A constraint raising <code>ValidationError</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="while-break-else">while, break and the loop's else</h2>
+                <p><code>while</code> repeats as long as its condition holds, which fits cases where the number of repeats is unknown (for example retrying an API call until it succeeds):</p>
+<pre><code>n = 3
+while n &gt; 0:
+    print("left", n)
+    n -= 1
+# left 3
+# left 2
+# left 1</code></pre>
+                <p>Python also has a neat quirk: a loop may carry an <code>else</code> branch that runs when the loop ends normally (without <code>break</code>). It suits searching:</p>
+<pre><code>for code in ("ODO-F", "XYZ"):
+    for course in courses:
+        if course["code"] == code:
+            print("Found", code)
+            break
+    else:
+        print("Not found", code)
+# Found ODO-F
+# Not found XYZ</code></pre>
+
+                <h2 id="match">match: several branches by value</h2>
+                <p>Since Python 3.10 the <code>match</code> statement compares a value against <code>case</code> patterns. A <code>|</code> combines values and <code>_</code> is the default branch. Example: turning HTTP status codes from an API (part 13) into messages:</p>
+<pre><code>def status_message(code):
+    match code:
+        case 200:
+            return "OK"
+        case 401 | 403:
+            return "No permission"
+        case 404:
+            return "Not found"
+        case _:
+            return "Other error"
+
+print([status_message(c) for c in (200, 403, 404, 500)])
+# ['OK', 'No permission', 'Not found', 'Other error']</code></pre>
+                <p>Odoo 20 runs on Python 3.12+, so you may use <code>match</code> in new modules. Existing Odoo code is still mostly <code>if/elif</code> chains, so be able to read both.</p>
+
+                <h2 id="practice">Practice: a quick course list report</h2>
+                <p>Write code that prints each course with its length, skips unpublished ones, then prints a total:</p>
+<pre><code>total = 0
+for course in courses:
+    if not course["published"]:
+        continue
+    print(course["code"], level_of(course["hours"]))
+    total += course["hours"]
+print("Total:", total)
+# ODO-F long
+# PY-F medium
+# Total: 40</code></pre>
+                <p>Try swapping <code>continue</code> for <code>break</code> to see the difference: the loop stops for good at the first unpublished course.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+                    <ul>
+                        <li><strong>Wrong or missing indentation.</strong> Forgetting to indent the block after <code>if</code> gives <code>IndentationError: expected an indented block after 'if' statement on line 2</code>. Use 4 spaces and never mix tabs with spaces.</li>
+                        <li><strong>A missing colon.</strong> <code>if hours &gt; 20</code> without <code>:</code> gives <code>SyntaxError: expected ':'</code>.</li>
+                        <li><strong>Changing a list while looping over it.</strong> The Python documentation warns that modifying a collection during iteration is hard to get right. Loop over a copy (<code>for x in nums[:]:</code>) or build a new list. For <code>[1, 2, 3, 4]</code>, removing the even numbers from a copy correctly leaves <code>[1, 3]</code>.</li>
+                        <li><strong>A <code>while</code> loop that never ends.</strong> Always change something in the loop body (like <code>n -= 1</code>) or include an explicit <code>break</code>.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>if/elif/else</code> runs the first true branch; blocks are recognised by a colon and indentation.</li>
+                    <li><code>for item in iterable</code> is the main loop; <code>enumerate</code>, <code>zip</code> and <code>.items()</code> make loops tidier.</li>
+                    <li><code>break</code>, <code>continue</code> and the loop <code>else</code> steer the flow; <code>match</code> handles many branches by value.</li>
+                    <li>Odoo's <code>for record in self</code> is simply a <code>for</code> loop over a recordset.</li>
+                </ul>
+                <p>The next part introduces the four data structures you will use constantly: list, tuple, set and dict.</p>
+
+                <div class="cta-box">
+                    <h3>Want to build programming logic with a mentor?</h3>
+                    <p>The Developer Foundation course has a Python Fundamentals module with exercises on conditions and loops, plus code review.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is for record in self in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">self is a recordset, a set of records. The for loop walks over each record and assigns it to record, so your method works even when it is called on several records at once.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between break and continue?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">continue skips the rest of the current pass and moves to the next item, while break leaves the loop altogether.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When does the else branch of a for loop run?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The else branch runs when the loop ends normally, meaning without a break. It suits searches: if nothing was found, else runs.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>When should I use match instead of if/elif?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">When one value has several clear branches, such as HTTP status codes. match exists since Python 3.10, so it works in Odoo 20 modules running Python 3.12 or newer.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/controlflow.html" target="_blank" rel="noopener">Python 3.12 – More Control Flow Tools</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/compound_stmts.html" target="_blank" rel="noopener">Python 3.12 – Compound statements</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (recordsets)</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-conditions-loops-if-for-while-match.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-conditions-loops-if-for-while-match.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-variables-data-types-strings-f-strings.html"><small>← Previous</small>Variables, data types and strings</a>
+                    <a class="next" href="python-lists-tuples-sets-dicts.html"><small>Next →</small>Lists, tuples, sets and dicts</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#if">Conditions: if, elif, else</a></li>
+                        <li><a href="#for">The for loop: visiting each item</a></li>
+                        <li><a href="#while-break-else">while, break and the loop's else</a></li>
+                        <li><a href="#match">match: several branches by value</a></li>
+                        <li><a href="#practice">Practice: a quick course list report</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

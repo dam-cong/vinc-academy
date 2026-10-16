@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Error Handling: try/except, raise and with</title>
+    <meta name="description" content="Learn try/except/finally, raise, custom exceptions and the with statement in Python, plus reporting errors with Odoo&#x27;s ValidationError and UserError." />
+    <meta name="keywords" content="python try except, python raise, python with, custom exception python, odoo ValidationError, odoo UserError" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/xu-ly-loi-try-except-with-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Error Handling: try/except, raise and with" />
+    <meta property="og:description" content="try/except, raise, with and custom exceptions in Python, compared with Odoo&#x27;s ValidationError and UserError." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-error-handling-try-except-with-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Error Handling: try/except, raise and with",
+                "description": "try/except, raise, with and custom exceptions in Python, compared with Odoo's ValidationError and UserError.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-error-handling-try-except-with-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-error-handling-try-except-with-odoo.html",
+                "proficiencyLevel": "Intermediate",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Error handling and the with statement"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Should I catch errors broadly with except Exception?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Only catch the specific kind you know how to handle. A bare except or except Exception with pass swallows every error, including programming mistakes, so the program fails silently. If you must catch broadly, log the traceback."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is finally for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The finally block always runs, whether or not there was an error and even with a return, so use it for cleanup such as closing files or releasing resources. The with statement does this automatically for files."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do ValidationError and UserError differ in Odoo?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "ValidationError is for data constraints; an @api.constrains method must raise it when the condition fails. UserError blocks an operation for a business reason, for example forbidding deletion inside @api.ondelete. Both show their message to the user."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is raise ... from e for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "It raises a new error while keeping the original one in the __cause__ attribute, helping you trace the root cause when debugging."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"xu-ly-loi-try-except-with-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Error handling and the with statement</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 10 · Practical Python Series</span>
+            <h1>Python Error Handling: try/except, raise, with and ValidationError</h1>
+            <p class="post-lead">Data can always be wrong and files can always be missing. This guide teaches try/except/finally, raise, custom exceptions and the with statement, then compares them with the ValidationError and UserError Odoo uses to report problems to users.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 15 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>Errors in Python are exceptions. <code>try</code> wraps code that may fail, <code>except</code> handles that exact kind of error, <code>finally</code> always runs for cleanup, and <code>raise</code> reports an error on purpose when data is invalid.</strong> The <code>with</code> statement guarantees resources such as files are closed. In Odoo you report problems to users with <code>raise ValidationError(...)</code> or <code>raise UserError(...)</code>, and in tests you catch them with <code>with self.assertRaises(...)</code>.</p>
+                </div>
+
+                <h2 id="try-except">try, except, else, finally</h2>
+                <p>When a statement fails, Python stops and "throws" an exception up the calling layers until an <code>except</code> catches it; if nobody does, the program halts and prints a traceback. The four blocks of a <code>try</code> statement:</p>
+<pre><code>def to_hours(text):
+    try:
+        hours = int(text)             # code that may fail
+    except ValueError:
+        print("Not a number:", text) # runs only on a ValueError
+        return None
+    else:
+        print("converted")          # runs when there was NO error
+        return hours
+    finally:
+        print("always runs")            # always runs, error or not
+
+print(to_hours("24"))
+# converted
+# always runs
+# 24
+print(to_hours("abc"))
+# Not a number: abc
+# always runs
+# None</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Block</th><th>Runs when</th><th>Used for</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>try</code></td><td>Always</td><td>Holding code that may fail, kept as short as possible</td></tr>
+                            <tr><td><code>except Kind</code></td><td>An error of exactly that kind occurred</td><td>Handling or recording the error</td></tr>
+                            <tr><td><code>else</code></td><td>No error occurred</td><td>The follow-up work when all went well</td></tr>
+                            <tr><td><code>finally</code></td><td>Always, even on error or <code>return</code></td><td>Cleanup: closing files, releasing resources</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="catch-right">Catching the right kind</h2>
+<pre><code>try:
+    {"a": 1}["b"]
+except (KeyError, IndexError) as e:   # catch several kinds, get the error object via "as e"
+    print(type(e).__name__, e)        # KeyError 'b'
+
+try:
+    open("missing.csv")
+except FileNotFoundError as e:
+    print("FileNotFoundError:", e)
+# FileNotFoundError: [Errno 2] No such file or directory: 'missing.csv'
+
+def safe_div(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError as e:
+        print("ZeroDivisionError:", e)   # division by zero
+        return 0.0</code></pre>
+                <p>Catch the <strong>most specific</strong> kind of error you know how to handle. A tuple in <code>except</code> catches several kinds at once; <code>as e</code> gives you the error object for printing its message or reading attributes. The errors you meet most when handling data:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Error</th><th>When</th><th>Example</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ValueError</code></td><td>Wrong value though the type is right</td><td><code>int("abc")</code></td></tr>
+                            <tr><td><code>TypeError</code></td><td>Wrong data type</td><td><code>"5" + 3</code></td></tr>
+                            <tr><td><code>KeyError</code></td><td>A dict key does not exist</td><td><code>d["price"]</code></td></tr>
+                            <tr><td><code>IndexError</code></td><td>Index out of range</td><td><code>lst[10]</code></td></tr>
+                            <tr><td><code>AttributeError</code></td><td>The object has no such attribute</td><td><code>None.name</code></td></tr>
+                            <tr><td><code>FileNotFoundError</code></td><td>The file does not exist</td><td><code>open("x.csv")</code></td></tr>
+                            <tr><td><code>ZeroDivisionError</code></td><td>Dividing by 0</td><td><code>1 / 0</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="read-traceback">Reading a traceback: the most important skill</h2>
+                <p>When an exception is not caught, Python prints a <strong>traceback</strong>: the chain of function calls leading to the error. Learn to read it <em>from the bottom up</em>: the last line names the error kind and message, and the lines above are the "path" you took. Take a script reading a course list where the second row spells its hours in words:</p>
+<pre><code>def parse_hours(text):
+    return int(text)
+
+def load_course(row):
+    return {"name": row["name"], "hours": parse_hours(row["hours"])}
+
+rows = [{"name": "Odoo", "hours": "24"}, {"name": "Git", "hours": "eight"}]
+for row in rows:
+    print(load_course(row))</code></pre>
+                <p>Running it prints:</p>
+<pre><code>{'name': 'Odoo', 'hours': 24}
+Traceback (most recent call last):
+  File "tb.py", line 9, in &lt;module&gt;
+    print(load_course(row))
+  File "tb.py", line 5, in load_course
+    return {"name": row["name"], "hours": parse_hours(row["hours"])}
+  File "tb.py", line 2, in parse_hours
+    return int(text)
+ValueError: invalid literal for int() with base 10: 'eight'</code></pre>
+                <ul>
+                    <li><strong>The last line</strong> (<code>ValueError: invalid literal for int() ... 'eight'</code>) is explicit: the error is a <code>ValueError</code> and the offending value is <code>'eight'</code>.</li>
+                    <li><strong>The frame nearest the end</strong> (<code>parse_hours</code>, line 2) is where the error occurred, the <code>int(text)</code> line.</li>
+                    <li>The frames above tell you who called it: <code>load_course</code> and then the module-level <code>for</code> loop. You follow them back to find which data row (<code>"Git"</code>) caused the trouble.</li>
+                </ul>
+                <p>A good habit: read the last line first, then the last frame of <em>your own code</em> (skip library frames if any). In Odoo, tracebacks appear in the server log and frames through <code>odoo/...</code> are just scaffolding; look for the first frame that belongs to your module.</p>
+
+                <h3 id="eafp">EAFP and LBYL: two error-handling styles</h3>
+                <p>There are two approaches: <strong>LBYL</strong> ("look before you leap": check the condition first, then act) and <strong>EAFP</strong> ("easier to ask forgiveness than permission": just act and catch the error if it comes). Python leans towards EAFP because it avoids data changing between the check and the use, but neither is absolutely right. When a missing key is normal, <code>d.get()</code> or <code>in</code> is usually clearer; when the failure is truly exceptional, use <code>try/except</code>:</p>
+<pre><code>d = {"a": 1}
+
+# LBYL: look before you leap (check the condition first)
+value = d["b"] if "b" in d else "none"
+
+# EAFP: easier to ask forgiveness than permission (just do it, catch the error)
+try:
+    value = d["b"]
+except KeyError:
+    value = "none"
+
+# usually the tidiest with a dict
+value = d.get("b", "none")
+
+assert value == "none", "miscalculated"     # assert: checks a developer's assumption
+# AssertionError: miscalculated  (if the condition is false)</code></pre>
+                <p>The <code>assert</code> keyword is for <em>developer assumptions</em> ("this must be true here"), not for validating user-entered data, because it can be switched off when Python runs with optimization options. External data always needs a real <code>raise</code>.</p>
+
+                <h2 id="raise">raise: reporting errors on purpose</h2>
+<pre><code>def check(hours):
+    if hours &lt;= 0:
+        raise ValueError(f"Invalid number of hours: {hours}")
+    return hours
+
+try:
+    check(0)
+except ValueError as e:
+    print("Caught:", e)               # Caught: Invalid number of hours: 0
+
+try:
+    try:
+        1 / 0
+    except ZeroDivisionError:
+        print("log it, then re-raise")
+        raise                           # a bare raise: re-raises the error being handled
+except ZeroDivisionError:
+    print("the caller still receives the error")</code></pre>
+                <p>Use <code>raise</code> when input data breaks a business rule, instead of letting the program continue with bad data. A bare <code>raise</code> inside <code>except</code> re-raises the very error being handled, useful when you want to log it and let an upper layer decide.</p>
+
+                <h2 id="custom-exceptions">Custom exceptions</h2>
+<pre><code>class CourseError(Exception):
+    """A course business error."""
+
+class InvalidHours(CourseError):
+    def __init__(self, hours):
+        super().__init__(f"Invalid number of hours: {hours}")
+        self.hours = hours
+
+def convert(text):
+    try:
+        return int(text)
+    except ValueError as e:
+        raise InvalidHours(text) from e     # keep the original cause
+
+try:
+    convert("x")
+except CourseError as e:                    # catches the parent class and its children
+    print(e)                                # Invalid number of hours: x
+    print(repr(e.__cause__))
+    # ValueError("invalid literal for int() with base 10: 'x'")</code></pre>
+                <p>Create a class extending <code>Exception</code> to give your project's business errors a name. Catching the parent class (<code>CourseError</code>) catches all its children. The <code>raise ... from e</code> syntax keeps the original cause in <code>__cause__</code>, very helpful when debugging. The whole exception tree derives from <code>BaseException</code>; most errors you meet extend <code>Exception</code>, whereas <code>KeyboardInterrupt</code> (Ctrl+C) does not, so <code>except Exception</code> does not swallow it.</p>
+
+                <h2 id="with">with: automatic cleanup</h2>
+                <p>The <code>with</code> statement works with a <em>context manager</em>: an object that knows how to "open" and "close". The classic case is a file, closed automatically when leaving the <code>with</code> block, error or not, so you need not remember <code>close()</code>:</p>
+<pre><code>import tempfile, os
+path = os.path.join(tempfile.mkdtemp(), "a.txt")
+
+with open(path, "w", encoding="utf-8") as f:    # the file closes automatically when leaving the with block
+    f.write("ODO-F\n")
+print(f.closed)                                  # True
+
+with open(path, encoding="utf-8") as f:
+    print(f.read().strip())                      # ODO-F</code></pre>
+                <p>You can write your own context manager using the <code>contextlib.contextmanager</code> decorator: the part before <code>yield</code> runs on entering the block, and the <code>finally</code> part after it runs on leaving, even if the block's body fails:</p>
+<pre><code>from contextlib import contextmanager
+
+@contextmanager
+def section(name):
+    print("start", name)
+    try:
+        yield                                    # the body of the with block runs here
+    finally:
+        print("end", name)                  # always runs, kể cả khi thân bị lỗi
+
+with section("import"):
+    print("working")
+# start import
+# working
+# end import
+
+try:
+    with section("error"):
+        raise ValueError("broken")
+except ValueError:
+    print("caught")
+# start error
+# end error      &lt;- finally still runs
+# caught</code></pre>
+
+                <h2 id="in-odoo">Reporting errors in Odoo: ValidationError and UserError</h2>
+<pre><code>from odoo.exceptions import UserError, ValidationError
+
+@api.constrains('duration_hours')
+def _check_duration(self):
+    for course in self:
+        if course.duration_hours &lt;= 0:
+            raise ValidationError("Teaching hours must be greater than 0.")   # shown to the user as an error message
+
+@api.ondelete(at_uninstall=False)
+def _unlink_except_published(self):
+    if any(course.is_published for course in self):
+        raise UserError("A published course cannot be deleted.")
+
+# in a test
+with self.assertRaises(ValidationError):
+    self.course.duration_hours = 0</code></pre>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Odoo exception</th><th>Use when</th><th>Seen in</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ValidationError</code></td><td>Data violates a constraint</td><td>An <code>@api.constrains</code> method must raise it when the condition fails</td></tr>
+                            <tr><td><code>UserError</code></td><td>Blocking an operation for a business reason</td><td>For example inside <code>@api.ondelete</code> when deletion is not allowed</td></tr>
+                            <tr><td><code>AccessError</code></td><td>The user lacks rights</td><td>Raised by <code>create</code>, <code>write</code>, <code>search</code> on rights violations (part 5 of the Odoo series)</td></tr>
+                            <tr><td><code>ValueError</code></td><td>A field name does not exist</td><td>Raised by <code>create</code> when passed values name a wrong field</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The message you pass to <code>ValidationError</code>/<code>UserError</code> is what the user sees, so write it clearly and say what they should do. In tests, <code>with self.assertRaises(ValidationError):</code> checks that your constraint really blocks bad data (part 13 of the Odoo series).</p>
+
+                <h2 id="practice">Practice: converting CSV rows safely</h2>
+<pre><code>def parse_row(row):
+    """Turn a dict of strings into typed values; raise InvalidHours on failure."""
+    try:
+        hours = int(row["hours"])
+    except (KeyError, ValueError) as e:
+        raise InvalidHours(row.get("hours")) from e
+    if hours &lt;= 0:
+        raise InvalidHours(hours)
+    return {"code": row["code"].strip().upper(), "hours": hours}
+
+rows = [{"code": " odo-f ", "hours": "24"}, {"code": "x", "hours": "abc"}, {"code": "y", "hours": "-1"}]
+ok, errors = [], []
+for row in rows:
+    try:
+        ok.append(parse_row(row))
+    except CourseError as e:
+        errors.append(str(e))
+print(ok)       # [{'code': 'ODO-F', 'hours': 24}]
+print(errors)   # ['Invalid number of hours: abc', 'Invalid number of hours: -1']</code></pre>
+                <p>This is a very realistic pattern for processing imported file data (parts 11 and 14): collect good rows in one list and bad rows in another, without the program stopping midway.</p>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+<pre><code>try:
+    risky()
+except:                      # CATCHES EVERYTHING, even KeyboardInterrupt
+    pass                     # and swallows the error: no trace is left
+
+# better: catch the right kind and record it
+try:
+    risky()
+except ValueError as e:
+    logging.warning("skipping bad row: %s", e)</code></pre>
+                    <ul>
+                        <li><strong>A bare <code>except:</code> or <code>except Exception: pass</code>.</strong> It swallows every error, including programming mistakes, so the program goes wrong silently. Catch the specific kind and log it (<code>logging.exception(...)</code> records the traceback too).</li>
+                        <li><strong>Wrapping a whole long function in one <code>try</code>.</strong> You cannot tell which line failed. Wrap only the lines that can really fail.</li>
+                        <li><strong>Using errors in place of ordinary conditions.</strong> Testing <code>if key in d:</code> or using <code>d.get()</code> is usually clearer than catching <code>KeyError</code> when a missing key is normal.</li>
+                        <li><strong>Picking the wrong exception in Odoo.</strong> Data constraints use <code>ValidationError</code>; blocking operations uses <code>UserError</code>. The message is for the end user, not the developer.</li>
+                    </ul>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li><code>try/except/else/finally</code> handles errors; catch specific kinds and avoid a bare <code>except:</code>.</li>
+                    <li><code>raise</code> reports invalid data; <code>raise X from e</code> keeps the original cause; custom exceptions name business errors.</li>
+                    <li><code>with</code> guarantees cleanup of resources (files, connections), error or not.</li>
+                    <li>Odoo: <code>ValidationError</code> for constraints, <code>UserError</code> for blocking operations, with messages written for users.</li>
+                </ul>
+                <p>The next part is about reading and writing real data: files, <code>pathlib</code>, JSON and CSV.</p>
+
+                <div class="cta-box">
+                    <h3>Want tidy error handling and friendly messages for users?</h3>
+                    <p>The Developer Foundation course has exercises on error handling, data constraints and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Should I catch errors broadly with except Exception?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Only catch the specific kind you know how to handle. A bare except or except Exception with pass swallows every error, including programming mistakes, so the program fails silently. If you must catch broadly, log the traceback.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is finally for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">The finally block always runs, whether or not there was an error and even with a return, so use it for cleanup such as closing files or releasing resources. The with statement does this automatically for files.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do ValidationError and UserError differ in Odoo?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">ValidationError is for data constraints; an @api.constrains method must raise it when the condition fails. UserError blocks an operation for a business reason, for example forbidding deletion inside @api.ondelete. Both show their message to the user.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is raise ... from e for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">It raises a new error while keeping the original one in the __cause__ attribute, helping you trace the root cause when debugging.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/errors.html" target="_blank" rel="noopener">Python 3.12 – Errors and Exceptions</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/exceptions.html" target="_blank" rel="noopener">Python 3.12 – Built-in Exceptions</a></li>
+                    <li><a href="https://docs.python.org/3.12/library/contextlib.html" target="_blank" rel="noopener">Python 3.12 – contextlib</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/orm.html" target="_blank" rel="noopener">Odoo 20 – ORM API (exceptions, constraints)</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/10_constraints.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Constraints</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-error-handling-try-except-with-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-error-handling-try-except-with-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-inheritance-super-decorators-odoo.html"><small>← Previous</small>Inheritance, super() and decorators</a>
+                    <a class="next" href="python-files-json-csv-pathlib-odoo.html"><small>Next →</small>Working with files, JSON and CSV</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#try-except">try, except, else, finally</a></li>
+                        <li><a href="#catch-right">Catching the right kind</a></li>
+                        <li><a href="#read-traceback">Reading a traceback: the most important skill</a></li>
+                        <li><a href="#raise">raise: reporting errors on purpose</a></li>
+                        <li><a href="#custom-exceptions">Custom exceptions</a></li>
+                        <li><a href="#with">with: automatic cleanup</a></li>
+                        <li><a href="#in-odoo">Reporting errors in Odoo: ValidationError and UserError</a></li>
+                        <li><a href="#practice">Practice: converting CSV rows safely</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>

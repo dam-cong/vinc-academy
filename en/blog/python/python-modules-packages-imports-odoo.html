@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Modules, Packages and Imports: Odoo __init__.py</title>
+    <meta name="description" content="Understand modules, packages, relative imports, __name__ == &quot;__main__&quot; and sys.path in Python, plus the Odoo module __init__.py chain and circular imports." />
+    <meta name="keywords" content="python module package, python import, odoo __init__.py, from . import odoo, __name__ main, circular import python" />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/blog/python/module-package-import-python-odoo.html" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Python Modules, Packages and Imports: Odoo __init__.py" />
+    <meta property="og:description" content="Modules, packages, imports and __init__.py in Python, and why one missing import line makes an Odoo model disappear." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/python-modules-packages-imports-odoo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="article:published_time" content="2026-10-16" />
+    <meta property="article:modified_time" content="2026-10-16" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../../../image/vinc-academy.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <link rel="stylesheet" href="../../../blog.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "TechArticle",
+                "headline": "Python Modules, Packages and Imports: Odoo __init__.py",
+                "description": "Modules, packages, imports and __init__.py in Python, and why one missing import line makes an Odoo model disappear.",
+                "inLanguage": "en",
+                "datePublished": "2026-10-16",
+                "dateModified": "2026-10-16",
+                "image": "https://vinc-academy.vercel.app/image/og/python-modules-packages-imports-odoo.png",
+                "mainEntityOfPage": "https://vinc-academy.vercel.app/en/blog/python/python-modules-packages-imports-odoo.html",
+                "proficiencyLevel": "Beginner",
+                "dependencies": "Python 3.12+",
+                "author": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy",
+                    "url": "https://vinc-academy.vercel.app/"
+                },
+                "publisher": {
+                    "@type": "EducationalOrganization",
+                    "name": "Vinc Academy",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://vinc-academy.vercel.app/image/vinc-academy.png"
+                    }
+                },
+                "copyrightHolder": {
+                    "@type": "Organization",
+                    "name": "Vinc Academy"
+                },
+                "copyrightYear": 2026
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://vinc-academy.vercel.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Knowledge",
+                        "item": "https://vinc-academy.vercel.app/en/blog/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": "Python",
+                        "item": "https://vinc-academy.vercel.app/en/blog/python/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 4,
+                        "name": "Modules, packages and imports"
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Why does an Odoo module need an __init__.py file?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "__init__.py turns a folder into a package and holds the import lines (such as from . import models) that make Python load model and controller files. Without the import line the model class never runs, so Odoo does not know the model exists."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is if __name__ == \"__main__\" for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "That block runs only when the file is run directly with python file.py, and not when the file is imported. It usually holds a quick trial or a script's entry point."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What is the difference between relative and absolute imports?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "A relative import uses dots to point inside the same package, for example from . import course. An absolute import spells the full path from the top, for example from vinc_tools.courses import make_code."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How do I fix a circular import error?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Restructure so modules depend in one direction, for example by moving shared code into a third module. A quick patch is to move the import statement inside the function that needs it."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../../../index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../../../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="../../../index.html#about" data-i18n="nav.about">About</a>
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" class="active" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <button class="btn-nav" onclick="location.href='../../../index.html#register'" data-i18n="nav.register">Free Consultation</button>
+        <button class="lang-toggle" onclick="toggleLang()" data-alt="../../../blog/python/"module-package-import-python-odoo.html" title="Switch language" aria-label="Toggle language">VI</button><button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <main class="blog-wrap">
+        <ol class="breadcrumb">
+            <li><a href="../../../index.html">Home</a></li>
+            <li><a href="../index.html">Knowledge</a></li>
+            <li><a href="index.html">Python</a></li>
+            <li aria-current="page">Modules, packages and imports</li>
+        </ol>
+
+        <header class="post-header">
+            <span class="section-tag">Part 7 · Practical Python Series</span>
+            <h1>Python Modules, Packages and Imports: Understanding Odoo __init__.py</h1>
+            <p class="post-lead">Every time you add a model or controller to an Odoo module you must edit an __init__.py file. This guide explains modules, packages, relative imports and how Python finds code, so you understand why one missing import line makes a model vanish.</p>
+            <div class="post-meta">
+                <span><i class="fa-regular fa-calendar"></i> Updated: <time datetime="2026-10-16">October 16, 2026</time></span>
+                <span><i class="fa-regular fa-clock"></i> 13 min read</span>
+                <span><i class="fa-solid fa-pen-nib"></i> Vinc Academy Team</span>
+            </div>
+        </header>
+
+        <div class="post-layout">
+            <article class="prose">
+
+                <div class="callout">
+                    <p class="callout-title">Quick summary</p>
+                    <p><strong>A <code>.py</code> file is a <em>module</em> and a folder with <code>__init__.py</code> is a <em>package</em>. You use <code>import</code> to pull code from another module.</strong> In an Odoo module, the <code>__init__.py</code> at the root and in <code>models/</code> form the import chain that brings model files into the system: miss one <code>from . import course</code> line and the model does not exist. Python looks modules up through <code>sys.path</code>, and a file with an <code>if __name__ == "__main__":</code> block can both run directly and be imported.</p>
+                </div>
+
+                <h2 id="module">Modules: one Python file is a small library</h2>
+                <p>Any <code>.py</code> file can be loaded by another. There are three ways to write an <code>import</code>:</p>
+<pre><code>import math                         # load the whole module, use math.sqrt(...)
+import math as m                    # give it an alias
+from math import sqrt, pi           # pull in specific names
+
+print(math.sqrt(16), m.sqrt(25), sqrt(9), round(pi, 2))
+# 4.0 5.0 3.0 3.14</code></pre>
+                <ul>
+                    <li><code>import math</code> loads the whole module; you call through the module name (<code>math.sqrt</code>), making the origin obvious.</li>
+                    <li><code>import math as m</code> gives a short name; common with long library names.</li>
+                    <li><code>from math import sqrt</code> brings one name straight into use; short but prone to name clashes if you import many.</li>
+                </ul>
+                <p>The standard library ships hundreds of modules (<code>math</code>, <code>json</code>, <code>datetime</code>, <code>csv</code>, <code>re</code>...), and you will use many in later parts. Third-party libraries (such as <code>requests</code>) are installed with <code>pip</code> as in part 1 and imported the same way.</p>
+
+                <h2 id="package">Packages: a folder holding several modules</h2>
+                <p>As a project grows you gather related files into a folder and add an <code>__init__.py</code> so Python treats it as a package. This is how you would organize a small toolkit for the course project:</p>
+<pre><code>vinc-tools/
+├── main.py
+└── vinc_tools/
+    ├── __init__.py
+    ├── courses.py
+    └── report.py</code></pre>
+<pre><code># vinc_tools/courses.py
+PREFIX = "ODO"
+
+def make_code(seq):
+    return f"{PREFIX}-{seq:03d}"
+
+if __name__ == "__main__":
+    print("run directly:", make_code(1))</code></pre>
+<pre><code># vinc_tools/__init__.py
+from .courses import make_code</code></pre>
+<pre><code># vinc_tools/report.py
+from . import courses
+from .courses import make_code as mk
+
+def line(seq):
+    return courses.PREFIX + ":" + mk(seq)</code></pre>
+<pre><code># main.py (next to the vinc_tools folder)
+import vinc_tools
+from vinc_tools import report
+from vinc_tools.courses import PREFIX
+import vinc_tools.courses as vc
+
+print(vinc_tools.make_code(7), report.line(2), PREFIX, vc.PREFIX)
+print(__name__)</code></pre>
+<pre><code>$ python3 main.py
+ODO-007 ODO:ODO-002 ODO ODO
+__main__
+
+$ python3 vinc_tools/courses.py
+run directly: ODO-001</code></pre>
+                <ul>
+                    <li><code>from .courses import make_code</code> in <code>__init__.py</code> is a <strong>relative import</strong>: the dot means "inside this same package". Thanks to it users can call <code>vinc_tools.make_code</code> without knowing which file holds it.</li>
+                    <li><code>from . import courses</code> loads the package's own <code>courses</code> module, while <code>from .courses import make_code as mk</code> takes one name and renames it.</li>
+                    <li><code>__init__.py</code> runs once, right when the package is loaded.</li>
+                </ul>
+
+                <h3 id="name-main">The if __name__ == "__main__" block</h3>
+                <p>Every module has a <code>__name__</code> variable. When a file is run directly with <code>python file.py</code>, <code>__name__</code> equals <code>"__main__"</code>; when it is imported, <code>__name__</code> is the module's name. The <code>if __name__ == "__main__":</code> block therefore runs only when you run the file as a script, ideal for a quick trial or a program's entry point (you will use it in part 14). Compare the two commands above: <code>main.py</code> prints <code>__main__</code>, while importing <code>vinc_tools.courses</code> does not show the "run directly" line.</p>
+
+                <h2 id="find-modules">Where does Python look for modules?</h2>
+                <p>On <code>import x</code> Python searches the <code>sys.path</code> list in order: the folder of the running script (or the current directory in interactive mode, shown as an empty-string entry), then the standard library and your environment's library location. That is why running <code>python3 main.py</code> from the project folder lets <code>import vinc_tools</code> succeed, while running from elsewhere may fail to find it. The virtual environment from part 1 also changes the search: <code>pip install</code> inside a venv puts packages in the venv's own folder.</p>
+                <p>Odoo uses a different mechanism with the same spirit: the list of module folders is declared with <code>--addons-path</code> (part 2 of the Odoo series), and Odoo looks for directories containing <code>__manifest__.py</code> in them.</p>
+
+                <h2 id="explore">Exploring a module: dir, help and __file__</h2>
+                <p>When you meet an unfamiliar module you need not open the docs straight away. Three built-in tools answer most questions: <code>dir(module)</code> lists the names inside, <code>help(module.func)</code> or the <code>__doc__</code> attribute prints the description, and <code>module.__file__</code> shows where the source lives (very handy when you want to read Odoo's or a library's code). Python also keeps loaded modules in <code>sys.modules</code>, so a second import costs almost nothing and a module's code runs only once.</p>
+<pre><code>import math
+print([n for n in dir(math) if n in ("sqrt", "pi", "floor", "ceil")])
+# ['ceil', 'floor', 'pi', 'sqrt']
+print(math.sqrt.__doc__.splitlines()[0])
+# Return the square root of x.
+
+import sys
+print("math" in sys.modules, "requests" in sys.modules)
+# True False   (an imported module is cached, so the second import is very fast)</code></pre>
+                <h3 id="stdlib">Standard modules you will use a lot</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Module</th><th>Used for</th><th>Covered in</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>json</code>, <code>csv</code></td><td>Reading and writing structured data</td><td>Part 11</td></tr>
+                            <tr><td><code>pathlib</code>, <code>os</code></td><td>Working with paths and folders</td><td>Part 11</td></tr>
+                            <tr><td><code>datetime</code></td><td>Dates and times</td><td>Part 12</td></tr>
+                            <tr><td><code>re</code></td><td>Regular expressions</td><td>Part 12</td></tr>
+                            <tr><td><code>logging</code></td><td>Logging instead of <code>print</code></td><td>Part 14</td></tr>
+                            <tr><td><code>unittest</code></td><td>Writing tests</td><td>Part 14</td></tr>
+                            <tr><td><code>collections</code>, <code>itertools</code>, <code>functools</code></td><td>Advanced data structures and iteration tools</td><td>Parts 6, 9</td></tr>
+                            <tr><td><code>requests</code> (installed separately)</td><td>Calling HTTP APIs</td><td>Part 13</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>A common convention is to group the <code>import</code> lines at the top of a file: standard library first, third-party libraries next, your project's own modules last, with a blank line between groups. Glancing at the top of a file tells a reader what it depends on, which is also why the <code>from odoo import ...</code> lines always sit up there.</p>
+
+                <h2 id="odoo-module">The import chain in an Odoo module</h2>
+                <figure class="diagram">
+                    <svg viewBox="0 0 640 145" role="img" aria-labelledby="dg-en-p07">
+                        <title id="dg-en-p07">The import chain inside an Odoo module</title>
+                        <rect class="dg-accent" x="10" y="10" width="190" height="70" rx="12" />
+                        <text class="dg-title" x="26" y="38">vinc_course/__init__.py</text>
+                        <text class="dg-text" x="26" y="64">from . import models</text>
+                        <path class="dg-arrow" d="M202 45 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="228" y="10" width="190" height="70" rx="12" />
+                        <text class="dg-title" x="244" y="38">models/__init__.py</text>
+                        <text class="dg-text" x="244" y="64">from . import course</text>
+                        <path class="dg-arrow" d="M420 45 h24 m-8 -6 l8 6 l-8 6" />
+                        <rect class="dg-box" x="446" y="10" width="184" height="70" rx="12" />
+                        <text class="dg-title" x="462" y="38">models/course.py</text>
+                        <text class="dg-text" x="462" y="64">class VincCourse(...)</text>
+                        <text class="dg-text" x="10" y="110">Odoo loads the module folder and Python runs __init__.py, pulling in each file in turn.</text>
+                        <text class="dg-text" x="10" y="132">Forget one import line here = the model is never registered.</text>
+                    </svg>
+                    <figcaption>Diagram by Vinc Academy.</figcaption>
+                </figure>
+
+
+<pre><code># vinc_course/__init__.py
+from . import models
+
+# vinc_course/models/__init__.py
+from . import course
+from . import course_category
+
+# vinc_course/models/course.py
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError</code></pre>
+                <p>These two <code>__init__.py</code> files are where many newcomers get hurt. Create <code>models/course.py</code> but forget <code>from . import course</code> and Python never runs the <code>VincCourse</code> class, Odoo does not know the model <code>vinc.course</code> exists, and no table is created on upgrade. Odoo's official tutorial describes exactly this chain: the model sits in <code>models/</code>, its file is imported in <code>models/__init__.py</code>, and the <code>models</code> folder is imported in the root <code>__init__.py</code>. The <code>from odoo import api, fields, models</code> lines at the top of a file are imports from Odoo's own library.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>You want to</th><th>Write</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Add a new model</td><td>Create <code>models/name.py</code> + <code>from . import name</code> in <code>models/__init__.py</code></td></tr>
+                            <tr><td>Add a controller</td><td>Create <code>controllers/main.py</code> + <code>from . import main</code> in <code>controllers/__init__.py</code></td></tr>
+                            <tr><td>Add a test</td><td>File <code>tests/test_x.py</code> + <code>from . import test_x</code> in <code>tests/__init__.py</code></td></tr>
+                            <tr><td>Use an external library</td><td><code>import requests</code> and declare it in the manifest's <code>external_dependencies</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The pattern "each sub-folder's <code>__init__.py</code> imports its files" repeats for <code>controllers</code> and <code>tests</code>; tests also follow the <code>test_*.py</code> file-name convention (part 13 of the Odoo series).</p>
+
+                <h2 id="practice">Practice: build a small package</h2>
+                <ol>
+                    <li>Create the <code>vinc-tools/vinc_tools/</code> structure above with its three files.</li>
+                    <li>From the <code>vinc-tools</code> folder run <code>python3 main.py</code> and check the first output line is <code>ODO-007 ODO:ODO-002 ODO ODO</code>.</li>
+                    <li>Run <code>python3 vinc_tools/courses.py</code> and see the "run directly" line.</li>
+                    <li>Try removing the import line in <code>__init__.py</code> and watch the error when <code>main.py</code> calls <code>vinc_tools.make_code</code>.</li>
+                </ol>
+
+                <div class="callout">
+                    <p class="callout-title">Common mistakes when starting out</p>
+<pre><code>import nonexistent_mod
+# ModuleNotFoundError: No module named 'nonexistent_mod'
+
+from vinc_tools import nothing
+# ImportError: cannot import name 'nothing' from 'vinc_tools' (.../vinc_tools/__init__.py)
+
+# running a file with relative imports directly:
+# $ python3 vinc_tools/report.py
+# ImportError: attempted relative import with no known parent package</code></pre>
+                    <ul>
+                        <li><strong><code>ModuleNotFoundError</code>.</strong> Python cannot find the module: it was not installed with <code>pip</code> (or you are in the wrong virtual environment), the name is wrong, or you run from a folder that leaves the project off <code>sys.path</code>.</li>
+                        <li><strong>Running a file with relative imports directly.</strong> <code>python3 vinc_tools/report.py</code> fails with "attempted relative import with no known parent package" because the file is not loaded as part of the package. Run through a file outside the package (like <code>main.py</code>).</li>
+                        <li><strong>Circular imports.</strong> Two modules importing each other cause <code>ImportError: cannot import name ... (most likely due to a circular import)</code>:</li>
+                    </ul>
+<pre><code># circ/a.py
+from circ.b import fb
+def fa(): return "a"
+
+# circ/b.py
+from circ.a import fa
+def fb(): return "b"
+
+# import circ.a  -&gt;
+# ImportError: cannot import name 'fa' from partially initialized module 'circ.a'
+#   (most likely due to a circular import)
+
+# Fix: move the import inside the function
+# circ/b.py
+def fb():
+    from circ.a import fa      # imported only when the function runs
+    return "b" + fa()</code></pre>
+                    <p>The best cure is restructuring so dependencies run one way (move shared pieces to a third module); moving an import into a function is only a quick patch.</p>
+                </div>
+
+                <h2 id="summary">Summary</h2>
+                <ul>
+                    <li>A <code>.py</code> file = a module; a folder with <code>__init__.py</code> = a package; <code>import</code> pulls code from elsewhere.</li>
+                    <li>Use relative imports (<code>from . import x</code>) inside one package.</li>
+                    <li><code>if __name__ == "__main__":</code> runs only when the file is run directly.</li>
+                    <li>Odoo modules: every <code>__init__.py</code> must import its child files, and a missing line means a missing model.</li>
+                </ul>
+                <p>The next part covers the foundation of every Odoo model: classes and objects.</p>
+
+                <div class="cta-box">
+                    <h3>Want to organize Odoo modules cleanly from the start?</h3>
+                    <p>The Developer Foundation course covers module structure, imports and code review every session.</p>
+                    <div class="cta-actions">
+                        <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
+                        <a href="../../../index.html#register" class="ghost">Get free consultation</a>
+                    </div>
+                </div>
+
+                <h2 id="faq">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>Why does an Odoo module need an __init__.py file?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">__init__.py turns a folder into a package and holds the import lines (such as from . import models) that make Python load model and controller files. Without the import line the model class never runs, so Odoo does not know the model exists.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is if __name__ == "__main__" for?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">That block runs only when the file is run directly with python file.py, and not when the file is imported. It usually holds a quick trial or a script's entry point.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>What is the difference between relative and absolute imports?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">A relative import uses dots to point inside the same package, for example from . import course. An absolute import spells the full path from the top, for example from vinc_tools.courses import make_code.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)"><span>How do I fix a circular import error?</span> <span class="faq-arrow">▾</span></div>
+                        <div class="faq-a">Restructure so modules depend in one direction, for example by moving shared code into a third module. A quick patch is to move the import statement inside the function that needs it.</div>
+                    </div>
+                </div>
+
+                <h2 id="sources">Sources</h2>
+                <ul class="sources">
+                    <li><a href="https://docs.python.org/3.12/tutorial/modules.html" target="_blank" rel="noopener">Python 3.12 – Modules</a></li>
+                    <li><a href="https://docs.python.org/3.12/reference/import.html" target="_blank" rel="noopener">Python 3.12 – The import system</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/tutorials/server_framework_101/03_basicmodel.html" target="_blank" rel="noopener">Odoo 20 – Server framework 101: Models and basic fields</a></li>
+                    <li><a href="https://www.odoo.com/documentation/20.0/developer/reference/backend/module.html" target="_blank" rel="noopener">Odoo 20 – Module manifests</a></li>
+                </ul>
+
+                <div class="share-row">
+                    <span>Share:</span>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-modules-packages-imports-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fvinc-academy.vercel.app%2Fen%2Fblog%2Fpython%2Fpython-modules-packages-imports-odoo.html" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <div class="series-nav" role="navigation" aria-label="Series navigation">
+                    <a href="python-comprehensions-generators-sorted-filter.html"><small>← Previous</small>Comprehensions, generators and sorted/filter</a>
+                    <a class="next" href="python-classes-objects-oop-odoo-models.html"><small>Next →</small>Classes and objects</a>
+                </div>
+
+                <p class="disclaimer">This article is copyrighted by Vinc Academy. Please credit and link the source when quoting. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </article>
+
+            <aside>
+                <details class="toc" open>
+                    <summary>Contents</summary>
+                    <ol>
+                        <li><a href="#module">Modules: one Python file is a small library</a></li>
+                        <li><a href="#package">Packages: a folder holding several modules</a></li>
+                        <li><a href="#find-modules">Where does Python look for modules?</a></li>
+                        <li><a href="#explore">Exploring a module: dir, help and __file__</a></li>
+                        <li><a href="#odoo-module">The import chain in an Odoo module</a></li>
+                        <li><a href="#practice">Practice: build a small package</a></li>
+                        <li><a href="#summary">Summary</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ol>
+                </details>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="../../../index.html#programs" data-i18n="nav.programs">Programs</a>
+            <a href="../../../index.html#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="../index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="../../../index.html#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-tip="Chat Messenger" aria-label="Chat Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
+    </div>
+
+    <script src="../../../script.js"></script>
+</body>
+
+</html>
