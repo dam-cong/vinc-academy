@@ -15,6 +15,7 @@ Quy tắc cốt lõi:
 - Series Python: ví dụ lấy từ dự án `vinc_course`, mỗi đoạn code Python phải chạy được (kiểm tra bằng `python3`), thông báo lỗi trích từ lần chạy thật; chỉ tham khảo danh mục chủ đề của W3Schools/LearnPython, không chép câu chữ.
 - Series Git: ví dụ lấy từ repo `vinc_course` trên GitLab; mọi lệnh phải chạy thật trên repo thử, output lấy từ lần chạy, không bịa; tính năng riêng GitLab chỉ nêu khi có trong docs.gitlab.com.
 - Sơ đồ SVG (`figure.diagram`): chữ phải nằm gọn trong khung, cách mép phải ≥ 8px (tiêu đề đậm 13.5px ≈ 8px/ký tự, chữ phụ 12px ≈ 6.5px/ký tự: ước lượng chiều rộng khung theo số ký tự, khung dài thì xuống dòng bằng hai thẻ `<text>`); nhãn trên mũi tên đặt PHÍA TRÊN hàng khung, căn giữa (`text-anchor="middle"`), không đặt trong khe giữa hai khung; viewBox 640 để khỏi bị co. Sau khi viết bài có sơ đồ, bắt buộc chụp ảnh sơ đồ ở 1366px và 390px để kiểm tra bằng mắt.
+- Tiêu đề: theo mục "Quy ước tiêu đề" trong docs/blog-guide.md ("<Chủ đề> trong <công nghệ>: <nội dung>", ≤58 ký tự, title = og:title = headline = H1).
 - Nhân bản bài gần nhất trong cùng chủ đề, giữ nguyên nav/footer; mỗi bài có đủ bản VI (`blog/<chủ-đề>/`) và EN (`en/blog/<chủ-đề>/`).
 - Cập nhật: hub chủ đề, `sitemap.xml`, `series-nav` bài trước (nếu thuộc series).
 - Không commit/push. Không xóa file.

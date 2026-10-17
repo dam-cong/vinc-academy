@@ -40,6 +40,11 @@ Khi xuất bản một chủ đề mới, đổi thẻ `post-card soon` thành l
 - Ảnh bìa bài: `image/cover/<slug>.webp` (960×504, ~17 KB, thu nhỏ từ ảnh OG) chèn bằng `<figure class="post-cover">` ngay sau `</header>` của bài. Ảnh OG PNG vẫn giữ cho mạng xã hội.
 - Bài mới dựng thủ công theo checklist trong `docs/odoo-series-handoff.md` §5.
 
+## Quy ước tiêu đề
+- Dạng "<Chủ đề> trong <công nghệ>: <nội dung chính>" (EN: "<Topic> in <Tech>: <what>"); từ khóa chính ở đầu; tiêu đề bài ≤ 58 ký tự, hub kèm " | Vinc Academy" ≤ 60.
+- Bối cảnh series (Odoo, nhóm) để ở `section-tag`, breadcrumb, mô tả; không lặp trong mọi tiêu đề. "từ A–Z" chỉ cho hub/bài tổng quan; tránh "có ví dụ", "hướng dẫn" thừa. EN đặt "in Odoo 20" ở cuối, giống VI "trong Odoo 20".
+- `<title>` = `og:title` = JSON-LD `headline` = `<h1>`; H1 hub mô tả đầy đủ (không chỉ tên công nghệ). Đổi tiêu đề thì giữ nguyên slug.
+
 ## Quy tắc link (chạy được cả `file://` và Vercel)
 - Link nội bộ luôn **tương đối** và **ghi rõ `index.html`** (VD `odoo/index.html`, `../index.html`), không dùng `/` đầu dòng hay link thư mục `odoo/` — `file://` không tự mở `index.html`.
 - Chỉ `canonical`, `hreflang`, `og:url`, JSON-LD và `sitemap.xml` dùng URL tuyệt đối dạng thư mục (`/blog/odoo/`) cho gọn.
