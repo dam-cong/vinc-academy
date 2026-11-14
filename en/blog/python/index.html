@@ -93,55 +93,304 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="python" data-lang="en">
         <ol class="breadcrumb">
             <li><a href="../../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge</a></li>
             <li aria-current="page">Python</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Topic · Free</span>
-            <h1>Practical Python for Odoo Developers</h1>
-            <p class="post-lead">Learn just enough Python to get work done: every part uses examples from the course management project and shows where it appears in Odoo code. Little theory, lots of runnable code.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Topic · Free</span><a href="../index.html">← All topics</a></p>
+                <h1>Practical Python for Odoo Developers</h1>
+                <p class="post-lead">Learn just enough Python to get work done: every part uses examples from the course management project and shows where it appears in Odoo code. Little theory, lots of runnable code.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="getting-started-python-venv-pip.html">Start part 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">View the series</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Reading progress">
+                <div class="topic-file-label"><span>TOPIC / PYTHON</span><span>Free</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>14</b><span>posts</span></div>
+                        <div><b data-topic-progress>0/14</b><span>read</span></div>
+                        <div><b>$0</b><span>access</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Reading progress</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Practical Python for Odoo Developers</h2>
-        <p class="series-desc">14 parts from setting up your environment, data types, functions and OOP to error handling, files, APIs and a small project.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sort">
-            <button type="button" class="chip active" data-sort="new">Newest</button>
-            <button type="button" class="chip" data-sort="top">Most read</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="getting-started-python-venv-pip.html"><span class="post-num">Part 01</span><h2>Getting started with Python: install, venv and pip</h2><p>Install Python 3.12, create a virtual environment, run scripts and install libraries for an Odoo project.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="lam-quen-python-cai-dat-venv-pip">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-variables-data-types-strings-f-strings.html"><span class="post-num">Part 02</span><h2>Variables, data types and strings</h2><p>Numbers, strings, f-strings and casting through course codes and log messages.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="bien-kieu-du-lieu-chuoi-f-string-python">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-conditions-loops-if-for-while-match.html"><span class="post-num">Part 03</span><h2>Conditions and loops</h2><p>if, for, while and match on a list of courses, the groundwork for for record in self.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="dieu-kien-vong-lap-if-for-while-python">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-lists-tuples-sets-dicts.html"><span class="post-num">Part 04</span><h2>Lists, tuples, sets and dicts</h2><p>The data structures you meet in Odoo's vals, domains and Commands.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="list-tuple-set-dict-python">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-functions-args-kwargs-lambda.html"><span class="post-num">Part 05</span><h2>Functions: parameters, **kwargs and lambda</h2><p>Write tidy functions, use default arguments and understand default=lambda self: in Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ham-python-args-kwargs-lambda">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-comprehensions-generators-sorted-filter.html"><span class="post-num">Part 06</span><h2>Comprehensions, generators and sorted/filter</h2><p>Process lists as neatly as a recordset's mapped, filtered and sorted.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="comprehension-generator-sorted-filter-python">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-modules-packages-imports-odoo.html"><span class="post-num">Part 07</span><h2>Modules, packages and imports</h2><p>How Python finds and loads code, and why Odoo modules have __init__.py.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="module-package-import-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-classes-objects-oop-odoo-models.html"><span class="post-num">Part 08</span><h2>Classes and objects</h2><p>Attributes, methods, @property and how a Python class becomes an Odoo model.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="class-doi-tuong-oop-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-inheritance-super-decorators-odoo.html"><span class="post-num">Part 09</span><h2>Inheritance, super() and decorators</h2><p>Understand super().create(), @api.depends and write your own decorators.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ke-thua-super-decorator-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-error-handling-try-except-with-odoo.html"><span class="post-num">Part 10</span><h2>Error handling and the with statement</h2><p>try/except, raise and custom exceptions, mirroring ValidationError and UserError.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="xu-ly-loi-try-except-with-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-files-json-csv-pathlib-odoo.html"><span class="post-num">Part 11</span><h2>Working with files, JSON and CSV</h2><p>File I/O, pathlib, JSON and CSV for exporting and importing course data.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="file-json-csv-pathlib-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-datetime-timezones-regex-odoo.html"><span class="post-num">Part 12</span><h2>Dates, times and regex</h2><p>datetime, timedelta, time zones and regex to validate course codes and emails.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ngay-gio-datetime-regex-python-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-requests-odoo-json-2-api-calls.html"><span class="post-num">Part 13</span><h2>Calling APIs with requests</h2><p>Send requests, read JSON, handle errors and timeouts, try Odoo's JSON-2 API.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="goi-api-requests-json-2-odoo-python">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="python-debugging-logging-testing-small-project.html"><span class="post-num">Part 14</span><h2>Debugging, logging, tests and a small project</h2><p>pdb, logging, unittest, type hints and a script that imports courses into Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="debug-logging-test-du-an-nho-python">–</b> views</span><span class="post-status">Published</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Series contents">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>14</span> posts</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Reading progress</span><b data-topic-progress>0/14</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Series contents">
+                        <a href="#post-01"><span class="n">01</span><span>Getting started with Python: install, venv and pip</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Variables, data types and strings</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Conditions and loops</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>Lists, tuples, sets and dicts</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>Functions: parameters, **kwargs and lambda</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Comprehensions, generators and sorted/filter</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Modules, packages and imports</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Classes and objects</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Inheritance, super() and decorators</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>Error handling and the with statement</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>Working with files, JSON and CSV</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Dates, times and regex</span></a>
+                        <a href="#post-13"><span class="n">13</span><span>Calling APIs with requests</span></a>
+                        <a href="#post-14"><span class="n">14</span><span>Debugging, logging, tests and a small project</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Browse all topics</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 14 posts</p>
+                        <h2>Practical Python for Odoo Developers</h2>
+                        <p class="topic-series-desc">14 parts from setting up your environment, data types, functions and OOP to error handling, files, APIs and a small project.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Search this series…" aria-label="Search this series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sort">
+                            <button type="button" class="chip active" data-sort="new">Newest</button>
+                            <button type="button" class="chip" data-sort="top">Most read</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="getting-started-python-venv-pip">
+                        <a class="topic-card" href="getting-started-python-venv-pip.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 01</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="lam-quen-python-cai-dat-venv-pip">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Getting started with Python: install, venv and pip</h3>
+                                <p class="topic-desc">Install Python 3.12, create a virtual environment, run scripts and install libraries for an Odoo project.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="python-variables-data-types-strings-f-strings">
+                        <a class="topic-card" href="python-variables-data-types-strings-f-strings.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 02</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="bien-kieu-du-lieu-chuoi-f-string-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Variables, data types and strings</h3>
+                                <p class="topic-desc">Numbers, strings, f-strings and casting through course codes and log messages.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="python-conditions-loops-if-for-while-match">
+                        <a class="topic-card" href="python-conditions-loops-if-for-while-match.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 03</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="dieu-kien-vong-lap-if-for-while-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Conditions and loops</h3>
+                                <p class="topic-desc">if, for, while and match on a list of courses, the groundwork for for record in self.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="python-lists-tuples-sets-dicts">
+                        <a class="topic-card" href="python-lists-tuples-sets-dicts.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 04</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="list-tuple-set-dict-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Lists, tuples, sets and dicts</h3>
+                                <p class="topic-desc">The data structures you meet in Odoo's vals, domains and Commands.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="python-functions-args-kwargs-lambda">
+                        <a class="topic-card" href="python-functions-args-kwargs-lambda.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 05</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ham-python-args-kwargs-lambda">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Functions: parameters, **kwargs and lambda</h3>
+                                <p class="topic-desc">Write tidy functions, use default arguments and understand default=lambda self: in Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="python-comprehensions-generators-sorted-filter">
+                        <a class="topic-card" href="python-comprehensions-generators-sorted-filter.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 06</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="comprehension-generator-sorted-filter-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Comprehensions, generators and sorted/filter</h3>
+                                <p class="topic-desc">Process lists as neatly as a recordset's mapped, filtered and sorted.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="python-modules-packages-imports-odoo">
+                        <a class="topic-card" href="python-modules-packages-imports-odoo.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 07</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="module-package-import-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Modules, packages and imports</h3>
+                                <p class="topic-desc">How Python finds and loads code, and why Odoo modules have __init__.py.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="python-classes-objects-oop-odoo-models">
+                        <a class="topic-card" href="python-classes-objects-oop-odoo-models.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 08</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="class-doi-tuong-oop-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Classes and objects</h3>
+                                <p class="topic-desc">Attributes, methods, @property and how a Python class becomes an Odoo model.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="python-inheritance-super-decorators-odoo">
+                        <a class="topic-card" href="python-inheritance-super-decorators-odoo.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 09</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ke-thua-super-decorator-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Inheritance, super() and decorators</h3>
+                                <p class="topic-desc">Understand super().create(), @api.depends and write your own decorators.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="python-error-handling-try-except-with-odoo">
+                        <a class="topic-card" href="python-error-handling-try-except-with-odoo.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 10</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="xu-ly-loi-try-except-with-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Error handling and the with statement</h3>
+                                <p class="topic-desc">try/except, raise and custom exceptions, mirroring ValidationError and UserError.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="python-files-json-csv-pathlib-odoo">
+                        <a class="topic-card" href="python-files-json-csv-pathlib-odoo.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 11</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="file-json-csv-pathlib-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Working with files, JSON and CSV</h3>
+                                <p class="topic-desc">File I/O, pathlib, JSON and CSV for exporting and importing course data.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="python-datetime-timezones-regex-odoo">
+                        <a class="topic-card" href="python-datetime-timezones-regex-odoo.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 12</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ngay-gio-datetime-regex-python-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Dates, times and regex</h3>
+                                <p class="topic-desc">datetime, timedelta, time zones and regex to validate course codes and emails.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-13" data-slug="python-requests-odoo-json-2-api-calls">
+                        <a class="topic-card" href="python-requests-odoo-json-2-api-calls.html">
+                            <span class="topic-index" aria-hidden="true">13</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 13</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="goi-api-requests-json-2-odoo-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Calling APIs with requests</h3>
+                                <p class="topic-desc">Send requests, read JSON, handle errors and timeouts, try Odoo's JSON-2 API.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-14" data-slug="python-debugging-logging-testing-small-project">
+                        <a class="topic-card" href="python-debugging-logging-testing-small-project.html">
+                            <span class="topic-index" aria-hidden="true">14</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 14</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="debug-logging-test-du-an-nho-python">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Debugging, logging, tests and a small project</h3>
+                                <p class="topic-desc">pdb, logging, unittest, type hints and a script that imports courses into Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>No matching posts.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Want to learn Python properly with a mentor?</h3>
                 <p>The Developer Foundation course includes a Python Fundamentals module with real exercises and code review.</p>
                 <div class="cta-actions">
                     <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
                     <a href="../../../index.html#register" class="ghost">Get free consultation</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">This content is copyrighted by Vinc Academy. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">This content is copyrighted by Vinc Academy. Python is a trademark of the Python Software Foundation; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
     </main>
 
     <!-- FOOTER -->

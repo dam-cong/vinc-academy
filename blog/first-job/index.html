@@ -82,41 +82,128 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="first-job" data-lang="vi">
         <ol class="breadcrumb">
             <li><a href="../../index.html">Trang chủ</a></li>
             <li><a href="../index.html">Kiến thức</a></li>
             <li aria-current="page">Kỹ năng đi làm đầu tiên</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Chủ đề · Sinh viên và người mới</span>
-            <h1>Kỹ năng đi làm đầu tiên cho dev mới</h1>
-            <p class="post-lead">Những thứ trường học ít dạy nhưng đội nào cũng mong người mới biết từ ngày đầu: hòa nhập, đọc hiểu ticket, hỏi đúng cách, nhận code review và làm việc theo nhịp Agile/Scrum.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Chủ đề · Sinh viên và người mới</span><a href="../index.html">← Tất cả chủ đề</a></p>
+                <h1>Kỹ năng đi làm đầu tiên cho dev mới</h1>
+                <p class="post-lead">Những thứ trường học ít dạy nhưng đội nào cũng mong người mới biết từ ngày đầu: hòa nhập, đọc hiểu ticket, hỏi đúng cách, nhận code review và làm việc theo nhịp Agile/Scrum.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="tuan-dau-di-lam-it-onboarding-ticket.html">Bắt đầu bài 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">Xem danh sách bài</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Tiến độ đọc">
+                <div class="topic-file-label"><span>TOPIC / FIRST JOB</span><span>Miễn phí</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>3</b><span>bài viết</span></div>
+                        <div><b data-topic-progress>0/3</b><span>đã đọc</span></div>
+                        <div><b>0đ</b><span>học phí</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
-            <button type="button" class="chip active" data-sort="new">Bài mới</button>
-            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="tuan-dau-di-lam-it-onboarding-ticket.html"><span class="post-num">Người mới</span><h2>Tuần đầu đi làm: onboarding, đọc ticket và hỏi đúng cách</h2><p>Kế hoạch 30 ngày đầu, checklist onboarding, đọc user story và tiêu chí chấp nhận, đặt câu hỏi rõ ràng.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="code-review-nhan-va-dua-gop-y.html"><span class="post-num">Người mới</span><h2>Code review: nhận và đưa góp ý</h2><p>Merge request nhỏ, mô tả rõ ràng, xử lý góp ý không tự ái và viết comment review hiệu quả.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="code-review-nhan-va-dua-gop-y">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="agile-scrum-uoc-luong-bao-cao-tien-do.html"><span class="post-num">Người mới</span><h2>Agile/Scrum, ước lượng và báo cáo tiến độ</h2><p>Scrum theo Scrum Guide 2020, nói gì ở Daily Scrum, ước lượng công việc và báo rủi ro sớm.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Nội dung series">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>3</span> bài</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-progress>0/3</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Nội dung series">
+                        <a href="#post-01"><span class="n">01</span><span>Tuần đầu đi làm: onboarding, đọc ticket và hỏi đúng cách</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Code review: nhận và đưa góp ý</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Agile/Scrum, ước lượng và báo cáo tiến độ</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Xem tất cả chủ đề</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 3 bài</p>
+                        <h2>Tất cả bài viết</h2>
 
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Tìm bài trong series…" aria-label="Tìm bài trong series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
+                            <button type="button" class="chip active" data-sort="new">Bài mới</button>
+                            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="tuan-dau-di-lam-it-onboarding-ticket">
+                        <a class="topic-card" href="tuan-dau-di-lam-it-onboarding-ticket.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Người mới</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Tuần đầu đi làm: onboarding, đọc ticket và hỏi đúng cách</h3>
+                                <p class="topic-desc">Kế hoạch 30 ngày đầu, checklist onboarding, đọc user story và tiêu chí chấp nhận, đặt câu hỏi rõ ràng.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="code-review-nhan-va-dua-gop-y">
+                        <a class="topic-card" href="code-review-nhan-va-dua-gop-y.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Người mới</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="code-review-nhan-va-dua-gop-y">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Code review: nhận và đưa góp ý</h3>
+                                <p class="topic-desc">Merge request nhỏ, mô tả rõ ràng, xử lý góp ý không tự ái và viết comment review hiệu quả.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="agile-scrum-uoc-luong-bao-cao-tien-do">
+                        <a class="topic-card" href="agile-scrum-uoc-luong-bao-cao-tien-do.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Người mới</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Agile/Scrum, ước lượng và báo cáo tiến độ</h3>
+                                <p class="topic-desc">Scrum theo Scrum Guide 2020, nói gì ở Daily Scrum, ước lượng công việc và báo rủi ro sớm.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>Không tìm thấy bài phù hợp.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Muốn làm quen quy trình làm việc thật?</h3>
                 <p>Các khóa của Vinc Academy làm việc theo ticket, nhánh Git và review code như một đội phát triển thật.</p>
                 <div class="cta-actions">
                     <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
                     <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Tên các công cụ được nhắc tới trong bài là nhãn hiệu của chủ sở hữu tương ứng.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Tên các công cụ được nhắc tới trong bài là nhãn hiệu của chủ sở hữu tương ứng.</p>
     </main>
 
     <!-- FOOTER -->

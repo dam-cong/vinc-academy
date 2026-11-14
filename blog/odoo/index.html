@@ -93,60 +93,304 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="odoo" data-lang="vi">
         <ol class="breadcrumb">
             <li><a href="../../index.html">Trang chủ</a></li>
             <li><a href="../index.html">Kiến thức</a></li>
             <li aria-current="page">Odoo</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Chủ đề · Miễn phí</span>
-            <h1>Lập trình Odoo 20 từ A–Z</h1>
-            <p class="post-lead">Kiến thức lập trình và triển khai Odoo cho developer, do Vinc Academy biên soạn, bám sát tài liệu Developer chính thức của Odoo.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Chủ đề · Miễn phí</span><a href="../index.html">← Tất cả chủ đề</a></p>
+                <h1>Lập trình Odoo 20 từ A–Z</h1>
+                <p class="post-lead">Kiến thức lập trình và triển khai Odoo cho developer, do Vinc Academy biên soạn, bám sát tài liệu Developer chính thức của Odoo.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="odoo-la-gi.html">Bắt đầu bài 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">Xem danh sách bài</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Tiến độ đọc">
+                <div class="topic-file-label"><span>TOPIC / ODOO</span><span>Miễn phí</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>14</b><span>bài viết</span></div>
+                        <div><b data-topic-progress>0/14</b><span>đã đọc</span></div>
+                        <div><b>0đ</b><span>học phí</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Lập trình Odoo 20 từ A–Z</h2>
-        <p class="series-desc">Tự học từ hiểu Odoo là gì đến viết module, phân quyền, giao diện OWL, tích hợp API và triển khai production.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
-            <button type="button" class="chip active" data-sort="new">Bài mới</button>
-            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="odoo-la-gi.html">
-                <span class="post-num">Bài 01</span>
-                <h2>Odoo là gì? Kiến thức nền tảng cho lập trình viên</h2>
-                <p>Kiến trúc 3 tầng, cấu trúc module, Community vs Enterprise, yêu cầu Odoo 20 và lộ trình học.</p>
-                <span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="odoo-la-gi">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span>
-            </a></li>
-            <li><a class="post-card" href="cai-dat-odoo-20.html"><span class="post-num">Bài 02</span><h2>Cài đặt môi trường Odoo 20</h2><p>Cài từ source và Docker Compose, chạy odoo-bin, bật developer mode, xử lý lỗi thường gặp.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="cai-dat-odoo-20">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="tao-module-odoo-dau-tien.html"><span class="post-num">Bài 03</span><h2>Tạo module đầu tiên &amp; manifest</h2><p>Khung thư mục, __manifest__.py, cài và nâng cấp module.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tao-module-odoo-dau-tien">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="model-field-orm-odoo.html"><span class="post-num">Bài 04</span><h2>Model, fields &amp; ORM</h2><p>Các loại field, recordset, thao tác CRUD với ORM.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="model-field-orm-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="phan-quyen-odoo-access-rights-record-rules.html"><span class="post-num">Bài 05</span><h2>Security: access rights &amp; record rules</h2><p>Nhóm người dùng, ir.model.access.csv, quy tắc theo bản ghi.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="phan-quyen-odoo-access-rights-record-rules">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="view-action-menu-odoo.html"><span class="post-num">Bài 06</span><h2>Views &amp; actions</h2><p>Form, list, search, kanban; menu và window action.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="view-action-menu-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="many2one-one2many-many2many-odoo.html"><span class="post-num">Bài 07</span><h2>Quan hệ giữa các model</h2><p>Many2one, One2many, Many2many trong thực tế.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="many2one-one2many-many2many-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="computed-field-onchange-constraint-odoo.html"><span class="post-num">Bài 08</span><h2>Computed fields, onchange &amp; constraints</h2><p>Logic nghiệp vụ tự động và ràng buộc dữ liệu.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="computed-field-onchange-constraint-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="ke-thua-model-view-odoo.html"><span class="post-num">Bài 09</span><h2>Kế thừa trong Odoo</h2><p>Mở rộng model và view của module khác đúng cách.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ke-thua-model-view-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="bao-cao-pdf-qweb-odoo.html"><span class="post-num">Bài 10</span><h2>Báo cáo PDF với QWeb</h2><p>Thiết kế template và in báo cáo nghiệp vụ.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="bao-cao-pdf-qweb-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="owl-framework-odoo-co-ban.html"><span class="post-num">Bài 11</span><h2>OWL framework cơ bản</h2><p>Component, hooks, services trên giao diện Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="owl-framework-odoo-co-ban">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="web-controller-json-2-api-odoo.html"><span class="post-num">Bài 12</span><h2>Web controllers &amp; JSON-2 API</h2><p>Tạo endpoint và tích hợp hệ thống bên ngoài.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="web-controller-json-2-api-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="unit-test-odoo-transactioncase.html"><span class="post-num">Bài 13</span><h2>Unit test trong Odoo</h2><p>Viết test bảo vệ module trước mỗi lần nâng cấp.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="unit-test-odoo-transactioncase">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="trien-khai-odoo-production-nginx-workers.html"><span class="post-num">Bài 14</span><h2>Triển khai Odoo production</h2><p>Linux, Docker, Nginx, SSL, sao lưu và giám sát.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="trien-khai-odoo-production-nginx-workers">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Nội dung series">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>14</span> bài</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-progress>0/14</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Nội dung series">
+                        <a href="#post-01"><span class="n">01</span><span>Odoo là gì? Kiến thức nền tảng cho lập trình viên</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Cài đặt môi trường Odoo 20</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Tạo module đầu tiên &amp;amp; manifest</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>Model, fields &amp;amp; ORM</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>Security: access rights &amp;amp; record rules</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Views &amp;amp; actions</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Quan hệ giữa các model</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Computed fields, onchange &amp;amp; constraints</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Kế thừa trong Odoo</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>Báo cáo PDF với QWeb</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>OWL framework cơ bản</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Web controllers &amp;amp; JSON-2 API</span></a>
+                        <a href="#post-13"><span class="n">13</span><span>Unit test trong Odoo</span></a>
+                        <a href="#post-14"><span class="n">14</span><span>Triển khai Odoo production</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Xem tất cả chủ đề</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 14 bài</p>
+                        <h2>Lập trình Odoo 20 từ A–Z</h2>
+                        <p class="topic-series-desc">Tự học từ hiểu Odoo là gì đến viết module, phân quyền, giao diện OWL, tích hợp API và triển khai production.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Tìm bài trong series…" aria-label="Tìm bài trong series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
+                            <button type="button" class="chip active" data-sort="new">Bài mới</button>
+                            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="odoo-la-gi">
+                        <a class="topic-card" href="odoo-la-gi.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 01</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="odoo-la-gi">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Odoo là gì? Kiến thức nền tảng cho lập trình viên</h3>
+                                <p class="topic-desc">Kiến trúc 3 tầng, cấu trúc module, Community vs Enterprise, yêu cầu Odoo 20 và lộ trình học.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="cai-dat-odoo-20">
+                        <a class="topic-card" href="cai-dat-odoo-20.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 02</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="cai-dat-odoo-20">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Cài đặt môi trường Odoo 20</h3>
+                                <p class="topic-desc">Cài từ source và Docker Compose, chạy odoo-bin, bật developer mode, xử lý lỗi thường gặp.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="tao-module-odoo-dau-tien">
+                        <a class="topic-card" href="tao-module-odoo-dau-tien.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 03</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="tao-module-odoo-dau-tien">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Tạo module đầu tiên &amp; manifest</h3>
+                                <p class="topic-desc">Khung thư mục, __manifest__.py, cài và nâng cấp module.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="model-field-orm-odoo">
+                        <a class="topic-card" href="model-field-orm-odoo.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 04</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="model-field-orm-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Model, fields &amp; ORM</h3>
+                                <p class="topic-desc">Các loại field, recordset, thao tác CRUD với ORM.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="phan-quyen-odoo-access-rights-record-rules">
+                        <a class="topic-card" href="phan-quyen-odoo-access-rights-record-rules.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 05</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="phan-quyen-odoo-access-rights-record-rules">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Security: access rights &amp; record rules</h3>
+                                <p class="topic-desc">Nhóm người dùng, ir.model.access.csv, quy tắc theo bản ghi.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="view-action-menu-odoo">
+                        <a class="topic-card" href="view-action-menu-odoo.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 06</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="view-action-menu-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Views &amp; actions</h3>
+                                <p class="topic-desc">Form, list, search, kanban; menu và window action.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="many2one-one2many-many2many-odoo">
+                        <a class="topic-card" href="many2one-one2many-many2many-odoo.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 07</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="many2one-one2many-many2many-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Quan hệ giữa các model</h3>
+                                <p class="topic-desc">Many2one, One2many, Many2many trong thực tế.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="computed-field-onchange-constraint-odoo">
+                        <a class="topic-card" href="computed-field-onchange-constraint-odoo.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 08</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="computed-field-onchange-constraint-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Computed fields, onchange &amp; constraints</h3>
+                                <p class="topic-desc">Logic nghiệp vụ tự động và ràng buộc dữ liệu.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="ke-thua-model-view-odoo">
+                        <a class="topic-card" href="ke-thua-model-view-odoo.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 09</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ke-thua-model-view-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Kế thừa trong Odoo</h3>
+                                <p class="topic-desc">Mở rộng model và view của module khác đúng cách.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="bao-cao-pdf-qweb-odoo">
+                        <a class="topic-card" href="bao-cao-pdf-qweb-odoo.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 10</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="bao-cao-pdf-qweb-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Báo cáo PDF với QWeb</h3>
+                                <p class="topic-desc">Thiết kế template và in báo cáo nghiệp vụ.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="owl-framework-odoo-co-ban">
+                        <a class="topic-card" href="owl-framework-odoo-co-ban.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 11</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="owl-framework-odoo-co-ban">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">OWL framework cơ bản</h3>
+                                <p class="topic-desc">Component, hooks, services trên giao diện Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="web-controller-json-2-api-odoo">
+                        <a class="topic-card" href="web-controller-json-2-api-odoo.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 12</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="web-controller-json-2-api-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Web controllers &amp; JSON-2 API</h3>
+                                <p class="topic-desc">Tạo endpoint và tích hợp hệ thống bên ngoài.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-13" data-slug="unit-test-odoo-transactioncase">
+                        <a class="topic-card" href="unit-test-odoo-transactioncase.html">
+                            <span class="topic-index" aria-hidden="true">13</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 13</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="unit-test-odoo-transactioncase">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Unit test trong Odoo</h3>
+                                <p class="topic-desc">Viết test bảo vệ module trước mỗi lần nâng cấp.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-14" data-slug="trien-khai-odoo-production-nginx-workers">
+                        <a class="topic-card" href="trien-khai-odoo-production-nginx-workers.html">
+                            <span class="topic-index" aria-hidden="true">14</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 14</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="trien-khai-odoo-production-nginx-workers">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Triển khai Odoo production</h3>
+                                <p class="topic-desc">Linux, Docker, Nginx, SSL, sao lưu và giám sát.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>Không tìm thấy bài phù hợp.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Muốn học nhanh hơn với mentor?</h3>
                 <p>Khóa Odoo Developer Foundation giúp bạn tự xây module hoàn chỉnh sau 8 buổi, có dự án thực tế và review code.</p>
                 <div class="cta-actions">
                     <a href="../../program-detail.html?code=ODO-F">Xem khóa Odoo Developer Foundation</a>
                     <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Odoo là nhãn hiệu của Odoo S.A.; Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với Odoo S.A.</p>
     </main>
 
     <!-- FOOTER -->

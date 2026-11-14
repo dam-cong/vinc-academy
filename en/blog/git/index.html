@@ -91,53 +91,272 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="git" data-lang="en">
         <ol class="breadcrumb">
             <li><a href="../../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge</a></li>
             <li aria-current="page">Git</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Topic · Free</span>
-            <h1>Practical Git for Development Teams</h1>
-            <p class="post-lead">Learn just enough Git to start work: every part uses the vinc_course course management repository on GitLab and follows a real team workflow from commit to merge request and release. Little theory, every command really run.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Topic · Free</span><a href="../index.html">← All topics</a></p>
+                <h1>Practical Git for Development Teams</h1>
+                <p class="post-lead">Learn just enough Git to start work: every part uses the vinc_course course management repository on GitLab and follows a real team workflow from commit to merge request and release. Little theory, every command really run.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="what-is-git-install-first-time-setup.html">Start part 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">View the series</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Reading progress">
+                <div class="topic-file-label"><span>TOPIC / GIT</span><span>Free</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>12</b><span>posts</span></div>
+                        <div><b data-topic-progress>0/12</b><span>read</span></div>
+                        <div><b>$0</b><span>access</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Reading progress</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Practical Git for Development Teams</h2>
-        <p class="series-desc">12 parts from installing and committing to branches, remotes, merge requests, conflicts, undoing, rebase, hooks, CI and a capstone project.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sort">
-            <button type="button" class="chip active" data-sort="new">Newest</button>
-            <button type="button" class="chip" data-sort="top">Most read</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="what-is-git-install-first-time-setup.html"><span class="post-num">Part 01</span><h2>What Git is, installing and first-time setup</h2><p>Install Git, set your name and email, pick an editor and understand Git's three areas.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-la-gi-cai-dat-cau-hinh-lan-dau">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-first-commits-status-add-log-gitignore.html"><span class="post-num">Part 02</span><h2>Your first commits: status, add, log and .gitignore</h2><p>The daily loop on the vinc_course repo and how to keep unwanted files out.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-commit-dau-tien-status-add-log-gitignore">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-branches-and-merging.html"><span class="post-num">Part 03</span><h2>Branches and merging</h2><p>Create a branch per feature, merge it back and tell fast-forward from merge commits.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-nhanh-branch-merge">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-remotes-clone-fetch-pull-push-ssh.html"><span class="post-num">Part 04</span><h2>Remotes: clone, fetch, pull, push and SSH</h2><p>Work with GitLab: SSH keys, upstream branches and why to fetch before you pull.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-remote-clone-fetch-pull-push-ssh">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-gitlab-merge-request-review-workflow.html"><span class="post-num">Part 05</span><h2>The merge request workflow on GitLab</h2><p>From feature branch to review, approval and merging into a protected branch.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-merge-request-gitlab-quy-trinh-review">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-resolving-merge-conflicts.html"><span class="post-num">Part 06</span><h2>Resolving merge conflicts</h2><p>Read the <<<<<<< markers, fix by hand, verify, then finish the merge or abort.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-giai-quyet-xung-dot-conflict">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-undo-restore-reset-revert-reflog.html"><span class="post-num">Part 07</span><h2>Undoing safely: restore, reset, revert, reflog</h2><p>Pick the right command after a bad edit, commit or push, and rescue commits you thought were lost.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-hoan-tac-restore-reset-revert-reflog">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-rebase-tidy-history.html"><span class="post-num">Part 08</span><h2>Rebase and tidy history</h2><p>Rebase onto fresh work, squash small commits interactively and follow the golden rule.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-rebase-lam-gon-lich-su">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-stash-cherry-pick-tags-hotfix-release.html"><span class="post-num">Part 09</span><h2>Stash, cherry-pick and tags</h2><p>Shelve unfinished work for a hotfix, pick one commit onto another branch and tag a release.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-stash-cherry-pick-tag-hotfix-release">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-commit-conventions-branching-strategies.html"><span class="post-num">Part 10</span><h2>Commit conventions and branching strategies</h2><p>Name branches, write commit messages and choose between GitLab Flow and trunk-based work.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-quy-uoc-commit-chien-luoc-nhanh">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-hooks-gitlab-ci-odoo-module-checks.html"><span class="post-num">Part 11</span><h2>Git hooks and GitLab CI for Odoo modules</h2><p>Catch mistakes before commit with hooks and run automatic checks in a pipeline.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-hook-gitlab-ci-kiem-tra-module-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="git-blame-bisect-troubleshooting-capstone.html"><span class="post-num">Part 12</span><h2>Blame, bisect and a capstone project</h2><p>Find who and which commit caused a bug, then run a full hotfix and release cycle.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-blame-bisect-xu-ly-su-co-du-an-tong-hop">–</b> views</span><span class="post-status">Published</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Series contents">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>12</span> posts</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Reading progress</span><b data-topic-progress>0/12</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Series contents">
+                        <a href="#post-01"><span class="n">01</span><span>What Git is, installing and first-time setup</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Your first commits: status, add, log and .gitignore</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Branches and merging</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>Remotes: clone, fetch, pull, push and SSH</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>The merge request workflow on GitLab</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Resolving merge conflicts</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Undoing safely: restore, reset, revert, reflog</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Rebase and tidy history</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Stash, cherry-pick and tags</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>Commit conventions and branching strategies</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>Git hooks and GitLab CI for Odoo modules</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Blame, bisect and a capstone project</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Browse all topics</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 12 posts</p>
+                        <h2>Practical Git for Development Teams</h2>
+                        <p class="topic-series-desc">12 parts from installing and committing to branches, remotes, merge requests, conflicts, undoing, rebase, hooks, CI and a capstone project.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Search this series…" aria-label="Search this series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sort">
+                            <button type="button" class="chip active" data-sort="new">Newest</button>
+                            <button type="button" class="chip" data-sort="top">Most read</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="what-is-git-install-first-time-setup">
+                        <a class="topic-card" href="what-is-git-install-first-time-setup.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 01</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-la-gi-cai-dat-cau-hinh-lan-dau">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">What Git is, installing and first-time setup</h3>
+                                <p class="topic-desc">Install Git, set your name and email, pick an editor and understand Git's three areas.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="git-first-commits-status-add-log-gitignore">
+                        <a class="topic-card" href="git-first-commits-status-add-log-gitignore.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 02</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-commit-dau-tien-status-add-log-gitignore">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Your first commits: status, add, log and .gitignore</h3>
+                                <p class="topic-desc">The daily loop on the vinc_course repo and how to keep unwanted files out.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="git-branches-and-merging">
+                        <a class="topic-card" href="git-branches-and-merging.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 03</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-nhanh-branch-merge">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Branches and merging</h3>
+                                <p class="topic-desc">Create a branch per feature, merge it back and tell fast-forward from merge commits.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="git-remotes-clone-fetch-pull-push-ssh">
+                        <a class="topic-card" href="git-remotes-clone-fetch-pull-push-ssh.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 04</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-remote-clone-fetch-pull-push-ssh">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Remotes: clone, fetch, pull, push and SSH</h3>
+                                <p class="topic-desc">Work with GitLab: SSH keys, upstream branches and why to fetch before you pull.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="git-gitlab-merge-request-review-workflow">
+                        <a class="topic-card" href="git-gitlab-merge-request-review-workflow.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 05</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-merge-request-gitlab-quy-trinh-review">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">The merge request workflow on GitLab</h3>
+                                <p class="topic-desc">From feature branch to review, approval and merging into a protected branch.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="git-resolving-merge-conflicts">
+                        <a class="topic-card" href="git-resolving-merge-conflicts.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 06</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-giai-quyet-xung-dot-conflict">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Resolving merge conflicts</h3>
+                                <p class="topic-desc">Read the <<<<<<< markers, fix by hand, verify, then finish the merge or abort.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="git-undo-restore-reset-revert-reflog">
+                        <a class="topic-card" href="git-undo-restore-reset-revert-reflog.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 07</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-hoan-tac-restore-reset-revert-reflog">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Undoing safely: restore, reset, revert, reflog</h3>
+                                <p class="topic-desc">Pick the right command after a bad edit, commit or push, and rescue commits you thought were lost.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="git-rebase-tidy-history">
+                        <a class="topic-card" href="git-rebase-tidy-history.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 08</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-rebase-lam-gon-lich-su">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Rebase and tidy history</h3>
+                                <p class="topic-desc">Rebase onto fresh work, squash small commits interactively and follow the golden rule.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="git-stash-cherry-pick-tags-hotfix-release">
+                        <a class="topic-card" href="git-stash-cherry-pick-tags-hotfix-release.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 09</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-stash-cherry-pick-tag-hotfix-release">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Stash, cherry-pick and tags</h3>
+                                <p class="topic-desc">Shelve unfinished work for a hotfix, pick one commit onto another branch and tag a release.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="git-commit-conventions-branching-strategies">
+                        <a class="topic-card" href="git-commit-conventions-branching-strategies.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 10</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-quy-uoc-commit-chien-luoc-nhanh">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Commit conventions and branching strategies</h3>
+                                <p class="topic-desc">Name branches, write commit messages and choose between GitLab Flow and trunk-based work.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="git-hooks-gitlab-ci-odoo-module-checks">
+                        <a class="topic-card" href="git-hooks-gitlab-ci-odoo-module-checks.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 11</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-hook-gitlab-ci-kiem-tra-module-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Git hooks and GitLab CI for Odoo modules</h3>
+                                <p class="topic-desc">Catch mistakes before commit with hooks and run automatic checks in a pipeline.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="git-blame-bisect-troubleshooting-capstone">
+                        <a class="topic-card" href="git-blame-bisect-troubleshooting-capstone.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 12</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-blame-bisect-xu-ly-su-co-du-an-tong-hop">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Blame, bisect and a capstone project</h3>
+                                <p class="topic-desc">Find who and which commit caused a bug, then run a full hotfix and release cycle.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>No matching posts.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Want to learn teamwork with Git alongside a mentor?</h3>
                 <p>The Developer Foundation course covers Git and team workflow with real exercises and code review.</p>
                 <div class="cta-actions">
                     <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
                     <a href="../../../index.html#register" class="ghost">Get free consultation</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">This content is copyrighted by Vinc Academy. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">This content is copyrighted by Vinc Academy. Git is a trademark of Software Freedom Conservancy; GitLab is a trademark of GitLab Inc.; Odoo is a trademark of Odoo S.A. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
     </main>
 
     <!-- FOOTER -->

@@ -23,7 +23,7 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href="../image/vinc-academy.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles.css" />
     <link rel="stylesheet" href="../blog.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -47,6 +47,1543 @@
         ]
     }
     </script>
+    <script>document.documentElement.classList.add('js');</script>
+    <style>
+        /* ── WRAP / TOKENS ── */
+        .kb-wrap {
+            --kb-blue-ink: var(--blue-700);
+            --kb-blue-soft: var(--blue-50);
+            --kb-blue-line: var(--blue-100);
+            --kb-blue-glow: rgba(29, 78, 216, .15);
+            --kb-teal: #0F766E;
+            --kb-teal-ink: #0B5F58;
+            --kb-teal-soft: #E7F6F3;
+            --kb-teal-line: #A7DED5;
+            --kb-teal-glow: rgba(15, 118, 110, .15);
+            --kb-amber: #B45309;
+            --kb-amber-ink: #8A3E07;
+            --kb-amber-soft: #FDF3E1;
+            --kb-amber-line: #F0C98C;
+            --kb-amber-glow: rgba(180, 83, 9, .15);
+            --kb-purple: #6D28D9;
+            --kb-purple-ink: #5521B5;
+            --kb-purple-soft: #F2ECFE;
+            --kb-purple-line: #C9B3F7;
+            --kb-purple-glow: rgba(109, 40, 217, .15);
+            --kb-mark-ink: #fff;
+            --kb-mono: 'Space Mono', ui-monospace, monospace;
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 2rem 2.5rem 4rem;
+        }
+
+        html[data-theme="dark"] .kb-wrap {
+            --kb-blue-ink: #9CC3FF;
+            --kb-blue-soft: rgba(79, 142, 247, .12);
+            --kb-blue-line: rgba(79, 142, 247, .38);
+            --kb-blue-glow: rgba(79, 142, 247, .22);
+            --kb-teal: #5EEAD4;
+            --kb-teal-ink: #99F6E4;
+            --kb-teal-soft: rgba(45, 212, 191, .1);
+            --kb-teal-line: rgba(94, 234, 212, .34);
+            --kb-teal-glow: rgba(45, 212, 191, .2);
+            --kb-amber: #FBBF24;
+            --kb-amber-ink: #FCD34D;
+            --kb-amber-soft: rgba(251, 191, 36, .1);
+            --kb-amber-line: rgba(251, 191, 36, .32);
+            --kb-amber-glow: rgba(251, 191, 36, .2);
+            --kb-purple: #A78BFA;
+            --kb-purple-ink: #C4B5FD;
+            --kb-purple-soft: rgba(167, 139, 250, .12);
+            --kb-purple-line: rgba(167, 139, 250, .34);
+            --kb-purple-glow: rgba(167, 139, 250, .22);
+            --kb-mark-ink: #0B1020;
+        }
+
+        .kb-wrap [data-lane="main"] {
+            --lane: var(--blue-500);
+            --lane-ink: var(--kb-blue-ink);
+            --lane-soft: var(--kb-blue-soft);
+            --lane-line: var(--kb-blue-line);
+            --lane-glow: var(--kb-blue-glow);
+        }
+
+        .kb-wrap [data-lane="foundations"] {
+            --lane: var(--kb-teal);
+            --lane-ink: var(--kb-teal-ink);
+            --lane-soft: var(--kb-teal-soft);
+            --lane-line: var(--kb-teal-line);
+            --lane-glow: var(--kb-teal-glow);
+        }
+
+        .kb-wrap [data-lane="advanced"] {
+            --lane: var(--kb-amber);
+            --lane-ink: var(--kb-amber-ink);
+            --lane-soft: var(--kb-amber-soft);
+            --lane-line: var(--kb-amber-line);
+            --lane-glow: var(--kb-amber-glow);
+        }
+
+        .kb-wrap [data-lane="odoo"] {
+            --lane: var(--kb-purple);
+            --lane-ink: var(--kb-purple-ink);
+            --lane-soft: var(--kb-purple-soft);
+            --lane-line: var(--kb-purple-line);
+            --lane-glow: var(--kb-purple-glow);
+        }
+
+        .kb-sr {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* ── HERO ── */
+        .kb-hero {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
+            gap: 2rem 2.75rem;
+            align-items: center;
+            padding: 1.25rem 0 2.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .kb-hero::before {
+            content: '';
+            position: absolute;
+            inset: -14% 0 0 0;
+            background-image:
+                linear-gradient(var(--border-light) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+            background-size: 28px 28px;
+            -webkit-mask-image: radial-gradient(58% 58% at 68% 32%, #000 0%, transparent 78%);
+            mask-image: radial-gradient(58% 58% at 68% 32%, #000 0%, transparent 78%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .kb-hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .kb-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--kb-mono);
+            font-size: 11px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .kb-eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--blue-500);
+            box-shadow: 0 0 0 4px var(--blue-50);
+        }
+
+        html[data-theme="dark"] .kb-eyebrow-dot {
+            box-shadow: 0 0 0 4px rgba(79, 142, 247, .15);
+        }
+
+        .kb-hero h1 {
+            font-size: clamp(34px, 4.4vw, 56px);
+            line-height: 1.05;
+            letter-spacing: -1.8px;
+            margin: 0 0 16px;
+            font-weight: 800;
+        }
+
+        .kb-hl {
+            background: linear-gradient(115deg, var(--blue-500) 10%, #0EA5E9 55%, var(--kb-teal) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .kb-lead {
+            font-size: 16px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            max-width: 46ch;
+        }
+
+        .kb-lead code {
+            font-family: var(--kb-mono);
+            font-size: 13.5px;
+            color: var(--kb-blue-ink);
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-radius: 5px;
+            padding: 1px 5px;
+        }
+
+        html[data-theme="dark"] .kb-lead code {
+            background: rgba(79, 142, 247, .12);
+            border-color: rgba(79, 142, 247, .3);
+        }
+
+        .kb-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .kb-stat {
+            font-family: var(--kb-mono);
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+            background: var(--bg-card);
+            border-radius: 999px;
+            padding: 5px 11px;
+        }
+
+        .kb-stat b {
+            color: var(--kb-blue-ink);
+        }
+
+        .kb-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .kb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #fff;
+            background: var(--blue-500);
+            border: 1px solid var(--blue-500);
+            border-radius: 10px;
+            padding: 10px 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .kb-btn:hover {
+            transform: translateY(-1px);
+            background: var(--blue-700);
+            border-color: var(--blue-700);
+            box-shadow: 0 14px 28px -18px rgba(4, 44, 83, .7);
+        }
+
+        .kb-btn-ghost {
+            color: var(--text-primary);
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        .kb-btn-ghost:hover {
+            color: var(--kb-blue-ink);
+            background: var(--bg-card);
+            border-color: var(--blue-500);
+            box-shadow: none;
+        }
+
+        html[data-theme="dark"] .kb-btn {
+            background: #2F6FE0;
+            border-color: #2F6FE0;
+        }
+
+        html[data-theme="dark"] .kb-btn:hover {
+            background: #265FC2;
+            border-color: #265FC2;
+        }
+
+        html[data-theme="dark"] .kb-btn-ghost {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        html[data-theme="dark"] .kb-btn-ghost:hover {
+            background: var(--bg-card);
+            border-color: var(--blue-500);
+            color: var(--kb-blue-ink);
+            box-shadow: none;
+        }
+
+        .kb-btn kbd {
+            font-family: var(--kb-mono);
+            font-size: 10.5px;
+            color: var(--text-muted);
+            background: var(--gray-100);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 1px 5px;
+        }
+
+        .kb-btn:focus-visible,
+        .kb-cmdk-btn:focus-visible,
+        .kb-chip:focus-visible,
+        .kb-card:focus-visible,
+        .kb-rail-link:focus-visible,
+        .kb-rail-reset:focus-visible,
+        .kb-empty button:focus-visible,
+        .kb-opt:focus-visible {
+            outline: 2px solid var(--blue-500);
+            outline-offset: 2px;
+        }
+
+        /* ── GRAPH PANEL ── */
+        .kb-panel {
+            --gp-blue: #4F8EF7;
+            --gp-teal: #2DD4BF;
+            --gp-amber: #FBBF24;
+            --gp-purple: #A78BFA;
+            position: relative;
+            background:
+                radial-gradient(120% 90% at 16% 0%, rgba(79, 142, 247, .13), transparent 58%),
+                radial-gradient(rgba(124, 144, 164, .11) 1px, transparent 1px) 0 0 / 16px 16px,
+                #0D1218;
+            border: 1px solid #22303B;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 38px 84px -42px rgba(4, 44, 83, .7), 0 0 90px -42px rgba(79, 142, 247, .6);
+            font-family: var(--kb-mono);
+        }
+
+        .kb-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(125deg, rgba(79, 142, 247, .6), rgba(45, 212, 191, .28) 38%, rgba(167, 139, 250, .5) 72%, rgba(79, 142, 247, .22));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+            opacity: .8;
+            pointer-events: none;
+        }
+
+        .kb-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 36%, rgba(126, 226, 168, .1) 47%, rgba(79, 142, 247, .13) 53%, transparent 64%);
+            transform: translateX(-130%);
+            pointer-events: none;
+        }
+
+        .kb-panel-bar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 14px;
+            background: #141C23;
+            border-bottom: 1px solid #22303B;
+        }
+
+        .kb-panel-bar i {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .kb-panel-bar i:nth-child(1) { background: #FF5F57; }
+        .kb-panel-bar i:nth-child(2) { background: #FEBC2E; }
+        .kb-panel-bar i:nth-child(3) { background: #28C840; }
+
+        .kb-panel-title {
+            margin-left: auto;
+            font-size: 10.5px;
+            letter-spacing: .4px;
+            color: #7C90A4;
+        }
+
+        .kb-graph-wrap {
+            position: relative;
+            padding: 6px 6px 0;
+        }
+
+        .kb-graph {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .kb-lane-label {
+            fill: #7C90A4;
+            font-family: var(--kb-mono);
+            font-size: 8.5px;
+            letter-spacing: .04em;
+        }
+
+        .kb-lane-glow-path {
+            fill: none;
+            stroke-width: 9;
+            stroke-linecap: round;
+            opacity: .14;
+        }
+
+        .kb-lane-path {
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            opacity: .95;
+        }
+
+        .kb-lane-main { stroke: var(--gp-blue); }
+        .kb-lane-foundations { stroke: var(--gp-teal); }
+        .kb-lane-advanced { stroke: var(--gp-amber); }
+
+        .kb-lane-merge {
+            stroke-width: 1.7;
+            opacity: .5;
+        }
+
+        .kb-halo {
+            fill: none;
+            stroke-width: 1;
+            opacity: .28;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .kb-halo-blue { stroke: var(--gp-blue); }
+        .kb-halo-teal { stroke: var(--gp-teal); }
+        .kb-halo-purple { stroke: var(--gp-purple); }
+
+        .kb-dot-label {
+            font-family: var(--kb-mono);
+            font-size: 7.5px;
+            letter-spacing: .02em;
+            dominant-baseline: middle;
+            pointer-events: none;
+        }
+
+        .kb-label-main { fill: var(--gp-blue); }
+        .kb-label-teal { fill: var(--gp-teal); }
+        .kb-label-amber { fill: var(--gp-amber); }
+        .kb-label-purple { fill: var(--gp-purple); }
+        .kb-label-queued { opacity: .45; }
+
+        .kb-hit {
+            fill: transparent;
+            cursor: default;
+        }
+
+        .kb-svg-dot {
+            stroke-width: 2;
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: stroke-width .15s ease;
+        }
+
+        .kb-svg-dot.is-hover {
+            stroke-width: 3.5;
+        }
+
+        .kb-dot-main { fill: var(--gp-blue); stroke: var(--gp-blue); }
+        .kb-dot-teal { fill: var(--gp-teal); stroke: var(--gp-teal); }
+        .kb-dot-amber { fill: var(--gp-amber); stroke: var(--gp-amber); }
+        .kb-dot-purple { fill: var(--gp-purple); stroke: var(--gp-purple); }
+
+        .kb-svg-dot.is-queued {
+            fill: #0D1218;
+            stroke-dasharray: 2.4 2.6;
+            opacity: .9;
+        }
+
+        .kb-svg-head {
+            fill: none;
+            stroke: #7EE2A8;
+            stroke-width: 1.5;
+            stroke-dasharray: 3 3;
+        }
+
+        .kb-panel-foot {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 14px;
+            padding: 9px 14px 11px;
+            border-top: 1px solid #1C2833;
+            color: #7C90A4;
+            font-size: 10.5px;
+            letter-spacing: .02em;
+        }
+
+        .kb-foot-readout {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-width: 0;
+            color: #B4C4D6;
+        }
+
+        .kb-foot-readout > span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .kb-foot-legend {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+            color: #7C90A4;
+            white-space: nowrap;
+        }
+
+        .kb-key {
+            display: inline-block;
+            flex: none;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            vertical-align: 0;
+        }
+
+        .kb-key--dot {
+            background: var(--gp-blue);
+        }
+
+        .kb-key--ring {
+            border: 1px dashed var(--gp-teal);
+        }
+
+        .kb-key--head {
+            border: 1px dashed #7EE2A8;
+        }
+
+        @media (max-width: 560px) {
+            .kb-foot-legend {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .js .kb-panel::after {
+                animation: kbSweep 1.5s cubic-bezier(.2, .6, .2, 1) .35s forwards;
+            }
+
+            .js .kb-lane-glow-path {
+                opacity: 0;
+                animation: kbGlowFade 1s ease forwards .55s;
+            }
+
+            .js .kb-lane-path {
+                stroke-dasharray: 1;
+                stroke-dashoffset: 1;
+                animation: kbDraw .9s ease forwards;
+                animation-delay: calc(var(--i, 0) * 130ms + 150ms);
+            }
+
+            .js .kb-svg-dot {
+                animation: kbPop .38s cubic-bezier(.2, .9, .3, 1.4) both;
+                animation-delay: calc(var(--i, 0) * 70ms + 520ms);
+            }
+
+            .js .kb-halo {
+                animation: kbHalo 3.4s ease-in-out infinite;
+                animation-delay: calc(var(--i, 0) * 230ms);
+            }
+
+            .js .kb-svg-head {
+                animation: kbRing 2.6s ease-in-out infinite;
+            }
+        }
+
+        @keyframes kbSweep {
+            to { transform: translateX(130%); }
+        }
+
+        @keyframes kbGlowFade {
+            to { opacity: .14; }
+        }
+
+        @keyframes kbDraw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes kbPop {
+            from { transform: scale(.25); }
+            to { transform: none; }
+        }
+
+        @keyframes kbHalo {
+            0%, 100% { opacity: .2; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.18); }
+        }
+
+        @keyframes kbRing {
+            0%, 100% { stroke-opacity: .95; }
+            50% { stroke-opacity: .25; }
+        }
+
+        /* ── WORKSPACE BAR ── */
+        .kb-ws {
+            position: sticky;
+            top: 64px;
+            z-index: 60;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 16px;
+            padding: 10px 14px;
+            margin: 1.5rem 0 1.5rem;
+            font-family: var(--kb-mono);
+            font-size: 11.5px;
+            color: var(--text-muted);
+            background: var(--nav-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 26px -24px rgba(4, 44, 83, .5);
+        }
+
+        .kb-repo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .kb-repo i {
+            font-size: 10px;
+            color: var(--kb-blue-ink);
+        }
+
+        .kb-head {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .kb-head-pill {
+            font-size: 9px;
+            letter-spacing: .08em;
+            color: var(--kb-blue-ink);
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-radius: 4px;
+            padding: 2px 5px;
+        }
+
+        html[data-theme="dark"] .kb-head-pill {
+            background: rgba(79, 142, 247, .14);
+            border-color: rgba(79, 142, 247, .35);
+        }
+
+        .kb-head a {
+            color: var(--text-primary);
+            text-decoration: none;
+            max-width: 34ch;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .kb-head a:hover {
+            color: var(--kb-blue-ink);
+        }
+
+        .kb-ws-prog {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .kb-seg {
+            display: flex;
+            gap: 3px;
+        }
+
+        .kb-seg span {
+            display: block;
+            width: 15px;
+            height: 6px;
+            border-radius: 2px;
+            background: var(--gray-100);
+            transition: background .25s ease;
+        }
+
+        .kb-seg span.on {
+            background: var(--blue-500);
+        }
+
+        .kb-ws-count {
+            min-width: 32px;
+            color: var(--text-secondary);
+        }
+
+        .kb-cmdk-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--kb-mono);
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: color .15s ease, border-color .15s ease;
+        }
+
+        .kb-cmdk-btn:hover {
+            color: var(--kb-blue-ink);
+            border-color: var(--blue-500);
+        }
+
+        .kb-cmdk-btn kbd {
+            font-family: var(--kb-mono);
+            font-size: 9.5px;
+            color: var(--text-muted);
+            background: var(--gray-100);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0 4px;
+        }
+
+        /* ── TOOLBAR ── */
+        .kb-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 0 0 1.1rem;
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .kb-search {
+            position: relative;
+            flex: 1 1 240px;
+            max-width: 380px;
+        }
+
+        .kb-search > i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .kb-input {
+            width: 100%;
+            font: inherit;
+            font-size: 13.5px;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 40px 10px 34px;
+        }
+
+        .kb-input:focus {
+            outline: 2px solid var(--blue-500);
+            outline-offset: 1px;
+            border-color: var(--blue-500);
+        }
+
+        .kb-search kbd {
+            position: absolute;
+            right: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: var(--kb-mono);
+            font-size: 10.5px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 1px 6px;
+            background: var(--bg);
+        }
+
+        .kb-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .kb-chip {
+            font: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background .15s ease, color .15s ease, border-color .15s ease;
+        }
+
+        .kb-chip:hover {
+            border-color: var(--blue-500);
+            color: var(--kb-blue-ink);
+        }
+
+        .kb-chip[aria-pressed="true"] {
+            background: var(--blue-500);
+            border-color: var(--blue-500);
+            color: #fff;
+        }
+
+        html[data-theme="dark"] .kb-chip[aria-pressed="true"] {
+            background: #2F6FE0;
+            border-color: #2F6FE0;
+        }
+
+        .kb-result {
+            margin-left: auto;
+            font-family: var(--kb-mono);
+            font-size: 11.5px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .kb-result b {
+            color: var(--text-primary);
+        }
+
+        /* ── GRID + RAIL ── */
+        .kb-grid {
+            display: grid;
+            grid-template-columns: 236px minmax(0, 1fr);
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        .kb-rail {
+            position: sticky;
+            top: 148px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+        }
+
+        .kb-rail-label {
+            font-family: var(--kb-mono);
+            font-size: 10px;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 2px 6px 6px;
+        }
+
+        .kb-rail-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .kb-rail-link {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 12.5px;
+            line-height: 1.35;
+            transition: background .15s ease, color .15s ease;
+        }
+
+        .kb-rail-link:hover {
+            background: var(--gray-100);
+            color: var(--text-primary);
+        }
+
+        .kb-rail-link.is-active {
+            background: var(--blue-50);
+            color: var(--kb-blue-ink);
+        }
+
+        html[data-theme="dark"] .kb-rail-link.is-active {
+            background: rgba(79, 142, 247, .12);
+        }
+
+        .kb-rail-branch {
+            font-family: var(--kb-mono);
+            font-size: 9px;
+            letter-spacing: .02em;
+            color: var(--lane-ink);
+            background: var(--lane-soft);
+            border: 1px solid var(--lane-line);
+            border-radius: 4px;
+            padding: 1px 4px;
+            white-space: nowrap;
+        }
+
+        .kb-rail-count {
+            font-family: var(--kb-mono);
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+
+        .kb-rail-link.is-active .kb-rail-count {
+            color: var(--lane-ink);
+        }
+
+        .kb-rail-prog {
+            margin-top: 8px;
+            padding: 10px 8px 4px;
+            border-top: 1px dashed var(--border-light);
+        }
+
+        .kb-rail-prog-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-family: var(--kb-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .kb-rail-track {
+            height: 5px;
+            border-radius: 999px;
+            background: var(--gray-100);
+            overflow: hidden;
+        }
+
+        .kb-rail-fill {
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--blue-700), var(--blue-500));
+            transition: width .3s ease;
+        }
+
+        .kb-rail-reset {
+            margin-top: 8px;
+            font: inherit;
+            font-family: var(--kb-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            background: none;
+            border: 1px dashed var(--border);
+            border-radius: 7px;
+            padding: 6px 8px;
+            cursor: pointer;
+            transition: color .15s ease, border-color .15s ease;
+        }
+
+        .kb-rail-reset:hover {
+            color: var(--kb-blue-ink);
+            border-color: var(--blue-500);
+        }
+
+        /* ── STAGES ── */
+        .kb-stage {
+            padding-bottom: 1.75rem;
+            scroll-margin-top: 152px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .js .kb-stage {
+                opacity: 0;
+                transform: translateY(10px);
+                transition: opacity .45s ease, transform .45s ease;
+            }
+
+            .js .kb-stage.is-in {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .kb-stage-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 10px;
+            margin-bottom: 12px;
+        }
+
+        .kb-branch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--kb-mono);
+            font-size: 10.5px;
+            color: var(--lane-ink);
+            background: var(--lane-soft);
+            border: 1px solid var(--lane-line);
+            border-radius: 6px;
+            padding: 2px 8px;
+        }
+
+        .kb-stage-head h2 {
+            font-size: 19px;
+            letter-spacing: -.35px;
+            color: var(--text-primary);
+        }
+
+        .kb-stage-count {
+            margin-left: auto;
+            font-family: var(--kb-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .kb-stage-desc {
+            flex-basis: 100%;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 76ch;
+        }
+
+        /* ── NODES ── */
+        .kb-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .kb-node {
+            display: flex;
+            min-width: 0;
+            scroll-margin-top: 152px;
+        }
+
+        .kb-node[hidden],
+        .kb-stage[hidden] {
+            display: none !important;
+        }
+
+        .kb-card {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            padding: 1rem 1.1rem .95rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            overflow: hidden;
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .kb-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--lane), transparent 72%);
+            opacity: .85;
+        }
+
+        .kb-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 0%), var(--lane-glow), transparent 70%);
+            opacity: 0;
+            transition: opacity .25s ease;
+            pointer-events: none;
+        }
+
+        .kb-node[data-status="done"] .kb-card:hover,
+        .kb-node[data-status="done"] .kb-card:focus-visible {
+            border-color: var(--lane-line);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px -26px rgba(4, 44, 83, .55);
+        }
+
+        .kb-node[data-status="done"] .kb-card:hover::after,
+        .kb-node[data-status="done"] .kb-card:focus-visible::after {
+            opacity: 1;
+        }
+
+        .kb-node.is-visited .kb-card {
+            box-shadow: inset 3px 0 0 var(--lane);
+        }
+
+        .kb-node.is-head .kb-card {
+            border-color: var(--lane-line);
+        }
+
+        .kb-node[data-status="soon"] .kb-card {
+            border-style: dashed;
+            cursor: default;
+        }
+
+        .kb-node[data-status="soon"] .kb-card::before {
+            opacity: .38;
+        }
+
+        .kb-node[data-status="soon"] .kb-card h3 {
+            color: var(--text-secondary);
+        }
+
+        .kb-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 7px;
+            padding-right: 24px;
+            font-family: var(--kb-mono);
+            font-size: 10.5px;
+            color: var(--text-muted);
+        }
+
+        .kb-hash {
+            color: var(--lane-ink);
+            font-weight: 700;
+        }
+
+        .kb-lane-chip {
+            font-size: 9.5px;
+            color: var(--lane-ink);
+            background: var(--lane-soft);
+            border: 1px solid var(--lane-line);
+            border-radius: 4px;
+            padding: 1px 5px;
+        }
+
+        .kb-card h3 {
+            margin: 7px 0 0;
+            font-size: 16px;
+            line-height: 1.4;
+            letter-spacing: -.2px;
+            overflow-wrap: break-word;
+        }
+
+        .kb-card p {
+            margin: 5px 0 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            overflow-wrap: break-word;
+        }
+
+        .kb-card-foot {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 13px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--lane-ink);
+        }
+
+        .kb-card-foot i {
+            transition: transform .2s ease;
+        }
+
+        .kb-node[data-status="done"] .kb-card:hover .kb-card-foot i {
+            transform: translateX(3px);
+        }
+
+        .kb-queue {
+            font-family: var(--kb-mono);
+            font-size: 10.5px;
+            font-weight: 400;
+            letter-spacing: .03em;
+            color: var(--text-muted);
+            border: 1px dashed var(--border);
+            border-radius: 999px;
+            padding: 2px 8px;
+        }
+
+        .kb-head-tag {
+            display: none;
+            font-family: var(--kb-mono);
+            font-size: 8.5px;
+            font-weight: 400;
+            letter-spacing: .08em;
+            color: #0F7A4D;
+            background: #DCFCE7;
+            border-radius: 4px;
+            padding: 1px 4px;
+            margin-left: 6px;
+            vertical-align: 2px;
+        }
+
+        html[data-theme="dark"] .kb-head-tag {
+            color: #7EE2A8;
+            background: rgba(126, 226, 168, .12);
+        }
+
+        .kb-node.is-head .kb-head-tag {
+            display: inline-block;
+        }
+
+        .kb-done-mark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+            place-items: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 8px;
+            color: var(--kb-mark-ink);
+            background: var(--lane);
+        }
+
+        .kb-node.is-visited .kb-done-mark {
+            display: grid;
+        }
+
+        .kb-node.is-flash .kb-card {
+            animation: kbFlash 1.5s ease;
+        }
+
+        @keyframes kbFlash {
+            0%, 100% { box-shadow: 0 0 0 0 transparent; }
+            30% { box-shadow: 0 0 0 3px var(--lane-line), 0 18px 36px -26px rgba(4, 44, 83, .5); }
+        }
+
+        /* ── EMPTY / CTA ── */
+        .kb-empty {
+            display: none;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .kb-empty.show {
+            display: block;
+        }
+
+        .kb-empty[hidden] {
+            display: none !important;
+        }
+
+        .kb-empty button {
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--kb-blue-ink);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .kb-wrap .cta-box {
+            margin-top: 2.5rem;
+        }
+
+        /* ── COMMAND PALETTE ── */
+        .kb-cmdk {
+            position: fixed;
+            inset: 0;
+            z-index: 400;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12vh 1rem 1rem;
+        }
+
+        .kb-cmdk[hidden] {
+            display: none !important;
+        }
+
+        .kb-cmdk-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 12, 20, .55);
+            -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+        }
+
+        .kb-cmdk-panel {
+            position: relative;
+            width: min(560px, 100%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 44px 96px -34px rgba(4, 20, 44, .65);
+        }
+
+        .kb-cmdk-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .kb-cmdk-top > i {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .kb-cmdk-top input {
+            flex: 1;
+            min-width: 0;
+            font: inherit;
+            font-family: var(--kb-mono);
+            font-size: 13.5px;
+            color: var(--text-primary);
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .kb-cmdk-top kbd {
+            font-family: var(--kb-mono);
+            font-size: 9.5px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 5px;
+        }
+
+        .kb-cmdk-list {
+            list-style: none;
+            margin: 0;
+            padding: 6px;
+            max-height: min(52vh, 400px);
+            overflow-y: auto;
+        }
+
+        .kb-opt {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .kb-opt.is-active {
+            background: var(--blue-50);
+            color: var(--kb-blue-ink);
+        }
+
+        html[data-theme="dark"] .kb-opt.is-active {
+            background: rgba(79, 142, 247, .12);
+        }
+
+        .kb-opt-hint {
+            margin-left: auto;
+            font-family: var(--kb-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .kb-opt-empty {
+            padding: 14px 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .kb-cmdk-foot {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 9px 14px;
+            border-top: 1px solid var(--border-light);
+            font-family: var(--kb-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        body.kb-locked {
+            overflow: hidden;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .kb-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .kb-rail {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .kb-hero {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .kb-panel {
+                max-width: 560px;
+            }
+
+            .kb-repo {
+                display: none;
+            }
+
+            .kb-head a {
+                max-width: 26ch;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .kb-wrap {
+                padding: 1.5rem 1.5rem 3rem;
+            }
+
+            .kb-result {
+                display: none;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .kb-list {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .kb-ws {
+                position: static;
+            }
+
+            .kb-stage,
+            .kb-node {
+                scroll-margin-top: 84px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .kb-wrap {
+                padding: 1rem 1rem 3rem;
+            }
+
+            .kb-ws-label {
+                display: none;
+            }
+
+            .kb-seg span {
+                width: 12px;
+            }
+
+            .kb-ws-prog {
+                margin-left: 0;
+            }
+
+            .kb-cmdk-btn {
+                margin-left: auto;
+            }
+
+            .kb-hero h1 {
+                font-size: 32px;
+                letter-spacing: -1.1px;
+            }
+
+            .kb-lead {
+                font-size: 15px;
+            }
+
+            .kb-ws {
+                gap: 8px;
+            }
+
+            .kb-head a {
+                max-width: 20ch;
+            }
+
+            .kb-stage-count {
+                display: none;
+            }
+
+            .kb-stage-head h2 {
+                flex-basis: 100%;
+                font-size: 17px;
+                margin-top: 2px;
+            }
+
+            .kb-card {
+                padding: .9rem .95rem;
+            }
+
+            .kb-input,
+            .kb-cmdk-top input {
+                font-size: 16px;
+            }
+
+            .kb-cmdk {
+                padding: 8vh .75rem 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js .kb-lane-path {
+                stroke-dasharray: none;
+                stroke-dashoffset: 0;
+                animation: none;
+            }
+
+            .js .kb-svg-dot {
+                animation: none;
+            }
+
+            .js .kb-svg-head {
+                animation: none;
+            }
+
+            .kb-node.is-flash .kb-card {
+                animation: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -85,68 +1622,316 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="kb-wrap">
         <ol class="breadcrumb">
             <li><a href="../index.html">Trang chủ</a></li>
             <li aria-current="page">Kiến thức</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Kiến thức · Miễn phí</span>
-            <h1>Blog kiến thức lập trình</h1>
-            <p class="post-lead">Nơi Vinc Academy chia sẻ kiến thức thực hành về lập trình và công nghệ. Bạn có thể đi theo lộ trình từ trên xuống, hoặc chọn thẳng chủ đề cần.</p>
+        <header class="kb-hero">
+            <div class="kb-copy">
+                <p class="kb-eyebrow"><span class="kb-eyebrow-dot" aria-hidden="true"></span>knowledge_graph</p>
+                <h1>Không học lộn xộn.<br>Đi theo <span class="kb-hl">graph</span>.</h1>
+                <p class="kb-lead">Mỗi chủ đề là một commit trên nhánh. Bắt đầu từ <code>#01</code> trên <code>main</code>, rẽ sang <code>foundations</code>, <code>advanced</code> rồi merge vào Odoo — hoặc nhảy thẳng tới commit bạn cần.</p>
+                <div class="kb-stats">
+                    <span class="kb-stat"><b>12</b> commits</span>
+                    <span class="kb-stat"><b>4</b> branches</span>
+                    <span class="kb-stat"><b>6</b> shipped</span>
+                    <span class="kb-stat">miễn phí</span>
+                </div>
+                <div class="kb-actions">
+                    <a class="kb-btn" href="#node-01">Bắt đầu từ #01 <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                    <button type="button" class="kb-btn kb-btn-ghost" data-open-cmdk>Bảng lệnh <kbd>⌘K</kbd></button>
+                </div>
+            </div>
+
+            <div class="kb-panel" aria-hidden="true">
+                <div class="kb-panel-bar"><i></i><i></i><i></i><span class="kb-panel-title">git log --graph --all</span></div>
+                <div class="kb-graph-wrap">
+                    <svg class="kb-graph" viewBox="0 0 420 282" role="presentation">
+                        <g>
+                            <text class="kb-lane-label" x="96" y="12" text-anchor="middle">main</text>
+                            <text class="kb-lane-label" x="210" y="12" text-anchor="middle">foundations</text>
+                            <text class="kb-lane-label" x="324" y="12" text-anchor="middle">advanced</text>
+                        </g>
+                        <g fill="none">
+                            <path class="kb-lane-glow-path kb-lane-main" d="M96 24 L96 52 L96 262" />
+                            <path class="kb-lane-glow-path kb-lane-foundations" d="M96 52 C96 68 210 64 210 78 L210 198" />
+                            <path class="kb-lane-glow-path kb-lane-advanced" d="M210 126 C210 140 324 138 324 150 L324 198" />
+                            <path class="kb-lane-glow-path kb-lane-foundations" d="M210 198 C210 222 96 228 96 242" />
+                            <path class="kb-lane-glow-path kb-lane-advanced" d="M324 198 C324 222 96 240 96 252" />
+                        </g>
+                        <g fill="none">
+                            <path class="kb-lane-path kb-lane-main" pathLength="1" style="--i:0" d="M96 24 L96 52 L96 262" />
+                            <path class="kb-lane-path kb-lane-foundations" pathLength="1" style="--i:1" d="M96 52 C96 68 210 64 210 78 L210 198" />
+                            <path class="kb-lane-path kb-lane-advanced" pathLength="1" style="--i:2" d="M210 126 C210 140 324 138 324 150 L324 198" />
+                            <path class="kb-lane-path kb-lane-merge kb-lane-foundations" pathLength="1" style="--i:3" d="M210 198 C210 222 96 228 96 242" />
+                            <path class="kb-lane-path kb-lane-merge kb-lane-advanced" pathLength="1" style="--i:4" d="M324 198 C324 222 96 240 96 252" />
+                        </g>
+                        <g>
+                            <circle class="kb-halo kb-halo-blue" cx="96" cy="24" r="11" style="--i:0" />
+                            <circle class="kb-halo kb-halo-blue" cx="96" cy="52" r="11" style="--i:1" />
+                            <circle class="kb-halo kb-halo-teal" cx="210" cy="78" r="11" style="--i:2" />
+                            <circle class="kb-halo kb-halo-teal" cx="210" cy="102" r="11" style="--i:3" />
+                            <circle class="kb-halo kb-halo-teal" cx="210" cy="126" r="11" style="--i:4" />
+                            <circle class="kb-halo kb-halo-purple" cx="96" cy="262" r="11" style="--i:5" />
+                        </g>
+                        <g>
+                            <circle class="kb-svg-dot kb-dot-main" data-id="01" cx="96" cy="24" r="6" style="--i:0" />
+                            <circle class="kb-svg-dot kb-dot-main" data-id="02" cx="96" cy="52" r="6" style="--i:1" />
+                            <circle class="kb-svg-dot kb-dot-teal" data-id="03" cx="210" cy="78" r="6" style="--i:2" />
+                            <circle class="kb-svg-dot kb-dot-teal" data-id="04" cx="210" cy="102" r="6" style="--i:3" />
+                            <circle class="kb-svg-dot kb-dot-teal" data-id="05" cx="210" cy="126" r="6" style="--i:4" />
+                            <circle class="kb-svg-dot kb-dot-teal is-queued" data-id="06" cx="210" cy="150" r="6" style="--i:5" />
+                            <circle class="kb-svg-dot kb-dot-teal is-queued" data-id="07" cx="210" cy="174" r="6" style="--i:6" />
+                            <circle class="kb-svg-dot kb-dot-teal is-queued" data-id="08" cx="210" cy="198" r="6" style="--i:7" />
+                            <circle class="kb-svg-dot kb-dot-amber is-queued" data-id="09" cx="324" cy="150" r="6" style="--i:8" />
+                            <circle class="kb-svg-dot kb-dot-amber is-queued" data-id="10" cx="324" cy="174" r="6" style="--i:9" />
+                            <circle class="kb-svg-dot kb-dot-amber is-queued" data-id="11" cx="324" cy="198" r="6" style="--i:10" />
+                            <circle class="kb-svg-dot kb-dot-purple" data-id="12" cx="96" cy="262" r="6" style="--i:11" />
+                        </g>
+                        <g>
+                            <text class="kb-dot-label kb-label-main" x="113" y="24">#01 career</text>
+                            <text class="kb-dot-label kb-label-main" x="113" y="52">#02 first-job</text>
+                            <text class="kb-dot-label kb-label-teal" x="227" y="78">#03 python</text>
+                            <text class="kb-dot-label kb-label-teal" x="227" y="102">#04 linux</text>
+                            <text class="kb-dot-label kb-label-teal" x="227" y="126">#05 git</text>
+                            <text class="kb-dot-label kb-label-teal kb-label-queued" x="227" y="150">#06 sql</text>
+                            <text class="kb-dot-label kb-label-teal kb-label-queued" x="227" y="174">#07 web-api</text>
+                            <text class="kb-dot-label kb-label-teal kb-label-queued" x="227" y="198">#08 algo</text>
+                            <text class="kb-dot-label kb-label-amber kb-label-queued" x="341" y="150">#09 clean-code</text>
+                            <text class="kb-dot-label kb-label-amber kb-label-queued" x="341" y="174">#10 ai</text>
+                            <text class="kb-dot-label kb-label-amber kb-label-queued" x="341" y="198">#11 devops</text>
+                            <text class="kb-dot-label kb-label-purple" x="113" y="262">#12 odoo</text>
+                        </g>
+                        <circle id="kb-head-ring" class="kb-svg-head" cx="210" cy="78" r="12" />
+                        <g>
+                            <circle class="kb-hit" data-id="01" cx="96" cy="24" r="13" />
+                            <circle class="kb-hit" data-id="02" cx="96" cy="52" r="13" />
+                            <circle class="kb-hit" data-id="03" cx="210" cy="78" r="13" />
+                            <circle class="kb-hit" data-id="04" cx="210" cy="102" r="13" />
+                            <circle class="kb-hit" data-id="05" cx="210" cy="126" r="13" />
+                            <circle class="kb-hit" data-id="06" cx="210" cy="150" r="13" />
+                            <circle class="kb-hit" data-id="07" cx="210" cy="174" r="13" />
+                            <circle class="kb-hit" data-id="08" cx="210" cy="198" r="13" />
+                            <circle class="kb-hit" data-id="09" cx="324" cy="150" r="13" />
+                            <circle class="kb-hit" data-id="10" cx="324" cy="174" r="13" />
+                            <circle class="kb-hit" data-id="11" cx="324" cy="198" r="13" />
+                            <circle class="kb-hit" data-id="12" cx="96" cy="262" r="13" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="kb-panel-foot">
+                    <span class="kb-foot-readout"><i class="kb-key kb-key--head"></i><span id="kb-panel-readout">HEAD → #01 · career</span></span>
+                    <span class="kb-foot-legend"><i class="kb-key kb-key--dot"></i>shipped<i class="kb-key kb-key--ring"></i>queued</span>
+                </div>
+            </div>
         </header>
 
-        <input type="search" id="post-search" class="post-search" placeholder="Tìm chủ đề: Python, Git, SQL..." aria-label="Tìm chủ đề">
-        <p class="prog-empty" id="post-empty" hidden>Không tìm thấy chủ đề phù hợp.</p>
-        <section class="blog-group">
-            <h2 class="series-title">1. Định hướng cho sinh viên và người mới</h2>
-            <p class="series-desc">Hiểu nghề IT, chọn hướng đi và chuẩn bị những kỹ năng mềm cho ngày đầu đi làm.</p>
-        <ol class="post-grid">
-            <li><a class="post-card" href="career/index.html"><span class="post-num">Người mới</span><h2>Lộ trình &amp; nghề IT</h2><p>Roadmap học lập trình, chọn hướng (backend, ERP, DevOps), CV, portfolio GitHub và chuẩn bị phỏng vấn thực tập, fresher.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="first-job/index.html"><span class="post-num">Người mới</span><h2>Kỹ năng đi làm đầu tiên</h2><p>Onboarding, đọc ticket, hỏi đúng cách, code review, ước lượng, báo cáo tiến độ và làm việc Agile/Scrum.</p><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
-        </section>
+        <div class="kb-ws">
+            <span class="kb-repo"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> vinc-academy/knowledge</span>
+            <span class="kb-head">
+                <span class="kb-head-pill">HEAD</span>
+                <a id="kb-head-link" href="#node-01">#01 · Lộ trình &amp; nghề IT</a>
+            </span>
+            <div class="kb-ws-prog">
+                <span class="kb-ws-label" aria-hidden="true">progress</span>
+                <div class="kb-seg" id="kb-seg" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" aria-label="Số chủ đề bạn đã đọc"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="kb-ws-count" id="kb-ws-count">0/6</span>
+            </div>
+            <button type="button" class="kb-cmdk-btn" data-open-cmdk><i class="fa-solid fa-terminal" aria-hidden="true"></i> Bảng lệnh <kbd>⌘K</kbd></button>
+        </div>
 
-        <section class="blog-group">
-            <h2 class="series-title">2. Nền tảng kỹ thuật</h2>
-            <p class="series-desc">Bộ kỹ năng nền mà developer nào cũng cần; nên học lần lượt từ trên xuống.</p>
-        <ol class="post-grid">
-            <li><a class="post-card" href="python/index.html"><span class="post-num">Người mới</span><h2>Python</h2><p>Nền tảng Python và kỹ thuật thực chiến cho developer.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="linux/index.html"><span class="post-num">Người mới</span><h2>Linux &amp; Shell</h2><p>Dòng lệnh Linux và Bash thực chiến: file, quyền, tiến trình, pipe và script cho developer.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git/index.html"><span class="post-num">Người mới</span><h2>Git</h2><p>Git thực chiến cho nhóm: commit, nhánh, merge request, hoàn tác, rebase và CI.</p><span class="post-status">Đã xuất bản</span></a></li>
-            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>SQL &amp; PostgreSQL</h2><p>Truy vấn, thiết kế dữ liệu và tối ưu hiệu năng với PostgreSQL.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Người mới</span><h2>Web &amp; API cơ bản</h2><p>Internet, HTTP, client–server, REST và JSON; dùng curl, Postman để gọi thử API.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>Giải thuật &amp; cấu trúc dữ liệu</h2><p>Độ phức tạp, tìm kiếm, sắp xếp, ngăn xếp, hàng đợi bằng Python; phục vụ ôn thi và phỏng vấn.</p><span class="post-status">Sắp ra mắt</span></div></li>
-        </ol>
-        </section>
+        <div class="kb-toolbar">
+            <div class="kb-search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" id="kb-search" class="kb-input" placeholder="Tìm commit, chủ đề, keyword..." aria-label="Tìm chủ đề" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+            <div class="kb-chips" role="group" aria-label="Lọc chủ đề">
+                <button type="button" class="kb-chip" data-filter="all" aria-pressed="true">Tất cả</button>
+                <button type="button" class="kb-chip" data-filter="beginner" aria-pressed="false">Người mới</button>
+                <button type="button" class="kb-chip" data-filter="intermediate" aria-pressed="false">Trung cấp</button>
+                <button type="button" class="kb-chip" data-filter="done" aria-pressed="false">Đã mở</button>
+            </div>
+            <p class="kb-result" aria-live="polite"><b id="kb-result-count">12</b> chủ đề</p>
+        </div>
 
-        <section class="blog-group">
-            <h2 class="series-title">3. Kỹ thuật nâng cao</h2>
-            <p class="series-desc">Dành cho người đã quen viết code và làm việc nhóm.</p>
-        <ol class="post-grid">
-            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>Clean Code &amp; SOLID</h2><p>Viết code dễ đọc, dễ thay đổi: đặt tên, hàm ngắn, DRY và các nguyên lý SOLID.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>AI cho lập trình</h2><p>Dùng AI để viết, review và debug code hiệu quả.</p><span class="post-status">Sắp ra mắt</span></div></li>
-            <li><div class="post-card soon"><span class="post-num">Trung cấp</span><h2>DevOps</h2><p>Docker, CI/CD, Linux và triển khai ứng dụng (Odoo) lên server.</p><span class="post-status">Sắp ra mắt</span></div></li>
-        </ol>
-        </section>
-
-        <section class="blog-group">
-            <h2 class="series-title">4. Odoo: lập trình ERP</h2>
-            <p class="series-desc">Vận dụng toàn bộ nền tảng trên vào một nền tảng ERP phổ biến.</p>
-        <ol class="post-grid">
-            <li><a class="post-card" href="odoo/index.html"><span class="post-num">Trung cấp</span><h2>Odoo</h2><p>Lập trình Odoo 20 từ A–Z: module, ORM, view, bảo mật, OWL, API, triển khai.</p><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
-        </section>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
-                <h3>Muốn học nhanh hơn với mentor?</h3>
-                <p>Các khóa học tại Vinc Academy có dự án thực tế và review code từ giảng viên.</p>
-                <div class="cta-actions">
-                    <a href="../index.html#programs">Xem chương trình</a>
-                    <a href="../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
+        <div class="kb-grid">
+            <aside class="kb-rail" aria-label="Chặng học">
+                <p class="kb-rail-label">branches</p>
+                <ol class="kb-rail-list">
+                    <li><a class="kb-rail-link" href="#stage-1" data-stage-link="1" data-lane="main"><span class="kb-rail-branch">main</span><span>Định hướng</span><span class="kb-rail-count" data-rail-count="1">0/2</span></a></li>
+                    <li><a class="kb-rail-link" href="#stage-2" data-stage-link="2" data-lane="foundations"><span class="kb-rail-branch">foundations</span><span>Nền tảng</span><span class="kb-rail-count" data-rail-count="2">0/3</span></a></li>
+                    <li><a class="kb-rail-link" href="#stage-3" data-stage-link="3" data-lane="advanced"><span class="kb-rail-branch">advanced</span><span>Nâng cao</span><span class="kb-rail-count" data-rail-count="3">soon</span></a></li>
+                    <li><a class="kb-rail-link" href="#stage-4" data-stage-link="4" data-lane="odoo"><span class="kb-rail-branch">odoo</span><span>Odoo ERP</span><span class="kb-rail-count" data-rail-count="4">0/1</span></a></li>
+                </ol>
+                <div class="kb-rail-prog">
+                    <div class="kb-rail-prog-top"><span>đã đọc</span><span id="kb-rail-prog-text">0/6</span></div>
+                    <div class="kb-rail-track" aria-hidden="true"><span class="kb-rail-fill" id="kb-rail-fill"></span></div>
+                    <button type="button" class="kb-rail-reset" data-reset-progress>Xoá tiến độ</button>
                 </div>
+            </aside>
+
+            <div class="kb-main" id="kb-branch-view">
+                <section class="kb-stage" id="stage-1" data-stage="1" data-lane="main" aria-labelledby="stage-1-title">
+                    <header class="kb-stage-head">
+                        <span class="kb-branch"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> main</span>
+                        <h2 id="stage-1-title">1. Định hướng cho sinh viên và người mới</h2>
+                        <span class="kb-stage-count">2 commits</span>
+                        <p class="kb-stage-desc">Hiểu nghề IT, chọn hướng đi và chuẩn bị kỹ năng cho ngày đầu đi làm.</p>
+                    </header>
+                    <ol class="kb-list">
+                        <li class="kb-node" id="node-01" data-id="01" data-status="done" data-level="beginner" data-lane="main" data-topic="Lộ trình &amp; nghề IT" data-keywords="roadmap nghe nghề cv portfolio phỏng vấn backend erp devops">
+                            <a class="kb-card" href="career/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#01</span><span class="kb-lane-chip">main</span><span>Người mới</span></div>
+                                <h3>Lộ trình &amp; nghề IT<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Roadmap học lập trình, chọn hướng (backend, ERP, DevOps), CV, portfolio GitHub và chuẩn bị phỏng vấn thực tập, fresher.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                        <li class="kb-node" id="node-02" data-id="02" data-status="done" data-level="beginner" data-lane="main" data-topic="Kỹ năng đi làm đầu tiên" data-keywords="onboarding ticket code review estimate agile scrum báo cáo">
+                            <a class="kb-card" href="first-job/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#02</span><span class="kb-lane-chip">main</span><span>Người mới</span></div>
+                                <h3>Kỹ năng đi làm đầu tiên<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Onboarding, đọc ticket, hỏi đúng cách, code review, ước lượng, báo cáo tiến độ và làm việc Agile/Scrum.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                    </ol>
+                </section>
+
+                <section class="kb-stage" id="stage-2" data-stage="2" data-lane="foundations" aria-labelledby="stage-2-title">
+                    <header class="kb-stage-head">
+                        <span class="kb-branch"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> feat/foundations</span>
+                        <h2 id="stage-2-title">2. Nền tảng kỹ thuật</h2>
+                        <span class="kb-stage-count">6 commits</span>
+                        <p class="kb-stage-desc">Bộ kỹ năng nền mà developer nào cũng cần; nên học lần lượt từ trên xuống.</p>
+                    </header>
+                    <ol class="kb-list">
+                        <li class="kb-node" id="node-03" data-id="03" data-status="done" data-level="beginner" data-lane="foundations" data-topic="Python" data-keywords="python py pip django flask">
+                            <a class="kb-card" href="python/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#03</span><span class="kb-lane-chip">foundations</span><span>Người mới</span></div>
+                                <h3>Python<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Nền tảng Python và kỹ thuật thực chiến cho developer.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                        <li class="kb-node" id="node-04" data-id="04" data-status="done" data-level="beginner" data-lane="foundations" data-topic="Linux &amp; Shell" data-keywords="linux bash shell terminal quyền tiến trình pipe script">
+                            <a class="kb-card" href="linux/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#04</span><span class="kb-lane-chip">foundations</span><span>Người mới</span></div>
+                                <h3>Linux &amp; Shell<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Dòng lệnh Linux và Bash thực chiến: file, quyền, tiến trình, pipe và script cho developer.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                        <li class="kb-node" id="node-05" data-id="05" data-status="done" data-level="beginner" data-lane="foundations" data-topic="Git" data-keywords="git github commit branch merge rebase ci">
+                            <a class="kb-card" href="git/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#05</span><span class="kb-lane-chip">foundations</span><span>Người mới</span></div>
+                                <h3>Git<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Git thực chiến cho nhóm: commit, nhánh, merge request, hoàn tác, rebase và CI.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                        <li class="kb-node" id="node-06" data-id="06" data-status="soon" data-level="beginner" data-lane="foundations" data-topic="SQL &amp; PostgreSQL" data-keywords="sql postgresql database truy vấn join index">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#06</span><span class="kb-lane-chip">foundations</span><span>Người mới</span></div>
+                                <h3>SQL &amp; PostgreSQL</h3>
+                                <p>Truy vấn, thiết kế dữ liệu và tối ưu hiệu năng với PostgreSQL.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                        <li class="kb-node" id="node-07" data-id="07" data-status="soon" data-level="beginner" data-lane="foundations" data-topic="Web &amp; API cơ bản" data-keywords="web http rest api json curl postman client server">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#07</span><span class="kb-lane-chip">foundations</span><span>Người mới</span></div>
+                                <h3>Web &amp; API cơ bản</h3>
+                                <p>Internet, HTTP, client–server, REST và JSON; dùng curl, Postman để gọi thử API.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                        <li class="kb-node" id="node-08" data-id="08" data-status="soon" data-level="intermediate" data-lane="foundations" data-topic="Giải thuật &amp; cấu trúc dữ liệu" data-keywords="giải thuật cấu trúc dữ liệu algorithm complexity sort search stack queue">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#08</span><span class="kb-lane-chip">foundations</span><span>Trung cấp</span></div>
+                                <h3>Giải thuật &amp; cấu trúc dữ liệu</h3>
+                                <p>Độ phức tạp, tìm kiếm, sắp xếp, ngăn xếp, hàng đợi bằng Python; phục vụ ôn thi và phỏng vấn.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+                <section class="kb-stage" id="stage-3" data-stage="3" data-lane="advanced" aria-labelledby="stage-3-title">
+                    <header class="kb-stage-head">
+                        <span class="kb-branch"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> feat/advanced</span>
+                        <h2 id="stage-3-title">3. Kỹ thuật nâng cao</h2>
+                        <span class="kb-stage-count">3 commits</span>
+                        <p class="kb-stage-desc">Dành cho người đã quen viết code và làm việc nhóm.</p>
+                    </header>
+                    <ol class="kb-list">
+                        <li class="kb-node" id="node-09" data-id="09" data-status="soon" data-level="intermediate" data-lane="advanced" data-topic="Clean Code &amp; SOLID" data-keywords="clean code solid naming dry refactor">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#09</span><span class="kb-lane-chip">advanced</span><span>Trung cấp</span></div>
+                                <h3>Clean Code &amp; SOLID</h3>
+                                <p>Viết code dễ đọc, dễ thay đổi: đặt tên, hàm ngắn, DRY và các nguyên lý SOLID.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                        <li class="kb-node" id="node-10" data-id="10" data-status="soon" data-level="intermediate" data-lane="advanced" data-topic="AI cho lập trình" data-keywords="ai llm copilot chatgpt debug review code">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#10</span><span class="kb-lane-chip">advanced</span><span>Trung cấp</span></div>
+                                <h3>AI cho lập trình</h3>
+                                <p>Dùng AI để viết, review và debug code hiệu quả.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                        <li class="kb-node" id="node-11" data-id="11" data-status="soon" data-level="intermediate" data-lane="advanced" data-topic="DevOps" data-keywords="devops docker ci cd triển khai deploy server">
+                            <div class="kb-card" aria-disabled="true">
+                                <div class="kb-meta"><span class="kb-hash">#11</span><span class="kb-lane-chip">advanced</span><span>Trung cấp</span></div>
+                                <h3>DevOps</h3>
+                                <p>Docker, CI/CD, Linux và triển khai ứng dụng (Odoo) lên server.</p>
+                                <span class="kb-card-foot"><span class="kb-queue">queued</span></span>
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+                <section class="kb-stage" id="stage-4" data-stage="4" data-lane="odoo" aria-labelledby="stage-4-title">
+                    <header class="kb-stage-head">
+                        <span class="kb-branch"><i class="fa-solid fa-code-branch" aria-hidden="true"></i> feat/odoo</span>
+                        <h2 id="stage-4-title">4. Odoo: lập trình ERP</h2>
+                        <span class="kb-stage-count">1 commit</span>
+                        <p class="kb-stage-desc">Vận dụng toàn bộ nền tảng trên vào một nền tảng ERP phổ biến.</p>
+                    </header>
+                    <ol class="kb-list">
+                        <li class="kb-node" id="node-12" data-id="12" data-status="done" data-level="intermediate" data-lane="odoo" data-topic="Odoo" data-keywords="odoo erp module orm view bảo mật owl api triển khai">
+                            <a class="kb-card" href="odoo/index.html">
+                                <div class="kb-meta"><span class="kb-hash">#12</span><span class="kb-lane-chip">odoo</span><span>Trung cấp</span></div>
+                                <h3>Odoo<span class="kb-head-tag">HEAD</span></h3>
+                                <p>Lập trình Odoo 20 từ A–Z: module, ORM, view, bảo mật, OWL, API, triển khai.</p>
+                                <span class="kb-card-foot">Mở bài <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                                <span class="kb-done-mark" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                            </a>
+                        </li>
+                    </ol>
+                </section>
+
+                <div class="kb-empty" id="kb-empty" hidden>
+                    Không tìm thấy commit phù hợp. <button type="button" id="kb-empty-reset">Xoá bộ lọc</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <h3>Muốn học nhanh hơn với mentor?</h3>
+            <p>Các khóa học tại Vinc Academy có dự án thực tế và review code từ giảng viên.</p>
+            <div class="cta-actions">
+                <a href="../index.html#programs">Xem chương trình</a>
+                <a href="../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
             </div>
         </div>
     </main>
@@ -171,7 +1956,456 @@
         <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-tip="Chat Zalo" aria-label="Chat Zalo">Zalo</a>
     </div>
 
+    <!-- COMMAND PALETTE -->
+    <div class="kb-cmdk" id="kb-cmdk" hidden>
+        <div class="kb-cmdk-bg" data-close-cmdk></div>
+        <div class="kb-cmdk-panel" role="dialog" aria-modal="true" aria-labelledby="kb-cmdk-title">
+            <h2 id="kb-cmdk-title" class="kb-sr">Bảng lệnh chuyển nhanh</h2>
+            <div class="kb-cmdk-top">
+                <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+                <input id="kb-cmdk-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="kb-cmdk-list" aria-activedescendant="" placeholder="Nhảy tới commit, chặng hoặc lệnh..." autocomplete="off" spellcheck="false">
+                <kbd>esc</kbd>
+            </div>
+            <ul class="kb-cmdk-list" id="kb-cmdk-list" role="listbox" aria-label="Kết quả bảng lệnh"></ul>
+            <div class="kb-cmdk-foot"><span>↑↓ di chuyển</span><span>↵ chọn</span><span>esc đóng</span></div>
+        </div>
+    </div>
+
+    <p class="kb-sr" id="kb-live" aria-live="polite"></p>
+
     <script src="../script.js"></script>
+    <script>
+        (function () {
+            const STORE = 'va-knowledge-visited';
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const nodes = [...document.querySelectorAll('.kb-node')];
+            const shipped = nodes.filter(n => n.dataset.status === 'done');
+            const shippedById = {};
+            shipped.forEach(n => { shippedById[n.dataset.id] = n; });
+            const stages = [...document.querySelectorAll('.kb-stage')];
+            const chips = [...document.querySelectorAll('.kb-chip[data-filter]')];
+            const search = document.getElementById('kb-search');
+            const empty = document.getElementById('kb-empty');
+            const emptyReset = document.getElementById('kb-empty-reset');
+            const resultCount = document.getElementById('kb-result-count');
+            const segs = [...document.querySelectorAll('#kb-seg span')];
+            const segBar = document.getElementById('kb-seg');
+            const wsCount = document.getElementById('kb-ws-count');
+            const headLink = document.getElementById('kb-head-link');
+            const headRing = document.getElementById('kb-head-ring');
+            const railLinks = [...document.querySelectorAll('.kb-rail-link')];
+            const railFill = document.getElementById('kb-rail-fill');
+            const railProgText = document.getElementById('kb-rail-prog-text');
+            const live = document.getElementById('kb-live');
+            const palette = document.getElementById('kb-cmdk');
+            const paletteInput = document.getElementById('kb-cmdk-input');
+            const paletteList = document.getElementById('kb-cmdk-list');
+            const openBtns = [...document.querySelectorAll('[data-open-cmdk]')];
+            const closeBtns = [...document.querySelectorAll('[data-close-cmdk]')];
+            const resetBtns = [...document.querySelectorAll('[data-reset-progress]')];
+
+            const coords = {
+                '01': [96, 24], '02': [96, 52], '03': [210, 78], '04': [210, 102],
+                '05': [210, 126], '06': [210, 150], '07': [210, 174], '08': [210, 198],
+                '09': [324, 150], '10': [324, 174], '11': [324, 198], '12': [96, 262]
+            };
+
+            const slugs = {
+                '01': 'career', '02': 'first-job', '03': 'python', '04': 'linux',
+                '05': 'git', '06': 'sql', '07': 'web-api', '08': 'algo',
+                '09': 'clean-code', '10': 'ai', '11': 'devops', '12': 'odoo'
+            };
+
+            const nodeById = {};
+            nodes.forEach(n => { nodeById[n.dataset.id] = n; });
+            const dotById = {};
+            document.querySelectorAll('.kb-svg-dot[data-id]').forEach(d => { dotById[d.dataset.id] = d; });
+            const panelReadout = document.getElementById('kb-panel-readout');
+
+            let filter = 'all';
+            let visited = loadVisited();
+            let paletteItems = [];
+            let activeIdx = 0;
+            let opener = null;
+            let previewing = false;
+
+            function setPanelReadout(id, preview) {
+                const node = nodeById[id];
+                if (!node || !panelReadout) return;
+                panelReadout.textContent = (preview ? 'preview → ' : 'HEAD → ') + '#' + id + ' · ' + (slugs[id] || node.dataset.topic);
+            }
+
+            function loadVisited() {
+                try {
+                    const raw = JSON.parse(localStorage.getItem(STORE) || '[]');
+                    if (!Array.isArray(raw)) return [];
+                    return raw.map(String).filter(id => shippedById[id]);
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveVisited() {
+                try {
+                    localStorage.setItem(STORE, JSON.stringify(visited));
+                } catch (e) { /* storage có thể bị chặn */ }
+            }
+
+            function headId() {
+                for (let i = visited.length - 1; i >= 0; i--) {
+                    if (shippedById[visited[i]]) return visited[i];
+                }
+                return shipped[0] ? shipped[0].dataset.id : '01';
+            }
+
+            function renderState() {
+                const head = headId();
+
+                nodes.forEach(node => {
+                    node.classList.toggle('is-visited', visited.includes(node.dataset.id));
+                    node.classList.toggle('is-head', node.dataset.id === head);
+                });
+
+                const headNode = shippedById[head];
+                if (headNode) {
+                    const id = headNode.dataset.id;
+                    headLink.textContent = '#' + id + ' · ' + headNode.dataset.topic;
+                    headLink.href = '#node-' + id;
+                    const c = coords[id];
+                    if (c && headRing) {
+                        headRing.setAttribute('cx', c[0]);
+                        headRing.setAttribute('cy', c[1]);
+                    }
+                    if (!previewing) setPanelReadout(id, false);
+                }
+
+                const total = shipped.length;
+                const done = visited.length;
+                wsCount.textContent = done + '/' + total;
+                segBar.setAttribute('aria-valuenow', String(done));
+                segBar.setAttribute('aria-valuemax', String(total));
+                segs.forEach((s, i) => s.classList.toggle('on', i < done));
+
+                if (railFill) railFill.style.width = (total ? (done / total) * 100 : 0) + '%';
+                if (railProgText) railProgText.textContent = done + '/' + total;
+
+                stages.forEach(stage => {
+                    const pub = [...stage.querySelectorAll('.kb-node')].filter(n => n.dataset.status === 'done');
+                    const seen = pub.filter(n => visited.includes(n.dataset.id)).length;
+                    const el = document.querySelector('[data-rail-count="' + stage.dataset.stage + '"]');
+                    if (el) el.textContent = pub.length ? seen + '/' + pub.length : 'soon';
+                });
+            }
+
+            function apply() {
+                const q = search.value.trim().toLowerCase();
+                let visible = 0;
+
+                nodes.forEach(node => {
+                    const text = (node.textContent + ' ' + (node.dataset.keywords || '')).toLowerCase();
+                    const matchText = !q || text.includes(q);
+                    const matchFilter =
+                        filter === 'all' ||
+                        node.dataset.level === filter ||
+                        (filter === 'done' && node.dataset.status === 'done');
+                    const show = matchText && matchFilter;
+                    node.hidden = !show;
+                    if (show) visible++;
+                });
+
+                stages.forEach(stage => {
+                    stage.hidden = ![...stage.querySelectorAll('.kb-node')].some(n => !n.hidden);
+                });
+
+                empty.hidden = visible !== 0;
+                empty.classList.toggle('show', visible === 0);
+                resultCount.textContent = String(visible);
+            }
+
+            function syncChips() {
+                chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
+            }
+
+            function resetProgress() {
+                visited = [];
+                saveVisited();
+                renderState();
+                apply();
+                live.textContent = 'Đã xoá tiến độ đã đọc.';
+            }
+
+            function flash(node) {
+                node.classList.remove('is-flash');
+                void node.offsetWidth;
+                node.classList.add('is-flash');
+                window.setTimeout(() => node.classList.remove('is-flash'), 1700);
+            }
+
+            /* mark visited when a shipped topic is opened */
+            nodes.forEach(node => {
+                if (node.dataset.status !== 'done') return;
+                const card = node.querySelector('.kb-card');
+                card.addEventListener('click', () => {
+                    const id = node.dataset.id;
+                    if (!visited.includes(id)) {
+                        visited.push(id);
+                        saveVisited();
+                        renderState();
+                    }
+                });
+            });
+
+            /* spotlight follows pointer */
+            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                document.querySelectorAll('.kb-node[data-status="done"] .kb-card').forEach(card => {
+                    card.addEventListener('pointermove', e => {
+                        const r = card.getBoundingClientRect();
+                        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+                    });
+                });
+            }
+
+            /* filters + search */
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    filter = chip.dataset.filter;
+                    syncChips();
+                    apply();
+                });
+            });
+
+            search.addEventListener('input', apply);
+
+            emptyReset.addEventListener('click', () => {
+                search.value = '';
+                filter = 'all';
+                syncChips();
+                apply();
+                search.focus();
+            });
+
+            resetBtns.forEach(btn => btn.addEventListener('click', resetProgress));
+
+            function clearFilters() {
+                if (!search.value && filter === 'all') return;
+                search.value = '';
+                filter = 'all';
+                syncChips();
+                apply();
+            }
+
+            railLinks.forEach(link => link.addEventListener('click', clearFilters));
+            document.querySelectorAll('.kb-hero a[href^="#node-"]').forEach(a => a.addEventListener('click', clearFilters));
+
+            document.querySelectorAll('.kb-hit').forEach(hit => {
+                const id = hit.dataset.id;
+                hit.addEventListener('pointerenter', () => {
+                    previewing = true;
+                    setPanelReadout(id, true);
+                    if (dotById[id]) dotById[id].classList.add('is-hover');
+                });
+                hit.addEventListener('pointerleave', () => {
+                    previewing = false;
+                    setPanelReadout(headId(), false);
+                    if (dotById[id]) dotById[id].classList.remove('is-hover');
+                });
+            });
+
+            /* command palette */
+            const commands = [
+                { label: 'Lọc: tất cả chủ đề', hint: '/all', type: 'filter', value: 'all' },
+                { label: 'Lọc: người mới', hint: '/beginner', type: 'filter', value: 'beginner' },
+                { label: 'Lọc: trung cấp', hint: '/intermediate', type: 'filter', value: 'intermediate' },
+                { label: 'Lọc: đã mở', hint: '/shipped', type: 'filter', value: 'done' },
+                { label: 'Xoá tiến độ đã đọc', hint: 'reset', type: 'reset' },
+                { label: 'Về đầu trang', hint: 'top', type: 'top' }
+            ];
+
+            function buildPalette(q) {
+                const topics = nodes.map(n => ({
+                    label: '#' + n.dataset.id + ' · ' + n.dataset.topic,
+                    hint: n.dataset.lane + ' · ' + (n.dataset.status === 'done' ? 'shipped' : 'queued'),
+                    type: 'topic',
+                    id: n.dataset.id
+                }));
+                const all = topics.concat(commands);
+                const query = q.trim().toLowerCase();
+                paletteItems = query
+                    ? all.filter(it => (it.label + ' ' + it.hint).toLowerCase().includes(query))
+                    : all;
+                activeIdx = 0;
+
+                if (!paletteItems.length) {
+                    paletteList.innerHTML = '<li class="kb-opt-empty">Không có kết quả cho “' + q.replace(/</g, '&lt;') + '”.</li>';
+                    paletteInput.setAttribute('aria-activedescendant', '');
+                    return;
+                }
+
+                paletteList.innerHTML = paletteItems.map((it, i) =>
+                    '<li class="kb-opt' + (i === 0 ? ' is-active' : '') + '" role="option" id="kb-opt-' + i + '" aria-selected="' + (i === 0) + '" data-idx="' + i + '">' +
+                        '<span class="kb-opt-label">' + it.label + '</span>' +
+                        '<span class="kb-opt-hint">' + it.hint + '</span>' +
+                    '</li>'
+                ).join('');
+                paletteInput.setAttribute('aria-activedescendant', 'kb-opt-0');
+            }
+
+            function setActive(i) {
+                if (!paletteItems.length) return;
+                activeIdx = (i + paletteItems.length) % paletteItems.length;
+                [...paletteList.querySelectorAll('.kb-opt')].forEach((el, idx) => {
+                    const on = idx === activeIdx;
+                    el.classList.toggle('is-active', on);
+                    el.setAttribute('aria-selected', String(on));
+                });
+                paletteInput.setAttribute('aria-activedescendant', 'kb-opt-' + activeIdx);
+                const el = document.getElementById('kb-opt-' + activeIdx);
+                if (el) el.scrollIntoView({ block: 'nearest' });
+            }
+
+            function openPalette(trigger) {
+                opener = trigger || document.activeElement;
+                palette.hidden = false;
+                document.body.classList.add('kb-locked');
+                paletteInput.value = '';
+                paletteInput.setAttribute('aria-expanded', 'true');
+                buildPalette('');
+                paletteInput.focus();
+                document.addEventListener('keydown', paletteKeys);
+            }
+
+            function closePalette() {
+                if (palette.hidden) return;
+                palette.hidden = true;
+                paletteInput.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('kb-locked');
+                document.removeEventListener('keydown', paletteKeys);
+                if (opener && typeof opener.focus === 'function') opener.focus();
+            }
+
+            function paletteKeys(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    paletteInput.focus();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closePalette();
+                }
+            }
+
+            function runItem(item) {
+                if (item.type === 'topic') {
+                    closePalette();
+                    search.value = '';
+                    filter = 'all';
+                    syncChips();
+                    apply();
+                    const node = document.getElementById('node-' + item.id);
+                    if (node) {
+                        node.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+                        flash(node);
+                    }
+                } else if (item.type === 'filter') {
+                    search.value = '';
+                    filter = item.value;
+                    syncChips();
+                    apply();
+                    closePalette();
+                    const target = document.getElementById('kb-branch-view');
+                    if (target) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+                } else if (item.type === 'reset') {
+                    resetProgress();
+                    closePalette();
+                } else if (item.type === 'top') {
+                    closePalette();
+                    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+                }
+            }
+
+            openBtns.forEach(btn => btn.addEventListener('click', () => openPalette(btn)));
+            closeBtns.forEach(btn => btn.addEventListener('click', closePalette));
+
+            paletteInput.addEventListener('input', () => buildPalette(paletteInput.value));
+
+            paletteInput.addEventListener('keydown', e => {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActive(activeIdx + 1);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActive(activeIdx - 1);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const item = paletteItems[activeIdx];
+                    if (item) runItem(item);
+                }
+            });
+
+            paletteList.addEventListener('click', e => {
+                const li = e.target.closest('.kb-opt');
+                if (!li) return;
+                const item = paletteItems[Number(li.dataset.idx)];
+                if (item) runItem(item);
+            });
+
+            document.addEventListener('keydown', e => {
+                const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+
+                if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+                    e.preventDefault();
+                    if (palette.hidden) openPalette(document.activeElement);
+                    else closePalette();
+                    return;
+                }
+
+                if (e.key === '/' && !typing && palette.hidden) {
+                    e.preventDefault();
+                    search.focus();
+                    return;
+                }
+
+                if (e.key === 'Escape') {
+                    if (!palette.hidden) {
+                        closePalette();
+                    } else if (document.activeElement === search) {
+                        search.value = '';
+                        apply();
+                        search.blur();
+                    }
+                }
+            });
+
+            /* reveal + rail spy */
+            if ('IntersectionObserver' in window) {
+                const reveal = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-in');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+                stages.forEach(s => reveal.observe(s));
+
+                const spy = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        const id = entry.target.dataset.stage;
+                        railLinks.forEach(link => link.classList.toggle('is-active', link.dataset.stageLink === id));
+                    });
+                }, { rootMargin: '-152px 0px -60% 0px' });
+                stages.forEach(s => spy.observe(s));
+            } else {
+                stages.forEach(s => s.classList.add('is-in'));
+            }
+
+            renderState();
+            syncChips();
+            apply();
+        })();
+    </script>
 </body>
 
 </html>

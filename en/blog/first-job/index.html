@@ -82,41 +82,128 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="first-job" data-lang="en">
         <ol class="breadcrumb">
             <li><a href="../../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge</a></li>
             <li aria-current="page">First-job skills</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Topic · Students and newcomers</span>
-            <h1>First-Job Skills for New Developers</h1>
-            <p class="post-lead">The things nobody teaches at university but every team expects from day one: settling in, understanding tickets, asking well, taking code review and working in an Agile/Scrum rhythm.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Topic · Students and newcomers</span><a href="../index.html">← All topics</a></p>
+                <h1>First-Job Skills for New Developers</h1>
+                <p class="post-lead">The things nobody teaches at university but every team expects from day one: settling in, understanding tickets, asking well, taking code review and working in an Agile/Scrum rhythm.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="first-week-it-job-onboarding-tickets.html">Start part 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">View the series</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Reading progress">
+                <div class="topic-file-label"><span>TOPIC / FIRST JOB</span><span>Free</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>3</b><span>posts</span></div>
+                        <div><b data-topic-progress>0/3</b><span>read</span></div>
+                        <div><b>$0</b><span>access</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Reading progress</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <div class="chips post-sort" role="group" aria-label="Sort">
-            <button type="button" class="chip active" data-sort="new">Newest</button>
-            <button type="button" class="chip" data-sort="top">Most read</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="first-week-it-job-onboarding-tickets.html"><span class="post-num">Beginner</span><h2>Your first week: onboarding, tickets and good questions</h2><p>A 30-day plan, an onboarding checklist, reading user stories and acceptance criteria, asking clear questions.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="code-review-receiving-giving-feedback.html"><span class="post-num">Beginner</span><h2>Code review: receiving and giving feedback</h2><p>Small merge requests, clear descriptions, handling feedback calmly and writing effective review comments.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="code-review-nhan-va-dua-gop-y">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="agile-scrum-estimating-reporting-progress.html"><span class="post-num">Beginner</span><h2>Agile/Scrum, estimating and reporting progress</h2><p>Scrum per the 2020 Scrum Guide, the Daily Scrum, estimating work and flagging risks early.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do">–</b> views</span><span class="post-status">Published</span></a></li>
-        </ol>
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Series contents">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>3</span> posts</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Reading progress</span><b data-topic-progress>0/3</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Series contents">
+                        <a href="#post-01"><span class="n">01</span><span>Your first week: onboarding, tickets and good questions</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Code review: receiving and giving feedback</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Agile/Scrum, estimating and reporting progress</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Browse all topics</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 3 posts</p>
+                        <h2>All posts</h2>
 
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Search this series…" aria-label="Search this series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sort">
+                            <button type="button" class="chip active" data-sort="new">Newest</button>
+                            <button type="button" class="chip" data-sort="top">Most read</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="first-week-it-job-onboarding-tickets">
+                        <a class="topic-card" href="first-week-it-job-onboarding-tickets.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Beginner</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="tuan-dau-di-lam-it-onboarding-ticket">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Your first week: onboarding, tickets and good questions</h3>
+                                <p class="topic-desc">A 30-day plan, an onboarding checklist, reading user stories and acceptance criteria, asking clear questions.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="code-review-receiving-giving-feedback">
+                        <a class="topic-card" href="code-review-receiving-giving-feedback.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Beginner</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="code-review-nhan-va-dua-gop-y">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Code review: receiving and giving feedback</h3>
+                                <p class="topic-desc">Small merge requests, clear descriptions, handling feedback calmly and writing effective review comments.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="agile-scrum-estimating-reporting-progress">
+                        <a class="topic-card" href="agile-scrum-estimating-reporting-progress.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Beginner</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="agile-scrum-uoc-luong-bao-cao-tien-do">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Agile/Scrum, estimating and reporting progress</h3>
+                                <p class="topic-desc">Scrum per the 2020 Scrum Guide, the Daily Scrum, estimating work and flagging risks early.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>No matching posts.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Want to practise a real team workflow?</h3>
                 <p>Vinc Academy courses run on tickets, Git branches and code reviews like a real development team.</p>
                 <div class="cta-actions">
                     <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
                     <a href="../../../index.html#register" class="ghost">Get free consultation</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">This content is copyrighted by Vinc Academy. Tool names mentioned in articles are trademarks of their respective owners.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">This content is copyrighted by Vinc Academy. Tool names mentioned in articles are trademarks of their respective owners.</p>
     </main>
 
     <!-- FOOTER -->

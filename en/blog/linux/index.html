@@ -79,33 +79,116 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="linux" data-lang="en">
         <ol class="breadcrumb">
             <li><a href="../../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge</a></li>
             <li aria-current="page">Linux &amp; Shell</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Topic · Free</span>
-            <h1>Practical Linux &amp; Shell</h1>
-            <p class="post-lead">Master just enough Linux command line to get work done: moving around and managing files, permissions, processes, pipes and Bash scripts — the things you use every day with servers, Git and Odoo deployments.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Topic · Free</span><a href="../index.html">← All topics</a></p>
+                <h1>Practical Linux &amp; Shell</h1>
+                <p class="post-lead">Master just enough Linux command line to get work done: moving around and managing files, permissions, processes, pipes and Bash scripts — the things you use every day with servers, Git and Odoo deployments.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="../../index.html#register">Get notified when it launches <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#roadmap">View roadmap</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Reading progress">
+                <div class="topic-file-label"><span>TOPIC / LINUX</span><span>Free</span></div>
+                <div class="topic-metrics">
+                        <div><b>0</b><span>posts</span></div>
+                        <div><b>6</b><span>planned</span></div>
+                        <div><b>$0</b><span>access</span></div>
+                    </div>
+            </aside>
         </header>
 
-        <div class="prose" style="max-width:none">
-            <p>Most servers run Linux, and nearly all deployment, debugging or automation work starts in a terminal window. Knowing the command line lets you read logs, find files, inspect processes and write scripts instead of doing things by hand.</p>
-            <p>This series is being written in the style of the other Vinc Academy topics: little theory, examples really run on Linux (WSL, a virtual machine or a server), each command with its output. Leave a message if you would like to hear when the first part goes live.</p>
-            <div class="cta-box">
+        <section class="topic-main" id="roadmap">
+            <div class="topic-head">
+                <div>
+                    <p class="topic-eyebrow">COMING SOON · 6 planned</p>
+                    <h2>Planned roadmap</h2>
+                    <p class="topic-series-desc">These posts are being written. Leave your email to hear when the first part goes live.</p>
+                </div>
+                <a class="topic-side-cta" href="../index.html"><span>Browse other topics</span><span aria-hidden="true">→</span></a>
+            </div>
+            <ol class="post-grid topic-grid">
+                <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">01</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">Getting comfortable with the terminal and file system</h3>
+                                    <p class="topic-desc">Move around, inspect, create and find files with pwd, ls, cd, find and tree.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">02</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">Permissions, users and groups</h3>
+                                    <p class="topic-desc">Understand rwx, chown, chmod and avoid permission errors during deployment.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">03</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">Processes, jobs and systemd</h3>
+                                    <p class="topic-desc">Inspect processes, stop jobs and manage services with systemctl.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">04</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">Pipes, redirection and search</h3>
+                                    <p class="topic-desc">Chain commands with |, read logs with grep and shape output.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">05</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">Environment variables and Bash scripts</h3>
+                                    <p class="topic-desc">Write scripts with arguments, conditions and error handling.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">06</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Coming soon</span></div>
+                                    <h3 class="topic-title">SSH, networking and server logs</h3>
+                                    <p class="topic-desc">Connect to a server, check ports and read logs when something breaks.</p>
+                                </div>
+                            </div>
+                        </li>
+            </ol>
+            <div class="topic-intro"><p>Most servers run Linux, and nearly all deployment, debugging or automation work starts in a terminal window. Knowing the command line lets you read logs, find files, inspect processes and write scripts instead of doing things by hand.</p>
+            <p>This series is being written in the style of the other Vinc Academy topics: little theory, examples really run on Linux (WSL, a virtual machine or a server), each command with its output. Leave a message if you would like to hear when the first part goes live.</p></div>
+            <div class="topic-cta"><div class="cta-box">
                 <h3>Want to learn Linux &amp; the command line with a mentor?</h3>
                 <p>Vinc Academy courses include hands-on exercises on a Linux environment and live code review.</p>
                 <div class="cta-actions">
                     <a href="../../../program-detail.html?code=DEV-F">See Developer Foundation</a>
                     <a href="../../../index.html#register" class="ghost">Get free consultation</a>
                 </div>
-            </div>
-        </div>
-
-        <p class="disclaimer">This content is copyrighted by Vinc Academy. Linux is a trademark of Linus Torvalds; Bash and the GNU tools belong to the GNU Project. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+            </div></div>
+            <p class="disclaimer">This content is copyrighted by Vinc Academy. Linux is a trademark of Linus Torvalds; Bash and the GNU tools belong to the GNU Project. Vinc Academy is an independent training provider and is not officially affiliated with these organizations.</p>
+        </section>
     </main>
 
     <!-- FOOTER -->

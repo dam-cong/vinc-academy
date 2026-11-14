@@ -91,53 +91,272 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="git" data-lang="vi">
         <ol class="breadcrumb">
             <li><a href="../../index.html">Trang chủ</a></li>
             <li><a href="../index.html">Kiến thức</a></li>
             <li aria-current="page">Git</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Chủ đề · Miễn phí</span>
-            <h1>Git thực chiến cho nhóm phát triển</h1>
-            <p class="post-lead">Học Git vừa đủ để đi làm: mỗi bài dùng repo của dự án quản lý khóa học vinc_course trên GitLab, đi theo quy trình nhóm thật từ commit đến merge request và phát hành. Ít lý thuyết, mọi lệnh đều chạy thật.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Chủ đề · Miễn phí</span><a href="../index.html">← Tất cả chủ đề</a></p>
+                <h1>Git thực chiến cho nhóm phát triển</h1>
+                <p class="post-lead">Học Git vừa đủ để đi làm: mỗi bài dùng repo của dự án quản lý khóa học vinc_course trên GitLab, đi theo quy trình nhóm thật từ commit đến merge request và phát hành. Ít lý thuyết, mọi lệnh đều chạy thật.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="git-la-gi-cai-dat-cau-hinh-lan-dau.html">Bắt đầu bài 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">Xem danh sách bài</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Tiến độ đọc">
+                <div class="topic-file-label"><span>TOPIC / GIT</span><span>Miễn phí</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>12</b><span>bài viết</span></div>
+                        <div><b data-topic-progress>0/12</b><span>đã đọc</span></div>
+                        <div><b>0đ</b><span>học phí</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Git thực chiến cho nhóm phát triển</h2>
-        <p class="series-desc">12 bài từ cài đặt, commit, nhánh, remote, merge request, xung đột, hoàn tác, rebase đến hook, CI và một dự án tổng hợp.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
-            <button type="button" class="chip active" data-sort="new">Bài mới</button>
-            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="git-la-gi-cai-dat-cau-hinh-lan-dau.html"><span class="post-num">Bài 01</span><h2>Git là gì, cài đặt và cấu hình lần đầu</h2><p>Cài Git, đặt tên và email, chọn editor và hiểu ba vùng làm việc của Git.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-la-gi-cai-dat-cau-hinh-lan-dau">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-commit-dau-tien-status-add-log-gitignore.html"><span class="post-num">Bài 02</span><h2>Commit đầu tiên: status, add, log và .gitignore</h2><p>Vòng lặp hằng ngày trên repo vinc_course và cách loại file không nên theo dõi.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-commit-dau-tien-status-add-log-gitignore">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-nhanh-branch-merge.html"><span class="post-num">Bài 03</span><h2>Nhánh và merge</h2><p>Tạo nhánh cho từng tính năng, gộp lại và hiểu fast-forward với merge commit.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-nhanh-branch-merge">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-remote-clone-fetch-pull-push-ssh.html"><span class="post-num">Bài 04</span><h2>Remote: clone, fetch, pull, push và SSH</h2><p>Làm việc với GitLab: SSH key, upstream và vì sao nên fetch trước khi pull.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-remote-clone-fetch-pull-push-ssh">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-merge-request-gitlab-quy-trinh-review.html"><span class="post-num">Bài 05</span><h2>Quy trình Merge Request trên GitLab</h2><p>Từ nhánh tính năng đến review, approve và merge vào nhánh được bảo vệ.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-merge-request-gitlab-quy-trinh-review">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-giai-quyet-xung-dot-conflict.html"><span class="post-num">Bài 06</span><h2>Giải quyết xung đột (conflict)</h2><p>Đọc dấu <<<<<<<, sửa tay, kiểm tra rồi hoàn tất merge hoặc hủy để làm lại.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-giai-quyet-xung-dot-conflict">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-hoan-tac-restore-reset-revert-reflog.html"><span class="post-num">Bài 07</span><h2>Hoàn tác an toàn: restore, reset, revert, reflog</h2><p>Chọn đúng lệnh khi lỡ sửa, lỡ commit hoặc lỡ đẩy, và cứu lại commit tưởng đã mất.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-hoan-tac-restore-reset-revert-reflog">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-rebase-lam-gon-lich-su.html"><span class="post-num">Bài 08</span><h2>Rebase và làm gọn lịch sử</h2><p>Rebase nhánh lên bản mới, gộp commit lẻ bằng interactive rebase và quy tắc vàng.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-rebase-lam-gon-lich-su">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-stash-cherry-pick-tag-hotfix-release.html"><span class="post-num">Bài 09</span><h2>Stash, cherry-pick và tag</h2><p>Cất việc dở để sửa hotfix, nhặt một commit sang nhánh khác và gắn tag phát hành.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-stash-cherry-pick-tag-hotfix-release">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-quy-uoc-commit-chien-luoc-nhanh.html"><span class="post-num">Bài 10</span><h2>Quy ước commit và chiến lược nhánh</h2><p>Cách đặt tên nhánh, viết commit message và chọn GitLab Flow, trunk-based cho nhóm.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-quy-uoc-commit-chien-luoc-nhanh">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-hook-gitlab-ci-kiem-tra-module-odoo.html"><span class="post-num">Bài 11</span><h2>Git hook và GitLab CI cho module Odoo</h2><p>Chặn lỗi trước khi commit bằng pre-commit và chạy kiểm tra tự động trong pipeline.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-hook-gitlab-ci-kiem-tra-module-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html"><span class="post-num">Bài 12</span><h2>Blame, bisect và dự án tổng hợp</h2><p>Tìm ai/commit nào gây lỗi, rồi chạy trọn một chu kỳ hotfix và phát hành.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="git-blame-bisect-xu-ly-su-co-du-an-tong-hop">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Nội dung series">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>12</span> bài</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-progress>0/12</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Nội dung series">
+                        <a href="#post-01"><span class="n">01</span><span>Git là gì, cài đặt và cấu hình lần đầu</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Commit đầu tiên: status, add, log và .gitignore</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Nhánh và merge</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>Remote: clone, fetch, pull, push và SSH</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>Quy trình Merge Request trên GitLab</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Giải quyết xung đột (conflict)</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Hoàn tác an toàn: restore, reset, revert, reflog</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Rebase và làm gọn lịch sử</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Stash, cherry-pick và tag</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>Quy ước commit và chiến lược nhánh</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>Git hook và GitLab CI cho module Odoo</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Blame, bisect và dự án tổng hợp</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Xem tất cả chủ đề</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 12 bài</p>
+                        <h2>Git thực chiến cho nhóm phát triển</h2>
+                        <p class="topic-series-desc">12 bài từ cài đặt, commit, nhánh, remote, merge request, xung đột, hoàn tác, rebase đến hook, CI và một dự án tổng hợp.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Tìm bài trong series…" aria-label="Tìm bài trong series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
+                            <button type="button" class="chip active" data-sort="new">Bài mới</button>
+                            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="git-la-gi-cai-dat-cau-hinh-lan-dau">
+                        <a class="topic-card" href="git-la-gi-cai-dat-cau-hinh-lan-dau.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 01</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-la-gi-cai-dat-cau-hinh-lan-dau">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Git là gì, cài đặt và cấu hình lần đầu</h3>
+                                <p class="topic-desc">Cài Git, đặt tên và email, chọn editor và hiểu ba vùng làm việc của Git.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="git-commit-dau-tien-status-add-log-gitignore">
+                        <a class="topic-card" href="git-commit-dau-tien-status-add-log-gitignore.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 02</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-commit-dau-tien-status-add-log-gitignore">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Commit đầu tiên: status, add, log và .gitignore</h3>
+                                <p class="topic-desc">Vòng lặp hằng ngày trên repo vinc_course và cách loại file không nên theo dõi.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="git-nhanh-branch-merge">
+                        <a class="topic-card" href="git-nhanh-branch-merge.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 03</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-nhanh-branch-merge">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Nhánh và merge</h3>
+                                <p class="topic-desc">Tạo nhánh cho từng tính năng, gộp lại và hiểu fast-forward với merge commit.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="git-remote-clone-fetch-pull-push-ssh">
+                        <a class="topic-card" href="git-remote-clone-fetch-pull-push-ssh.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 04</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-remote-clone-fetch-pull-push-ssh">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Remote: clone, fetch, pull, push và SSH</h3>
+                                <p class="topic-desc">Làm việc với GitLab: SSH key, upstream và vì sao nên fetch trước khi pull.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="git-merge-request-gitlab-quy-trinh-review">
+                        <a class="topic-card" href="git-merge-request-gitlab-quy-trinh-review.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 05</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-merge-request-gitlab-quy-trinh-review">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Quy trình Merge Request trên GitLab</h3>
+                                <p class="topic-desc">Từ nhánh tính năng đến review, approve và merge vào nhánh được bảo vệ.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="git-giai-quyet-xung-dot-conflict">
+                        <a class="topic-card" href="git-giai-quyet-xung-dot-conflict.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 06</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-giai-quyet-xung-dot-conflict">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Giải quyết xung đột (conflict)</h3>
+                                <p class="topic-desc">Đọc dấu <<<<<<<, sửa tay, kiểm tra rồi hoàn tất merge hoặc hủy để làm lại.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="git-hoan-tac-restore-reset-revert-reflog">
+                        <a class="topic-card" href="git-hoan-tac-restore-reset-revert-reflog.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 07</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-hoan-tac-restore-reset-revert-reflog">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Hoàn tác an toàn: restore, reset, revert, reflog</h3>
+                                <p class="topic-desc">Chọn đúng lệnh khi lỡ sửa, lỡ commit hoặc lỡ đẩy, và cứu lại commit tưởng đã mất.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="git-rebase-lam-gon-lich-su">
+                        <a class="topic-card" href="git-rebase-lam-gon-lich-su.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 08</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-rebase-lam-gon-lich-su">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Rebase và làm gọn lịch sử</h3>
+                                <p class="topic-desc">Rebase nhánh lên bản mới, gộp commit lẻ bằng interactive rebase và quy tắc vàng.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="git-stash-cherry-pick-tag-hotfix-release">
+                        <a class="topic-card" href="git-stash-cherry-pick-tag-hotfix-release.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 09</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-stash-cherry-pick-tag-hotfix-release">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Stash, cherry-pick và tag</h3>
+                                <p class="topic-desc">Cất việc dở để sửa hotfix, nhặt một commit sang nhánh khác và gắn tag phát hành.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="git-quy-uoc-commit-chien-luoc-nhanh">
+                        <a class="topic-card" href="git-quy-uoc-commit-chien-luoc-nhanh.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 10</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-quy-uoc-commit-chien-luoc-nhanh">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Quy ước commit và chiến lược nhánh</h3>
+                                <p class="topic-desc">Cách đặt tên nhánh, viết commit message và chọn GitLab Flow, trunk-based cho nhóm.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="git-hook-gitlab-ci-kiem-tra-module-odoo">
+                        <a class="topic-card" href="git-hook-gitlab-ci-kiem-tra-module-odoo.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 11</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-hook-gitlab-ci-kiem-tra-module-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Git hook và GitLab CI cho module Odoo</h3>
+                                <p class="topic-desc">Chặn lỗi trước khi commit bằng pre-commit và chạy kiểm tra tự động trong pipeline.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="git-blame-bisect-xu-ly-su-co-du-an-tong-hop">
+                        <a class="topic-card" href="git-blame-bisect-xu-ly-su-co-du-an-tong-hop.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 12</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="git-blame-bisect-xu-ly-su-co-du-an-tong-hop">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Blame, bisect và dự án tổng hợp</h3>
+                                <p class="topic-desc">Tìm ai/commit nào gây lỗi, rồi chạy trọn một chu kỳ hotfix và phát hành.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>Không tìm thấy bài phù hợp.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Muốn học làm việc nhóm với Git cùng mentor?</h3>
                 <p>Khóa Developer Foundation có phần Git &amp; làm việc nhóm với bài tập thực tế và review code.</p>
                 <div class="cta-actions">
                     <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
                     <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Git là nhãn hiệu của Software Freedom Conservancy; GitLab là nhãn hiệu của GitLab Inc.; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
     </main>
 
     <!-- FOOTER -->

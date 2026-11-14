@@ -93,60 +93,304 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="odoo" data-lang="en">
         <ol class="breadcrumb">
             <li><a href="../../../index.html">Home</a></li>
             <li><a href="../index.html">Knowledge</a></li>
             <li aria-current="page">Odoo</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Topic · Free</span>
-            <h1>Odoo 20 Development A–Z</h1>
-            <p class="post-lead">Odoo development and deployment knowledge for developers, written by Vinc Academy and aligned with the official Odoo Developer documentation.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Topic · Free</span><a href="../index.html">← All topics</a></p>
+                <h1>Odoo 20 Development A–Z</h1>
+                <p class="post-lead">Odoo development and deployment knowledge for developers, written by Vinc Academy and aligned with the official Odoo Developer documentation.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="what-is-odoo.html">Start part 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">View the series</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Reading progress">
+                <div class="topic-file-label"><span>TOPIC / ODOO</span><span>Free</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>14</b><span>posts</span></div>
+                        <div><b data-topic-progress>0/14</b><span>read</span></div>
+                        <div><b>$0</b><span>access</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Reading progress</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Odoo 20 Development A–Z</h2>
-        <p class="series-desc">Self-study from what Odoo is to building modules, access control, OWL interfaces, API integrations and production deployment.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sort">
-            <button type="button" class="chip active" data-sort="new">Newest</button>
-            <button type="button" class="chip" data-sort="top">Most read</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="what-is-odoo.html">
-                <span class="post-num">Part 01</span>
-                <h2>What is Odoo? Fundamentals for developers</h2>
-                <p>Three-tier architecture, module anatomy, Community vs Enterprise, Odoo 20 requirements and a learning path.</p>
-                <span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="odoo-la-gi">–</b> views</span><span class="post-status">Published</span>
-            </a></li>
-            <li><a class="post-card" href="install-odoo-20.html"><span class="post-num">Part 02</span><h2>Setting up an Odoo 20 environment</h2><p>Install from source and Docker Compose, run odoo-bin, enable developer mode, fix common errors.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="cai-dat-odoo-20">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="first-odoo-module.html"><span class="post-num">Part 03</span><h2>Your first module &amp; manifest</h2><p>Folder layout, __manifest__.py, installing and upgrading modules.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="tao-module-odoo-dau-tien">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="models-fields-orm.html"><span class="post-num">Part 04</span><h2>Models, fields &amp; the ORM</h2><p>Field types, recordsets and CRUD with the ORM.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="model-field-orm-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-access-rights-record-rules.html"><span class="post-num">Part 05</span><h2>Security: access rights &amp; record rules</h2><p>User groups, ir.model.access.csv, record-level rules.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="phan-quyen-odoo-access-rights-record-rules">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-views-actions-menus.html"><span class="post-num">Part 06</span><h2>Views &amp; actions</h2><p>Form, list, search, kanban; menus and window actions.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="view-action-menu-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-many2one-one2many-many2many.html"><span class="post-num">Part 07</span><h2>Relations between models</h2><p>Many2one, One2many and Many2many in practice.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="many2one-one2many-many2many-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-computed-field-onchange-constraints.html"><span class="post-num">Part 08</span><h2>Computed fields, onchange &amp; constraints</h2><p>Automated business logic and data validation.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="computed-field-onchange-constraint-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-inheritance-model-view.html"><span class="post-num">Part 09</span><h2>Inheritance in Odoo</h2><p>Extending other modules' models and views the right way.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ke-thua-model-view-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-qweb-pdf-reports.html"><span class="post-num">Part 10</span><h2>PDF reports with QWeb</h2><p>Designing templates and printing business reports.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="bao-cao-pdf-qweb-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-owl-framework-basics.html"><span class="post-num">Part 11</span><h2>OWL framework basics</h2><p>Components, hooks and services in the Odoo UI.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="owl-framework-odoo-co-ban">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-web-controllers-json-2-api.html"><span class="post-num">Part 12</span><h2>Web controllers &amp; JSON-2 API</h2><p>Building endpoints and integrating external systems.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="web-controller-json-2-api-odoo">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-unit-tests-transactioncase.html"><span class="post-num">Part 13</span><h2>Unit testing in Odoo</h2><p>Tests that protect your modules before every upgrade.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="unit-test-odoo-transactioncase">–</b> views</span><span class="post-status">Published</span></a></li>
-            <li><a class="post-card" href="odoo-production-deployment-nginx-workers.html"><span class="post-num">Part 14</span><h2>Deploying Odoo to production</h2><p>Linux, Docker, Nginx, SSL, backups and monitoring.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="trien-khai-odoo-production-nginx-workers">–</b> views</span><span class="post-status">Published</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Series contents">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>14</span> posts</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Reading progress</span><b data-topic-progress>0/14</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Series contents">
+                        <a href="#post-01"><span class="n">01</span><span>What is Odoo? Fundamentals for developers</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Setting up an Odoo 20 environment</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Your first module &amp;amp; manifest</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>Models, fields &amp;amp; the ORM</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>Security: access rights &amp;amp; record rules</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Views &amp;amp; actions</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Relations between models</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Computed fields, onchange &amp;amp; constraints</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Inheritance in Odoo</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>PDF reports with QWeb</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>OWL framework basics</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Web controllers &amp;amp; JSON-2 API</span></a>
+                        <a href="#post-13"><span class="n">13</span><span>Unit testing in Odoo</span></a>
+                        <a href="#post-14"><span class="n">14</span><span>Deploying Odoo to production</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Browse all topics</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 14 posts</p>
+                        <h2>Odoo 20 Development A–Z</h2>
+                        <p class="topic-series-desc">Self-study from what Odoo is to building modules, access control, OWL interfaces, API integrations and production deployment.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Search this series…" aria-label="Search this series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sort">
+                            <button type="button" class="chip active" data-sort="new">Newest</button>
+                            <button type="button" class="chip" data-sort="top">Most read</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="what-is-odoo">
+                        <a class="topic-card" href="what-is-odoo.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 01</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="odoo-la-gi">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">What is Odoo? Fundamentals for developers</h3>
+                                <p class="topic-desc">Three-tier architecture, module anatomy, Community vs Enterprise, Odoo 20 requirements and a learning path.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="install-odoo-20">
+                        <a class="topic-card" href="install-odoo-20.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 02</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="cai-dat-odoo-20">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Setting up an Odoo 20 environment</h3>
+                                <p class="topic-desc">Install from source and Docker Compose, run odoo-bin, enable developer mode, fix common errors.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="first-odoo-module">
+                        <a class="topic-card" href="first-odoo-module.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 03</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="tao-module-odoo-dau-tien">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Your first module &amp; manifest</h3>
+                                <p class="topic-desc">Folder layout, __manifest__.py, installing and upgrading modules.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="models-fields-orm">
+                        <a class="topic-card" href="models-fields-orm.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 04</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="model-field-orm-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Models, fields &amp; the ORM</h3>
+                                <p class="topic-desc">Field types, recordsets and CRUD with the ORM.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="odoo-access-rights-record-rules">
+                        <a class="topic-card" href="odoo-access-rights-record-rules.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 05</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="phan-quyen-odoo-access-rights-record-rules">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Security: access rights &amp; record rules</h3>
+                                <p class="topic-desc">User groups, ir.model.access.csv, record-level rules.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="odoo-views-actions-menus">
+                        <a class="topic-card" href="odoo-views-actions-menus.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 06</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="view-action-menu-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Views &amp; actions</h3>
+                                <p class="topic-desc">Form, list, search, kanban; menus and window actions.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="odoo-many2one-one2many-many2many">
+                        <a class="topic-card" href="odoo-many2one-one2many-many2many.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 07</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="many2one-one2many-many2many-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Relations between models</h3>
+                                <p class="topic-desc">Many2one, One2many and Many2many in practice.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="odoo-computed-field-onchange-constraints">
+                        <a class="topic-card" href="odoo-computed-field-onchange-constraints.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 08</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="computed-field-onchange-constraint-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Computed fields, onchange &amp; constraints</h3>
+                                <p class="topic-desc">Automated business logic and data validation.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="odoo-inheritance-model-view">
+                        <a class="topic-card" href="odoo-inheritance-model-view.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 09</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ke-thua-model-view-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Inheritance in Odoo</h3>
+                                <p class="topic-desc">Extending other modules' models and views the right way.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="odoo-qweb-pdf-reports">
+                        <a class="topic-card" href="odoo-qweb-pdf-reports.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 10</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="bao-cao-pdf-qweb-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">PDF reports with QWeb</h3>
+                                <p class="topic-desc">Designing templates and printing business reports.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="odoo-owl-framework-basics">
+                        <a class="topic-card" href="odoo-owl-framework-basics.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 11</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="owl-framework-odoo-co-ban">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">OWL framework basics</h3>
+                                <p class="topic-desc">Components, hooks and services in the Odoo UI.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="odoo-web-controllers-json-2-api">
+                        <a class="topic-card" href="odoo-web-controllers-json-2-api.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 12</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="web-controller-json-2-api-odoo">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Web controllers &amp; JSON-2 API</h3>
+                                <p class="topic-desc">Building endpoints and integrating external systems.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-13" data-slug="odoo-unit-tests-transactioncase">
+                        <a class="topic-card" href="odoo-unit-tests-transactioncase.html">
+                            <span class="topic-index" aria-hidden="true">13</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 13</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="unit-test-odoo-transactioncase">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Unit testing in Odoo</h3>
+                                <p class="topic-desc">Tests that protect your modules before every upgrade.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-14" data-slug="odoo-production-deployment-nginx-workers">
+                        <a class="topic-card" href="odoo-production-deployment-nginx-workers.html">
+                            <span class="topic-index" aria-hidden="true">14</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Part 14</span>
+                                    <span class="topic-read" data-read-label hidden>Read</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="trien-khai-odoo-production-nginx-workers">-</b> views</span>
+                                </div>
+                                <h3 class="topic-title">Deploying Odoo to production</h3>
+                                <p class="topic-desc">Linux, Docker, Nginx, SSL, backups and monitoring.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>No matching posts.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Want to learn faster with a mentor?</h3>
                 <p>The Odoo Developer Foundation program gets you building complete modules in 8 sessions, with a real project and code reviews.</p>
                 <div class="cta-actions">
                     <a href="../../../program-detail.html?code=ODO-F">See Odoo Developer Foundation</a>
                     <a href="../../../index.html#register" class="ghost">Get free consultation</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">Content copyrighted by Vinc Academy. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">Content copyrighted by Vinc Academy. Odoo is a trademark of Odoo S.A.; Vinc Academy is an independent training provider and is not officially affiliated with Odoo S.A.</p>
     </main>
 
     <!-- FOOTER -->

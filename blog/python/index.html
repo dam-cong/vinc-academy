@@ -93,55 +93,304 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="python" data-lang="vi">
         <ol class="breadcrumb">
             <li><a href="../../index.html">Trang chủ</a></li>
             <li><a href="../index.html">Kiến thức</a></li>
             <li aria-current="page">Python</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Chủ đề · Miễn phí</span>
-            <h1>Python thực chiến cho lập trình viên Odoo</h1>
-            <p class="post-lead">Học Python vừa đủ để làm việc: mỗi bài dùng ví dụ từ dự án quản lý khóa học và chỉ ra nó xuất hiện ở đâu trong mã Odoo. Ít lý thuyết, nhiều đoạn code chạy được.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Chủ đề · Miễn phí</span><a href="../index.html">← Tất cả chủ đề</a></p>
+                <h1>Python thực chiến cho lập trình viên Odoo</h1>
+                <p class="post-lead">Học Python vừa đủ để làm việc: mỗi bài dùng ví dụ từ dự án quản lý khóa học và chỉ ra nó xuất hiện ở đâu trong mã Odoo. Ít lý thuyết, nhiều đoạn code chạy được.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="lam-quen-python-cai-dat-venv-pip.html">Bắt đầu bài 01 <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#series">Xem danh sách bài</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Tiến độ đọc">
+                <div class="topic-file-label"><span>TOPIC / PYTHON</span><span>Miễn phí</span></div>
+                <div class="topic-metrics">
+                        <div><b data-topic-total>14</b><span>bài viết</span></div>
+                        <div><b data-topic-progress>0/14</b><span>đã đọc</span></div>
+                        <div><b>0đ</b><span>học phí</span></div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-percent>0%</b></div>
+                        <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                    </div>
+            </aside>
         </header>
 
-        <h2 class="series-title">Series: Python thực chiến cho lập trình viên Odoo</h2>
-        <p class="series-desc">14 bài từ cài đặt môi trường, kiểu dữ liệu, hàm, OOP đến xử lý lỗi, file, API và một dự án nhỏ.</p>
-
-        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
-            <button type="button" class="chip active" data-sort="new">Bài mới</button>
-            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
-        </div>
-        <ol class="post-grid">
-            <li><a class="post-card" href="lam-quen-python-cai-dat-venv-pip.html"><span class="post-num">Bài 01</span><h2>Làm quen Python: cài đặt, venv và pip</h2><p>Cài Python 3.12, tạo môi trường ảo, chạy script và cài thư viện cho dự án Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="lam-quen-python-cai-dat-venv-pip">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="bien-kieu-du-lieu-chuoi-f-string-python.html"><span class="post-num">Bài 02</span><h2>Biến, kiểu dữ liệu và chuỗi</h2><p>Số, chuỗi, f-string và ép kiểu qua ví dụ mã khóa học và thông báo log.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="bien-kieu-du-lieu-chuoi-f-string-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="dieu-kien-vong-lap-if-for-while-python.html"><span class="post-num">Bài 03</span><h2>Điều kiện và vòng lặp</h2><p>if, for, while, match với danh sách khóa học, nền tảng của for record in self.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="dieu-kien-vong-lap-if-for-while-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="list-tuple-set-dict-python.html"><span class="post-num">Bài 04</span><h2>List, tuple, set và dict</h2><p>Các cấu trúc dữ liệu bạn gặp trong vals, domain và Command của Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="list-tuple-set-dict-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="ham-python-args-kwargs-lambda.html"><span class="post-num">Bài 05</span><h2>Hàm: tham số, **kwargs và lambda</h2><p>Viết hàm gọn, dùng tham số mặc định và hiểu default=lambda self: trong Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ham-python-args-kwargs-lambda">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="comprehension-generator-sorted-filter-python.html"><span class="post-num">Bài 06</span><h2>Comprehension, generator và sorted/filter</h2><p>Xử lý danh sách gọn như mapped, filtered, sorted của recordset.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="comprehension-generator-sorted-filter-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="module-package-import-python-odoo.html"><span class="post-num">Bài 07</span><h2>Module, package và import</h2><p>Cách Python tìm và nạp mã, và vì sao module Odoo có __init__.py.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="module-package-import-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="class-doi-tuong-oop-python-odoo.html"><span class="post-num">Bài 08</span><h2>Class và đối tượng</h2><p>Thuộc tính, method, @property và cách class Python trở thành model Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="class-doi-tuong-oop-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="ke-thua-super-decorator-python-odoo.html"><span class="post-num">Bài 09</span><h2>Kế thừa, super() và decorator</h2><p>Hiểu super().create(), @api.depends và tự viết decorator của riêng bạn.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ke-thua-super-decorator-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="xu-ly-loi-try-except-with-python-odoo.html"><span class="post-num">Bài 10</span><h2>Xử lý lỗi và câu lệnh with</h2><p>try/except, raise và exception tùy biến, tương ứng ValidationError, UserError.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="xu-ly-loi-try-except-with-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="file-json-csv-pathlib-python-odoo.html"><span class="post-num">Bài 11</span><h2>Làm việc với file, JSON và CSV</h2><p>Đọc ghi file, pathlib, JSON và CSV để xuất nhập dữ liệu khóa học.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="file-json-csv-pathlib-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="ngay-gio-datetime-regex-python-odoo.html"><span class="post-num">Bài 12</span><h2>Ngày giờ và regex</h2><p>datetime, timedelta, múi giờ và regex để kiểm tra mã khóa học, email.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="ngay-gio-datetime-regex-python-odoo">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="goi-api-requests-json-2-odoo-python.html"><span class="post-num">Bài 13</span><h2>Gọi API với requests</h2><p>Gửi request, đọc JSON, xử lý lỗi và timeout, gọi thử API JSON-2 của Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="goi-api-requests-json-2-odoo-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-            <li><a class="post-card" href="debug-logging-test-du-an-nho-python.html"><span class="post-num">Bài 14</span><h2>Debug, logging, test và dự án nhỏ</h2><p>pdb, logging, unittest, type hints và script nhập khóa học vào Odoo.</p><span class="post-views"><i class="fa-regular fa-eye"></i> <b data-views="debug-logging-test-du-an-nho-python">–</b> lượt xem</span><span class="post-status">Đã xuất bản</span></a></li>
-        </ol>
-
-        <div class="prose" style="max-width:none">
-            <div class="cta-box">
+        <div class="topic-layout">
+            <aside class="topic-side" aria-label="Nội dung series">
+                <div class="topic-side-head"><span>SERIES</span><b><span data-topic-total>14</span> bài</b></div>
+                <div class="topic-progress">
+                    <div class="topic-progress-top"><span>Tiến độ đọc</span><b data-topic-progress>0/14</b></div>
+                    <div class="topic-track" role="progressbar" aria-label="Tiến độ đọc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-topic-bar></i></div>
+                </div>
+                <nav class="topic-nav" aria-label="Nội dung series">
+                        <a href="#post-01"><span class="n">01</span><span>Làm quen Python: cài đặt, venv và pip</span></a>
+                        <a href="#post-02"><span class="n">02</span><span>Biến, kiểu dữ liệu và chuỗi</span></a>
+                        <a href="#post-03"><span class="n">03</span><span>Điều kiện và vòng lặp</span></a>
+                        <a href="#post-04"><span class="n">04</span><span>List, tuple, set và dict</span></a>
+                        <a href="#post-05"><span class="n">05</span><span>Hàm: tham số, **kwargs và lambda</span></a>
+                        <a href="#post-06"><span class="n">06</span><span>Comprehension, generator và sorted/filter</span></a>
+                        <a href="#post-07"><span class="n">07</span><span>Module, package và import</span></a>
+                        <a href="#post-08"><span class="n">08</span><span>Class và đối tượng</span></a>
+                        <a href="#post-09"><span class="n">09</span><span>Kế thừa, super() và decorator</span></a>
+                        <a href="#post-10"><span class="n">10</span><span>Xử lý lỗi và câu lệnh with</span></a>
+                        <a href="#post-11"><span class="n">11</span><span>Làm việc với file, JSON và CSV</span></a>
+                        <a href="#post-12"><span class="n">12</span><span>Ngày giờ và regex</span></a>
+                        <a href="#post-13"><span class="n">13</span><span>Gọi API với requests</span></a>
+                        <a href="#post-14"><span class="n">14</span><span>Debug, logging, test và dự án nhỏ</span></a>
+                </nav>
+                <a class="topic-side-cta" href="../index.html"><span>Xem tất cả chủ đề</span><span aria-hidden="true">→</span></a>
+            </aside>
+            <section class="topic-main" id="series">
+                <div class="topic-head">
+                    <div>
+                        <p class="topic-eyebrow">SERIES · 14 bài</p>
+                        <h2>Python thực chiến cho lập trình viên Odoo</h2>
+                        <p class="topic-series-desc">14 bài từ cài đặt môi trường, kiểu dữ liệu, hàm, OOP đến xử lý lỗi, file, API và một dự án nhỏ.</p>
+                    </div>
+                    <div class="topic-tools">
+                        <label class="topic-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="post-search" type="search" placeholder="Tìm bài trong series…" aria-label="Tìm bài trong series…">
+                        </label>
+                        <div class="chips post-sort" role="group" aria-label="Sắp xếp">
+                            <button type="button" class="chip active" data-sort="new">Bài mới</button>
+                            <button type="button" class="chip" data-sort="top">Đọc nhiều nhất</button>
+                        </div>
+                    </div>
+                </div>
+                <ol class="post-grid topic-grid">
+                    <li class="topic-item" id="post-01" data-slug="lam-quen-python-cai-dat-venv-pip">
+                        <a class="topic-card" href="lam-quen-python-cai-dat-venv-pip.html">
+                            <span class="topic-index" aria-hidden="true">01</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 01</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="lam-quen-python-cai-dat-venv-pip">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Làm quen Python: cài đặt, venv và pip</h3>
+                                <p class="topic-desc">Cài Python 3.12, tạo môi trường ảo, chạy script và cài thư viện cho dự án Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-02" data-slug="bien-kieu-du-lieu-chuoi-f-string-python">
+                        <a class="topic-card" href="bien-kieu-du-lieu-chuoi-f-string-python.html">
+                            <span class="topic-index" aria-hidden="true">02</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 02</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="bien-kieu-du-lieu-chuoi-f-string-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Biến, kiểu dữ liệu và chuỗi</h3>
+                                <p class="topic-desc">Số, chuỗi, f-string và ép kiểu qua ví dụ mã khóa học và thông báo log.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-03" data-slug="dieu-kien-vong-lap-if-for-while-python">
+                        <a class="topic-card" href="dieu-kien-vong-lap-if-for-while-python.html">
+                            <span class="topic-index" aria-hidden="true">03</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 03</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="dieu-kien-vong-lap-if-for-while-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Điều kiện và vòng lặp</h3>
+                                <p class="topic-desc">if, for, while, match với danh sách khóa học, nền tảng của for record in self.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-04" data-slug="list-tuple-set-dict-python">
+                        <a class="topic-card" href="list-tuple-set-dict-python.html">
+                            <span class="topic-index" aria-hidden="true">04</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 04</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="list-tuple-set-dict-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">List, tuple, set và dict</h3>
+                                <p class="topic-desc">Các cấu trúc dữ liệu bạn gặp trong vals, domain và Command của Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-05" data-slug="ham-python-args-kwargs-lambda">
+                        <a class="topic-card" href="ham-python-args-kwargs-lambda.html">
+                            <span class="topic-index" aria-hidden="true">05</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 05</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ham-python-args-kwargs-lambda">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Hàm: tham số, **kwargs và lambda</h3>
+                                <p class="topic-desc">Viết hàm gọn, dùng tham số mặc định và hiểu default=lambda self: trong Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-06" data-slug="comprehension-generator-sorted-filter-python">
+                        <a class="topic-card" href="comprehension-generator-sorted-filter-python.html">
+                            <span class="topic-index" aria-hidden="true">06</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 06</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="comprehension-generator-sorted-filter-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Comprehension, generator và sorted/filter</h3>
+                                <p class="topic-desc">Xử lý danh sách gọn như mapped, filtered, sorted của recordset.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-07" data-slug="module-package-import-python-odoo">
+                        <a class="topic-card" href="module-package-import-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">07</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 07</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="module-package-import-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Module, package và import</h3>
+                                <p class="topic-desc">Cách Python tìm và nạp mã, và vì sao module Odoo có __init__.py.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-08" data-slug="class-doi-tuong-oop-python-odoo">
+                        <a class="topic-card" href="class-doi-tuong-oop-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">08</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 08</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="class-doi-tuong-oop-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Class và đối tượng</h3>
+                                <p class="topic-desc">Thuộc tính, method, @property và cách class Python trở thành model Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-09" data-slug="ke-thua-super-decorator-python-odoo">
+                        <a class="topic-card" href="ke-thua-super-decorator-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">09</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 09</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ke-thua-super-decorator-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Kế thừa, super() và decorator</h3>
+                                <p class="topic-desc">Hiểu super().create(), @api.depends và tự viết decorator của riêng bạn.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-10" data-slug="xu-ly-loi-try-except-with-python-odoo">
+                        <a class="topic-card" href="xu-ly-loi-try-except-with-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">10</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 10</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="xu-ly-loi-try-except-with-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Xử lý lỗi và câu lệnh with</h3>
+                                <p class="topic-desc">try/except, raise và exception tùy biến, tương ứng ValidationError, UserError.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-11" data-slug="file-json-csv-pathlib-python-odoo">
+                        <a class="topic-card" href="file-json-csv-pathlib-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">11</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 11</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="file-json-csv-pathlib-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Làm việc với file, JSON và CSV</h3>
+                                <p class="topic-desc">Đọc ghi file, pathlib, JSON và CSV để xuất nhập dữ liệu khóa học.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-12" data-slug="ngay-gio-datetime-regex-python-odoo">
+                        <a class="topic-card" href="ngay-gio-datetime-regex-python-odoo.html">
+                            <span class="topic-index" aria-hidden="true">12</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 12</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="ngay-gio-datetime-regex-python-odoo">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Ngày giờ và regex</h3>
+                                <p class="topic-desc">datetime, timedelta, múi giờ và regex để kiểm tra mã khóa học, email.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-13" data-slug="goi-api-requests-json-2-odoo-python">
+                        <a class="topic-card" href="goi-api-requests-json-2-odoo-python.html">
+                            <span class="topic-index" aria-hidden="true">13</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 13</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="goi-api-requests-json-2-odoo-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Gọi API với requests</h3>
+                                <p class="topic-desc">Gửi request, đọc JSON, xử lý lỗi và timeout, gọi thử API JSON-2 của Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                    <li class="topic-item" id="post-14" data-slug="debug-logging-test-du-an-nho-python">
+                        <a class="topic-card" href="debug-logging-test-du-an-nho-python.html">
+                            <span class="topic-index" aria-hidden="true">14</span>
+                            <div class="topic-card-main">
+                                <div class="topic-card-top">
+                                    <span class="topic-badge">Bài 14</span>
+                                    <span class="topic-read" data-read-label hidden>Đã đọc</span>
+                                    <span class="post-views"><i class="fa-regular fa-eye" aria-hidden="true"></i> <b data-views="debug-logging-test-du-an-nho-python">-</b> lượt xem</span>
+                                </div>
+                                <h3 class="topic-title">Debug, logging, test và dự án nhỏ</h3>
+                                <p class="topic-desc">pdb, logging, unittest, type hints và script nhập khóa học vào Odoo.</p>
+                            </div>
+                            <span class="topic-arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ol>
+                <p class="topic-empty" id="post-empty" hidden>Không tìm thấy bài phù hợp.</p>
+                <div class="topic-cta"><div class="cta-box">
                 <h3>Muốn học Python bài bản với mentor?</h3>
                 <p>Khóa Developer Foundation có phần Python Fundamentals với bài tập thực tế và review code.</p>
                 <div class="cta-actions">
                     <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
                     <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                 </div>
-            </div>
+            </div></div>
+                <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </section>
         </div>
-
-        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Python là nhãn hiệu của Python Software Foundation; Odoo là nhãn hiệu của Odoo S.A. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
     </main>
 
     <!-- FOOTER -->

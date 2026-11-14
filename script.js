@@ -584,10 +584,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initAboutBadge();
     initProgramFilter();
     initPostFilter();
+    initTopicPage();
     initViews();
     initBackToTop();
     initChatHide();
     initSeriesNav();
+    initArticlePage();
 });
 
 // ── ABOUT BADGE (mobile tap to show text) ──
@@ -808,6 +810,134 @@ function initPostFilter() {
     });
 }
 
+// ARTICLE DETAIL: reading progress + TOC active state
+function initArticlePage() {
+    const page = document.querySelector('.blog-wrap');
+    const article = document.querySelector('.post-layout .prose');
+    if (!page || !article) return;
+    page.classList.add('post-page');
+    const topic = location.pathname.match(/\/blog\/(career|first-job|python|linux|git|odoo)\//);
+    if (topic) page.dataset.topic = topic[1];
+
+    const bar = document.createElement('div');
+    bar.className = 'read-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = '<i></i>';
+    page.prepend(bar);
+    const fill = bar.firstElementChild;
+
+    const toc = document.querySelector('.toc');
+    const tocLinks = [...document.querySelectorAll('.toc a[href^="#"]')];
+    const headings = tocLinks.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+    const setActive = id => tocLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + id));
+    const syncToc = () => {
+        if (!headings.length) return;
+        let current = headings[0];
+        for (const h of headings) {
+            if (h.getBoundingClientRect().top <= 120) current = h;
+            else break;
+        }
+        setActive(current.id);
+    };
+    syncToc();
+
+    let ticking = false;
+    const paint = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const pct = max > 0 ? Math.min(100, Math.max(0, scrollY / max * 100)) : 0;
+        fill.style.width = pct + '%';
+        if (toc) syncToc();
+        ticking = false;
+    };
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(paint);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    paint();
+}
+
+// TOPIC / SERIES HUB: reading progress + scroll spy
+function initTopicPage() {
+    const page = document.querySelector('.topic-page');
+    if (!page) return;
+    const items = [...page.querySelectorAll('.topic-item[data-slug]')];
+    if (!items.length) return;
+    const key = 'va-topic-' + (page.dataset.lang || document.documentElement.lang || 'vi') + '-' + (page.dataset.topic || 'series');
+    let read = [];
+    try {
+        read = JSON.parse(localStorage.getItem(key)) || [];
+    } catch { }
+    if (!Array.isArray(read)) read = [];
+    const done = new Set(read);
+    const total = items.length;
+    const paint = () => {
+        const n = items.filter(li => done.has(li.dataset.slug)).length;
+        page.querySelectorAll('[data-topic-total]').forEach(el => el.textContent = total);
+        page.querySelectorAll('[data-topic-progress]').forEach(el => el.textContent = n + '/' + total);
+        const pct = Math.round(n / total * 100);
+        page.querySelectorAll('[data-topic-percent]').forEach(el => el.textContent = pct + '%');
+        page.querySelectorAll('[data-topic-bar]').forEach(el => el.style.width = pct + '%');
+        page.querySelectorAll('[role="progressbar"]').forEach(el => el.setAttribute('aria-valuenow', pct));
+        items.forEach(li => {
+            const isRead = done.has(li.dataset.slug);
+            li.classList.toggle('is-read', isRead);
+            const label = li.querySelector('[data-read-label]');
+            if (label) label.hidden = !isRead;
+        });
+    };
+    paint();
+    items.forEach(li => {
+        const link = li.querySelector('a.topic-card');
+        if (!link) return;
+        link.addEventListener('click', () => {
+            if (done.has(li.dataset.slug)) return;
+            done.add(li.dataset.slug);
+            try {
+                localStorage.setItem(key, JSON.stringify([...done]));
+            } catch { }
+            paint();
+        });
+    });
+    const links = [...page.querySelectorAll('.topic-nav a[href^="#"]')];
+    links.forEach(a => {
+        if (!a.title) {
+            const label = a.querySelector('span:last-child');
+            a.title = (label ? label.textContent : a.textContent).replace(/\s+/g, ' ').trim();
+        }
+    });
+    const search = page.querySelector('#post-search');
+    if (search && links.length) {
+        search.addEventListener('input', () => {
+            const q = search.value.trim();
+            links.forEach(a => {
+                const item = document.getElementById(a.getAttribute('href').slice(1));
+                a.hidden = !!q && (!item || item.hidden);
+            });
+        });
+    }
+    if (links.length && 'IntersectionObserver' in window) {
+        const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                links.forEach(a => {
+                    a.classList.remove('is-active');
+                    a.removeAttribute('aria-current');
+                });
+                const active = byId.get(entry.target.id);
+                if (active) {
+                    active.classList.add('is-active');
+                    active.setAttribute('aria-current', 'location');
+                }
+            });
+        }, { rootMargin: '-20% 0px -65% 0px' });
+        items.forEach(li => io.observe(li));
+    }
+}
+
 // ── LƯỢT XEM BÀI BLOG (api/views.js) ──
 async function initViews() {
     const els = [...document.querySelectorAll('[data-views]')];
@@ -907,7 +1037,7 @@ function initSeriesNav() {
     side.innerHTML = `<summary><span class="ss-label">SERIES</span><b class="ss-name">${name}</b>
         <span class="ss-count">${en ? 'Part' : 'Bài'} ${cur + 1}/${n}</span>
         <span class="ss-bar"><i style="width:${(cur + 1) / n * 100}%"></i></span></summary>
-        <ol>${SERIES_ODOO.map((r, i) => `<li><a href="${r[en ? 2 : 0]}"${i === cur ? ' aria-current="page"' : ''}>
+        <ol>${SERIES_ODOO.map((r, i) => `<li><a href="${r[en ? 2 : 0]}"${i === cur ? ' aria-current="page"' : ''} title="${esc(r[en ? 3 : 1])}">
             <span class="ss-n">${String(i + 1).padStart(2, '0')}</span><span class="ss-t">${esc(r[en ? 3 : 1])}</span>${i !== cur && done.has(i) ? '<span class="ss-ok" aria-label="' + (en ? 'read' : 'đã đọc') + '">✓</span>' : ''}</a></li>`).join('')}</ol>
         <a class="ss-all" href="index.html">${en ? 'All posts in this series' : 'Tất cả bài trong series'} →</a>`;
     layout.prepend(side);

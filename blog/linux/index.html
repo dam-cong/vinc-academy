@@ -79,33 +79,116 @@
         </button>
     </nav>
 
-    <main class="blog-wrap">
+    <main class="blog-wrap topic-page" data-topic="linux" data-lang="vi">
         <ol class="breadcrumb">
             <li><a href="../../index.html">Trang chủ</a></li>
             <li><a href="../index.html">Kiến thức</a></li>
             <li aria-current="page">Linux &amp; Shell</li>
         </ol>
 
-        <header class="hub-hero">
-            <span class="section-tag">Chủ đề · Miễn phí</span>
-            <h1>Linux &amp; Shell thực chiến</h1>
-            <p class="post-lead">Làm chủ dòng lệnh Linux vừa đủ để làm việc: di chuyển và quản lý file, quyền truy cập, tiến trình, pipe và script Bash — những thứ bạn dùng mỗi ngày khi làm việc với server, Git và triển khai Odoo.</p>
+        <header class="topic-hero">
+            <div class="topic-hero-main">
+                <p class="topic-kicker"><span class="topic-kicker-dot" aria-hidden="true"></span><span>Chủ đề · Miễn phí</span><a href="../index.html">← Tất cả chủ đề</a></p>
+                <h1>Linux &amp; Shell thực chiến</h1>
+                <p class="post-lead">Làm chủ dòng lệnh Linux vừa đủ để làm việc: di chuyển và quản lý file, quyền truy cập, tiến trình, pipe và script Bash — những thứ bạn dùng mỗi ngày khi làm việc với server, Git và triển khai Odoo.</p>
+                <div class="topic-actions">
+                    <a class="topic-btn" href="../../index.html#register">Nhận thông báo khi có bài <span aria-hidden="true">→</span></a>
+                        <a class="topic-btn ghost" href="#roadmap">Xem lộ trình</a>
+                </div>
+            </div>
+            <aside class="topic-file" aria-label="Tiến độ đọc">
+                <div class="topic-file-label"><span>TOPIC / LINUX</span><span>Miễn phí</span></div>
+                <div class="topic-metrics">
+                        <div><b>0</b><span>bài viết</span></div>
+                        <div><b>6</b><span>bài dự kiến</span></div>
+                        <div><b>0đ</b><span>học phí</span></div>
+                    </div>
+            </aside>
         </header>
 
-        <div class="prose" style="max-width:none">
-            <p>Phần lớn server chạy Linux, và hầu hết công việc triển khai, gỡ lỗi hay tự động hóa đều bắt đầu từ một cửa sổ terminal. Biết dòng lệnh giúp bạn đọc log, tìm file, kiểm tra tiến trình và viết script thay vì làm thủ công từng bước.</p>
-            <p>Series này đang được biên soạn theo phong cách của các chủ đề khác tại Vinc Academy: ít lý thuyết, ví dụ chạy thật trên Linux (WSL, máy ảo hoặc server), mỗi lệnh đều có kết quả kèm theo. Hãy để lại lời nhắn nếu bạn muốn được thông báo khi bài đầu tiên lên sóng.</p>
-            <div class="cta-box">
+        <section class="topic-main" id="roadmap">
+            <div class="topic-head">
+                <div>
+                    <p class="topic-eyebrow">SẮP RA MẮT · 6 bài dự kiến</p>
+                    <h2>Lộ trình dự kiến</h2>
+                    <p class="topic-series-desc">Các bài dưới đây đang được biên soạn. Để lại email để được thông báo khi bài đầu tiên lên sóng.</p>
+                </div>
+                <a class="topic-side-cta" href="../index.html"><span>Xem chủ đề khác</span><span aria-hidden="true">→</span></a>
+            </div>
+            <ol class="post-grid topic-grid">
+                <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">01</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">Làm quen terminal và hệ thống file</h3>
+                                    <p class="topic-desc">Di chuyển, xem, tạo và tìm file với pwd, ls, cd, find và tree.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">02</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">Quyền truy cập, user và group</h3>
+                                    <p class="topic-desc">Hiểu rwx, chown, chmod và cách tránh lỗi permission khi triển khai.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">03</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">Tiến trình, job và systemd</h3>
+                                    <p class="topic-desc">Theo dõi tiến trình, dừng job và quản lý service bằng systemctl.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">04</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">Pipe, redirect và tìm kiếm</h3>
+                                    <p class="topic-desc">Ghép lệnh với |, đọc log bằng grep và xử lý đầu ra.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">05</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">Biến môi trường và Bash script</h3>
+                                    <p class="topic-desc">Viết script có tham số, điều kiện và xử lý lỗi.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="topic-item is-soon">
+                            <div class="topic-card">
+                                <span class="topic-index" aria-hidden="true">06</span>
+                                <div class="topic-card-main">
+                                    <div class="topic-card-top"><span class="topic-badge">Sắp ra mắt</span></div>
+                                    <h3 class="topic-title">SSH, mạng và log server</h3>
+                                    <p class="topic-desc">Kết nối server, kiểm tra cổng và đọc log khi có sự cố.</p>
+                                </div>
+                            </div>
+                        </li>
+            </ol>
+            <div class="topic-intro"><p>Phần lớn server chạy Linux, và hầu hết công việc triển khai, gỡ lỗi hay tự động hóa đều bắt đầu từ một cửa sổ terminal. Biết dòng lệnh giúp bạn đọc log, tìm file, kiểm tra tiến trình và viết script thay vì làm thủ công từng bước.</p>
+            <p>Series này đang được biên soạn theo phong cách của các chủ đề khác tại Vinc Academy: ít lý thuyết, ví dụ chạy thật trên Linux (WSL, máy ảo hoặc server), mỗi lệnh đều có kết quả kèm theo. Hãy để lại lời nhắn nếu bạn muốn được thông báo khi bài đầu tiên lên sóng.</p></div>
+            <div class="topic-cta"><div class="cta-box">
                 <h3>Muốn học Linux &amp; dòng lệnh cùng mentor?</h3>
                 <p>Các khóa tại Vinc Academy có bài tập thực tế trên môi trường Linux và review trực tiếp.</p>
                 <div class="cta-actions">
                     <a href="../../program-detail.html?code=DEV-F">Xem khóa Developer Foundation</a>
                     <a href="../../index.html#register" class="ghost">Nhận tư vấn miễn phí</a>
                 </div>
-            </div>
-        </div>
-
-        <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Linux là nhãn hiệu của Linus Torvalds; Bash và các công cụ GNU thuộc dự án GNU. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+            </div></div>
+            <p class="disclaimer">Nội dung thuộc bản quyền của Vinc Academy. Linux là nhãn hiệu của Linus Torvalds; Bash và các công cụ GNU thuộc dự án GNU. Vinc Academy là đơn vị đào tạo độc lập, không liên kết chính thức với các tổ chức này.</p>
+        </section>
     </main>
 
     <!-- FOOTER -->
