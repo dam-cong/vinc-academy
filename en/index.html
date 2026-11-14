@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page.title">Vinc Academy — Hands-on Odoo Programming Training</title>
+    <meta name="description" content="Vinc Academy offers hands-on Odoo programming training: Python, Odoo Developer, AI and DevOps. A 6-level roadmap, real projects and free consulting." />
+    <meta name="author" content="Vinc Academy" />
+    <meta name="copyright" content="Vinc Academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#1D4ED8" />
+    <link rel="canonical" href="https://vinc-academy.vercel.app/en/" />
+    <link rel="alternate" hreflang="vi" href="https://vinc-academy.vercel.app/" />
+    <link rel="alternate" hreflang="en" href="https://vinc-academy.vercel.app/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://vinc-academy.vercel.app/" />
+    <link rel="icon" href="../image/vinc-academy.png" />
+    <link rel="apple-touch-icon" href="../image/vinc-academy.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vinc Academy" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="vi_VN" />
+    <meta property="og:title" content="Vinc Academy — Hands-on Odoo Programming Training" />
+    <meta property="og:description" content="A 6-level path from Python to Odoo, AI and DevOps. Learn through real projects, free consulting." />
+    <meta property="og:url" content="https://vinc-academy.vercel.app/en/" />
+    <meta property="og:image" content="https://vinc-academy.vercel.app/image/og/home.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vinc Academy — Hands-on Odoo Programming Training" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vinc Academy — Hands-on Odoo Programming Training" />
+    <meta name="twitter:description" content="A 6-level path from Python to Odoo, AI and DevOps. Learn through real projects, free consulting." />
+    <meta name="twitter:image" content="https://vinc-academy.vercel.app/image/og/home.png" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://vinc-academy.vercel.app/#org",
+      "name": "Vinc Academy",
+      "url": "https://vinc-academy.vercel.app/",
+      "logo": "https://vinc-academy.vercel.app/image/vinc-academy.png",
+      "description": "Vinc Academy offers hands-on Odoo programming training: Python, Odoo Developer, AI and DevOps. A 6-level roadmap, real projects and free consulting.",
+      "telephone": "+84363729276",
+      "knowsLanguage": [
+        "vi",
+        "en"
+      ],
+      "sameAs": [
+        "https://www.facebook.com/vinc.academy"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+84363729276",
+        "contactType": "customer support",
+        "availableLanguage": [
+          "vi",
+          "en"
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://vinc-academy.vercel.app/#website",
+      "name": "Vinc Academy",
+      "url": "https://vinc-academy.vercel.app/en/",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://vinc-academy.vercel.app/#org"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "6 Hands-on Odoo Programs",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Course",
+            "name": "Developer Foundation",
+            "description": "Beginners · IT Students · Career Switchers. Python · SQL · Git · Mini Project",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=DEV-F",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Course",
+            "name": "Odoo Developer Foundation",
+            "description": "Has programming foundation. Odoo Module · Security · PDF Report · Website · TMS Portfolio",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=ODO-F",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Course",
+            "name": "AI & Vibe Coding Odoo",
+            "description": "Knows Odoo · Wants to boost productivity. 2-5x faster · AI Code · Review · Project",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=AI-O",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "Course",
+            "name": "Odoo Business & Functional",
+            "description": "Developer · BA · Functional Consultant · PM. ERP Process · BA · BRD · Solution Design · Gap Analysis",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=ODO-B",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "Course",
+            "name": "Odoo Advanced Developer",
+            "description": "Odoo Developer 6mo+ experience. Advanced ORM · API · OWL · Performance · Testing",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=ODO-A",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "Course",
+            "name": "DevOps for Odoo",
+            "description": "Odoo Developer · Technical Consultant · System Admin. Production Server · Docker · Nginx · Backup · CI/CD",
+            "url": "https://vinc-academy.vercel.app/program-detail.html?code=ODO-D",
+            "inLanguage": "en",
+            "provider": {
+              "@id": "https://vinc-academy.vercel.app/#org"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I join Developer Foundation with no programming experience?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Developer Foundation is designed from absolute zero — starting with Python basics, no prior experience required. Just a computer and internet connection."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Online or offline classes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vinc Academy trains online via video lessons and interactive live sessions. Students can review anytime, no fixed schedule. Private group for continuous support."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I get a job after Odoo Developer Foundation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Odoo Developer Foundation teaches you to write modules, customize the system, and understand Odoo architecture — enough to apply as a Junior Odoo Developer. For advanced roles, continue with Advanced or DevOps."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does each program take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Developer Foundation: 5 sessions, Odoo Foundation: 8, AI & Vibe Coding: 5, Business & Functional: 8, Advanced: 8, DevOps: 5. Average 4–8 weeks with 1–2 hours daily. No deadline, learn at your own pace."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much is the tuition? Are installments available?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tuition depends on the combo you choose. Message us on Zalo 036 3729 276 for a detailed quote and flexible payment options."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Just graduated / new at work — where should I start?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No coding yet: start with L1 Developer Foundation. Already coding: go straight to L2 Odoo Developer Foundation. Use the “Who are you?” filter in Programs to see your path, or get a free consultation."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../cert-verify.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+</head>
+
+<body>
+    <a href="#about" class="skip-link" data-i18n="nav.skip">Skip to content</a>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">
+                <img src="../image/vinc-academy.png" alt="Vinc Academy logo" width="34" height="34" decoding="async"
+                    style="border-radius: 8px; object-fit: cover;" />
+            </div>
+            <span class="nav-logo-text">Vinc <span>Academy</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="#about" data-i18n="nav.about">About</a>
+            <a href="#programs" data-i18n="nav.programs">Programs</a>
+            <a href="#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="../en/blog/index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="#verify" class="nav-sub"><i class="fa-solid fa-award"></i> <span data-i18n="nav.certificate">Certificate</span></a>
+        </div>
+        <a href="#register" class="btn-nav" data-i18n="nav.register">Free Consultation</a>
+        <button type="button" class="lang-toggle" onclick="toggleLang()" data-alt="../index.html" title="Switch language" aria-label="Toggle language">VI</button><button type="button" class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"
+            aria-label="Toggle dark mode">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-left">
+            <div class="hero-badge" data-i18n="hero.badge">Hands-on Training · 100% Real Projects</div>
+            <h1 data-i18n-html="hero.title">From student<br><span class="accent">to Odoo Developer</span><br>job-ready</h1>
+            <p class="hero-desc" data-i18n="hero.desc">From Developer Foundation to AI & Vibe Coding — 6 hands-on Odoo programs, clear roadmap, real projects, industry-experienced instructors.</p>
+            <div class="hero-actions">
+                <a href="#programs" class="btn-primary" data-i18n="hero.btn2">View Learning Path</a>
+                <a href="#register" class="btn-secondary" data-i18n="hero.btn1">Get Free Consultation</a>
+            </div>
+            <div class="hero-pick">
+                <span data-i18n="hero.who">Who are you?</span>
+                <button type="button" data-pick="new" data-i18n="f.new">New to coding</button>
+                <button type="button" data-pick="dev" data-i18n="f.dev">Can code</button>
+                <button type="button" data-pick="pro" data-i18n="f.pro">Already on Odoo</button>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot blue"><i class="fa-solid fa-box-open" aria-hidden="true"></i></div>
+                </div>
+                <div class="stat-num">6</div>
+                <div class="stat-label" data-i18n="hero.stat1">Training Programs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot teal"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i></div>
+                </div>
+                <div class="stat-num">100%</div>
+                <div class="stat-label" data-i18n="hero.stat2">Real Project Practice</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-row">
+                    <div class="stat-dot amber"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></div>
+                </div>
+                <div class="stat-num">Job-ready</div>
+                <div class="stat-label" data-i18n="hero.stat3">Job-Ready Skills</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST -->
+    <section class="trust">
+        <ul class="trust-inner">
+            <li><b>100+</b><span data-i18n="trust.1">Learners trained</span></li>
+            <li><b>5+</b><span data-i18n="trust.2">Years of instructor experience</span></li>
+            <li><b>24h</b><span data-i18n="trust.3">Consulting response time</span></li>
+            <li><b><i class="fa-solid fa-circle-check" aria-hidden="true"></i></b><span data-i18n="trust.4">Certificates verifiable online</span></li>
+        </ul>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+        <div class="about-grid">
+            <div class="about-visual">
+                <div class="about-logo-block">
+                    <img src="../image/vinc-academy.png" alt="Vinc Academy" width="280" height="280" loading="lazy" decoding="async"
+                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;" />
+                </div>
+                <div class="about-float-badge">
+                    <div class="dot"></div>
+                    <span data-i18n="about.badge">Now enrolling 2026</span>
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-tag" data-i18n="about.tag">About</span>
+                <h2 style="margin-bottom:0;" data-i18n-html="about.title">We Are<br>Vinc Academy</h2>
+                <p data-i18n-html="about.desc1">Vinc Academy was founded with the mission of providing <strong>hands-on</strong> Odoo training — where students not only learn theory but build real products from day one.</p>
+                <p data-i18n-html="about.desc2">We focus on the <strong>Python · Odoo · DevOps · AI</strong> ecosystem — the most in-demand skills for Vietnamese and international companies, especially in ERP and process automation.</p>
+                <div class="about-highlight" data-i18n="about.quote">"Learn what businesses need — not just for knowledge"</div>
+                <div class="about-stats-row">
+                    <div class="about-stat">
+                        <div class="about-stat-num">6</div>
+                        <div class="about-stat-label" data-i18n="about.stat1">Programs</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num">100%</div>
+                        <div class="about-stat-label" data-i18n="about.stat2">Practice</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num">6</div>
+                        <div class="about-stat-label" data-i18n="about.stat3">Path Levels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHY -->
+        <div class="why-block">
+            <span class="section-tag" data-i18n="why.tag">Why Vinc Academy</span>
+            <h2 data-i18n="why.title">Training like a Software Company</h2>
+            <p class="section-sub" data-i18n="why.sub">Not just coding — learn real product development workflows</p>
+        </div>
+        <!-- Comparison Table -->
+        <div class="usp-table-wrap">
+            <table class="usp-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="cmp.h1">Typical training centers</th>
+                        <th data-i18n="cmp.h2">Vinc Academy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.1a">Learn to know</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.1b"><strong>Learn to do</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.2a">Follow a textbook</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.2b"><strong>Learn through real projects</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.3a">Mostly coding</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.3b"><strong>Learn the product development process</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.4a">Little practice</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.4b"><strong>Hands-on practice throughout the course</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.5a">Finish with a certificate</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.5b"><strong>Portfolio + real-world experience</strong></td>
+                    </tr>
+                    <tr>
+                        <td data-label="Typical" data-i18n="cmp.6a">Learn each technology separately</td>
+                        <td data-label="Vinc Academy" data-i18n-html="cmp.6b"><strong>Learn from Development → Deployment</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.1.title">Work like in a software company</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.1.desc">Follow real development workflows: requirements analysis, planning, coding, code review, deployment, and operations.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.2.title">Real experience from day one</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.2.desc">Instead of spending months as an intern, you practice on business-simulated projects and build experience from day one.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.3.title">Instructors are active Developers</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.3.desc">Senior Odoo Developers and Technical Consultants currently deploying real business projects — up-to-date knowledge, real experience.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.5.title">Build a professional Portfolio</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.5.desc">Every course includes mini projects and a final project. Graduate with a portfolio and source code ready for job applications.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.6.title">Clear path to Developer career</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.6.desc">Program designed in stages with specific goals — you always know what to learn, what to build, and what skills you'll gain.</div>
+            </div>
+            <div class="why-card">
+                <div class="why-header">
+                    <div class="why-icon-wrap"><i class="fa-solid fa-handshake" aria-hidden="true"></i></div>
+                    <h3 class="why-title" data-i18n="w.7.title">Mentors guide you all the way</h3>
+                </div>
+                <div class="why-desc" data-i18n="w.7.desc">Instructors and mentors track your progress, answer questions, review code, and guide your personal development.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTRUCTOR -->
+    <!-- <section class="section" id="instructor">
+        <div class="about-grid">
+            <div class="about-visual">
+                <div class="about-logo-block"
+                    style="background: var(--bg-card); border: 1px solid var(--border-light); max-width: 300px; aspect-ratio: 3 / 4;">
+                    <img src="../image/hiendc.jpg" alt="Đàm Công Hiến"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" />
+                </div>
+                <div class="about-float-badge">
+                    <div class="dot"></div>
+                    <span data-i18n="instructor.badge">Instructor at Vinc Academy</span>
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-tag" data-i18n="instructor.tag">Instructor</span>
+                <h2 style="margin-bottom:0;" data-i18n-html="instructor.name">Đàm Công Hiến</h2>
+                <p data-i18n-html="instructor.desc1"><strong>Đàm Công Hiến</strong> is a <strong>Senior Odoo Developer</strong> and instructor at Vinc Academy with <strong>over 5 years of experience</strong> developing and deploying ERP solutions on the Odoo platform. His expertise includes <strong>Python, PostgreSQL, DevOps</strong>, Odoo module development, system integration, performance optimization, Docker deployment, CI/CD setup, and digital transformation consulting for businesses.</p>
+                <p data-i18n-html="instructor.desc2">He has personally <strong>trained over 100 interns and Python Odoo developers</strong>, applying the <strong>Learning by Doing</strong> approach with real projects, helping students quickly master Odoo and be ready to join deployment projects right after the course.</p>
+                <div class="about-highlight" data-i18n="instructor.quote">"You only truly know it when you can build it — and Odoo is the fastest way to touch business."</div>
+                <div class="about-stats-row">
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat1num">5+</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat1">Năm kinh nghiệm</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat2num">100+</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat2">Học viên</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-num" data-i18n="instructor.stat3num">6</div>
+                        <div class="about-stat-label" data-i18n="instructor.stat3">Chương trình</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <div class="divider"></div>
+
+    <!-- PROGRAMS -->
+    <section class="section" id="programs">
+        <span class="section-tag" data-i18n="programs.tag">Training Programs</span>
+        <h2 data-i18n="programs.title">6 Hands-on Odoo Programs</h2>
+        <p class="section-sub" data-i18n="programs.sub">From programming fundamentals to AI — a structured path for every level</p>
+        <div class="levels-grid program-levels">
+            <button type="button" class="level-card" data-level="1">
+                <span class="level-start" data-i18n="road.start">Start here</span>
+                <div class="level-num">L1</div>
+                <div class="level-name" data-i18n="road.card1">Foundation</div>
+                <div class="level-desc" data-i18n="road.card1d">Python · SQL · Git</div>
+            </button>
+            <button type="button" class="level-card" data-level="2">
+                <div class="level-num">L2</div>
+                <div class="level-name" data-i18n="road.card2">Odoo Core</div>
+                <div class="level-desc" data-i18n="road.card2d">Junior Odoo Developer</div>
+            </button>
+            <button type="button" class="level-card" data-level="3">
+                <div class="level-num">L3</div>
+                <div class="level-name" data-i18n="road.card3">AI</div>
+                <div class="level-desc" data-i18n="road.card3d">AI-Enhanced Developer</div>
+            </button>
+            <button type="button" class="level-card" data-level="4">
+                <div class="level-num">L4</div>
+                <div class="level-name" data-i18n="road.card4">BA / Functional</div>
+                <div class="level-desc" data-i18n="road.card4d">Functional Consultant</div>
+            </button>
+            <button type="button" class="level-card" data-level="5">
+                <div class="level-num">L5</div>
+                <div class="level-name" data-i18n="road.card5">Advanced</div>
+                <div class="level-desc" data-i18n="road.card5d">Senior Developer</div>
+            </button>
+            <button type="button" class="level-card" data-level="6">
+                <div class="level-num">L6</div>
+                <div class="level-name" data-i18n="road.card6">DevOps</div>
+                <div class="level-desc" data-i18n="road.card6d">Production Deployment</div>
+            </button>
+        </div>
+        <div class="prog-filter">
+            <div class="chips" role="group">
+                <button type="button" class="chip active" data-aud="all" data-i18n="f.all">All</button>
+                <button type="button" class="chip" data-aud="new" data-i18n="f.new">New to coding</button>
+                <button type="button" class="chip" data-aud="dev" data-i18n="f.dev">Can code</button>
+                <button type="button" class="chip" data-aud="pro" data-i18n="f.pro">Already on Odoo</button>
+            </div>
+            <input type="search" id="prog-search" data-i18n-placeholder="f.search" placeholder="Search programs..." aria-label="Search programs">
+        </div>
+        <p class="prog-empty" id="prog-empty" hidden data-i18n="f.empty">No matching program — clear the filter or get a free consultation.</p>
+        <div class="courses-grid">
+            <!-- 1. Developer Foundation (featured) -->
+            <div class="course-card featured" data-level="1" data-aud="new dev">
+                <div class="course-icon ci-blue">
+                    <img src="../image/python.png" alt="Developer Foundation" width="48" height="48" loading="lazy" decoding="async">
+                </div>
+                <div class="course-num" data-i18n="p.1.num">Programming Foundation</div>
+                <h3 class="course-title" data-i18n="p.1.title">Developer Foundation</h3>
+                <div class="program-target" data-i18n="p.1.target">Beginners · IT Students · Career Switchers</div>
+                <div class="program-duration" data-i18n="p.1.duration">5 sessions</div>
+                <ul class="program-curriculum">
+                    <li data-i18n-html="p.1.c.1"><strong>Python</strong> — Fundamentals, Function, OOP</li>
+                    <li data-i18n-html="p.1.c.2"><strong>PostgreSQL</strong> — Database, SQL, JOIN</li>
+                    <li data-i18n-html="p.1.c.3"><strong>Git & GitHub</strong> — Workflow, Branch, Merge</li>
+                    <li data-i18n-html="p.1.c.4"><strong>Project:</strong> Customer Management</li>
+                </ul>
+                <div class="program-outcome" data-i18n="p.1.outcome">Python · SQL · Git · Mini Project</div>
+                <div class="program-detail-link-wrap">
+                    <a href="../program-detail.html?code=DEV-F" class="program-detail-link" data-i18n="p.detail">View details</a>
+                </div>
+                <div class="course-footer">
+                    <span class="badge badge-hot" data-i18n="p.1.badge">Foundation</span>
+                </div>
+            </div>
+
+            <!-- 2. Odoo Developer Foundation -->
+            <div class="course-card" data-level="2" data-aud="dev">
+                <div class="course-icon ci-blue">
+                    <img src="../image/odoo.png" alt="Odoo Developer Foundation" width="48" height="48" loading="lazy" decoding="async">
+                </div>
+                <div class="course-num" data-i18n="p.2.num">Junior Odoo Developer</div>
+                <h3 class="course-title" data-i18n="p.2.title">Odoo Developer Foundation</h3>
+                <div class="program-target" data-i18n="p.2.target">Has programming foundation</div>
+                <div class="program-duration" data-i18n="p.2.duration">8 sessions</div>
+                <ul class="program-curriculum">
+                    <li data-i18n="p.2.c.1">Odoo Architecture · MVC · Module · Manifest</li>
+                    <li data-i18n="p.2.c.2">ORM · Models · Fields · Relations</li>
+                    <li data-i18n="p.2.c.3">Views · Business Logic · Security · Report</li>
+                    <li data-i18n-html="p.2.c.4"><strong>Project:</strong> Training Management System (TMS)</li>
+                </ul>
+                <div class="program-outcome" data-i18n="p.2.outcome">Odoo Module · Security · PDF Report · Website · TMS Portfolio</div>
+                <div class="program-detail-link-wrap">
+                    <a href="../program-detail.html?code=ODO-F" class="program-detail-link" data-i18n="p.detail">View details</a>
+                </div>
+                <div class="course-footer">
+                    <span class="badge badge-hot" data-i18n="p.2.badge">Core</span>
+                </div>
+            </div>
+
+            <!-- 3. AI & Vibe Coding Odoo -->
+            <div class="course-card" data-level="3" data-aud="dev pro">
+                <div class="course-icon ci-blue">
+                    <img src="../image/odoo.png" alt="AI & Vibe Coding Odoo" width="48" height="48" loading="lazy" decoding="async">
+                </div>
+                <div class="course-num" data-i18n="p.3.num">Working with AI</div>
+                <h3 class="course-title" data-i18n="p.3.title">AI & Vibe Coding Odoo</h3>
+                <div class="program-target" data-i18n="p.3.target">Knows Odoo · Wants to boost productivity</div>
+                <div class="program-duration" data-i18n="p.3.duration">5 sessions</div>
+                <ul class="program-curriculum">
+                    <li data-i18n="p.3.c.1">Prompt Engineering · AI Pair Programming</li>
+                    <li data-i18n="p.3.c.2">AI Code Generation · Review · Refactor · Debug</li>
+                    <li data-i18n="p.3.c.3">Technical Design · Documentation</li>
+                    <li data-i18n="p.3.c.4">Tools: ChatGPT · Claude · Cursor · OpenCode</li>
+                    <li data-i18n-html="p.3.c.5"><strong>Project:</strong> Build module with AI</li>
+                </ul>
+                <div class="program-outcome" data-i18n="p.3.outcome">2-5x faster · AI Code · Review · Project</div>
+                <div class="program-detail-link-wrap">
+                    <a href="../program-detail.html?code=AI-O" class="program-detail-link" data-i18n="p.detail">View details</a>
+                </div>
+                <div class="course-footer">
+                    <span class="badge badge-new" data-i18n="p.3.badge">AI</span>
+                </div>
+            </div>
+
+            <!-- 4. Odoo Business & Functional (hidden) -->
+            <div class="program-hidden">
+                <div class="course-card" data-level="4" data-aud="dev pro">
+                    <div class="course-icon ci-blue">
+                        <img src="../image/postgresql.jpg" alt="Odoo Business & Functional" width="48" height="48" loading="lazy" decoding="async">
+                    </div>
+                    <div class="course-num" data-i18n="p.4.num">Business</div>
+                    <h3 class="course-title" data-i18n="p.4.title">Odoo Business & Functional</h3>
+                    <div class="program-target" data-i18n="p.4.target">Developer · BA · Functional Consultant · PM</div>
+                    <div class="program-duration" data-i18n="p.4.duration">8 sessions</div>
+                    <ul class="program-curriculum">
+                        <li data-i18n="p.4.c.1">CRM · Sales · Purchase · Inventory · Accounting</li>
+                        <li data-i18n="p.4.c.2">HR · Project · Business Analysis · Documentation</li>
+                        <li data-i18n-html="p.4.c.3"><strong>Project:</strong> Business Solution Design & Analysis</li>
+                    </ul>
+                    <div class="program-outcome" data-i18n="p.4.outcome">ERP Process · BA · BRD · Solution Design · Gap Analysis</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="../program-detail.html?code=ODO-B" class="program-detail-link" data-i18n="p.detail">View details</a>
+                    </div>
+                    <div class="course-footer">
+                        <span class="badge badge-pop" data-i18n="p.4.badge">Business</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Odoo Advanced Developer (hidden) -->
+            <div class="program-hidden">
+                <div class="course-card" data-level="5" data-aud="pro">
+                    <div class="course-icon ci-blue">
+                        <img src="../image/odoo.png" alt="Odoo Advanced Developer" width="48" height="48" loading="lazy" decoding="async">
+                    </div>
+                    <div class="course-num" data-i18n="p.5.num">Advanced</div>
+                    <h3 class="course-title" data-i18n="p.5.title">Odoo Advanced Developer</h3>
+                    <div class="program-target" data-i18n="p.5.target">Odoo Developer 6mo+ experience</div>
+                    <div class="program-duration" data-i18n="p.5.duration">8 sessions</div>
+                    <ul class="program-curriculum">
+                        <li data-i18n="p.5.c.1">Advanced ORM · SQL Optimization · Multi Company</li>
+                        <li data-i18n="p.5.c.2">API Integration · Cron Job · Queue Job · Testing</li>
+                        <li data-i18n="p.5.c.3">OWL · POS · Performance</li>
+                        <li data-i18n-html="p.5.c.4"><strong>Project:</strong> HR Management or CRM</li>
+                    </ul>
+                    <div class="program-outcome" data-i18n="p.5.outcome">Advanced ORM · API · OWL · Performance · Testing</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="../program-detail.html?code=ODO-A" class="program-detail-link" data-i18n="p.detail">View details</a>
+                    </div>
+                    <div class="course-footer">
+                        <span class="badge badge-pop" data-i18n="p.5.badge">Advanced</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. DevOps for Odoo (hidden) -->
+            <div class="program-hidden">
+                <div class="course-card" data-level="6" data-aud="pro">
+                    <div class="course-icon ci-blue">
+                        <img src="../image/devops.jpg" alt="DevOps for Odoo" width="48" height="48" loading="lazy" decoding="async">
+                    </div>
+                    <div class="course-num" data-i18n="p.6.num">Operations</div>
+                    <h3 class="course-title" data-i18n="p.6.title">DevOps for Odoo</h3>
+                    <div class="program-target" data-i18n="p.6.target">Odoo Developer · Technical Consultant · System Admin</div>
+                    <div class="program-duration" data-i18n="p.6.duration">5 sessions</div>
+                    <ul class="program-curriculum">
+                        <li data-i18n="p.6.c.1">Linux · Docker · PostgreSQL</li>
+                        <li data-i18n="p.6.c.2">Nginx · SSL · Odoo Deployment</li>
+                        <li data-i18n="p.6.c.3">Backup · Monitoring · CI/CD</li>
+                        <li data-i18n-html="p.6.c.4"><strong>Project:</strong> Deploy Production Server</li>
+                    </ul>
+                    <div class="program-outcome" data-i18n="p.6.outcome">Production Server · Docker · Nginx · Backup · CI/CD</div>
+                    <div class="program-detail-link-wrap">
+                        <a href="../program-detail.html?code=ODO-D" class="program-detail-link" data-i18n="p.detail">View details</a>
+                    </div>
+                    <div class="course-footer">
+                        <span class="badge badge-new" data-i18n="p.6.badge">Deploy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- REGISTER (Học phí & Đăng ký) -->
+    <section class="section" id="register">
+        <span class="section-tag" data-i18n="register.tag">Tuition & Enrollment</span>
+        <h2 data-i18n="register.title">Choose the right combo for you</h2>
+        <p class="section-sub" data-i18n="register.sub">Pick a combo — get advice — start learning</p>
+        <div class="pricing-wrap">
+            <div class="pricing-combos">
+                <div class="combo-card">
+                    <div class="combo-badge popular" data-i18n="r.1.badge">Popular</div>
+                    <h3 data-i18n="r.1.name">Starter</h3>
+                    <div class="combo-includes" data-i18n="r.1.content">Developer Foundation + Odoo Developer Foundation</div>
+                </div>
+                <div class="combo-card">
+                    <div class="combo-badge best" data-i18n="r.2.badge">Best Value</div>
+                    <h3 data-i18n="r.2.name">Professional</h3>
+                    <div class="combo-includes" data-i18n="r.2.content">Starter + Odoo Advanced Developer</div>
+                </div>
+                <div class="combo-card">
+                    <div class="combo-badge value" data-i18n="r.3.badge">Comprehensive</div>
+                    <h3 data-i18n="r.3.name">Expert</h3>
+                    <div class="combo-includes" data-i18n="r.3.content">Starter + Advanced + DevOps for Odoo</div>
+                </div>
+                <div class="combo-card">
+                    <div class="combo-badge ai" data-i18n="r.4.badge">AI</div>
+                    <h3 data-i18n="r.4.name">AI Developer</h3>
+                    <div class="combo-includes" data-i18n="r.4.content">AI & Vibe Coding</div>
+                </div>
+                <div class="combo-card">
+                    <div class="combo-badge full" data-i18n="r.5.badge">All-in</div>
+                    <h3 data-i18n="r.5.name">Full Stack Odoo</h3>
+                    <div class="combo-includes" data-i18n="r.5.content">All 6 programs</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="steps-wrapper">
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">1</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title" data-i18n="reg.step1">Choose your combo</div>
+                        <div class="step-desc" data-i18n="reg.desc1">Check the combo list above or pick individual programs. Not sure? Message us on Zalo for free consultation.</div>
+                        <span class="step-tag" data-i18n="reg.tag1">Free consultation</span>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">2</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title" data-i18n="reg.step2">Get advice & quote</div>
+                        <div class="step-desc" data-i18n-html="reg.desc2">Message us on Zalo, the Vinc Academy team will advise on the right path and send a detailed quote within 24h.</div>
+                        <span class="step-tag" data-i18n="reg.tag2">Free consultation</span>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num-wrap">
+                        <div class="step-num">3</div>
+                    </div>
+                    <div class="step-body">
+                        <div class="step-title" data-i18n="reg.step3">Get info & start learning</div>
+                        <div class="step-desc" data-i18n="reg.desc3">After receiving the quote and confirming, you will get detailed guidance and start learning right away. No time limit.</div>
+                        <span class="step-tag amber" data-i18n="reg.tag3">Lifetime access</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="register-card">
+                <h3 data-i18n="reg.card.title">Register</h3>
+                <p class="sub" data-i18n="reg.card.sub">Contact us now for special offers</p>
+
+                <div class="reg-card-simple">
+                    <p class="reg-card-text" data-i18n-html="reg.card.text">Message us on Zalo, the Vinc Academy team will provide <strong>free consultation</strong> and send a <strong>detailed quote</strong> within 24h.</p>
+                    <div class="reg-card-benefits" data-i18n-html="reg.card.benefits"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Find the right learning path<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Detailed quote per combo<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 10% off when you register today</div>
+                </div>
+
+                <div class="reg-suggest" data-i18n-html="reg.suggest.desc"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> <strong>Starter</strong> combo — for beginners, includes Developer Foundation + Odoo Developer Foundation. Best for starting from zero.</div>
+
+                <div class="btn-row">
+                    <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="btn-register" data-i18n="reg.btn">Message us on Zalo · 036 3729 276</a>
+                    <button type="button" class="btn-register outline" onclick="openFormModal()" data-i18n="reg.formBtn">Register via Google Form</button>
+                </div>
+                <p class="reg-social" data-i18n-html="reg.social">Or chat via <a href="https://m.me/vinc.academy" target="_blank" rel="noopener">Messenger</a> · follow our <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener">Fanpage</a></p>
+                <p class="reg-note" data-i18n="reg.note">Response within 24h — No spam guarantee</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+        <span class="section-tag" data-i18n="faq.tag">FAQ</span>
+        <h2 data-i18n="faq.title">Frequently Asked Questions</h2>
+        <p class="section-sub" data-i18n="faq.sub">Common questions from our students</p>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.q1">Can I join Developer Foundation with no programming experience?</span> <span class="faq-arrow" aria-hidden="true">▾</span></button>
+                <div class="faq-a" data-i18n="faq.a1">Absolutely. Developer Foundation is designed from absolute zero — starting with Python basics, no prior experience required. Just a computer and internet connection.</div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.q2">Online or offline classes?</span> <span class="faq-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="faq-a" data-i18n="faq.a2">Vinc Academy trains online via video lessons and interactive live sessions. Students can review anytime, no fixed schedule. Private group for continuous support.</div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.q3">Can I get a job after Odoo Developer Foundation?</span> <span class="faq-arrow" aria-hidden="true">▾</span></button>
+                <div class="faq-a" data-i18n="faq.a3">Yes. Odoo Developer Foundation teaches you to write modules, customize the system, and understand Odoo architecture — enough to apply as a Junior Odoo Developer. For advanced roles, continue with Advanced or DevOps.</div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.q4">How long does each program take?</span> <span class="faq-arrow" aria-hidden="true">▾</span></button>
+                <div class="faq-a" data-i18n="faq.a4">Developer Foundation: 5 sessions, Odoo Foundation: 8, AI & Vibe Coding: 5, Business & Functional: 8, Advanced: 8, DevOps: 5. Average 4–8 weeks with 1–2 hours daily. No deadline, learn at your own pace.</div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.q5">How much is the tuition? Are installments available?</span> <span class="faq-arrow" aria-hidden="true">▾</span></button>
+                <div class="faq-a" data-i18n="faq.a5">Tuition depends on the combo you choose. Message us on Zalo 036 3729 276 for a detailed quote and flexible payment options.</div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false"><span data-i18n="faq.qn">Just graduated / new at work — where should I start?</span> <span class="faq-arrow" aria-hidden="true">▾</span></button>
+                <div class="faq-a" data-i18n="faq.an">No coding yet: start with L1 Developer Foundation. Already coding: go straight to L2 Odoo Developer Foundation. Use the “Who are you?” filter in Programs to see your path, or get a free consultation.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta-section">
+        <div class="cta-card">
+            <h2 data-i18n="cta.title">Ready to start your Odoo career?</h2>
+            <p data-i18n="cta.sub">Message us on Zalo for a free learning-path consultation and a detailed quote within 24 hours.</p>
+            <div class="cta-actions">
+                <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="btn-primary" data-i18n="cta.btn1">Chat on Zalo</a>
+                <a href="#programs" class="btn-secondary" data-i18n="hero.btn2">View Learning Path</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CERTIFICATE VERIFY -->
+    <section class="cert-verify" id="verify">
+        <div class="hero-section">
+            <div class="hero-content">
+                <p class="hero-subtitle" data-i18n="verify.subtitle">Vinc Academy Verification System</p>
+                <h2 class="hero-title" data-i18n="verify.title">Verify course completion certificate</h2>
+                <p class="hero-desc" data-i18n="verify.desc">Quickly and accurately look up diplomas and certificates issued by Vinc Academy. Enter the certificate code in the box below to verify online.</p>
+
+                <!-- Search Form -->
+                <form id="search-form" class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="search-input" class="search-input" data-i18n-placeholder="verify.placeholder" autocomplete="off">
+                    </div>
+                    <button type="submit" id="search-btn" class="search-btn" data-i18n="verify.btn">Verify</button>
+                </form>
+
+                <!-- Feedback Message -->
+                <div id="feedback-msg" class="feedback-msg"></div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo" data-i18n-html="footer">Vinc <span>Academy</span></div>
+        <div class="footer-links">
+            <a href="#programs" data-i18n="nav.programs">Programs</a>
+            <a href="#register" data-i18n="nav.pricing">Tuition</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="../en/blog/index.html" data-i18n="nav.blog">Knowledge</a>
+            <a href="#verify" data-i18n="footer.verify">Verify Certificate</a>
+            <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            <a href="https://zalo.me/0363729276" target="_blank" rel="noopener">Zalo · 036 3729 276</a>
+        </div>
+        <div class="footer-right footer-copyright" data-i18n-html="footer.right">© 2026 <strong>Vinc Academy</strong>. All rights reserved.<br>Reproduction of content or course materials without written permission is prohibited.</div>
+    </footer>
+
+    <!-- FORM MODAL -->
+    <div class="modal-overlay" id="formModal" role="dialog" aria-modal="true" aria-label="Register" onclick="closeFormModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button type="button" class="modal-close" onclick="closeFormModal()" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            <iframe data-src="https://docs.google.com/forms/d/e/1FAIpQLSeNLgxU8-80JzApGiC2K6nlDfb5tJ3PzWTZ9FGjySgxYBb-2A/viewform?usp=header&embedded=true" class="modal-iframe" title="Form đăng ký" loading="lazy" frameborder="0" marginheight="0" marginwidth="0">Đang tải...</iframe>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">Registered! We will contact you shortly.</div>
+
+    <!-- CHAT BUBBLES -->
+    <div class="chat-bubbles">
+        <a href="https://m.me/vinc.academy" target="_blank" rel="noopener" class="chat-bubble messenger" data-i18n-tip="chat.messenger" data-tip="Chat on Messenger" aria-label="Chat on Messenger"><i class="fa-brands fa-facebook-messenger"></i></a>
+        <a href="https://zalo.me/0363729276" target="_blank" rel="noopener" class="chat-bubble zalo" data-i18n-tip="chat.zalo" data-tip="Chat on Zalo" aria-label="Chat on Zalo"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M12 2.5c5.25 0 9.5 3.6 9.5 8.05S17.25 18.6 12 18.6c-.95 0-1.86-.12-2.72-.34L5 20.5l1.1-3.6C4.1 15.5 2.5 13.2 2.5 10.55 2.5 6.1 6.75 2.5 12 2.5z" fill="#fff"/><text x="12" y="13.2" text-anchor="middle" font-size="6.2" font-weight="800" fill="#0068FF" font-family="Be Vietnam Pro, sans-serif">Zalo</text></svg></a>
+    </div>
+
+    <script src="../certificate/js/data.js" defer></script>
+    <script src="../script.js" defer></script>
+
+</body>
+
+</html>

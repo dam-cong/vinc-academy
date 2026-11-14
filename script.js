@@ -9,11 +9,6 @@ function toggleTheme() {
     const saved = localStorage.getItem('va-theme');
     if (saved) {
         if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        const hour = new Date().getHours();
-        if (hour >= 18 || hour < 6) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
     }
 })();
 
@@ -21,7 +16,8 @@ function toggleFaq(el) {
     const item = el.closest('.faq-item');
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
+    document.querySelectorAll('.faq-q').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    if (!isOpen) { item.classList.add('open'); el.setAttribute('aria-expanded', 'true'); }
 }
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -35,6 +31,30 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 // ── I18N ──
 const i18n = {
     vi: {
+        'trust.1': 'Học viên đã được đào tạo',
+        'trust.2': 'Năm kinh nghiệm giảng viên',
+        'trust.3': 'Phản hồi tư vấn',
+        'trust.4': 'Chứng chỉ tra cứu trực tuyến',
+        'cta.title': 'Sẵn sàng bắt đầu sự nghiệp Odoo?',
+        'cta.sub': 'Nhắn Zalo để được tư vấn lộ trình miễn phí và nhận báo giá chi tiết trong vòng 24h.',
+        'cta.btn1': 'Nhắn Zalo tư vấn',
+        'cmp.h1': 'Trung tâm đào tạo thông thường',
+        'cmp.h2': 'Vinc Academy',
+        'cmp.1a': 'Học để biết',
+        'cmp.1b': '<strong>Học để làm</strong>',
+        'cmp.2a': 'Học theo giáo trình',
+        'cmp.2b': '<strong>Học theo dự án thực tế</strong>',
+        'cmp.3a': 'Chủ yếu học code',
+        'cmp.3b': '<strong>Học quy trình phát triển sản phẩm</strong>',
+        'cmp.4a': 'Thực hành ít',
+        'cmp.4b': '<strong>Thực hành xuyên suốt khóa học</strong>',
+        'cmp.5a': 'Kết thúc nhận chứng chỉ',
+        'cmp.5b': '<strong>Có Portfolio + kinh nghiệm thực chiến</strong>',
+        'cmp.6a': 'Học riêng từng công nghệ',
+        'cmp.6b': '<strong>Học từ Development → Deployment</strong>',
+        'chat.messenger': 'Chat qua Messenger',
+        'chat.zalo': 'Chat qua Zalo',
+        'nav.skip': 'Bỏ qua điều hướng',
         'nav.about': 'Giới thiệu',
         'nav.programs': 'Chương trình',
         'nav.pricing': 'Học phí',
@@ -43,7 +63,7 @@ const i18n = {
         'nav.blog': 'Kiến thức',
 
         'verify.subtitle': 'Vinc Academy Verification System',
-        'verify.title': 'XÁC MINH CHỨNG NHẬN HOÀN THÀNH KHÓA HỌC',
+        'verify.title': 'Xác minh chứng nhận hoàn thành khóa học',
         'verify.desc': 'Tra cứu nhanh và chính xác văn bằng, chứng chỉ được cấp bởi Vinc Academy. Nhập mã số chứng chỉ ở khung bên dưới để xác thực trực tuyến.',
         'verify.placeholder': 'Nhập mã chứng chỉ (VD: HV20260004-C0002)...',
         'verify.btn': 'Tra cứu',
@@ -67,9 +87,9 @@ const i18n = {
         'faq.qn': 'Mới ra trường / mới đi làm thì nên bắt đầu từ đâu?',
         'faq.an': 'Chưa biết code: bắt đầu từ L1 Developer Foundation. Đã có nền tảng lập trình: vào thẳng L2 Odoo Developer Foundation. Chọn bộ lọc “Bạn đang là ai?” ở mục Chương trình để xem đúng lộ trình, hoặc nhận tư vấn miễn phí.',
         'f.all': 'Tất cả',
-        'f.new': '🎓 Chưa biết code',
-        'f.dev': '💻 Biết code, muốn vào Odoo',
-        'f.pro': '🚀 Đã làm Odoo',
+        'f.new': 'Chưa biết code',
+        'f.dev': 'Biết code',
+        'f.pro': 'Đã làm Odoo',
         'f.search': 'Tìm chương trình...',
         'f.empty': 'Chưa có chương trình phù hợp — thử bỏ bộ lọc hoặc nhận tư vấn miễn phí.',
         'road.start': 'Bắt đầu',
@@ -103,76 +123,76 @@ const i18n = {
         'p.1.num': 'Nền tảng lập trình',
         'p.1.title': 'Developer Foundation',
         'p.1.target': 'Người mới · Sinh viên CNTT · Chuyển ngành',
-        'p.1.duration': '⏱ 5 buổi',
+        'p.1.duration': '5 buổi',
         'p.1.c.1': '<strong>Python</strong> — Fundamentals, Function, OOP',
         'p.1.c.2': '<strong>PostgreSQL</strong> — Database, SQL, JOIN',
         'p.1.c.3': '<strong>Git & GitHub</strong> — Workflow, Branch, Merge',
         'p.1.c.4': '<strong>Dự án:</strong> Customer Management',
-        'p.1.outcome': '✅ Python · SQL · Git · Mini Project',
-        'p.1.badge': '🔥 Nền tảng',
+        'p.1.outcome': 'Python · SQL · Git · Mini Project',
+        'p.1.badge': 'Nền tảng',
 
         'p.2.num': 'Junior Odoo Developer',
         'p.2.title': 'Odoo Developer Foundation',
         'p.2.target': 'Đã có nền tảng lập trình',
-        'p.2.duration': '⏱ 8 buổi',
+        'p.2.duration': '8 buổi',
         'p.2.c.1': 'Odoo Architecture · MVC · Module · Manifest',
         'p.2.c.2': 'ORM · Models · Fields · Relations',
         'p.2.c.3': 'Views · Business Logic · Security · Report',
         'p.2.c.4': '<strong>Dự án:</strong> Training Management System (TMS)',
-        'p.2.outcome': '✅ Module Odoo · Security · PDF Report · Website · Portfolio TMS',
-        'p.2.badge': '🔥 Cốt lõi',
+        'p.2.outcome': 'Module Odoo · Security · PDF Report · Website · Portfolio TMS',
+        'p.2.badge': 'Cốt lõi',
 
         'p.3.num': 'Làm việc cùng AI',
         'p.3.title': 'AI & Vibe Coding Odoo',
         'p.3.target': 'Đã biết Odoo · Muốn tăng năng suất',
-        'p.3.duration': '⏱ 5 buổi',
+        'p.3.duration': '5 buổi',
         'p.3.c.1': 'Prompt Engineering · AI Pair Programming',
         'p.3.c.2': 'AI Code Generation · Review · Refactor · Debug',
         'p.3.c.3': 'Technical Design · Documentation',
         'p.3.c.4': 'Tool: ChatGPT · Claude · Cursor · OpenCode',
         'p.3.c.5': '<strong>Dự án:</strong> Phát triển module bằng AI',
-        'p.3.outcome': '✅ Tăng tốc 2-5 lần · AI Code · Review · Project',
-        'p.3.badge': '✨ AI',
+        'p.3.outcome': 'Tăng tốc 2-5 lần · AI Code · Review · Project',
+        'p.3.badge': 'AI',
 
         'p.4.num': 'Nghiệp vụ',
         'p.4.title': 'Odoo Business & Functional',
         'p.4.target': 'Developer · BA · Functional Consultant · PM',
-        'p.4.duration': '⏱ 8 buổi',
+        'p.4.duration': '8 buổi',
         'p.4.c.1': 'CRM · Sales · Purchase · Inventory · Accounting',
         'p.4.c.2': 'HR · Project · Business Analysis · Documentation',
         'p.4.c.3': '<strong>Dự án:</strong> Phân tích & thiết kế giải pháp doanh nghiệp',
-        'p.4.outcome': '✅ ERP Process · BA · BRD · Solution Design · Gap Analysis',
+        'p.4.outcome': 'ERP Process · BA · BRD · Solution Design · Gap Analysis',
         'p.4.badge': 'Nghiệp vụ',
 
         'p.5.num': 'Nâng cao',
         'p.5.title': 'Odoo Advanced Developer',
         'p.5.target': 'Odoo Developer 6 tháng+ kinh nghiệm',
-        'p.5.duration': '⏱ 8 buổi',
+        'p.5.duration': '8 buổi',
         'p.5.c.1': 'Advanced ORM · SQL Optimization · Multi Company',
         'p.5.c.2': 'API Integration · Cron Job · Queue Job · Testing',
         'p.5.c.3': 'OWL · POS · Performance',
         'p.5.c.4': '<strong>Dự án:</strong> HR Management hoặc CRM',
-        'p.5.outcome': '✅ Advanced ORM · API · OWL · Performance · Testing',
+        'p.5.outcome': 'Advanced ORM · API · OWL · Performance · Testing',
         'p.5.badge': 'Chuyên sâu',
 
         'p.6.num': 'Vận hành',
         'p.6.title': 'DevOps for Odoo',
         'p.6.target': 'Odoo Developer · Technical Consultant · System Admin',
-        'p.6.duration': '⏱ 5 buổi',
+        'p.6.duration': '5 buổi',
         'p.6.c.1': 'Linux · Docker · PostgreSQL',
         'p.6.c.2': 'Nginx · SSL · Odoo Deployment',
         'p.6.c.3': 'Backup · Monitoring · CI/CD',
         'p.6.c.4': '<strong>Dự án:</strong> Deploy Production Server',
-        'p.6.outcome': '✅ Production Server · Docker · Nginx · Backup · CI/CD',
+        'p.6.outcome': 'Production Server · Docker · Nginx · Backup · CI/CD',
         'p.6.badge': 'Triển khai',
 
         'programs.expand': '+ Xem thêm 3 chương trình',
         'programs.collapse': '− Thu gọn',
         'p.free': 'trong combo',
-        'p.detail': '📖 Xem chi tiết',
+        'p.detail': 'Xem chi tiết',
 
         'r.1.name': 'Bắt đầu',
-        'r.1.badge': '🔥 Phổ biến',
+        'r.1.badge': 'Phổ biến',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
         'r.2.name': 'Chuyên nghiệp',
         'r.2.badge': 'Tiết kiệm nhất',
@@ -246,14 +266,14 @@ const i18n = {
         'reg.tag3': 'Truy cập mãi mãi',
         'reg.card.title': 'Đăng ký học',
         'reg.card.sub': 'Liên hệ ngay để nhận ưu đãi',
-        'reg.suggest.desc': '💡 Combo <strong>Bắt đầu</strong> — dành cho người mới, đã bao gồm Developer Foundation + Odoo Developer Foundation. Phù hợp nhất để bắt đầu từ con số 0.',
+        'reg.suggest.desc': '<i class="fa-solid fa-lightbulb" aria-hidden="true"></i> Combo <strong>Bắt đầu</strong> — dành cho người mới, đã bao gồm Developer Foundation + Odoo Developer Foundation. Phù hợp nhất để bắt đầu từ con số 0.',
         'reg.card.text': 'Nhắn tin qua Zalo, đội ngũ Vinc Academy sẽ <strong>tư vấn miễn phí</strong> và gửi <strong>báo giá chi tiết</strong> trong vòng 24h.',
-        'reg.card.benefits': '✅ Tư vấn lộ trình phù hợp<br>✅ Báo giá chi tiết theo combo<br>✅ Giảm 10% khi đăng ký hôm nay',
+        'reg.card.benefits': '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Tư vấn lộ trình phù hợp<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Báo giá chi tiết theo combo<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Giảm 10% khi đăng ký hôm nay',
         'reg.btn': 'Nhắn tin Zalo ngay · 036 3729 276',
-        'reg.formBtn': '📝 Đăng ký qua Google Form',
+        'reg.formBtn': 'Đăng ký qua Google Form',
         'reg.note': 'Phản hồi trong vòng 24h — Cam kết không spam',
         'reg.social': 'Hoặc chat qua <a href="https://m.me/vinc.academy" target="_blank" rel="noopener">Messenger</a> · theo dõi <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener">Fanpage</a>',
-        'page.title': 'Vinc Academy — Đào tạo lập trình thực chiến',
+        'page.title': 'Vinc Academy — Đào tạo lập trình Odoo thực chiến',
         'about.badge': 'Đang tuyển sinh 2026',
         'faq.q5': 'Học phí bao nhiêu? Có hỗ trợ trả góp không?',
         'faq.a5': 'Học phí tùy theo combo bạn chọn. Nhắn Zalo 036 3729 276 để nhận báo giá chi tiết và các hình thức thanh toán linh hoạt.',
@@ -263,6 +283,30 @@ const i18n = {
         'footer.right': '© 2026 <strong>Vinc Academy</strong>. Bản quyền thuộc về Vinc Academy.<br>Nghiêm cấm sao chép nội dung, giáo trình khi chưa có sự đồng ý bằng văn bản.',
     },
     en: {
+        'trust.1': 'Learners trained',
+        'trust.2': 'Years of instructor experience',
+        'trust.3': 'Consulting response time',
+        'trust.4': 'Certificates verifiable online',
+        'cta.title': 'Ready to start your Odoo career?',
+        'cta.sub': 'Message us on Zalo for a free learning-path consultation and a detailed quote within 24 hours.',
+        'cta.btn1': 'Chat on Zalo',
+        'cmp.h1': 'Typical training centers',
+        'cmp.h2': 'Vinc Academy',
+        'cmp.1a': 'Learn to know',
+        'cmp.1b': '<strong>Learn to do</strong>',
+        'cmp.2a': 'Follow a textbook',
+        'cmp.2b': '<strong>Learn through real projects</strong>',
+        'cmp.3a': 'Mostly coding',
+        'cmp.3b': '<strong>Learn the product development process</strong>',
+        'cmp.4a': 'Little practice',
+        'cmp.4b': '<strong>Hands-on practice throughout the course</strong>',
+        'cmp.5a': 'Finish with a certificate',
+        'cmp.5b': '<strong>Portfolio + real-world experience</strong>',
+        'cmp.6a': 'Learn each technology separately',
+        'cmp.6b': '<strong>Learn from Development → Deployment</strong>',
+        'chat.messenger': 'Chat on Messenger',
+        'chat.zalo': 'Chat on Zalo',
+        'nav.skip': 'Skip to content',
         'nav.about': 'About',
         'nav.programs': 'Programs',
         'nav.pricing': 'Tuition',
@@ -272,7 +316,7 @@ const i18n = {
         'nav.register': 'Free Consultation',
 
         'verify.subtitle': 'Vinc Academy Verification System',
-        'verify.title': 'VERIFY COURSE COMPLETION CERTIFICATE',
+        'verify.title': 'Verify course completion certificate',
         'verify.desc': 'Quickly and accurately look up diplomas and certificates issued by Vinc Academy. Enter the certificate code in the box below to verify online.',
         'verify.placeholder': 'Enter certificate code (e.g. HV20260004-C0002)...',
         'verify.btn': 'Verify',
@@ -296,9 +340,9 @@ const i18n = {
         'faq.qn': 'Just graduated / new at work — where should I start?',
         'faq.an': 'No coding yet: start with L1 Developer Foundation. Already coding: go straight to L2 Odoo Developer Foundation. Use the “Who are you?” filter in Programs to see your path, or get a free consultation.',
         'f.all': 'All',
-        'f.new': '🎓 New to coding',
-        'f.dev': '💻 Can code, new to Odoo',
-        'f.pro': '🚀 Already on Odoo',
+        'f.new': 'New to coding',
+        'f.dev': 'Can code',
+        'f.pro': 'Already on Odoo',
         'f.search': 'Search programs...',
         'f.empty': 'No matching program — clear the filter or get a free consultation.',
         'road.start': 'Start here',
@@ -332,76 +376,76 @@ const i18n = {
         'p.1.num': 'Programming Foundation',
         'p.1.title': 'Developer Foundation',
         'p.1.target': 'Beginners · IT Students · Career Switchers',
-        'p.1.duration': '⏱ 5 sessions',
+        'p.1.duration': '5 sessions',
         'p.1.c.1': '<strong>Python</strong> — Fundamentals, Function, OOP',
         'p.1.c.2': '<strong>PostgreSQL</strong> — Database, SQL, JOIN',
         'p.1.c.3': '<strong>Git & GitHub</strong> — Workflow, Branch, Merge',
         'p.1.c.4': '<strong>Project:</strong> Customer Management',
-        'p.1.outcome': '✅ Python · SQL · Git · Mini Project',
-        'p.1.badge': '🔥 Foundation',
+        'p.1.outcome': 'Python · SQL · Git · Mini Project',
+        'p.1.badge': 'Foundation',
 
         'p.2.num': 'Junior Odoo Developer',
         'p.2.title': 'Odoo Developer Foundation',
         'p.2.target': 'Has programming foundation',
-        'p.2.duration': '⏱ 8 sessions',
+        'p.2.duration': '8 sessions',
         'p.2.c.1': 'Odoo Architecture · MVC · Module · Manifest',
         'p.2.c.2': 'ORM · Models · Fields · Relations',
         'p.2.c.3': 'Views · Business Logic · Security · Report',
         'p.2.c.4': '<strong>Project:</strong> Training Management System (TMS)',
-        'p.2.outcome': '✅ Odoo Module · Security · PDF Report · Website · TMS Portfolio',
-        'p.2.badge': '🔥 Core',
+        'p.2.outcome': 'Odoo Module · Security · PDF Report · Website · TMS Portfolio',
+        'p.2.badge': 'Core',
 
         'p.3.num': 'Working with AI',
         'p.3.title': 'AI & Vibe Coding Odoo',
         'p.3.target': 'Knows Odoo · Wants to boost productivity',
-        'p.3.duration': '⏱ 5 sessions',
+        'p.3.duration': '5 sessions',
         'p.3.c.1': 'Prompt Engineering · AI Pair Programming',
         'p.3.c.2': 'AI Code Generation · Review · Refactor · Debug',
         'p.3.c.3': 'Technical Design · Documentation',
         'p.3.c.4': 'Tools: ChatGPT · Claude · Cursor · OpenCode',
         'p.3.c.5': '<strong>Project:</strong> Build module with AI',
-        'p.3.outcome': '✅ 2-5x faster · AI Code · Review · Project',
-        'p.3.badge': '✨ AI',
+        'p.3.outcome': '2-5x faster · AI Code · Review · Project',
+        'p.3.badge': 'AI',
 
         'p.4.num': 'Business',
         'p.4.title': 'Odoo Business & Functional',
         'p.4.target': 'Developer · BA · Functional Consultant · PM',
-        'p.4.duration': '⏱ 8 sessions',
+        'p.4.duration': '8 sessions',
         'p.4.c.1': 'CRM · Sales · Purchase · Inventory · Accounting',
         'p.4.c.2': 'HR · Project · Business Analysis · Documentation',
         'p.4.c.3': '<strong>Project:</strong> Business Solution Design & Analysis',
-        'p.4.outcome': '✅ ERP Process · BA · BRD · Solution Design · Gap Analysis',
+        'p.4.outcome': 'ERP Process · BA · BRD · Solution Design · Gap Analysis',
         'p.4.badge': 'Business',
 
         'p.5.num': 'Advanced',
         'p.5.title': 'Odoo Advanced Developer',
         'p.5.target': 'Odoo Developer 6mo+ experience',
-        'p.5.duration': '⏱ 8 sessions',
+        'p.5.duration': '8 sessions',
         'p.5.c.1': 'Advanced ORM · SQL Optimization · Multi Company',
         'p.5.c.2': 'API Integration · Cron Job · Queue Job · Testing',
         'p.5.c.3': 'OWL · POS · Performance',
         'p.5.c.4': '<strong>Project:</strong> HR Management or CRM',
-        'p.5.outcome': '✅ Advanced ORM · API · OWL · Performance · Testing',
+        'p.5.outcome': 'Advanced ORM · API · OWL · Performance · Testing',
         'p.5.badge': 'Advanced',
 
         'p.6.num': 'Operations',
         'p.6.title': 'DevOps for Odoo',
         'p.6.target': 'Odoo Developer · Technical Consultant · System Admin',
-        'p.6.duration': '⏱ 5 sessions',
+        'p.6.duration': '5 sessions',
         'p.6.c.1': 'Linux · Docker · PostgreSQL',
         'p.6.c.2': 'Nginx · SSL · Odoo Deployment',
         'p.6.c.3': 'Backup · Monitoring · CI/CD',
         'p.6.c.4': '<strong>Project:</strong> Deploy Production Server',
-        'p.6.outcome': '✅ Production Server · Docker · Nginx · Backup · CI/CD',
+        'p.6.outcome': 'Production Server · Docker · Nginx · Backup · CI/CD',
         'p.6.badge': 'Deploy',
 
         'programs.expand': '+ View 3 more programs',
         'programs.collapse': '− Collapse',
         'p.free': 'in combo',
-        'p.detail': '📖 View details',
+        'p.detail': 'View details',
 
         'r.1.name': 'Starter',
-        'r.1.badge': '🔥 Popular',
+        'r.1.badge': 'Popular',
         'r.1.content': 'Developer Foundation + Odoo Developer Foundation',
         'r.2.name': 'Professional',
         'r.2.badge': 'Best Value',
@@ -473,14 +517,14 @@ const i18n = {
         'reg.tag3': 'Lifetime access',
         'reg.card.title': 'Register',
         'reg.card.sub': 'Contact us now for special offers',
-        'reg.suggest.desc': '💡 <strong>Starter</strong> combo — for beginners, includes Developer Foundation + Odoo Developer Foundation. Best for starting from zero.',
+        'reg.suggest.desc': '<i class="fa-solid fa-lightbulb" aria-hidden="true"></i> <strong>Starter</strong> combo — for beginners, includes Developer Foundation + Odoo Developer Foundation. Best for starting from zero.',
         'reg.card.text': 'Message us on Zalo, the Vinc Academy team will provide <strong>free consultation</strong> and send a <strong>detailed quote</strong> within 24h.',
-        'reg.card.benefits': '✅ Find the right learning path<br>✅ Detailed quote per combo<br>✅ 10% off when you register today',
+        'reg.card.benefits': '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Find the right learning path<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Detailed quote per combo<br><i class="fa-solid fa-circle-check" aria-hidden="true"></i> 10% off when you register today',
         'reg.btn': 'Message us on Zalo · 036 3729 276',
-        'reg.formBtn': '📝 Register via Google Form',
+        'reg.formBtn': 'Register via Google Form',
         'reg.note': 'Response within 24h — No spam guarantee',
         'reg.social': 'Or chat via <a href="https://m.me/vinc.academy" target="_blank" rel="noopener">Messenger</a> · follow our <a href="https://www.facebook.com/vinc.academy" target="_blank" rel="noopener">Fanpage</a>',
-        'page.title': 'Vinc Academy — Hands-on Programming Training',
+        'page.title': 'Vinc Academy — Hands-on Odoo Programming Training',
         'about.badge': 'Now enrolling 2026',
         'faq.q5': 'How much is the tuition? Are installments available?',
         'faq.a5': 'Tuition depends on the combo you choose. Message us on Zalo 036 3729 276 for a detailed quote and flexible payment options.',
@@ -516,6 +560,10 @@ function applyLang() {
             el.setAttribute('placeholder', i18n[currentLang][key]);
         }
     });
+    document.querySelectorAll('[data-i18n-tip]').forEach(el => {
+        const v = i18n[currentLang] && i18n[currentLang][el.dataset.i18nTip];
+        if (v) { el.dataset.tip = v; el.setAttribute('aria-label', v); }
+    });
     const btn = document.querySelector('.lang-toggle');
     if (btn) btn.textContent = currentLang === 'vi' ? 'EN' : 'VI';
 
@@ -538,6 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPostFilter();
     initViews();
     initBackToTop();
+    initChatHide();
     initSeriesNav();
 });
 
@@ -581,9 +630,14 @@ function initMobileNav() {
 }
 
 // ── FORM MODAL ──
+let modalOpener;
 function openFormModal() {
+    modalOpener = document.activeElement;
+    const f = document.querySelector('#formModal iframe');
+    if (f && !f.getAttribute('src')) f.src = f.dataset.src;
     document.getElementById('formModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    document.querySelector('#formModal .modal-close').focus();
 }
 
 function closeFormModal() {
@@ -591,6 +645,7 @@ function closeFormModal() {
     if (!modal) return;
     modal.style.display = 'none';
     document.body.style.overflow = '';
+    if (modalOpener) modalOpener.focus();
 }
 
 document.addEventListener('keydown', e => {
@@ -655,7 +710,7 @@ function showCertPopup(certId, certUrl) {
     popup.className = 'cert-result-popup';
     popup.innerHTML = `
         <div class="cert-result-card">
-            <button class="cert-result-close" onclick="closeCertPopup()">✕</button>
+            <button class="cert-result-close" onclick="closeCertPopup()" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             <div class="cert-result-icon"><img src="image/vinc-academy.png" alt="Vinc Academy" class="cert-result-logo"></div>
             <h3 class="cert-result-title">${t['verify.validCert']}</h3>
             <div class="cert-result-code"><img src="image/medal.png" alt="medal" class="cert-result-medal"> ${certId}</div>
@@ -787,6 +842,18 @@ async function initViews() {
         lis.sort((a, b) => c.dataset.sort === 'top' ? n(b) - n(a) || idx.get(a) - idx.get(b) : idx.get(a) - idx.get(b))
             .forEach(li => grid.appendChild(li));
     }));
+}
+
+// ── ẨN NÚT LIÊN HỆ NỔI khi đã có nút Zalo trong nội dung ──
+function initChatHide() {
+    const box = document.querySelector('.chat-bubbles'), zones = document.querySelectorAll('.register-card, .cta-card');
+    if (!box || !zones.length || !('IntersectionObserver' in window)) return;
+    const seen = new Set();
+    const io = new IntersectionObserver(es => {
+        es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target));
+        box.classList.toggle('near-cta', seen.size > 0);
+    }, { threshold: 0.25 });
+    zones.forEach(z => io.observe(z));
 }
 
 // ── NÚT LÊN ĐẦU TRANG ──
